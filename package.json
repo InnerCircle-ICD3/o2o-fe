@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.74.7",
+    "ky": "^1.8.1",
     "next": "15.3.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "use-form-light": "^1.2.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
