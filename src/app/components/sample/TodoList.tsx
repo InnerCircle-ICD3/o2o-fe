@@ -1,6 +1,6 @@
 "use client";
 
-import { useTodos } from "@/app/hooks/useTodos";
+import { useTodos } from "@/hooks/useTodos";
 
 export default function TodoList() {
   const { todos, isLoading, error, toggleTodo, deleteTodo } = useTodos();
