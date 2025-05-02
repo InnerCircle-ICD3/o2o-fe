@@ -24,8 +24,7 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "error",
-        "noUnusedImports": "error",
-        "requireKeyForArrayComponents": "error"
+        "noUnusedImports": "error"
       },
       "suspicious": {
         "noExplicitAny": "error"
@@ -33,9 +32,6 @@
       "style": {
         "useConst": "error",
         "useTemplate": "error"
-      },
-      "naming": {
-        "camelCase": "error"
       }
     }
   },
