@@ -13,10 +13,17 @@ jobs:
   assign:
     runs-on: ubuntu-latest
     steps:
-      - uses: hkusu/review-assign-action@v1
+      - name: Assign PR author
+        uses: actions/github-script@v6
         with:
-          assignees: ${{ github.event.pull_request.user.login }}
           github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              assignees: [context.payload.pull_request.user.login]
+            });
           
       - name: Add label to PR
         uses: actions/github-script@v6
