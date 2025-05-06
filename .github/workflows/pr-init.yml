@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: hkusu/review-assign-action@v1
         with:
-          assignees: ${{ github.actor }} # assign pull request author
+          assignees: ${{ github.event.pull_request.user.login }}
           github-token: ${{ secrets.GH_TOKEN }}
           
       - name: Add label to PR
@@ -26,5 +26,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              labels: ['WIP'] // 여기에 원하는 라벨명 배열로 추가
+              labels: ['WIP']
             });

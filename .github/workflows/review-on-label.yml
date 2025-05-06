@@ -21,7 +21,7 @@ jobs:
         run: npm install @actions/github @slack/web-api js-yaml
 
       - name: 리뷰어 지정 및 Slack 알림
-        run: npx ts-node --project tsconfig.json .github/scripts/assign-reviewer.ts
+        run: npx ts-node --project tsconfig.actions.json .github/scripts/assign-reviewer.ts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
