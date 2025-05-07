@@ -29,7 +29,7 @@ export default function TodoList() {
             <button
               onClick={() => deleteTodo(todo.id)}
               className="text-red-500 hover:text-red-700"
-              type={"button"}
+              type="button"
             >
               Delete
             </button>
