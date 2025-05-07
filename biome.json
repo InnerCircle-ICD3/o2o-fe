@@ -25,17 +25,15 @@
       "correctness": {
         "noUnusedVariables": "error",
         "noUnusedImports": "error",
-        "requireKeyForArrayComponents": "error"
+        "useJsxKeyInIterable": "error"
       },
       "suspicious": {
         "noExplicitAny": "error"
       },
       "style": {
         "useConst": "error",
-        "useTemplate": "error"
-      },
-      "naming": {
-        "camelCase": "error"
+        "useTemplate": "error",
+        "useNamingConvention": "error"
       }
     }
   },
