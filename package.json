@@ -27,7 +27,6 @@
     "husky": "^9.1.7"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["biome check --write --unsafe --no-errors-on-unmatched"],
-    "*.{json,md}": ["biome format --write"]
+    "*.{js,jsx,ts,tsx,json,md}": ["biome check --write --unsafe --no-errors-on-unmatched"]
   }
 }
