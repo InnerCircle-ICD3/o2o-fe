@@ -1,13 +1,13 @@
 {
-  "name": "o2o-fe",
-  "version": "0.1.0",
-  "private": true,
+  "name": "pnpm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "prepare": "husky"
+    "user": "pnpm -F o2o-user run dev",
+    "back": "pnpm -F o2o-backoffice run dev",
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.74.7",
@@ -29,6 +29,10 @@
     "husky": "^9.1.7",
     "@biomejs/biome": "1.9.4"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,md}": ["biome check --write --no-errors-on-unmatched"]
   }

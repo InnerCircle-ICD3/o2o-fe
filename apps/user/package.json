@@ -1,0 +1,28 @@
+{
+  "name": "o2o-user",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.74.7",
+    "ky": "^1.8.1",
+    "next": "15.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "use-form-light": "^1.2.0",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

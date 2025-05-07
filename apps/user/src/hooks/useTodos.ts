@@ -1,5 +1,5 @@
-import { apiClient } from "@/services/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "../services/client";
 
 export interface Todo {
   id: number;
