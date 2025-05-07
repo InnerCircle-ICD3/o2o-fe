@@ -1,0 +1,28 @@
+name: PR 리뷰어 지정 (라벨 기반)
+
+on:
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  assign:
+    if: contains(github.event.label.name, 'Needs Review') # 라벨이 "Needs Review"일 때만 실행
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install @actions/github @slack/web-api js-yaml
+
+      - name: 리뷰어 지정 및 Slack 알림
+        run: npx ts-node --project tsconfig.actions.json .github/scripts/assign-reviewer.ts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          REVIEWERS_JSON: ${{ secrets.REVIEWERS_JSON }}

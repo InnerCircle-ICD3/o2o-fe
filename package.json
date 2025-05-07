@@ -3,27 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky"
   },
   "dependencies": {
+    "@actions/github": "^6.0.0",
+    "@slack/web-api": "^7.9.1",
+    "@tanstack/react-query": "^5.74.7",
+    "ky": "^1.8.1",
     "next": "15.3.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "use-form-light": "^1.2.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/webpack-env": "^1.18.8",
+    "husky": "^9.1.7",
     "msw": "^2.7.5",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   },
   "msw": {
-    "workerDirectory": [
-      "public"
-    ]
+    "workerDirectory": ["public"]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,md}": ["biome check --write --no-errors-on-unmatched"]
   }
 }
