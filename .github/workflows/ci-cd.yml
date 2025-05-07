@@ -26,20 +26,34 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.9.0
+          run_install: false
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Run tests with coverage
-        run: npm test -- --coverage
-        
+        run: pnpm test:coverage
+      
+      - name: Install jq and bc
+        run: sudo apt-get install -y jq bc
+      
+      # 스크립트를 사용하여 커버리지 체크
       - name: Check test coverage
         id: coverage
-        uses: johanvanhelden/gha-clover-test-coverage-check@v1
-        with:
-          percentage: 60
-          filename: './coverage/clover.xml'
+        run: |
+          COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+          echo "Total coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 60" | bc -l) )); then
+            echo "::error::Test coverage is below 60%"
+            exit 1
+          fi
+          echo "Coverage threshold met!"
       
       - name: Generate test coverage badge
         if: github.event_name == 'pull_request'
@@ -55,7 +69,7 @@ jobs:
           lcov-file: ./coverage/lcov.info
 
       - name: Block PR if coverage is too low
-        if: steps.coverage.outputs.met != 'true'
+        if: failure() && github.event_name == 'pull_request' && steps.coverage.outcome == 'failure'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -66,7 +80,6 @@ jobs:
               repo: context.repo.repo,
               body: '❌ 테스트 커버리지가 60% 미만입니다. PR을 병합할 수 없습니다.'
             })
-            core.setFailed('Test coverage is less than 60%')
 
   build:
     name: 빌드 검사
@@ -80,13 +93,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.9.0
+          run_install: false
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Build Next.js app
-        run: npm run build
+        run: pnpm build
 
   deploy-preview:
     name: Vercel 개발 환경 배포
