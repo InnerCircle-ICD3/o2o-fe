@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import Counter from "@/app/components/sample/Counter";
 
 export default function Home() {
   return (
@@ -45,6 +46,7 @@ export default function Home() {
             Read our docs
           </a>
         </div>
+        <Counter />
       </main>
       <footer className={styles.footer}>
         <a
