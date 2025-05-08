@@ -1,11 +1,11 @@
 "use client";
 
+import { handlers } from "@/mocks/handlers";
 import { type PropsWithChildren, Suspense, use } from "react";
-import { handlers } from "../../../mocks/handlers";
 
 const mockingEnabledPromise =
   typeof window !== "undefined"
-    ? import("../../../mocks/browser").then(async ({ worker }) => {
+    ? import("@/mocks/browser").then(async ({ worker }) => {
         if (process.env.NODE_ENV === "development") {
           await worker.start();
           worker.use(...handlers);
