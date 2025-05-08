@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "user": "pnpm -F o2o-user run dev",
-    "back": "pnpm -F o2o-backoffice run dev",
+    "back": "pnpm -F o2o-owner run dev",
     "dev": "pnpm -r dev",
     "build": "pnpm -r build"
   },

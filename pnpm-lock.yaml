@@ -82,7 +82,7 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@types/node@20.17.43)(jsdom@26.1.0)(msw@2.7.6(@types/node@20.17.43)(typescript@5.8.3))(terser@5.39.0)
 
-  apps/backoffice:
+  apps/owner:
     dependencies:
       next:
         specifier: 15.3.1
