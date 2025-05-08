@@ -19,7 +19,7 @@ GitHub 리포지토리 설정에서 다음 시크릿을 추가해야 합니다:
 
 ```
 VERCEL_TOKEN: Vercel API 토큰
-VERCEL_ORG_ID: Vercel 조직 ID
+VERCEL_TEAM_ID: Vercel 조직 ID
 VERCEL_PROJECT_ID: Vercel 프로젝트 ID
 ```
 
