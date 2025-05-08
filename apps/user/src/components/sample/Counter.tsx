@@ -1,6 +1,6 @@
 "use client";
 
-import { useCounterStore } from "../../../stores";
+import { useCounterStore } from "@/stores";
 
 export default function Counter() {
   const { count, increment, decrement, reset } = useCounterStore();
