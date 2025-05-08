@@ -15,8 +15,8 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "json-summary", "html", "lcov", "clover"],
       reportsDirectory: "./coverage",
-      include: ["src/utils/**/*.ts"],
-      exclude: ["**/*.test.ts", "**/*.spec.ts"]
+      include: ["src/utils/**/*.ts"], // TODO: 테스트를 위해 임시로 추가한 코드
+      exclude: ["**/*.test.ts", "**/*.spec.ts"] // TODO: 테스트를 위해 임시로 추가한 코드
     },
     include: ["**/*.{test,spec}.{ts,tsx}"],
     exclude: ["**/node_modules/**", "**/dist/**", "**/.next/**"],
