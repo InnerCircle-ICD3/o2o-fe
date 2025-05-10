@@ -7,6 +7,8 @@
     "dev:user": "pnpm -F o2o-user run dev",
     "dev:owner": "pnpm -F o2o-owner run dev",
     "dev": "pnpm -r dev",
+    "build:user": "pnpm -F o2o-user build",
+    "build:owner": "pnpm -F o2o-owner build",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
   },

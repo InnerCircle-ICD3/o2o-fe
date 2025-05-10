@@ -82,13 +82,13 @@ VERCEL_PROJECT_ID_OWNER: Owner 앱의 Vercel 프로젝트 ID
 ### User 앱 설정
 
 - **Root Directory**: `apps/user`
-- **Build Command**: `cd ../.. && pnpm build --filter=o2o-user`
+- **Build Command**: `cd ../.. && pnpm --filter o2o-user build`
 - **Output Directory**: `.next`
 
 ### Owner 앱 설정
 
 - **Root Directory**: `apps/owner`
-- **Build Command**: `cd ../.. && pnpm build --filter=o2o-owner`
+- **Build Command**: `cd ../.. && pnpm --filter o2o-owner build`
 - **Output Directory**: `.next`
 
 ## Learn More
