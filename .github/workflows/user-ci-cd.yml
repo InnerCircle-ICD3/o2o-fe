@@ -282,6 +282,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_USER }}
-          working-directory: ./apps/user
+          working-directory: ./
           vercel-args: '--prod'
           zeit-token: ${{ secrets.VERCEL_TOKEN }} 
