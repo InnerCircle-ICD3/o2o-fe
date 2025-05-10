@@ -94,7 +94,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./coverage/lcov.info
+          path-to-lcov: ./apps/user/coverage/lcov.info
           base-path: ./apps/user
 
       - name: Block PR if coverage is too low
