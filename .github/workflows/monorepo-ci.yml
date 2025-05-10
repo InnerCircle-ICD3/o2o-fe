@@ -42,7 +42,7 @@ jobs:
         run: pnpm install
 
       - name: Run biome
-        run: pnpm lint
+        run: pnpm lint:check
 
   type-check:
     name: Type Check

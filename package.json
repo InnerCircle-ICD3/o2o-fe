@@ -15,7 +15,12 @@
     "test:owner": "pnpm -F o2o-owner test",
     "test:coverage:user": "pnpm -F o2o-user test:coverage",
     "test:coverage:owner": "pnpm -F o2o-owner test:coverage",
-    "test:coverage": "pnpm -r test:coverage"
+    "test:coverage": "pnpm -r test:coverage",
+    "typecheck": "pnpm -r typecheck",
+    "typecheck:user": "pnpm -F o2o-user typecheck",
+    "typecheck:owner": "pnpm -F o2o-owner typecheck",
+    "lint": "biome check .",
+    "lint:check": "biome check apps/user/src apps/owner/src"
   },
   "dependencies": {
     "@actions/github": "^6.0.0",

@@ -8,7 +8,10 @@
     "start": "next start",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:check": "biome check src"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.2",
