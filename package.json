@@ -10,7 +10,12 @@
     "build:user": "pnpm -F o2o-user build",
     "build:owner": "pnpm -F o2o-owner build",
     "build": "pnpm -r build",
-    "test": "pnpm -r test"
+    "test": "pnpm -r test",
+    "test:user": "pnpm -F o2o-user test",
+    "test:owner": "pnpm -F o2o-owner test",
+    "test:coverage:user": "pnpm -F o2o-user test:coverage",
+    "test:coverage:owner": "pnpm -F o2o-owner test:coverage",
+    "test:coverage": "pnpm -r test:coverage"
   },
   "dependencies": {
     "@actions/github": "^6.0.0",

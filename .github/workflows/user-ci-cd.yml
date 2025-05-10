@@ -56,7 +56,7 @@ jobs:
         working-directory: ./ # 루트에서 pnpm install 실행 (워크스페이스 전체 설치)
 
       - name: Run tests with coverage
-        run: pnpm test:coverage
+        run: pnpm --filter o2o-user test:coverage
 
       - name: Install jq and bc
         run: sudo apt-get install -y jq bc

@@ -31,13 +31,21 @@ o2o-FE/
 pnpm install
 
 # User 앱 개발 서버 실행
-pnpm --filter=o2o-user dev
+pnpm --filter o2o-user dev
 
 # Owner 앱 개발 서버 실행
-pnpm --filter=o2o-owner dev
+pnpm --filter o2o-owner dev
 
 # 전체 앱 빌드
 pnpm build
+
+# 테스트 실행
+pnpm --filter o2o-user test       # User 앱 테스트
+pnpm --filter o2o-owner test      # Owner 앱 테스트
+
+# 테스트 커버리지 확인
+pnpm --filter o2o-user test:coverage    # User 앱 테스트 커버리지
+pnpm --filter o2o-owner test:coverage   # Owner 앱 테스트 커버리지
 ```
 
 ## CI/CD 워크플로우
