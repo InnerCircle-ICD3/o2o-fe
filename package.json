@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "user": "pnpm -F o2o-user run dev",
-    "back": "pnpm -F o2o-owner run dev",
+    "dev:user": "pnpm -F o2o-user run dev",
+    "dev:owner": "pnpm -F o2o-owner run dev",
     "dev": "pnpm -r dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test"

@@ -31,10 +31,10 @@ o2o-FE/
 pnpm install
 
 # User 앱 개발 서버 실행
-pnpm --filter user dev
+pnpm --filter=o2o-user dev
 
 # Owner 앱 개발 서버 실행
-pnpm --filter owner dev
+pnpm --filter=o2o-owner dev
 
 # 전체 앱 빌드
 pnpm build
@@ -82,13 +82,13 @@ VERCEL_PROJECT_ID_OWNER: Owner 앱의 Vercel 프로젝트 ID
 ### User 앱 설정
 
 - **Root Directory**: `apps/user`
-- **Build Command**: `cd ../.. && pnpm build --filter=user`
+- **Build Command**: `cd ../.. && pnpm build --filter=o2o-user`
 - **Output Directory**: `.next`
 
 ### Owner 앱 설정
 
 - **Root Directory**: `apps/owner`
-- **Build Command**: `cd ../.. && pnpm build --filter=owner`
+- **Build Command**: `cd ../.. && pnpm build --filter=o2o-owner`
 - **Output Directory**: `.next`
 
 ## Learn More

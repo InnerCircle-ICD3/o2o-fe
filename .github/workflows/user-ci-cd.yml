@@ -138,7 +138,7 @@ jobs:
         working-directory: ./ # 루트에서 실행
 
       - name: Build Next.js app
-        run: pnpm build
+        run: pnpm build --filter=o2o-user
 
   deploy-preview:
     name: Vercel 개발 환경 배포
