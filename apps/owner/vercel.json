@@ -1,41 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "buildCommand": "pnpm build",
-  "outputDirectory": ".next",
-  "installCommand": "npm -i g pnpm@10.10.0 && pnpm install",
-  "devCommand": "pnpm dev",
-  "git": {
-    "deploymentEnabled": {
-      "main": false,
-      "dev": true
-    }
-  },
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./",
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
-    }
-  ],
-  "projectSettings": {
-    "framework": {
-      "nextjs": {
-        "distDir": ".next"
-      }
-    }
-  }
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install"
 }
