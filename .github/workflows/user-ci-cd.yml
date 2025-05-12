@@ -163,26 +163,24 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel
 
-      # - name: Clear Wrong Vercel Settings
-      #   run: |
-      #     echo "Setting Vercel Project Root"
-      #     vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-      #     vercel build --token=${{ secrets.VERCEL_TOKEN }}
-      #   env:
-      #     VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
-      #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
+      - name: Clear Wrong Vercel Settings
+        run: |
+          echo "Setting Vercel Project Root"
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
+          vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
 
       - name: Deploy to Vercel (Preview)
         id: vercel-deploy
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_USER }}
-          working-directory: ./apps/user
-          github-comment: true
-          zeit-token: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          cd ./apps/user
+          DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes)
+          echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
 
       - name: Comment PR with Preview URL
         uses: actions/github-script@v6
@@ -225,22 +223,19 @@ jobs:
       - name: Clear Wrong Vercel Settings
         run: |
           echo "Setting Vercel Project Root"
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
+          vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
 
       - name: Deploy to Vercel (Dev)
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_USER }}
-          working-directory: ./apps/user
-          vercel-args: '--prod'
-          zeit-token: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          cd ./apps/user
+          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
 
   # 수동 워크플로우 - Vercel 프로덕션 환경 배포
   manual-deploy-prod:
@@ -269,18 +264,16 @@ jobs:
       - name: Clear Wrong Vercel Settings
         run: |
           echo "Setting Vercel Project Root"
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
+          vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
 
       - name: Deploy to Vercel (Production)
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_USER }}
-          vercel-args: '--prod'
-          zeit-token: ${{ secrets.VERCEL_TOKEN }} 
+        run: |
+          cd ./apps/user
+          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }} 
