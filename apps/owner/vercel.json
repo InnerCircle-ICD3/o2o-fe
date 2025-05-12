@@ -1,10 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "cd ../.. && pnpm build:owner",
-  "outputDirectory": "./apps/owner/.next",
-  "installCommand": "cd ../.. && pnpm install",
-  "devCommand": "cd ../.. && pnpm dev:owner",
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".next",
+  "installCommand": "pnpm install",
+  "devCommand": "pnpm dev",
   "git": {
     "deploymentEnabled": {
       "main": false,
@@ -36,7 +36,6 @@
       "nextjs": {
         "distDir": ".next"
       }
-    },
-    "rootDirectory": "apps/owner"
+    }
   }
 }
