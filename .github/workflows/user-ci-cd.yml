@@ -166,8 +166,9 @@ jobs:
       - name: Clear Wrong Vercel Settings
         run: |
           echo "Setting Vercel Project Root"
-          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
-          vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
+          cd ./apps/user
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
@@ -176,7 +177,7 @@ jobs:
         id: vercel-deploy
         run: |
           cd ./apps/user
-          DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes)
+          DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes --cwd .)
           echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
@@ -223,8 +224,9 @@ jobs:
       - name: Clear Wrong Vercel Settings
         run: |
           echo "Setting Vercel Project Root"
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
-          vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
+          cd ./apps/user
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
@@ -232,7 +234,7 @@ jobs:
       - name: Deploy to Vercel (Dev)
         run: |
           cd ./apps/user
-          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes --cwd .
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
@@ -264,8 +266,9 @@ jobs:
       - name: Clear Wrong Vercel Settings
         run: |
           echo "Setting Vercel Project Root"
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
-          vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/user
+          cd ./apps/user
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
@@ -273,7 +276,7 @@ jobs:
       - name: Deploy to Vercel (Production)
         run: |
           cd ./apps/user
-          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes --cwd .
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }} 

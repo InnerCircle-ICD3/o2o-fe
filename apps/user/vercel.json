@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "buildCommand": "cd ../.. && pnpm build:user",
-  "outputDirectory": ".next",
+  "outputDirectory": "./apps/user/.next",
   "installCommand": "cd ../.. && pnpm install",
   "devCommand": "cd ../.. && pnpm dev:user",
   "git": {
@@ -32,6 +32,11 @@
     }
   ],
   "projectSettings": {
+    "framework": {
+      "nextjs": {
+        "distDir": ".next"
+      }
+    },
     "rootDirectory": "apps/user"
   }
 }
