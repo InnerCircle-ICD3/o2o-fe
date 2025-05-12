@@ -3,7 +3,7 @@
   "framework": "nextjs",
   "buildCommand": "pnpm build",
   "outputDirectory": ".next",
-  "installCommand": "pnpm install",
+  "installCommand": "npm -i g pnpm@10.10.0 && pnpm install",
   "devCommand": "pnpm dev",
   "git": {
     "deploymentEnabled": {
