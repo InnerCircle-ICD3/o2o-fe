@@ -167,8 +167,7 @@ jobs:
 
       - name: Deploy to Vercel (Preview)
         id: vercel-deploy
-        run: |
-          cd apps/owner
+        run:
           DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes)
           echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
         env:
@@ -207,15 +206,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       # Vercel 프로젝트 루트 설정
       - name: Install Vercel CLI
         run: npm install -g vercel
 
       - name: Deploy to Vercel (Dev)
-        run: |
-          cd apps/owner
+        run:
           vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
@@ -239,15 +237,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       # Vercel 프로젝트 루트 설정
       - name: Install Vercel CLI
         run: npm install -g vercel
 
       - name: Deploy to Vercel (Production)
-        run: |
-          cd apps/owner
+        run:
           vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
