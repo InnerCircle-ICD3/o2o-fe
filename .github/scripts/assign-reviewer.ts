@@ -7,34 +7,24 @@ interface Reviewer {
 }
 
 async function run() {
-  if (!process.env.GH_TOKEN) {
-    throw new Error("❌ GH_TOKEN 환경 변수가 설정되지 않았습니다.");
-  }
-  if (!process.env.SLACK_BOT_TOKEN) {
-    throw new Error("❌ SLACK_BOT_TOKEN 환경 변수가 설정되지 않았습니다.");
+  const { GH_TOKEN, SLACK_BOT_TOKEN, REVIEWERS_JSON } = process.env;
+  if (!GH_TOKEN || !SLACK_BOT_TOKEN || !REVIEWERS_JSON) {
+    throw new Error("❌ 필요한 환경 변수가 누락되었습니다.");
   }
 
-  const token = process.env.GH_TOKEN;
-  const slackToken = process.env.SLACK_BOT_TOKEN;
-  const octokit = github.getOctokit(token);
-  const slack = new WebClient(slackToken);
+  const octokit = github.getOctokit(GH_TOKEN);
+  const slack = new WebClient(SLACK_BOT_TOKEN);
   const context = github.context;
 
   const pr = context.payload.pull_request;
   if (!pr) throw new Error("❌ PR 정보가 없습니다.");
 
   const prCreator = pr.user.login;
-
-  // reviewers.yml 로딩 및 타입 변환
-  if (!process.env.REVIEWERS_JSON) {
-    throw new Error("❌ REVIEWERS_JSON 환경 변수가 설정되지 않았습니다.");
-  }
-  const reviewersJson = process.env.REVIEWERS_JSON;
-  const reviewers = JSON.parse(reviewersJson) as Reviewer[];
+  const reviewers = JSON.parse(REVIEWERS_JSON) as Reviewer[];
   const candidates = reviewers.filter((r) => r.githubName !== prCreator);
   const selected = candidates[Math.floor(Math.random() * candidates.length)];
 
-  // reviewer 지정
+  // 1. GitHub Reviewer 지정
   await octokit.rest.pulls.requestReviewers({
     owner: context.repo.owner,
     repo: context.repo.repo,
@@ -43,9 +33,16 @@ async function run() {
     reviewers: [selected.githubName],
   });
 
-  // Slack DM 전송
+  // 2. Slack 사용자 ID 추출
+  const slackUserId = selected.slackUserId;
+
+  // 3. DM 채널 열기 (자기 자신도 가능)
+  const { channel } = await slack.conversations.open({ users: slackUserId });
+  if (!channel?.id) throw new Error("❌ DM 채널 열기에 실패했습니다.");
+
+  // 4. 메시지 전송
   await slack.chat.postMessage({
-    channel: selected.slackUserId,
+    channel: channel.id,
     text: `🔔 *[${pr.title}]* PR의 리뷰어로 지정되셨습니다!\n👉 <${pr.html_url}|PR 보러가기>`,
   });
 }
