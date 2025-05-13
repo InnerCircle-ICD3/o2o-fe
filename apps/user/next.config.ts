@@ -5,6 +5,8 @@ const withVanillaExtract = createVanillaExtractPlugin();
 
 const nextConfig: NextConfig = {
   /* config options here */
+  distDir: ".next",
+  output: "standalone",
 };
 
 export default withVanillaExtract(nextConfig);
