@@ -1,0 +1,18 @@
+import { http, HttpResponse } from 'msw';
+import { baseUrl } from '../../utils';
+
+const mockSuggestions = ['피자', '피자스쿨', '피자나라치킨공주', '피나치공', '피자헛', '피자마루', '피자알볼로'];
+
+const handlers = [
+  http.get(`${baseUrl}/suggestions`, ({ request }) => {
+    const url = new URL(request.url);
+    const searchTerm = url.searchParams.get('searchTerm') ?? '';
+    const filtered = mockSuggestions.filter((word) =>
+      word.includes(searchTerm)
+    );
+    return HttpResponse.json(filtered);
+  }),
+];
+
+export default handlers;
+
