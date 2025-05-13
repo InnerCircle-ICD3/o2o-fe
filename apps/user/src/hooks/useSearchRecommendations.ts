@@ -30,8 +30,11 @@ export const useSearchRecommendations = (searchTerm: string): UseSearchRecommend
 
         const data: string[] = await res.json();
 
+        // 중복 제거
+        const uniqueRecommendations = Array.from(new Set(data));
+
         if (latestSearchTermRef.current === searchTerm) {
-          setRecommendations(data);
+          setRecommendations(uniqueRecommendations);
         }
       } catch (err: unknown) {
         if (!(err instanceof DOMException && err.name === "AbortError")) {
