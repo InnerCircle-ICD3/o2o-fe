@@ -70,8 +70,6 @@ const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScr
       style={{
         overflowY: "auto",
         height: "100%",
-        position: "relative",
-        border: "1px solid #ccc",
       }}
     >
       <div style={{ height: totalHeight }}>

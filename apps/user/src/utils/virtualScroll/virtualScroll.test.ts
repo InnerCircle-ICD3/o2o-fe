@@ -79,7 +79,7 @@ describe("Virtual Scroll Utils Test", () => {
         heights: badHeights,
         width: 500,
       }),
-    ).toThrow("No height or aspect ratio for: Z");
+    ).toThrow("No height or aspect ratio for: z");
   });
 
   it("getVirtualRange 함수는 스크롤 위치와 높이를 기반으로 가상화할 컴포넌트의 시작과 끝 인덱스를 반환한다.", () => {
@@ -224,8 +224,8 @@ describe("Virtual Scroll Utils Test", () => {
 
     // 시작 인덱스: 0, 끝 인덱스: 3
     expect(visible.length).toBe(3);
-    expect(visible[0].props.name).toBe("A");
-    expect(visible[1].props.name).toBe("B");
-    expect(visible[2].props.name).toBe("C");
+    expect(visible[0].props.name).toBe("a");
+    expect(visible[1].props.name).toBe("b");
+    expect(visible[2].props.name).toBe("c");
   });
 });

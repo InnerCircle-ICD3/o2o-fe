@@ -185,4 +185,16 @@ describe("Virtual Scroll Component Test", () => {
       expect(onBottom).not.toHaveBeenCalled();
     });
   });
+
+  it("VirtualItem 컴포넌트는 children을 렌더링한다.", () => {
+    const { container } = render(
+      <VirtualItem name="test-item">
+        <div>Test Item</div>
+      </VirtualItem>,
+    );
+
+    const item = container.querySelector("div");
+    expect(item).toBeDefined();
+    expect(item?.textContent).toBe("Test Item");
+  });
 });
