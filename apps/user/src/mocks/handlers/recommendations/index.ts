@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { baseUrl } from '../../utils';
 
-const mockRecommendations = ['피자', '피자스쿨', '피자나라치킨공주', '피나치공', '피자헛', '피자마루', '피자알볼로'];
+const mockRecommendations = ['피자', '피자스쿨', '피자나라치킨공주', '피나치공', '피자헛', '피자마루', '피자알볼로', '치킨', '짜장면'];
 
 const handlers = [
   http.get(`${baseUrl}/recommendations`, ({ request }) => {
