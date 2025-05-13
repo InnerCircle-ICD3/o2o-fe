@@ -46,6 +46,7 @@ export const getVirtualRange = ({
 
   let endIdx = startIdx;
   let visibleHeight = 0;
+
   while (endIdx < itemHeights.length && visibleHeight < height) {
     visibleHeight += itemHeights[endIdx];
     endIdx++;
@@ -53,18 +54,18 @@ export const getVirtualRange = ({
 
   const renderStart = Math.max(0, startIdx - overscan);
   const renderEnd = Math.min(itemHeights.length, endIdx + overscan);
-  const translateY = itemHeights.slice(0, renderStart).reduce((a, b) => a + b, 0);
 
   return {
     renderStart,
     renderEnd,
-    translateY,
-    totalHeight: itemHeights.reduce((a, b) => a + b, 0),
   };
 };
 
-// renderVirtualContent.ts
-export function renderVirtualContent({
+export const getTranslateY = (itemHeights: number[], startIdx: number) => {
+  return itemHeights.slice(0, startIdx).reduce((a, b) => a + b, 0);
+};
+
+export const renderVirtualContent = ({
   children,
   heights,
   containerSize,
@@ -79,21 +80,22 @@ export function renderVirtualContent({
   };
   scrollTop: number;
   overscan: number;
-}) {
+}) => {
   const { width, height } = containerSize;
 
   const itemHeights = getItemHeights({ children, heights, width });
-
-  const { renderStart, renderEnd, translateY, totalHeight } = getVirtualRange({
+  const totalHeight = itemHeights.reduce((acc, cur) => acc + cur, 0);
+  const { renderStart, renderEnd } = getVirtualRange({
     scrollTop,
     height,
     overscan,
     itemHeights,
   });
+  const translateY = getTranslateY(itemHeights, renderStart);
 
   return {
     totalHeight,
     translateY,
     visible: children.slice(renderStart, renderEnd),
   };
-}
+};

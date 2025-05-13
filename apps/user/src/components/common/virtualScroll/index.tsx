@@ -66,6 +66,7 @@ const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScr
   return (
     <div
       ref={containerRef}
+      className="virtual-scroll"
       style={{
         overflowY: "auto",
         height: "100%",
@@ -73,7 +74,7 @@ const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScr
         border: "1px solid #ccc",
       }}
     >
-      <div style={{ height: totalHeight, position: "relative" }}>
+      <div style={{ height: totalHeight }}>
         {containerSize.height !== 0 && containerSize.width !== 0 && (
           <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
         )}
