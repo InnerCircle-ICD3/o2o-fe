@@ -21,9 +21,9 @@ const Checkbox = (props: CheckboxProps) => {
     <label className={style.container} htmlFor={id}>
       <input id={id} type={"checkbox"} hidden checked={checked} onChange={handleChange} />
       {checked ? (
-        <Image src={"/icons/check_on.svg"} alt={""} width={20} height={20} />
+        <Image src={"/icons/check_on.svg"} alt={"체크박스 취소"} width={20} height={20} />
       ) : (
-        <Image src={"/icons/check_off.svg"} alt={""} width={20} height={20} />
+        <Image src={"/icons/check_off.svg"} alt={"체크박스 선택"} width={20} height={20} />
       )}
     </label>
   );
