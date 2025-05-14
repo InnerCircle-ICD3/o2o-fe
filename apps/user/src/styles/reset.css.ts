@@ -15,7 +15,6 @@ globalStyle("html, body", {
 
 // 버튼 초기화
 globalStyle("button", {
-  all: "unset",
   cursor: "pointer",
 });
 
@@ -27,5 +26,4 @@ globalStyle("ul, ol", {
 // 링크 초기화
 globalStyle("a", {
   textDecoration: "none",
-  color: "inherit",
 });
