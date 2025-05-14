@@ -1,9 +1,20 @@
 "use client";
 
-import type { VirtualItemProps, VirtualScrollProps } from "@/types/virtualScroll.type";
+import type { HeightSpec } from "@/types/virtualScroll.type";
 import { renderVirtualContent } from "@/utils/virtualScroll";
 import { Children, useEffect, useRef, useState } from "react";
-import type { ReactElement } from "react";
+import type { PropsWithChildren, ReactElement } from "react";
+import * as style from "./virtualScroll.css";
+
+export interface VirtualScrollProps extends PropsWithChildren {
+  overscan?: number;
+  heights: Record<string, HeightSpec>;
+  onBottom?: () => void;
+}
+
+export interface VirtualItemProps extends PropsWithChildren {
+  name: string;
+}
 
 const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScrollProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,14 +75,7 @@ const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScr
   }, [onBottom]);
 
   return (
-    <div
-      ref={containerRef}
-      className="virtual-scroll"
-      style={{
-        overflowY: "auto",
-        height: "100%",
-      }}
-    >
+    <div ref={containerRef} className={`virtual-scroll ${style.container}`}>
       <div style={{ height: totalHeight }}>
         {containerSize.height !== 0 && containerSize.width !== 0 && (
           <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
