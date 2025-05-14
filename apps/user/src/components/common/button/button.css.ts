@@ -1,0 +1,45 @@
+import { globalTheme } from "@/styles/theme/theme.css";
+import { style, styleVariants } from "@vanilla-extract/css";
+
+const button = style({
+  width: "100%",
+  height: "auto",
+  aspectRatio: "327/60",
+
+  borderWidth: "1px",
+  borderStyle: "solid",
+  borderRadius: "8px",
+
+  fontWeight: "bold",
+
+  cursor: "pointer",
+});
+
+export const buttonVariants = styleVariants({
+  primary: [
+    button,
+    {
+      backgroundColor: globalTheme.color.primary,
+      borderColor: globalTheme.color.primary,
+      color: globalTheme.color.white,
+    },
+  ],
+  disabled: [
+    button,
+    {
+      backgroundColor: globalTheme.color.white,
+      borderColor: globalTheme.color.gray.light,
+      color: globalTheme.color.gray.base,
+
+      cursor: "not-allowed",
+    },
+  ],
+  common: [
+    button,
+    {
+      backgroundColor: globalTheme.color.white,
+      borderColor: globalTheme.color.gray.light,
+      color: globalTheme.color.black,
+    },
+  ],
+});
