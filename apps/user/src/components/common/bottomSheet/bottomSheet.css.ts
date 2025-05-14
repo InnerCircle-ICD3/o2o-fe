@@ -98,7 +98,7 @@ export const header = style({
   color: globalTheme.color.black,
 });
 
-export const closeButton = style({
+export const close = style({
   width: 24,
   height: 24,
 

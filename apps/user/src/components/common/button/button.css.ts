@@ -15,7 +15,7 @@ const button = style({
   cursor: "pointer",
 });
 
-export const buttonVariants = styleVariants({
+export const buttonStatus = styleVariants({
   primary: [
     button,
     {

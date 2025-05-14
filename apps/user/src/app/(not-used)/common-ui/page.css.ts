@@ -16,3 +16,9 @@ export const list = style({
   flexDirection: "column",
   gap: 20,
 });
+
+export const header = style({
+  fontSize: 18,
+  marginTop: 20,
+  marginBottom: 10,
+});

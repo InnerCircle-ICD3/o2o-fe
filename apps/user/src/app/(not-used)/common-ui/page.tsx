@@ -19,19 +19,19 @@ const CommonUi = () => {
       <p>공용 UI 확인용 페이지입니다.</p>
 
       <div>
-        <h2>Button</h2>
+        <h2 className={style.header}>Button</h2>
         <div className={style.list}>
           <Button>Common</Button>
-          <Button variant="common">Common</Button>
-          <Button variant="primary">Primary</Button>
-          <Button variant="disabled" disabled>
+          <Button status="common">Common</Button>
+          <Button status="primary">Primary</Button>
+          <Button status="disabled" disabled>
             Disabled
           </Button>
         </div>
       </div>
 
       <div>
-        <h2>CheckBox</h2>
+        <h2 className={style.header}>CheckBox</h2>
         <div className={style.list}>
           <Checkbox checked={true} onChange={() => {}} />
           <Checkbox checked={false} onChange={() => {}} />
@@ -41,9 +41,9 @@ const CommonUi = () => {
       </div>
 
       <div>
-        <h2>BottomSheet - common</h2>
+        <h2 className={style.header}>BottomSheet - common</h2>
         <div className={style.list}>
-          <Button variant="common" onClick={() => setIsShow(true)}>
+          <Button status="common" onClick={() => setIsShow(true)}>
             BottomSheet
           </Button>
 
@@ -60,9 +60,9 @@ const CommonUi = () => {
       </div>
 
       <div>
-        <h2>BottomSheet - shadow</h2>
+        <h2 className={style.header}>BottomSheet - shadow</h2>
         <div className={style.list}>
-          <Button variant="common" onClick={() => setIsShowShadow(true)}>
+          <Button status="common" onClick={() => setIsShowShadow(true)}>
             BottomSheet
           </Button>
 
@@ -80,7 +80,7 @@ const CommonUi = () => {
       </div>
 
       <div>
-        <h2>Status Label</h2>
+        <h2 className={style.header}>Status Label</h2>
         <div className={style.list}>
           <StatusLabel status={"sales"}>판매중</StatusLabel>
           <StatusLabel status={"soldOut"}>마감</StatusLabel>

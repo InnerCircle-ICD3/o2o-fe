@@ -25,7 +25,7 @@ const BottomSheet = (props: BottomSheetProps) => {
       <div className={innerStyle}>
         <div className={style.wrapper}>
           <h2 className={style.header}>{title}</h2>
-          <button className={style.closeButton} type={"button"} onClick={onClose}>
+          <button className={style.close} type={"button"} onClick={onClose}>
             <Image src={"/icons/btn_close.svg"} alt={""} width={24} height={24} />
           </button>
         </div>
