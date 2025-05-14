@@ -3,6 +3,7 @@
 import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import Checkbox from "@/components/common/checkbox";
+import StatusLabel from "@/components/common/statusLabel";
 import { useState } from "react";
 import * as style from "./page.css";
 
@@ -75,6 +76,18 @@ const CommonUi = () => {
           >
             <div>하하하하!!!!</div>
           </BottomSheet>
+        </div>
+      </div>
+
+      <div>
+        <h2>Status Label</h2>
+        <div className={style.list}>
+          <StatusLabel status={"sales"}>판매중</StatusLabel>
+          <StatusLabel status={"soldOut"}>마감</StatusLabel>
+          <StatusLabel status={"endSoon"}>마감임박</StatusLabel>
+          <StatusLabel status={"readyForPickup"}>픽업대기중</StatusLabel>
+          <StatusLabel status={"collected"}>픽업완료</StatusLabel>
+          <StatusLabel status={"cancel"}>주문취소</StatusLabel>
         </div>
       </div>
     </div>
