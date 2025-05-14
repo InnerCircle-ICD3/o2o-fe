@@ -1,5 +1,6 @@
 import Image from "next/image";
-import type { PropsWithChildren } from "react";
+import { type PropsWithChildren, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import * as style from "./bottomSheet.css";
 
 interface BottomSheetProps extends PropsWithChildren {
@@ -11,6 +12,7 @@ interface BottomSheetProps extends PropsWithChildren {
 
 const BottomSheet = (props: BottomSheetProps) => {
   const { type = "common", isShow, title, children, onClose } = props;
+  const [bottomElement, setBottomElement] = useState<HTMLDivElement | null>(null);
 
   const isShadow = type === "shadow";
 
@@ -19,8 +21,20 @@ const BottomSheet = (props: BottomSheetProps) => {
 
   const containerStyle = isShow ? style.container.visible : style.container.hidden;
 
-  return (
-    <div className={containerStyle}>
+  useEffect(() => {
+    const bottomElement = document.querySelector<HTMLDivElement>("#bottom-sheet");
+
+    if (!bottomElement) {
+      throw new Error("BottomSheet: bottom element not found");
+    }
+
+    setBottomElement(bottomElement);
+  }, []);
+
+  if (!bottomElement) return;
+
+  return createPortal(
+    <aside className={containerStyle}>
       {isShadow && isShow && <button className={style.shadow} type={"button"} onClick={onClose} />}
       <div className={innerStyle}>
         <div className={style.wrapper}>
@@ -32,7 +46,8 @@ const BottomSheet = (props: BottomSheetProps) => {
 
         {children}
       </div>
-    </div>
+    </aside>,
+    bottomElement,
   );
 };
 

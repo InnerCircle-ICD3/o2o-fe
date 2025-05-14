@@ -1,33 +1,51 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import BottomSheet from ".";
 import * as style from "./bottomSheet.css";
 
 describe("BottomSheet Test", () => {
-  afterEach(() => {
-    cleanup();
+  beforeEach(() => {
+    const bottomElement = document.createElement("div");
+    bottomElement.id = "bottom-sheet";
+
+    document.body.appendChild(bottomElement);
   });
 
-  it("isShow=true일 때 제목과 children이 렌더링되어야 한다", () => {
+  afterEach(() => {
+    cleanup();
+    const el = document.querySelector("#bottom-sheet");
+    if (el) {
+      document.body.removeChild(el);
+      el.remove();
+    }
+  });
+
+  it("isShow=true일 때 제목과 children이 id가 bottom-sheet 요소 안에 렌더링되어야 한다", () => {
     render(
       <BottomSheet isShow={true} title="테스트 시트" onClose={() => {}}>
         <p>내용</p>
       </BottomSheet>,
     );
 
+    const portalElement = document.getElementById("bottom-sheet") as HTMLDivElement;
+    const outerElement = portalElement.firstChild as HTMLElement;
+
+    expect(outerElement).not.toBeNull();
     expect(screen.getByText("테스트 시트")).not.toBeNull();
     expect(screen.getByText("내용")).not.toBeNull();
   });
 
   it("isShow=false일 때 숨겨진 스타일 클래스가 적용된다", () => {
-    const { container } = render(
+    render(
       <BottomSheet isShow={false} title="숨김" onClose={() => {}}>
         <p>숨김 내용</p>
       </BottomSheet>,
     );
 
-    const outer = container.firstChild as HTMLElement;
-    expect(outer.className).toContain(style.container.hidden); // 실제 클래스 이름 대신 스타일 명칭 기반 확인
+    const portalElement = document.getElementById("bottom-sheet") as HTMLDivElement;
+    const outerElement = portalElement.firstChild as HTMLElement;
+
+    expect(outerElement.className).toContain(style.container.hidden); // 실제 클래스 이름 대신 스타일 명칭 기반 확인
   });
 
   it("type이 shadow이고 isShow=true일 때 어두운 배경 버튼이 렌더링된다", () => {
