@@ -1,4 +1,4 @@
-import { globalTheme } from "@/styles/theme/theme.css";
+import { globalTheme } from "@/styles/theme.css";
 import { style, styleVariants } from "@vanilla-extract/css";
 
 const button = style({
