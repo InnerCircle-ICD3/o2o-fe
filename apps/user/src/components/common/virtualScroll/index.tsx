@@ -1,19 +1,15 @@
 "use client";
 
-import type { HeightSpec } from "@/types/virtualScroll.type";
+import type { HeightSpec, VirtualItemProps } from "@/types/virtualScroll.type";
 import { renderVirtualContent } from "@/utils/virtualScroll";
 import { Children, useEffect, useRef, useState } from "react";
 import type { PropsWithChildren, ReactElement } from "react";
 import * as style from "./virtualScroll.css";
 
-export interface VirtualScrollProps extends PropsWithChildren {
+interface VirtualScrollProps extends PropsWithChildren {
   overscan?: number;
   heights: Record<string, HeightSpec>;
   onBottom?: () => void;
-}
-
-export interface VirtualItemProps extends PropsWithChildren {
-  name: string;
 }
 
 const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScrollProps) => {
