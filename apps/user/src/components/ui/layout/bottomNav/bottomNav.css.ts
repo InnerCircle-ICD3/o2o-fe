@@ -35,7 +35,7 @@ const navItemBase = style({
   width: "60px",
 
   fontSize: "12px",
-  fontWeight: "medium",
+  fontWeight: 500,
 });
 
 export const navItem = styleVariants({
