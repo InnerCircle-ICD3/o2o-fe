@@ -32,8 +32,10 @@ const navItemBase = style({
   alignItems: "center",
   gap: "6px",
 
+  width: "60px",
+
   fontSize: "12px",
-  fontWeight: "normal",
+  fontWeight: "medium",
 });
 
 export const navItem = styleVariants({

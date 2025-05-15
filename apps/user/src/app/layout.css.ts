@@ -8,8 +8,6 @@ export const container = style({
   margin: "0 auto",
   borderLeft: `1px solid ${globalTheme.color.line}`,
   borderRight: `1px solid ${globalTheme.color.line}`,
-
-  backgroundColor: globalTheme.color.gray.light,
 });
 
 export const main = style({
