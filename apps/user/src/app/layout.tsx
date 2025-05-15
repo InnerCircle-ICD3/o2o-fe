@@ -2,6 +2,7 @@ import Providers from "@/providers";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/reset.css";
+import * as style from "./layout.css";
 
 if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "development") {
   const { worker } = await import("../mocks/server");
@@ -31,8 +32,10 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Providers>{children}</Providers>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${style.container}`}>
+        <div className={style.main}>
+          <Providers>{children}</Providers>
+        </div>
       </body>
     </html>
   );
