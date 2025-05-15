@@ -9,6 +9,8 @@ export const globalTheme = createThemeContract({
     black: null,
     white: null,
 
+    line: null,
+
     gray: {
       dark: null,
       base: null,
@@ -25,6 +27,8 @@ export const theme = createGlobalTheme(":root", globalTheme, {
 
     black: "#333333",
     white: "#ffffff",
+
+    line: "#d9d9d9",
 
     gray: {
       dark: "#666666",
