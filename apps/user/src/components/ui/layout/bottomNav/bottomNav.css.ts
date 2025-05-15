@@ -11,6 +11,8 @@ export const container = style({
 
 export const main = style({
   height: "calc(100% - 70px)",
+
+  padding: "0 20px",
 });
 
 export const bottomNav = style({
