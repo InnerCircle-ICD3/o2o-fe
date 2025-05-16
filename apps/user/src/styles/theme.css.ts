@@ -15,6 +15,7 @@ export const globalTheme = createThemeContract({
       dark: null,
       base: null,
       light: null,
+      background: null,
     },
   },
 });
@@ -34,6 +35,7 @@ export const theme = createGlobalTheme(":root", globalTheme, {
       dark: "#666666",
       base: "#999999",
       light: "#CCCCCC",
+      background: "#F2F3F6",
     },
   },
 });

@@ -16,6 +16,8 @@ globalStyle("html, body", {
 // 버튼 초기화
 globalStyle("button", {
   cursor: "pointer",
+  border: "none",
+  background: "none",
 });
 
 // 리스트 초기화
