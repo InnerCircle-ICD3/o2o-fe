@@ -140,12 +140,12 @@ describe("Virtual Scroll Component Test", () => {
     });
   });
 
-  it("observer가 화면에 들어오고 onBottom이 있다면 호출된다.", async () => {
-    const onBottom = vi.fn();
+  it("observer가 화면에 들어오고 onScrollEnd이 있다면 호출된다.", async () => {
+    const onScrollEnd = vi.fn();
 
     const { container } = render(
       <div style={{ height: "300px", overflowY: "auto" }}>
-        <VirtualScroll heights={heights} onBottom={onBottom}>
+        <VirtualScroll heights={heights} onScrollEnd={onScrollEnd}>
           {generateItems(100)}
         </VirtualScroll>
       </div>,
@@ -159,16 +159,16 @@ describe("Virtual Scroll Component Test", () => {
     });
 
     await waitFor(() => {
-      expect(onBottom).toHaveBeenCalled();
+      expect(onScrollEnd).toHaveBeenCalled();
     });
   });
 
-  it("observer가 화면에 들어오고 onBottom이 없다면 호출되지 않는다.", async () => {
-    const onBottom = vi.fn();
+  it("observer가 화면에 들어오고 onScrollEnd이 없다면 호출되지 않는다.", async () => {
+    const onScrollEnd = vi.fn();
 
     const { container } = render(
       <div style={{ height: "300px", overflowY: "auto" }}>
-        <VirtualScroll heights={heights} onBottom={undefined}>
+        <VirtualScroll heights={heights} onScrollEnd={undefined}>
           {generateItems(100)}
         </VirtualScroll>
       </div>,
@@ -182,7 +182,7 @@ describe("Virtual Scroll Component Test", () => {
     });
 
     await waitFor(() => {
-      expect(onBottom).not.toHaveBeenCalled();
+      expect(onScrollEnd).not.toHaveBeenCalled();
     });
   });
 
