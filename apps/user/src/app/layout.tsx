@@ -33,9 +33,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${style.container}`}>
-        <div className={style.main}>
-          <Providers>{children}</Providers>
-        </div>
+        <Providers>
+          <div className={style.main}>{children}</div>
+          <div id="bottom-sheet" />
+        </Providers>
       </body>
     </html>
   );

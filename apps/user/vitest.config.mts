@@ -15,17 +15,17 @@ export default defineConfig({
       reporter: ["text", "json-summary", "html", "lcov"],
       reportsDirectory: "./coverage",
       include: [
-        "src/app/page.tsx", 
+        "src/app/page.tsx",
         "src/components/sample/Counter.tsx",
-        "src/stores/**/*.ts"
+        "src/stores/**/*.ts",
       ],
       exclude: [
         "**/*.d.ts",
         "**/*.test.ts",
         "**/*.test.tsx",
         "src/mocks/**",
-        "src/test/**"
-      ]
-    }
+        "src/test/**",
+      ],
+    },
   },
 });
