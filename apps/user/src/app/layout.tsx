@@ -33,6 +33,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>{children}</Providers>
+        <div id="bottom-sheet" />
       </body>
     </html>
   );
