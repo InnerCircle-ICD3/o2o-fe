@@ -1,3 +1,6 @@
 import exampleHandlers from "./example";
-
-export const handlers = [...exampleHandlers];
+import recommendationsHandlers from "./recommendations";
+export const handlers = [
+  ...exampleHandlers,
+  ...recommendationsHandlers,
+];
