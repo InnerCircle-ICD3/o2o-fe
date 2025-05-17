@@ -12,7 +12,7 @@ interface PageProps {
 
 const Page = async (props: PageProps) => {
   const { params } = props;
-  const { id } = await params;
+  const { id } = params;
 
   const storeDetail = await getStoreDetail(id);
   const storeProducts = await getStoreDetailProducts(id);
