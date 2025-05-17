@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes } from "react";
-import * as style from "./input.css";
+import * as style from "./textInput.css";
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   labelText: string | React.ReactNode;
