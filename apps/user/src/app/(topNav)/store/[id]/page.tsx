@@ -8,6 +8,7 @@ const Page = () => {
     <section className={style.container}>
       <StoreInfo />
       <StoreProduct />
+
       <ProductSelector />
     </section>
   );
