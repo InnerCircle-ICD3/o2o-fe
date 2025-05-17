@@ -30,3 +30,7 @@ globalStyle("a", {
   textDecoration: "none",
   color: globalTheme.color.black,
 });
+
+globalStyle("::-webkit-scrollbar", {
+  display: "none",
+});
