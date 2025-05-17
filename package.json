@@ -21,8 +21,8 @@
     "typecheck": "pnpm -r typecheck",
     "typecheck:user": "pnpm -F o2o-user typecheck",
     "typecheck:owner": "pnpm -F o2o-owner typecheck",
-    "lint": "biome check .",
-    "lint:check": "biome check apps/user/src apps/owner/src"
+    "lint:check": "biome check apps/user/src apps/owner/src",
+    "lint:fix": "biome check apps/user/src apps/owner/src --write"
   },
   "dependencies": {
     "@actions/github": "^6.0.0",
