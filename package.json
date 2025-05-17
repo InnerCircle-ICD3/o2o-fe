@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prepare": "husky",
+    "postinstall": "chmod +x .husky/pre-commit",
     "dev:user": "pnpm -F o2o-user run dev",
     "dev:owner": "pnpm -F o2o-owner run dev",
     "dev": "pnpm -r dev",
