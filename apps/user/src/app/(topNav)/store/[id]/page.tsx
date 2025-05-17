@@ -4,18 +4,9 @@ import StoreInfo from "@/components/ui/storeDetail/storeInfo";
 import StoreProducts from "@/components/ui/storeDetail/storeProducts";
 import * as style from "./storeDetail.css";
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
-const Page = async (props: PageProps) => {
-  const { params } = props;
-  const { id } = params;
-
-  const storeDetail = await getStoreDetail(id);
-  const storeProducts = await getStoreDetailProducts(id);
+const Page = async ({ params }: { params: { id: string } }) => {
+  const storeDetail = await getStoreDetail(params.id);
+  const storeProducts = await getStoreDetailProducts(params.id);
 
   return (
     <section className={style.container}>
