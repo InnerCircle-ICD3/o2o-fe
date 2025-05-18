@@ -2,6 +2,7 @@ import Providers from "@/providers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/styles/reset.css";
+import classNames from "classnames";
 import * as style from "./layout.css";
 
 if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "development") {
@@ -28,7 +29,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${pretendard.variable} ${style.container}`}>
+      <body className={classNames(pretendard.variable, style.container)}>
         <Providers>
           <div className={style.main}>{children}</div>
           <div id="bottom-sheet" />
