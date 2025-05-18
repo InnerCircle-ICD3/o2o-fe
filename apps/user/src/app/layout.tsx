@@ -1,6 +1,6 @@
 import Providers from "@/providers";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "@/styles/reset.css";
 import * as style from "./layout.css";
 
@@ -12,11 +12,6 @@ if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "developme
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -32,7 +27,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${style.container}`}>
+      <body className={`${geistSans.variable}  ${style.container}`}>
         <Providers>
           <div className={style.main}>{children}</div>
           <div id="bottom-sheet" />
