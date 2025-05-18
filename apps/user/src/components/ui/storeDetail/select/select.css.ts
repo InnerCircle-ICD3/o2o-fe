@@ -20,8 +20,6 @@ const buttonBase = style({
 
   border: `1px solid ${globalTheme.color.gray.light}`,
   borderRadius: 10,
-
-  fontSize: 16,
 });
 
 export const button = styleVariants({

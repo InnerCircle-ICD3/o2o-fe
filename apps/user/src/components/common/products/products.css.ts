@@ -63,7 +63,6 @@ export const infoWrapper = style({
 
 export const strongText = style({
   fontWeight: 700,
-  fontSize: 16,
 });
 
 export const subText = style({

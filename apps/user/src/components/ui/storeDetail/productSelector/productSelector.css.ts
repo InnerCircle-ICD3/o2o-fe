@@ -11,5 +11,4 @@ export const fixedButton = style({
   padding: "0 15px 30px",
 
   backgroundColor: globalTheme.color.white,
-  fontSize: 16,
 });
