@@ -12,7 +12,7 @@ o2o-FE/
 │   ├── user/     # 사용자 앱
 │   └── owner/    # 점주 앱
 ├── packages/     # 공유 패키지
-└── ... 
+└── ...
 ```
 
 각 앱은 독립적으로 개발, 테스트, 배포되며 공통 코드는 packages 디렉토리에서 관리됩니다.
@@ -107,3 +107,4 @@ VERCEL_PROJECT_ID_OWNER: Owner 앱의 Vercel 프로젝트 ID
 - [pnpm Workspaces](https://pnpm.io/workspaces) - 모노레포 관리
 - [GitHub Actions](https://docs.github.com/en/actions) - CI/CD 파이프라인
 - [Vercel](https://vercel.com/docs) - 배포 플랫폼
+
