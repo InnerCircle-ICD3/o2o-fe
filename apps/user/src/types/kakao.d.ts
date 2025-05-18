@@ -21,6 +21,18 @@ declare namespace kakao {
       getLng(): number;
     }
 
+    class Size {
+      constructor(width: number, height: number);
+    }
+
+    class MarkerImage {
+      constructor(url: string, size: Size, options?: MarkerImageOptions);
+    }
+
+    class Circle {
+      constructor(options: CircleOptions);
+    }
+
     class Marker {
       constructor(options: MarkerOptions);
       setMap(map: Map | null): void;
@@ -32,14 +44,21 @@ declare namespace kakao {
       close(): void;
     }
 
-    interface MapOptions {
+    interface CircleOptions {
       center: LatLng;
-      level: number;
+      radius: number;
+      map?: Map;
+      strokeWeight?: number;
+      strokeOpacity?: number;
+      strokeColor?: string;
+      fillColor?: string;
+      fillOpacity?: number;
     }
 
     interface MarkerOptions {
       position: LatLng;
       map?: Map;
+      image?: MarkerImage;
       title?: string;
     }
 
@@ -47,6 +66,16 @@ declare namespace kakao {
       content: string;
     }
 
+    interface MarkerImageOptions {
+      verticalAlign?: string;
+    }
+
+    interface MapOptions {
+      center: LatLng;
+      level: number;
+    }
+
+    function load(callback: () => void): void;
     namespace event {
       function addListener<T>(
         target: T,
