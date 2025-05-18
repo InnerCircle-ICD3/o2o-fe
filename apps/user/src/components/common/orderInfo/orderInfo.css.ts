@@ -49,7 +49,9 @@ export const paymentAmount = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+});
 
+export const price = style({
   fontSize: 26,
   fontWeight: "bold",
 });
