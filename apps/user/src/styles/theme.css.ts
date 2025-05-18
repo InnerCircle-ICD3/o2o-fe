@@ -62,7 +62,6 @@ export const theme = createGlobalTheme(":root", globalTheme, {
       base: "#999999",
       light: "#CCCCCC",
     },
-
     label: {
       sales: {
         background: "#D8F4E4",
