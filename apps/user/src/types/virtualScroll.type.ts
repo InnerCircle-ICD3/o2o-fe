@@ -5,12 +5,6 @@ export interface HeightSpec {
   aspectRatio?: number;
 }
 
-export interface VirtualScrollProps extends PropsWithChildren {
-  overscan?: number;
-  heights: Record<string, HeightSpec>;
-  onBottom?: () => void;
-}
-
 export interface VirtualItemProps extends PropsWithChildren {
   name: string;
 }
