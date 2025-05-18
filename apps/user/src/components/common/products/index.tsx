@@ -18,15 +18,15 @@ const PRODUCTS_IMAGE = {
 };
 
 interface ProductsProps {
-  storeProducts: Product[];
+  products: Product[];
 }
 
 const Products = (props: ProductsProps) => {
-  const { storeProducts } = props;
+  const { products } = props;
 
   return (
     <ul className={style.container}>
-      {storeProducts.map((product) => {
+      {products.map((product) => {
         const { status, label } = generateProductStatus(product.inventory.quantity);
         return (
           <li key={product.id} className={style.wrapper}>
