@@ -1,3 +1,9 @@
 import exampleHandlers from "./example";
 import recommendationsHandlers from "./recommendations";
-export const handlers = [...exampleHandlers, ...recommendationsHandlers];
+import { searchMapHandlers } from "./search/location";
+
+export const handlers = [
+  ...exampleHandlers,
+  ...recommendationsHandlers,
+  ...searchMapHandlers,
+];
