@@ -2,6 +2,8 @@ import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const map = style({
+  position: "relative",
+
   width: "100%",
   height: "auto",
   aspectRatio: "395/270",

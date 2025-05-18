@@ -1,6 +1,6 @@
 import * as globalStyle from "@/styles/global.css";
 import type { OrderDetail } from "@/types/apis/order.type";
-import { formatCurrency } from "@/utils/format";
+import { formatCurrency, formatHourTo12HourText } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import Products from "../products";
@@ -15,7 +15,9 @@ const OrderInfo = (props: OrderInfoProps) => {
 
   return (
     <>
-      <div className={style.map} />
+      <div className={style.map}>
+        <Image src={"/images/mockOrder.png"} alt={""} fill />
+      </div>
 
       <div className={classNames(style.container, globalStyle.innerPadding)}>
         <div className={style.wrapper}>
@@ -33,14 +35,18 @@ const OrderInfo = (props: OrderInfoProps) => {
           <h3 className={classNames(style.subTitle, style.marginBottom)}>매장 픽업 가능 시간</h3>
 
           <div className={globalStyle.grayBackground}>
-            <strong>오후 7시 30분 ~ 오후 9시</strong> 픽업 가능 해요!
+            <strong>
+              {formatHourTo12HourText(orderDetail.store.openTime)} ~{" "}
+              {formatHourTo12HourText(orderDetail.store.closeTime)}
+            </strong>{" "}
+            픽업 가능 해요!
           </div>
         </div>
 
         <div className={classNames(style.wrapper, style.paymentAmount)}>
           <h3 className={style.subTitle}>결제 예정 금액</h3>
 
-          {formatCurrency(20000)}
+          <p className={globalStyle.primaryColor}>{formatCurrency(20000)}</p>
         </div>
       </div>
     </>
