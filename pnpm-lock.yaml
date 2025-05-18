@@ -184,6 +184,9 @@ importers:
       '@vanilla-extract/css':
         specifier: ^1.17.1
         version: 1.17.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       ky:
         specifier: ^1.8.1
         version: 1.8.1
