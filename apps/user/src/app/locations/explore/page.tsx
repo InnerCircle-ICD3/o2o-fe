@@ -25,7 +25,7 @@ export default function ExploreMap() {
 
 
   const fetchStoresByCenter = useCallback(async (center: kakao.maps.LatLng): Promise<Store[]> => {
-    const response = await fetch(`${baseUrl}/search/location`, {
+    const response = await fetch(`${baseUrl}/search/stores/map`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

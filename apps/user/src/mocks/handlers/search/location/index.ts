@@ -11,7 +11,7 @@ interface SearchLocationBody {
 
 export const searchMapHandlers = [
   http.post(
-    `${baseUrl}/search/location`,
+    `${baseUrl}/search/stores/map`,
     async (req): Promise<HttpResponse> => {
       const body = (await req.request.json()) as SearchLocationBody;
       const { viewPoint } = body;
