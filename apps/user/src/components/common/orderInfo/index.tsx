@@ -27,7 +27,7 @@ const OrderInfo = (props: OrderInfoProps) => {
         </div>
         <div className={style.wrapper}>
           <h3 className={classNames(style.subTitle, style.marginBottom)}>구매 품목</h3>
-          <Products storeProducts={orderDetail.products} />
+          <Products products={orderDetail.products} />
         </div>
         <div className={style.wrapper}>
           <h3 className={classNames(style.subTitle, style.marginBottom)}>매장 픽업 가능 시간</h3>
