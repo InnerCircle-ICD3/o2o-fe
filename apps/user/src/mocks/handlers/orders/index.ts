@@ -78,7 +78,7 @@ const handlers = [
         },
       ],
       totalPrice: 10000,
-      status: "PENDING",
+      status: "COMPLETED",
       createdAt: "2025-05-06T10:15:30Z",
     });
   }),
