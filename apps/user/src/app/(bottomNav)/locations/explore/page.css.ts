@@ -25,16 +25,16 @@ export const resetPositionButtonBase = style({
 
 export const resetPositionVariants = styleVariants({
   default: {
-    bottom: 16,
+    bottom: 80,
   },
   withStoreInfo: {
-    bottom: 200,
+    bottom: 240,
   },
 });
 
 export const storeInfoCard = style({
   position: "absolute",
-  bottom: 16,
+  bottom: 80,
   left: "50%",
   transform: "translateX(-50%)",
   right: 0,
@@ -78,7 +78,6 @@ export const tagList = style({
   gap: 4,
   fontSize: 12,
   color: "#666",
-  flexWrap: "wrap",
 });
 
 export const address = style({
@@ -89,6 +88,7 @@ export const address = style({
 export const pickupTime = style({
   fontSize: 12,
   color: "#666",
+  fontWeight: 600,
 });
 
 export const strikethroughPrice = style({
@@ -98,7 +98,7 @@ export const strikethroughPrice = style({
 });
 
 export const minPrice = style({
-  fontSize: 14,
+  fontSize: 16,
   fontWeight: 600,
   color: "#00B26F",
 });
@@ -107,4 +107,21 @@ export const maxPrice = style({
   fontSize: 10,
   fontWeight: 600,
   color: "#00B26F",
+});
+
+export const loadingMap = style({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: 16,
+});
+
+export const loadingMapText = style({
+  fontSize: 16,
+  fontWeight: 600,
+  textAlign: "center",
 });

@@ -1,6 +1,6 @@
 import type { Store } from "@/types/searchMap.type";
 import Image from "next/image";
-import * as styles from "../explore.css";
+import * as styles from "../page.css";
 
 interface StoreInfoCardProps {
   store: Store;
@@ -25,6 +25,7 @@ export const StoreInfoCard = ({ store }: StoreInfoCardProps) => {
           <div className={styles.flexColumn}>
             <p className={styles.tagList}>{store.category.split(",").join(" | ")}</p>
             <p className={styles.pickupTime}>픽업 : {store.pickupTime}</p>
+            <div className={styles.strikethroughPrice}>{store.minPrice * 2}원</div>
             <div className={styles.minPrice}>{store.minPrice}원 ~</div>
           </div>
         </div>

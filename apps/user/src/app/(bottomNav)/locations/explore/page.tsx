@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 
-import * as styles from "./explore.css";
+import * as styles from "./page.css";
 
 import type { Store } from "@/types/searchMap.type";
 
@@ -16,8 +16,9 @@ import {
   createStoreMarker,
   createUserMarker,
   fetchStoresByCenter,
-} from "../../../utils/locations/locationUtils";
-import { StoreInfoCard } from "./components/StoreInfoCard";
+} from "../../../../utils/locations/locationUtils";
+import { LoadingMap } from "./ui/LoadingMap";
+import { StoreInfoCard } from "./ui/StoreInfoCard";
 
 export default function ExploreMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
@@ -45,16 +46,21 @@ export default function ExploreMap() {
 
       const storeList = await fetchStoresByCenter(center);
       for (const store of storeList) {
-        createStoreMarker(store, map, (clickedStore) => {
-          setSelectedStore((prev) => (prev?.id === clickedStore.id ? null : clickedStore));
-        });
+        createStoreMarker(
+          store,
+          map,
+          (clickedStore) => {
+            setSelectedStore((prev) => (prev?.id === clickedStore.id ? null : clickedStore));
+          },
+          selectedStore?.id === store.id,
+        );
       }
 
       if (location) {
         createUserMarker(location, map);
       }
     },
-    [location],
+    [location, selectedStore],
   );
 
   const handleRefetch = async () => {
@@ -78,7 +84,7 @@ export default function ExploreMap() {
     }
   };
 
-  if (!isLoaded || !location) return <p>지도를 불러오는 중입니다...</p>;
+  if (!isLoaded || !location) return <LoadingMap />;
 
   return (
     <div className={styles.container}>

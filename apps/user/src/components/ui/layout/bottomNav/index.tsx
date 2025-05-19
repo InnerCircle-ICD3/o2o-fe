@@ -54,7 +54,7 @@ const ROUTE = [
   },
   {
     name: "지도",
-    path: "/location",
+    path: "/locations/explore",
     icon: () => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
