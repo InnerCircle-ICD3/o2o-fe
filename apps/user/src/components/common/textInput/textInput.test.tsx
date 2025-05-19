@@ -11,11 +11,11 @@ describe("TextInput 테스트", () => {
     cleanup();
   });
 
-  it("기본 status(normal)으로 렌더링된다", () => {
+  it("기본 status(common)으로 렌더링된다", () => {
     render(<TextInput placeholder="입력하세요" />);
     const input = screen.getByPlaceholderText("입력하세요");
     expect(input).not.toBeNull();
-    expect(input.className).toContain(inputStatus.normal);
+    expect(input.className).toContain(inputStatus.common);
   });
 
   it("지정한 status(disabled)가 스타일에 적용된다", () => {

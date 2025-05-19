@@ -37,6 +37,12 @@ const input = style({
   fontSize: 16,
   fontWeight: 400,
   outline: "none",
+
+  selectors: {
+    "&::placeholder": {
+      fontSize: 14,
+    },
+  },
 });
 
 export const inputWithIcon = style({
@@ -44,7 +50,15 @@ export const inputWithIcon = style({
 });
 
 export const inputStatus = styleVariants({
-  normal: [
+  primary: [
+    input,
+    {
+      border: "none",
+      color: globalTheme.color.text.primary,
+      backgroundColor: globalTheme.color.tertiary,
+    },
+  ],
+  common: [
     input,
     {
       borderColor: globalTheme.color.gray.light,

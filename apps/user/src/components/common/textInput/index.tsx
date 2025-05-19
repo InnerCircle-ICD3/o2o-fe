@@ -15,7 +15,7 @@ interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
 const TextInput = (props: TextInputProps) => {
   const {
     labelText,
-    status = "normal",
+    status = "common",
     placeholder,
     prefixIcon: PrefixIcon,
     suffixIcon: SuffixIcon,

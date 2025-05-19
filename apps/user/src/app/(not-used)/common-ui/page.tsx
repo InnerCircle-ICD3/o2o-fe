@@ -1,10 +1,12 @@
 "use client";
 
+import searchIcon from "@/assets/icon/ic-search.png";
 import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import Checkbox from "@/components/common/checkbox";
 import StatusLabel from "@/components/common/statusLabel";
 import TextInput from "@/components/common/textInput";
+import Image from "next/image";
 import { useState } from "react";
 import * as style from "./page.css";
 
@@ -35,6 +37,17 @@ const CommonUi = () => {
         <h2 className={style.header}>TextInput</h2>
         <div className={style.list}>
           <TextInput placeholder={"텍스트를 입력해주세요"} />
+          <TextInput status="common" />
+          <TextInput status="error" />
+          <TextInput status="disabled" />
+          <TextInput
+            status="primary"
+            suffixIcon={() => <Image src={searchIcon} alt={"search icon"} width={16} height={16} />}
+          />
+          <TextInput
+            status="primary"
+            prefixIcon={() => <Image src={searchIcon} alt={"search icon"} width={16} height={16} />}
+          />
         </div>
       </div>
       <div>
