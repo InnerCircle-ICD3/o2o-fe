@@ -23,13 +23,18 @@ export const createStoreMarker = (
   store: Store,
   map: kakao.maps.Map,
   onMarkerClick: (store: Store) => void,
+  isSelected = false,
 ) => {
   const marker = new kakao.maps.Marker({
     position: new kakao.maps.LatLng(store.latitude, store.longitude),
     map,
-    image: new kakao.maps.MarkerImage("/icons/map_marker.svg", new kakao.maps.Size(36, 36), {
-      verticalAlign: "bottom",
-    }),
+    image: new kakao.maps.MarkerImage(
+      "/icons/map_marker.svg",
+      new kakao.maps.Size(isSelected ? 48 : 36, isSelected ? 48 : 36),
+      {
+        verticalAlign: "bottom",
+      },
+    ),
     title: store.name,
   });
 
