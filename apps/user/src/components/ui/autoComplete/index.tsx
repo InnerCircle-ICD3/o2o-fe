@@ -54,7 +54,6 @@ export const AutoComplete = () => {
                       onMouseDown={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log("onMouseDownButton", item);
                         handleRemoveSearchHistory(item);
                       }}
                     >
