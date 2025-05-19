@@ -1,12 +1,16 @@
 export interface Store {
   id: number;
   name: string;
+  thumbnailUrl: string;
   category: string;
   distance: number;
   address: string;
   latitude: number;
   longitude: number;
   isOpen: boolean;
+  minPrice: number;
+  maxPrice: number;
+  pickupTime: string;
 }
 
 export interface BoundingBox {
