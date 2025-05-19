@@ -13,7 +13,11 @@ export const useSearchHistoryStore = create<SearchHistoryStore>()(
     (set) => ({
       searchHistory: [],
       addSearchHistory: (keyword: string) =>
-        set((state) => ({ searchHistory: [...state.searchHistory, keyword] })),
+        set((state) => {
+          const deduped = state.searchHistory.filter((item) => item !== keyword);
+          const updated = [keyword, ...deduped].slice(0, 10); // 최신순 + 10개 제한
+          return { searchHistory: updated };
+        }),
       removeSearchHistory: (keyword: string) =>
         set((state) => ({ searchHistory: state.searchHistory.filter((item) => item !== keyword) })),
       clearSearchHistory: () => set({ searchHistory: [] }),
