@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import * as styles from './kakaoMap.css';
+import { useEffect, useRef } from "react";
+import * as styles from "./kakaoMap.css";
 
 interface KakaoMapProps {
   /**
@@ -53,7 +53,7 @@ export const KakaoMap = ({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps) => 
 
     mapInstace.current = map;
 
-    kakaoMaps.event.addListener(map, 'idle', () => {
+    kakaoMaps.event.addListener(map, "idle", () => {
       onMapIdle(map);
     });
 
@@ -61,4 +61,4 @@ export const KakaoMap = ({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps) => 
   }, [lat, lng, onMapIdle, onMapReady]);
 
   return <div ref={mapRef} className={styles.kakaoMap} />;
-}
+};

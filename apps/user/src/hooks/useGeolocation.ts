@@ -21,7 +21,7 @@ export const useGeolocation = (): Coordinates | null => {
       (error) => {
         console.error("Geolocation error", error);
       },
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 },
     );
   }, []);
 

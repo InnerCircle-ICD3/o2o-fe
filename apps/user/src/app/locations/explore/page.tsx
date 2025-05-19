@@ -1,19 +1,17 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
+import { useCallback, useRef, useState } from "react";
 
 import * as styles from "./explore.css";
 
 import type { Store } from "@/types/searchMap.type";
 
+import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { baseUrl } from "@/mocks/utils";
-import Button from "@/components/common/button";
-import BottomSheet from "@/components/common/bottomSheet";
-
 
 export default function ExploreMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
@@ -23,12 +21,11 @@ export default function ExploreMap() {
   const [referenceCenter, setReferenceCenter] = useState<kakao.maps.LatLng | null>(null);
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 
-
   const fetchStoresByCenter = useCallback(async (center: kakao.maps.LatLng): Promise<Store[]> => {
     const response = await fetch(`${baseUrl}/search/stores/map`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         viewPoint: {
@@ -49,59 +46,59 @@ export default function ExploreMap() {
       const marker = new kakaoMaps.Marker({
         position: new kakaoMaps.LatLng(store.latitude, store.longitude),
         map,
-        image: new kakaoMaps.MarkerImage(
-          "/icons/map_marker.svg",
-          new kakaoMaps.Size(36, 36),
-          {
-            verticalAlign: "bottom",
-          }
-        ),
+        image: new kakaoMaps.MarkerImage("/icons/map_marker.svg", new kakaoMaps.Size(36, 36), {
+          verticalAlign: "bottom",
+        }),
         title: store.name,
       });
 
-      kakaoMaps.event.addListener(marker, 'click', () => {
+      kakaoMaps.event.addListener(marker, "click", () => {
         setSelectedStore(store);
       });
     }
   }, []);
 
-  const handleMapIdle = useCallback(async (map: kakao.maps.Map) => {
-    if (!referenceCenter) return;
+  const handleMapIdle = useCallback(
+    async (map: kakao.maps.Map) => {
+      if (!referenceCenter) return;
 
-    const center = map.getCenter();
-    const movedDistance = Math.sqrt(
-      (center.getLng() - referenceCenter.getLng()) ** 2 +
-      (center.getLat() - referenceCenter.getLat()) ** 2
-    );
+      const center = map.getCenter();
+      const movedDistance = Math.sqrt(
+        (center.getLng() - referenceCenter.getLng()) ** 2 +
+          (center.getLat() - referenceCenter.getLat()) ** 2,
+      );
 
-    setShouldShowRefetch(movedDistance > 0.02);
-  }, [referenceCenter]);
+      setShouldShowRefetch(movedDistance > 0.02);
+    },
+    [referenceCenter],
+  );
 
-  const handleMapReady = useCallback(async (map: kakao.maps.Map) => {
-    mapRef.current = map;
-    const center = map.getCenter();
+  const handleMapReady = useCallback(
+    async (map: kakao.maps.Map) => {
+      mapRef.current = map;
+      const center = map.getCenter();
 
-    setReferenceCenter(prev => prev ? prev : center);
-    const storeList = await fetchStoresByCenter(center);
-    renderMarkers(map, storeList);
+      setReferenceCenter((prev) => (prev ? prev : center));
+      const storeList = await fetchStoresByCenter(center);
+      renderMarkers(map, storeList);
 
-    if (location) {
-      new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(location.lat, location.lng),
-        map,
-        image: new kakao.maps.MarkerImage(
-          "/icons/my_marker.svg",
-          new kakao.maps.Size(24, 24),
-          { verticalAlign: "bottom" }
-        ),
-      });
-    }
-  }, [renderMarkers, fetchStoresByCenter, location]);
+      if (location) {
+        new kakao.maps.Marker({
+          position: new kakao.maps.LatLng(location.lat, location.lng),
+          map,
+          image: new kakao.maps.MarkerImage("/icons/my_marker.svg", new kakao.maps.Size(24, 24), {
+            verticalAlign: "bottom",
+          }),
+        });
+      }
+    },
+    [renderMarkers, fetchStoresByCenter, location],
+  );
 
   const handleRefetch = async () => {
     const map = mapRef.current;
-    if(!map) return;
-    
+    if (!map) return;
+
     const center = map.getCenter();
     const storeList = await fetchStoresByCenter(center);
     renderMarkers(map, storeList);
@@ -114,7 +111,7 @@ export default function ExploreMap() {
       const latLng = new kakao.maps.LatLng(location.lat, location.lng);
       mapRef.current.setCenter(latLng);
     }
-  }
+  };
 
   if (!isLoaded || !location) return <p>지도를 불러오는 중입니다...</p>;
 
@@ -127,7 +124,7 @@ export default function ExploreMap() {
         onMapReady={handleMapReady}
       />
       {shouldShowRefetch && (
-        <Button 
+        <Button
           type="button"
           onClick={handleRefetch}
           style={{
@@ -143,25 +140,14 @@ export default function ExploreMap() {
           현 지도에서 검색
         </Button>
       )}
-      <button
-        type="button"
-        onClick={handleResetPosition}
-        className={styles.resetPositionButton}
-      >
+      <button type="button" onClick={handleResetPosition} className={styles.resetPositionButton}>
         <Image src={"/icons/my_location.svg"} alt={""} width={24} height={24} />
       </button>
 
-    
-      <BottomSheet
-        type="shadow"
-        isShow={!!selectedStore}
-        title={selectedStore?.name || '상호명'}
-        onClose={() => setSelectedStore(null)}
-      >
+      <div>
         <h3>{selectedStore?.name}</h3>
         <p>{selectedStore?.address}</p>
-      </BottomSheet>
-
+      </div>
     </div>
-  )
+  );
 }

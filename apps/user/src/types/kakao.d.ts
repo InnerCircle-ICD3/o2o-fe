@@ -77,11 +77,7 @@ declare namespace kakao {
 
     function load(callback: () => void): void;
     namespace event {
-      function addListener<T>(
-        target: T,
-        type: string,
-        callback: () => void
-      ): void;
+      function addListener<T>(target: T, type: string, callback: () => void): void;
     }
   }
 }
