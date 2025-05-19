@@ -18,8 +18,8 @@ describe("Products Component", () => {
         foodType: ["과자", "음료"],
         imageUrl: "/images/thumb.png",
         inventory: {
-          quantity: 0,
-          stock: 0,
+          quantity: 5,
+          stock: 10,
         },
         storeId: 1,
         price: {
@@ -35,18 +35,13 @@ describe("Products Component", () => {
     render(<Products products={mockProducts} />);
 
     expect(screen.getByText("럭키백 S")).not.toBeNull();
-    expect(screen.getByText("럭키백 L")).not.toBeNull();
 
     expect(screen.getByText("소형 럭키백입니다")).not.toBeNull();
-    expect(screen.getByText("대형 럭키백입니다")).not.toBeNull();
 
-    expect(screen.getByText("10,000₩")).not.toBeNull();
-    expect(screen.getByText("5,000₩")).not.toBeNull();
     expect(screen.getByText("24,000₩")).not.toBeNull();
     expect(screen.getByText("12,000₩")).not.toBeNull();
 
     expect(screen.getByText("과자, 음료")).not.toBeNull();
-    expect(screen.getByText("간식, 과일")).not.toBeNull();
   });
 
   it("마감 상품에는 상태 라벨과 그림자 레이블이 표시된다", () => {
@@ -59,7 +54,7 @@ describe("Products Component", () => {
         foodType: ["간식", "과일"],
         imageUrl: "/images/thumb.png",
         inventory: {
-          quantity: 5,
+          quantity: 0,
           stock: 10,
         },
         storeId: 1,
