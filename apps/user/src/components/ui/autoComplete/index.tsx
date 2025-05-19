@@ -39,9 +39,7 @@ export const AutoComplete = () => {
                 <li
                   key={item}
                   className={styles.suggestionItem}
-                  onMouseDown={(e) => {
-                    // 버튼을 눌렀을 때는 처리하지 않음
-                    if ((e.target as HTMLElement).closest("button")) return;
+                  onMouseDown={() => {
                     handleSelect(item);
                   }}
                 >
@@ -56,6 +54,7 @@ export const AutoComplete = () => {
                       onMouseDown={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                        console.log("onMouseDownButton", item);
                         handleRemoveSearchHistory(item);
                       }}
                     >
