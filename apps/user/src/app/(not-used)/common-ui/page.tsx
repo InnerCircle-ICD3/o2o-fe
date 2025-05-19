@@ -4,6 +4,7 @@ import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import Checkbox from "@/components/common/checkbox";
 import StatusLabel from "@/components/common/statusLabel";
+import TextInput from "@/components/common/textInput";
 import { useState } from "react";
 import * as style from "./page.css";
 
@@ -30,6 +31,12 @@ const CommonUi = () => {
         </div>
       </div>
 
+      <div>
+        <h2 className={style.header}>TextInput</h2>
+        <div className={style.list}>
+          <TextInput placeholder={"텍스트를 입력해주세요"} />
+        </div>
+      </div>
       <div>
         <h2 className={style.header}>CheckBox</h2>
         <div className={style.list}>
