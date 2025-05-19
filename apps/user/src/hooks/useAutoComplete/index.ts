@@ -1,6 +1,6 @@
 import { useSearchHistoryStore } from "@/stores/searchHistory/searchHistoryStore";
 import { useMemo, useState } from "react";
-import { useSearchRecommendations } from "./useSearchRecommendations";
+import { useSearchRecommendations } from "../useSearchRecommendations";
 
 export const useAutoComplete = () => {
   const [inputValue, setInputValue] = useState("");
