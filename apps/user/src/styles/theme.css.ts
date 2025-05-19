@@ -11,6 +11,10 @@ export const globalTheme = createThemeContract({
 
     line: null,
 
+    text: {
+      primary: null,
+    },
+
     gray: {
       dark: null,
       base: null,
@@ -61,6 +65,9 @@ export const theme = createGlobalTheme(":root", globalTheme, {
       dark: "#666666",
       base: "#999999",
       light: "#CCCCCC",
+    },
+    text: {
+      primary: "#284835",
     },
     label: {
       sales: {
