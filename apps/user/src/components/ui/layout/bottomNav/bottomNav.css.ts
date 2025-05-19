@@ -5,13 +5,14 @@ export const container = style({
   display: "flex",
   flexDirection: "column",
 
-  position: "relative",
   width: "100%",
   height: "100vh",
 });
 
 export const main = style({
   height: "calc(100% - 70px)",
+
+  padding: "0 20px",
 });
 
 export const bottomNav = style({
@@ -19,14 +20,11 @@ export const bottomNav = style({
   justifyContent: "space-between",
   alignItems: "center",
 
-  position: "relative",
-  zIndex: 10,
   width: "100%",
   height: "70px",
 
   padding: "14px 20px",
 
-  backgroundColor: "#fff",
   borderTop: `1px solid ${globalTheme.color.line}`,
 });
 

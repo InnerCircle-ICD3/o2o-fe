@@ -3,7 +3,7 @@ import { style, styleVariants } from "@vanilla-extract/css";
 export const container = style({
   position: "relative",
   width: "100%",
-  height: "100vh",
+  height: "calc(100vh - 70px)",
 });
 
 export const resetPositionButtonBase = style({
@@ -25,16 +25,16 @@ export const resetPositionButtonBase = style({
 
 export const resetPositionVariants = styleVariants({
   default: {
-    bottom: 80,
+    bottom: 16,
   },
   withStoreInfo: {
-    bottom: 240,
+    bottom: 180,
   },
 });
 
 export const storeInfoCard = style({
   position: "absolute",
-  bottom: 80,
+  bottom: 16,
   left: "50%",
   transform: "translateX(-50%)",
   right: 0,
