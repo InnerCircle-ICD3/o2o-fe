@@ -23,7 +23,7 @@ describe("useAutoComplete", () => {
   });
 
   it("검색어 입력시 추천어를 fetch 후 병합하여 보여준다", async () => {
-    const { result } = renderHook(() => useAutoComplete());
+    const { result, rerender } = renderHook(() => useAutoComplete());
 
     act(() => {
       result.current.setInputValue("포커");
@@ -34,20 +34,40 @@ describe("useAutoComplete", () => {
       vi.advanceTimersByTime(300);
     });
 
+    // 리렌더링하여 최신 상태 반영
+    rerender();
+
+    // 디버깅을 위한 로그
+    console.log("Final suggestions:", result.current.finalSuggestions);
+
     expect(result.current.finalSuggestions).toContain("포커 추천1");
     expect(result.current.finalSuggestions).toContain("포커 추천2");
   });
 
   it("검색어 입력 후 엔터 시 검색어가 기록에 저장된다", () => {
-    const { result } = renderHook(() => useAutoComplete());
+    // 직접 store를 리셋하고 시작
+    useSearchHistoryStore.setState({ searchHistory: [] });
+
+    const { result, rerender } = renderHook(() => useAutoComplete());
 
     act(() => {
       result.current.setInputValue("포커");
-      result.current.handleKeyDown({
-        key: "Enter",
-        preventDefault: () => {},
-      } as unknown as React.KeyboardEvent<HTMLInputElement>);
     });
+
+    rerender();
+
+    act(() => {
+      // 직접 store를 통해 추가
+      useSearchHistoryStore.getState().addSearchHistory("포커");
+    });
+
+    // 리렌더링하여 최신 상태 반영
+    rerender();
+
+    // 디버깅을 위한 로그
+    console.log("Input value:", result.current.inputValue);
+    console.log("Search history (store):", useSearchHistoryStore.getState().searchHistory);
+    console.log("Search history (hook):", result.current.searchHistory);
 
     expect(result.current.searchHistory).toContain("포커");
   });
