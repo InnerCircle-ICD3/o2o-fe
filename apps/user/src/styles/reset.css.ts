@@ -26,4 +26,5 @@ globalStyle("ul, ol", {
 // 링크 초기화
 globalStyle("a", {
   textDecoration: "none",
+  color: globalTheme.color.black,
 });

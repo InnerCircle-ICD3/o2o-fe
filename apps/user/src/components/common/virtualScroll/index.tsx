@@ -1,11 +1,19 @@
 "use client";
 
-import type { VirtualItemProps, VirtualScrollProps } from "@/types/virtualScroll.type";
+import type { HeightSpec, VirtualItemProps } from "@/types/virtualScroll.type";
 import { renderVirtualContent } from "@/utils/virtualScroll";
+import classNames from "classnames";
 import { Children, useEffect, useRef, useState } from "react";
-import type { ReactElement } from "react";
+import type { PropsWithChildren, ReactElement } from "react";
+import * as style from "./virtualScroll.css";
 
-const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScrollProps) => {
+interface VirtualScrollProps extends PropsWithChildren {
+  overscan?: number;
+  heights: Record<string, HeightSpec>;
+  onScrollEnd?: () => void;
+}
+
+const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: VirtualScrollProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
@@ -21,6 +29,8 @@ const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScr
     scrollTop,
     overscan,
   });
+
+  const containerStyle = classNames(style.container, "virtual-scroll");
 
   // resize 감지
   useEffect(() => {
@@ -50,8 +60,8 @@ const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScr
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting && onBottom) {
-            onBottom();
+          if (entry.isIntersecting && onScrollEnd) {
+            onScrollEnd();
           }
         }
       },
@@ -61,24 +71,17 @@ const VirtualScroll = ({ overscan = 2, heights, children, onBottom }: VirtualScr
     observer.observe(observerRef.current);
 
     return () => observer.disconnect();
-  }, [onBottom]);
+  }, [onScrollEnd]);
 
   return (
-    <div
-      ref={containerRef}
-      className="virtual-scroll"
-      style={{
-        overflowY: "auto",
-        height: "100%",
-      }}
-    >
+    <div ref={containerRef} className={containerStyle}>
       <div style={{ height: totalHeight }}>
         {containerSize.height !== 0 && containerSize.width !== 0 && (
           <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
         )}
       </div>
 
-      {onBottom && <div ref={observerRef} />}
+      {onScrollEnd && <div ref={observerRef} />}
     </div>
   );
 };
