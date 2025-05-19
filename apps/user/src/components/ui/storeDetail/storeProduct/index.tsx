@@ -1,5 +1,5 @@
+import Products from "@/components/common/products";
 import * as globalStyle from "@/styles/global.css";
-import Products from "../products";
 import * as style from "./storeProduct.css";
 
 const StoreProduct = () => {
