@@ -48,7 +48,7 @@ const ROUTE = {
     },
     location: {
       name: "지도",
-      path: "/locations",
+      path: "/locations/search",
       icon: () => (
         <svg
           xmlns="http://www.w3.org/2000/svg"
