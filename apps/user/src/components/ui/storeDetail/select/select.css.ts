@@ -1,4 +1,4 @@
-import { middleStroke } from "@/styles/global.css";
+import * as globalStyle from "@/styles/global.css";
 import { globalTheme } from "@/styles/theme.css";
 import { style, styleVariants } from "@vanilla-extract/css";
 
@@ -73,7 +73,7 @@ export const item = styleVariants({
   default: [itemBase],
   soldOut: [
     itemBase,
-    middleStroke,
+    globalStyle.middleStroke,
     {
       color: globalTheme.color.gray.base,
     },
