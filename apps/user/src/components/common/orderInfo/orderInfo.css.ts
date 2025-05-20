@@ -16,7 +16,6 @@ export const container = style({
 });
 
 export const title = style({
-  fontSize: 16,
   fontWeight: "bold",
 });
 
