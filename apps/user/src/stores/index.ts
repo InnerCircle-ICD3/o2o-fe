@@ -1,1 +1,1 @@
-// export { STORE_NAME } from "@/stores/STORE_PATH";
+export { useSearchHistoryStore } from "@/stores/searchHistory/searchHistoryStore";
