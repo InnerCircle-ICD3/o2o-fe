@@ -18,6 +18,12 @@ const mockRecommendations = [
   "Pizza Hut",
   "Dominos PIZZA",
   "pizzaria",
+  "포커",
+  "포커 추천1",
+  "포커 추천2",
+  "포커게임",
+  "카지노",
+  "바카라",
 ];
 
 const handlers = [
