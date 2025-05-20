@@ -95,3 +95,25 @@ export const renderMyLocation = (
 
   return circle;
 };
+
+export const getRegionByCoords = (lat: number, lng: number): Promise<string | null> => {
+  return new Promise((resolve, reject) => {
+    if (!window.kakao?.maps) {
+      reject(new Error("카카오맵 API가 로드되지 않았습니다."));
+      return;
+    }
+
+    const geocoder = new kakao.maps.services.Geocoder();
+
+    const coord = new kakao.maps.LatLng(lat, lng);
+
+    geocoder.coord2RegionCode(coord.getLng(), coord.getLat(), (result, status) => {
+      if (status === "OK" && result.length > 0) {
+        const regionInfo = result.find((r) => r.region_type === "H");
+        resolve(regionInfo?.address_name || null);
+      } else {
+        resolve(null);
+      }
+    });
+  });
+};

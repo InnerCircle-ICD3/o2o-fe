@@ -47,6 +47,7 @@ vi.mock("@/components/common/kakaoMap", () => ({
         setMinLevel: () => {},
         setMaxLevel: () => {},
         setCenter: () => {},
+        setLevel: () => {},
       });
     }, 0);
     return (

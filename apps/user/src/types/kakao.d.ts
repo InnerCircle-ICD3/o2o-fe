@@ -6,6 +6,32 @@ declare global {
 
 declare namespace kakao {
   namespace maps {
+    namespace services {
+      class Geocoder {
+        constructor();
+        coord2RegionCode(
+          lng: number,
+          lat: number,
+          callback: (result: RegionCode[], status: Status) => void,
+        ): void;
+      }
+
+      type Status = "OK" | "ERROR" | "ZERO_RESULT" | "NOT_FOUND" | "INVALID_REQUEST";
+
+      interface RegionCode {
+        /* biome-ignore lint/style/useNamingConvention: false */
+        region_type: string;
+        /* biome-ignore lint/style/useNamingConvention: false */
+        address_name: string;
+        code: string;
+        /* biome-ignore lint/style/useNamingConvention: false */
+        region_1depth_name: string;
+        /* biome-ignore lint/style/useNamingConvention: false */
+        region_2depth_name: string;
+        /* biome-ignore lint/style/useNamingConvention: false */
+        region_3depth_name: string;
+      }
+    }
     /* biome-ignore lint/suspicious/noShadowRestrictedNames: false */
     class Map {
       constructor(container: HTMLElement, options: MapOptions);

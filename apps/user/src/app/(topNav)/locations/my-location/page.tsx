@@ -13,6 +13,7 @@ import * as styles from "./page.css";
 type RangeOption = 0 | 100 | 500 | 1000;
 
 export default function MyLocationPage() {
+  const geocoder = new kakao.maps.services.Geocoder();
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const location = useGeolocation();
   const isLoaded = useKakaoLoader();
@@ -30,6 +31,17 @@ export default function MyLocationPage() {
     },
     [location, range],
   );
+
+  const handleGetRegion = () => {
+    if (!location) return;
+
+    geocoder.coord2RegionCode(location.lng, location.lat, (result, status) => {
+      if (status === "OK" && result.length > 0) {
+        const region = result.find((r) => r.region_type === "H");
+        console.log(region?.address_name);
+      }
+    });
+  };
 
   if (!location || !isLoaded) return <LoadingMap />;
 
@@ -72,7 +84,7 @@ export default function MyLocationPage() {
           })}
         </div>
         <div className={styles.bottomSheetFooter}>
-          <Button status="primary" onClick={() => {}}>
+          <Button status="primary" onClick={() => handleGetRegion()}>
             <span className={styles.buttonText}>설정하기</span>
           </Button>
         </div>
