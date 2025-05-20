@@ -65,7 +65,7 @@ export const calculateMovedDistance = (
 /**
  * 반경에 따른 카카오 지도 줌 레벨을 반환
  */
-export const getZoomLevelByRadius = (radius: number): number => {
+const getZoomLevelByRadius = (radius: number): number => {
   if (radius <= 500) return 4;
   if (radius <= 1000) return 5;
   if (radius <= 2000) return 6;

@@ -3,18 +3,12 @@
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 import { LoadingMap } from "@/components/common/skeleton/LoadingMap";
+import { RANGE_OPTIONS } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { createUserMarker, renderMyLocation } from "@/utils/locations/locationUtils";
 import { useCallback, useRef, useState } from "react";
 import * as styles from "./page.css";
-
-const RANGE_OPTIONS = [
-  { value: 500, label: "가까워요" },
-  { value: 800, label: "" },
-  { value: 1500, label: "" },
-  { value: 2000, label: "멀어요" },
-];
 
 type RangeOption = 0 | 100 | 500 | 1000;
 
