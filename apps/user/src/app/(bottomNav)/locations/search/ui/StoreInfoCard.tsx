@@ -17,7 +17,7 @@ export const StoreInfoCard = ({ store }: StoreInfoCardProps) => {
         <div className={styles.flexRow}>
           <Image
             className={styles.thumbnail}
-            src={store.thumbnailUrl || "/images/storeThumbnail.png"}
+            src={store.thumbnailUrl || "/images/thumb.png"}
             alt={store.name}
             width={80}
             height={80}
