@@ -26,6 +26,8 @@ export const location = style({
   justifyContent: "flex-start",
   gap: 4,
 
+  marginTop: 6,
+
   fontSize: 14,
   fontWeight: "500",
   lineHeight: 1,
@@ -47,7 +49,9 @@ export const paymentAmount = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+});
 
+export const price = style({
   fontSize: 26,
   fontWeight: "bold",
 });
