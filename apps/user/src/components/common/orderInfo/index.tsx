@@ -46,7 +46,9 @@ const OrderInfo = (props: OrderInfoProps) => {
         <div className={classNames(style.wrapper, style.paymentAmount)}>
           <h3 className={style.subTitle}>결제 예정 금액</h3>
 
-          <p className={globalStyle.primaryColor}>{formatCurrency(20000)}</p>
+          <p className={classNames(globalStyle.primaryColor, style.price)}>
+            {formatCurrency(20000)}
+          </p>
         </div>
       </div>
     </>
