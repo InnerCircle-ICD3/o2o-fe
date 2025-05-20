@@ -22,7 +22,6 @@ const BottomSheet = (props: BottomSheetProps) => {
   const innerStyle = isShow ? innerType.visible : innerType.hidden;
 
   const containerStyle = isShow ? style.container.visible : style.container.hidden;
-  //
 
   useEffect(() => {
     const bottomElement = document.querySelector<HTMLDivElement>("#bottom-sheet");

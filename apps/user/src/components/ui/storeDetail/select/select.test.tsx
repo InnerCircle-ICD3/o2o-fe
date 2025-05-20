@@ -1,4 +1,5 @@
-import type { Product, SelectedProduct } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/store.type";
+import type { SelectedProduct } from "@/types/orders.type";
 // Select.test.tsx
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";

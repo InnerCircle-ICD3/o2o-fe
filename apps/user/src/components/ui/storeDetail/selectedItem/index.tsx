@@ -1,5 +1,5 @@
 import * as globalStyle from "@/styles/global.css";
-import type { SelectedProduct } from "@/types/apis/store.type";
+import type { SelectedProduct } from "@/types/orders.type";
 import { formatCurrency } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
