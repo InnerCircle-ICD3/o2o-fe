@@ -5,7 +5,6 @@ import ProductBottomSheet from ".";
 const mockSubmit = vi.fn();
 
 vi.mock("@/hooks/api/usePostOrder", () => ({
-  __esModule: true,
   default: () => mockSubmit,
 }));
 
@@ -22,7 +21,7 @@ const mockProducts: Product[] = [
       discountRate: 0,
       finalPrice: 5000,
     },
-    size: "S",
+    size: "s",
     status: "OPEN",
     storeId: 101,
     createdAt: "",
