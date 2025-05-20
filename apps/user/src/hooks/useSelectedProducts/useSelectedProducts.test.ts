@@ -1,4 +1,4 @@
-import type { Product } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import useSelectedProducts from "../useSelectedProducts";

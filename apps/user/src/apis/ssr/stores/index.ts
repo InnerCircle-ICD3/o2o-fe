@@ -1,13 +1,13 @@
 import { apiClient } from "@/apis/client";
-import type { Product, StoreDetail } from "@/types/apis/store.type";
+import type { Product, StoresDetail } from "@/types/apis/stores.type";
 
-export const getStoreDetail = async (id: string) => {
-  const data = await apiClient.get<StoreDetail>(`stores/${id}`);
+export const getStoresDetail = async (id: string) => {
+  const data = await apiClient.get<StoresDetail>(`stores/${id}`);
 
   return data;
 };
 
-export const getStoreDetailProducts = async (id: string) => {
+export const getStoresDetailProducts = async (id: string) => {
   const data = await apiClient.get<Product[]>(`stores/${id}/products`);
 
   return data;

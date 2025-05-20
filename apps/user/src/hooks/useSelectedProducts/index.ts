@@ -1,4 +1,4 @@
-import type { Product } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
 import type { OrderSummary, SelectedProduct } from "@/types/orders.type";
 import { useState } from "react";
 

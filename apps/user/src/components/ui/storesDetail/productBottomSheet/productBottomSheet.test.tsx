@@ -1,4 +1,4 @@
-import type { Product } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ProductBottomSheet from ".";
@@ -37,7 +37,7 @@ describe("ProductBottomSheet Test", () => {
     render(
       <>
         <div id={"bottom-sheet"} />
-        <ProductBottomSheet isShow={true} storeProducts={mockProducts} onClose={vi.fn()} />
+        <ProductBottomSheet isShow={true} storesProducts={mockProducts} onClose={vi.fn()} />
       </>,
     );
 
@@ -49,7 +49,7 @@ describe("ProductBottomSheet Test", () => {
     render(
       <>
         <div id="bottom-sheet" />
-        <ProductBottomSheet isShow={true} storeProducts={mockProducts} onClose={vi.fn()} />
+        <ProductBottomSheet isShow={true} storesProducts={mockProducts} onClose={vi.fn()} />
       </>,
     );
 

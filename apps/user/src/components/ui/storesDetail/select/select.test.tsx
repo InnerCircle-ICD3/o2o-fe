@@ -1,4 +1,4 @@
-import type { Product } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
 import type { SelectedProduct } from "@/types/orders.type";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -50,7 +50,7 @@ describe("Select Test", () => {
   });
 
   it("리스트가 버튼 클릭 시 열리고 닫힘", () => {
-    render(<Select storeProducts={mockProducts} selectedProducts={[]} onChange={mockOnChange} />);
+    render(<Select storesProducts={mockProducts} selectedProducts={[]} onChange={mockOnChange} />);
 
     const button = screen.getByRole("button", { name: /럭키백 선택/i });
     expect(screen.queryByText("상품 1")).toBeNull();
@@ -63,7 +63,7 @@ describe("Select Test", () => {
   });
 
   it("선택 가능한 상품을 클릭하면 onChange가 호출됨", () => {
-    render(<Select storeProducts={mockProducts} selectedProducts={[]} onChange={mockOnChange} />);
+    render(<Select storesProducts={mockProducts} selectedProducts={[]} onChange={mockOnChange} />);
 
     fireEvent.click(screen.getByRole("button"));
     fireEvent.click(screen.getByText("상품 1"));
@@ -71,7 +71,7 @@ describe("Select Test", () => {
   });
 
   it("품절 상품은 클릭해도 onChange가 호출되지 않음", () => {
-    render(<Select storeProducts={mockProducts} selectedProducts={[]} onChange={mockOnChange} />);
+    render(<Select storesProducts={mockProducts} selectedProducts={[]} onChange={mockOnChange} />);
 
     fireEvent.click(screen.getByRole("button"));
     fireEvent.click(screen.getByText("품절 상품"));
@@ -90,7 +90,7 @@ describe("Select Test", () => {
     ];
 
     render(
-      <Select storeProducts={mockProducts} selectedProducts={selected} onChange={mockOnChange} />,
+      <Select storesProducts={mockProducts} selectedProducts={selected} onChange={mockOnChange} />,
     );
 
     fireEvent.click(screen.getByRole("button"));
