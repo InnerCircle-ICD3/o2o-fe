@@ -14,7 +14,6 @@ export const title = style({
   marginBottom: 6,
 
   fontWeight: 700,
-  fontSize: 16,
 });
 
 export const reviewAndDistanceWrapper = style({

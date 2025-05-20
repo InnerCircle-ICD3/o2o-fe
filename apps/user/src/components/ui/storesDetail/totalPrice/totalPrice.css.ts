@@ -18,6 +18,7 @@ export const container = style({
 
 export const count = style({
   flexShrink: 0,
+  fontSize: 14,
   fontWeight: 500,
 });
 
@@ -38,8 +39,9 @@ export const row = style({
 });
 
 export const label = style({
-  width: 68,
+  width: 64,
 
+  fontSize: 14,
   textAlign: "right",
 });
 

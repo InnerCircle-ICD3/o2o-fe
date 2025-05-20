@@ -5,6 +5,7 @@ import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import Checkbox from "@/components/common/checkbox";
 import StatusLabel from "@/components/common/statusLabel";
+import { AutoComplete } from "@/components/ui/autoComplete";
 import TextInput from "@/components/common/textInput";
 import Image from "next/image";
 import { useState } from "react";
@@ -108,6 +109,13 @@ const CommonUi = () => {
           <StatusLabel status={"readyForPickup"}>픽업대기중</StatusLabel>
           <StatusLabel status={"collected"}>픽업완료</StatusLabel>
           <StatusLabel status={"cancel"}>주문취소</StatusLabel>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 100 }}>
+        <h2 className={style.header}>AutoComplete</h2>
+        <div className={style.list}>
+          <AutoComplete />
         </div>
       </div>
     </div>
