@@ -29,8 +29,8 @@ export const createStoreMarker = (
     position: new kakao.maps.LatLng(store.latitude, store.longitude),
     map,
     image: new kakao.maps.MarkerImage(
-      "/icons/map_marker.svg",
-      new kakao.maps.Size(isSelected ? 48 : 36, isSelected ? 48 : 36),
+      isSelected ? "/icons/selected_store_marker.svg" : "/icons/store_marker.svg",
+      new kakao.maps.Size(48, 48),
       {
         verticalAlign: "bottom",
       },
@@ -49,7 +49,7 @@ export const createUserMarker = (location: { lat: number; lng: number }, map: ka
   return new kakao.maps.Marker({
     position: new kakao.maps.LatLng(location.lat, location.lng),
     map,
-    image: new kakao.maps.MarkerImage("/icons/my_marker.svg", new kakao.maps.Size(24, 24), {
+    image: new kakao.maps.MarkerImage("/icons/my_marker.svg", new kakao.maps.Size(48, 48), {
       verticalAlign: "bottom",
     }),
   });
@@ -60,4 +60,25 @@ export const calculateMovedDistance = (
   location: { lat: number; lng: number },
 ) => {
   return Math.sqrt((center.getLng() - location.lng) ** 2 + (center.getLat() - location.lat) ** 2);
+};
+
+// 내 동네 표시
+export const renderMyLocation = (
+  map: kakao.maps.Map,
+  lat: number,
+  lng: number,
+  radius?: number,
+) => {
+  const circle = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(lat, lng),
+    radius: radius ?? 500,
+    map,
+    strokeWeight: 2,
+    strokeOpacity: 1,
+    strokeColor: "#35A865",
+    fillColor: "#35A865",
+    fillOpacity: 0.1,
+  });
+
+  return circle;
 };
