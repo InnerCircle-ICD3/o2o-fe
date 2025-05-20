@@ -4,18 +4,12 @@ import Button from "@/components/common/button";
 import * as globalStyle from "@/styles/global.css";
 import classNames from "classnames";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { use } from "react";
+import { useParams, useRouter } from "next/navigation";
 import * as style from "./success.css";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
-
-const Page = (props: PageProps) => {
+const Page = () => {
   const router = useRouter();
-  const { params } = props;
-  const { id } = use(params);
+  const { id } = useParams();
 
   const handleGoHome = () => {
     router.replace("/");
