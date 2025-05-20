@@ -13,6 +13,7 @@ declare namespace kakao {
       setMinLevel(level: number): void;
       setMaxLevel(level: number): void;
       setCenter(latlng: LatLng): void;
+      setLevel(level: number): void;
     }
 
     class LatLng {

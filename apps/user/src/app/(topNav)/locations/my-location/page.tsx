@@ -11,9 +11,9 @@ import * as styles from "./page.css";
 
 const RANGE_OPTIONS = [
   { value: 500, label: "가까워요" },
-  { value: 800, label: "800m" },
-  { value: 1500, label: "1.5km" },
-  { value: 2000, label: "2km" },
+  { value: 800, label: "" },
+  { value: 1500, label: "" },
+  { value: 2000, label: "멀어요" },
 ];
 
 type RangeOption = 0 | 100 | 500 | 1000;
@@ -23,27 +23,16 @@ export default function MyLocationPage() {
   const location = useGeolocation();
   const isLoaded = useKakaoLoader();
 
-  const [range, setRange] = useState<RangeOption>(0);
+  const [range, setRange] = useState<RangeOption>(500);
   const selectedIndex = RANGE_OPTIONS.findIndex((option) => option.value === range);
-
-  const handleMapIdle = useCallback(
-    async (map: kakao.maps.Map) => {
-      if (!location) return;
-
-      const center = map.getCenter();
-      console.log(center);
-    },
-    [location],
-  );
 
   const handleMapReady = useCallback(
     async (map: kakao.maps.Map) => {
       mapRef.current = map;
-
-      if (!location) return;
-
-      createUserMarker(location, map);
-      renderMyLocation(map, location.lat, location.lng, range);
+      if (location) {
+        renderMyLocation(map, location.lat, location.lng, range);
+        createUserMarker(location, map);
+      }
     },
     [location, range],
   );
@@ -52,12 +41,7 @@ export default function MyLocationPage() {
 
   return (
     <div className={styles.container}>
-      <KakaoMap
-        lat={location.lat}
-        lng={location.lng}
-        onMapIdle={handleMapIdle}
-        onMapReady={handleMapReady}
-      />
+      <KakaoMap lat={location.lat} lng={location.lng} onMapReady={handleMapReady} />
 
       <div className={styles.bottomSheetContainer}>
         <div className={styles.bottomSheetHeader}>

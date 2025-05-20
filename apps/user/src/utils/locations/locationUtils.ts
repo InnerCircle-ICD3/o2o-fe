@@ -62,7 +62,16 @@ export const calculateMovedDistance = (
   return Math.sqrt((center.getLng() - location.lng) ** 2 + (center.getLat() - location.lat) ** 2);
 };
 
-// 내 동네 표시
+/**
+ * 반경에 따른 카카오 지도 줌 레벨을 반환
+ */
+export const getZoomLevelByRadius = (radius: number): number => {
+  if (radius <= 500) return 4;
+  if (radius <= 1000) return 5;
+  if (radius <= 2000) return 6;
+  return 7;
+};
+
 export const renderMyLocation = (
   map: kakao.maps.Map,
   lat: number,
@@ -79,6 +88,10 @@ export const renderMyLocation = (
     fillColor: "#35A865",
     fillOpacity: 0.1,
   });
+
+  const range = radius ?? 500;
+  const level = getZoomLevelByRadius(range);
+  map.setLevel(level);
 
   return circle;
 };
