@@ -15,7 +15,7 @@ const mockProduct: Product = {
     discountRate: 0,
     finalPrice: 5000,
   },
-  size: "S",
+  size: "s",
   status: "OPEN",
   storeId: 1,
   createdAt: "",
