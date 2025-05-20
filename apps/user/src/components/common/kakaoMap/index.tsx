@@ -16,13 +16,13 @@ interface KakaoMapProps {
    * 지도가 이동/확대/축소 후 정지했을 때 호출되는 콜백
    * 지도 중심 좌표가 바뀌었는지 확인하는 데 유용함
    */
-  onMapIdle: (map: kakao.maps.Map) => void | Promise<void>;
+  onMapIdle?: (map: kakao.maps.Map) => void | Promise<void>;
 
   /**
    * 지도가 최초 로드되었을 때 호출되는 콜백
    * 지도 인스턴스를 외부에서 저장하거나 초기 fetch 등에 사용
    */
-  onMapReady: (map: kakao.maps.Map) => void | Promise<void>;
+  onMapReady?: (map: kakao.maps.Map) => void | Promise<void>;
 }
 
 /**
@@ -54,7 +54,7 @@ export const KakaoMap = ({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps) => 
     mapInstace.current = map;
 
     kakaoMaps.event.addListener(map, "idle", () => {
-      onMapIdle(map);
+      onMapIdle?.(map);
     });
 
     onMapReady?.(map);
