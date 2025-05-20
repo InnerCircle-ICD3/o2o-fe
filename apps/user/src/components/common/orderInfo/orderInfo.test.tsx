@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import OrderInfo from ".";
 
-// Products 컴포넌트가 복잡하다면 Mock 처리
 vi.mock("../products", () => ({
   default: () => <div data-testid="products-component">Products Component</div>,
 }));
