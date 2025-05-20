@@ -5,6 +5,9 @@ globalStyle("*", {
   boxSizing: "border-box",
   margin: 0,
   padding: 0,
+
+  fontFamily: "var(--font-pretendard)",
+  fontSize: 16,
 });
 
 globalStyle("html, body", {
