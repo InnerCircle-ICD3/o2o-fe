@@ -180,6 +180,9 @@ importers:
       "@tanstack/react-query":
         specifier: ^5.74.7
         version: 5.75.5(react@19.1.0)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       classnames:
         specifier: ^2.5.1
         version: 2.5.1

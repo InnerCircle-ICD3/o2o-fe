@@ -5,36 +5,23 @@ import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import "@vanilla-extract/css/disableRuntimeStyles";
 
 export default defineConfig({
-	plugins: [tsconfigPaths(), react(), vanillaExtractPlugin()],
-	test: {
-		environment: "jsdom",
-		setupFiles: ["./src/test/setup.ts"],
-		env: {
-			NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-		},
-		// TODO: Remove this after initial test coverage setup
-		coverage: {
-			provider: "v8",
-			reporter: ["text", "json-summary", "html", "lcov"],
-			reportsDirectory: "./coverage",
-			include: [
-				"src/app/page.tsx",
-
-				"src/components/sample/Counter.tsx",
-
-				"src/stores/**/*.ts",
-			],
-			exclude: [
-				"**/*.d.ts",
-
-				"**/*.test.ts",
-
-				"**/*.test.tsx",
-
-				"src/mocks/**",
-
-				"src/test/**",
-			],
-		},
-	},
+  plugins: [tsconfigPaths(), react(), vanillaExtractPlugin()],
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup.ts"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json-summary", "html", "lcov"],
+      reportsDirectory: "./coverage",
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "**/*.d.ts",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "src/mocks/**",
+        "src/test/**",
+        "**/__test__/**",
+      ],
+    },
+  },
 });
