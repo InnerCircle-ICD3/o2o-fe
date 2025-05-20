@@ -1,1 +1,1 @@
-export { useCounterStore } from "@/stores/counter/counterStore";
+// export { STORE_NAME } from "@/stores/STORE_PATH";
