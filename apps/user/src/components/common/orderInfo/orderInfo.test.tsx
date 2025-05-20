@@ -54,7 +54,7 @@ const mockOrderDetail: OrderDetail = {
         discountRate: 0.5,
         finalPrice: 10000,
       },
-      size: "L",
+      size: "l",
       status: "ACTIVE",
     },
   ],
