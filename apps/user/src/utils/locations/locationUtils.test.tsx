@@ -74,11 +74,9 @@ describe("locationUtils", () => {
         MarkerImage: vi.fn(),
         // biome-ignore lint/style/useNamingConvention: false
         Size: vi.fn(),
-        // biome-ignore lint/style/useNamingConvention: false
         event: {
           addListener: vi.fn(),
         },
-        // biome-ignore lint/style/useNamingConvention: false
         load: vi.fn(),
         // biome-ignore lint/style/useNamingConvention: false
         Map: vi.fn(),
