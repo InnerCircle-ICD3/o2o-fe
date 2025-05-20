@@ -2,7 +2,7 @@ import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { render, screen } from "@testing-library/react";
 import { type Mock, beforeEach, describe, expect, it, vi } from "vitest";
-import ExploreMap from "./page";
+import SearchMap from "./page";
 
 declare global {
   namespace kakao.maps {
@@ -56,7 +56,7 @@ vi.mock("@/utils/locations/locationUtils", async () => {
   };
 });
 
-describe("ExploreMap", () => {
+describe("SearchMap", () => {
   const mockLocation = { lat: 37.123456, lng: 127.123456 };
 
   beforeEach(() => {
@@ -67,7 +67,7 @@ describe("ExploreMap", () => {
     (useKakaoLoader as Mock).mockReturnValue(false);
     (useGeolocation as Mock).mockReturnValue(null);
 
-    render(<ExploreMap />);
+    render(<SearchMap />);
 
     expect(screen.queryByTestId("mock-kakao-map")).toBeNull();
 
@@ -78,7 +78,7 @@ describe("ExploreMap", () => {
     (useKakaoLoader as Mock).mockReturnValue(true);
     (useGeolocation as Mock).mockReturnValue(mockLocation);
 
-    render(<ExploreMap />);
+    render(<SearchMap />);
 
     const map = screen.getByTestId("mock-kakao-map");
     expect(map.textContent).toContain(`${mockLocation.lat},${mockLocation.lng}`);
@@ -88,7 +88,7 @@ describe("ExploreMap", () => {
     (useGeolocation as Mock).mockReturnValue(mockLocation);
     (useKakaoLoader as Mock).mockReturnValue(true);
 
-    render(<ExploreMap />);
+    render(<SearchMap />);
 
     const refreshBtn = await screen.findByRole("button", { name: /현 지도에서 검색/i });
 

@@ -20,7 +20,7 @@ import {
 import { LoadingMap } from "./ui/LoadingMap";
 import { StoreInfoCard } from "./ui/StoreInfoCard";
 
-export default function ExploreMap() {
+export default function SearchMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const isLoaded = useKakaoLoader();
   const location = useGeolocation();
