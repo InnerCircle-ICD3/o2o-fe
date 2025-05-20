@@ -10,6 +10,8 @@ export const container = style({
 
 export const main = style({
   height: "calc(100% - 44px)",
+
+  overflowY: "auto",
 });
 
 export const topNav = style({
