@@ -9,6 +9,7 @@ import type { Store } from "@/types/searchMap.type";
 
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
+
 import { LoadingMap } from "@/components/common/skeleton/LoadingMap";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
@@ -18,6 +19,7 @@ import {
   createUserMarker,
   fetchStoresByCenter,
 } from "../../../../utils/locations/locationUtils";
+
 import { StoreInfoCard } from "./ui/StoreInfoCard";
 
 export default function SearchMap() {
