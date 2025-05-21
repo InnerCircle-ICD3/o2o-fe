@@ -2,7 +2,7 @@ import { getStoresDetail, getStoresDetailProducts } from "@/apis/ssr/stores";
 import ProductSelector from "@/components/ui/storesDetail/productSelector";
 import StoresInfo from "@/components/ui/storesDetail/storesInfo";
 import StoresProducts from "@/components/ui/storesDetail/storesProducts";
-import * as style from "./storeDetail.css";
+import * as style from "./storesDetail.css";
 
 interface PageProps {
   params: Promise<{ id: string }>;
