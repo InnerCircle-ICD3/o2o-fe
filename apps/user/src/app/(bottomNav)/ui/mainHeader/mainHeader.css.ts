@@ -29,3 +29,22 @@ export const mainHeaderRight = style({
   alignItems: "center",
   gap: "10px",
 });
+
+export const bottomSheetListStyle = style({
+  width: "100%",
+  marginTop: 30,
+});
+
+export const bottomSheetListItemStyle = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: 10,
+});
+
+export const bottomSheetListItemButtonStyle = style({
+  display: "flex",
+  alignItems: "center",
+  gap: 10,
+  width: "100%",
+  padding: "10px 0",
+});

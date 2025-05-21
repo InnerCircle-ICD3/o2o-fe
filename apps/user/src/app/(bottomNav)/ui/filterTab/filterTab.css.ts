@@ -1,5 +1,11 @@
 import { globalTheme } from "@/styles/theme.css";
-import { globalStyle, style } from "@vanilla-extract/css";
+import { style } from "@vanilla-extract/css";
+import { recipe } from "@vanilla-extract/recipes";
+import {
+  bottomSheetListItemButtonStyle,
+  bottomSheetListItemStyle,
+  bottomSheetListStyle,
+} from "../mainHeader/mainHeader.css";
 
 export const container = style({
   display: "flex",
@@ -9,60 +15,128 @@ export const container = style({
   gap: 4,
 });
 
-export const tab = style({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: 4,
-  height: 34,
-  padding: "10px 12px",
-  flexShrink: 0,
-  borderRadius: 16.5,
-  border: `1px solid ${globalTheme.color.gray.light}`,
-  background: globalTheme.color.white,
+export const tab = recipe({
+  base: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+    height: 34,
+    padding: "10px 12px",
+    flexShrink: 0,
+    borderRadius: 16.5,
+    border: `1px solid ${globalTheme.color.gray.light}`,
+    background: globalTheme.color.white,
+  },
 
-  selectors: {
-    "&:hover": {
-      background: globalTheme.color.gray.background,
+  variants: {
+    active: {
+      true: {
+        backgroundColor: globalTheme.color.black,
+        border: "none",
+      },
+    },
+    hover: {
+      default: {
+        ":hover": {
+          background: globalTheme.color.gray.background,
+        },
+      },
+      active: {
+        ":hover": {
+          background: "rgba(51, 51, 51, 0.95)",
+        },
+      },
+    },
+  },
+
+  compoundVariants: [
+    {
+      variants: {
+        active: true,
+      },
+      style: {
+        ":hover": {
+          background: "rgba(51, 51, 51, 0.95)",
+        },
+      },
+    },
+  ],
+
+  defaultVariants: {
+    hover: "default",
+  },
+});
+
+export const textStyle = recipe({
+  base: {
+    lineHeight: "normal",
+    textTransform: "uppercase",
+  },
+  variants: {
+    type: {
+      tab: {
+        fontSize: "0.875rem",
+        fontWeight: 400,
+        color: globalTheme.color.black,
+      },
+      pickup: {
+        fontSize: "0.75rem",
+        fontWeight: 700,
+        color: globalTheme.color.gray.base,
+      },
+    },
+    parentActive: {
+      true: {
+        color: globalTheme.color.white,
+      },
     },
   },
 });
 
-export const tabText = style({
-  color: globalTheme.color.black,
-  fontSize: "0.875rem",
-  fontWeight: 400,
-  lineHeight: "normal",
-  textTransform: "uppercase",
+export const imageStyle = recipe({
+  base: {},
+  variants: {
+    parentActive: {
+      true: {
+        filter: "invert(1)",
+      },
+    },
+  },
 });
 
-export const pickupTime = style({
-  color: globalTheme.color.gray.base,
-  fontSize: "0.75rem",
-  fontWeight: 700,
-  lineHeight: "normal",
-  textTransform: "uppercase",
-});
+export const tabText = textStyle({ type: "tab" });
+export const pickupTime = textStyle({ type: "pickup" });
+export const active = tab({ active: true });
 
-export const active = style({
-  backgroundColor: globalTheme.color.black,
-  border: "none",
-});
+export const filterListStyle = bottomSheetListStyle;
 
-// 전역 스타일로 active와 tabText, pickupTime의 관계 정의
-globalStyle(`.${active} .${tabText}`, {
-  color: globalTheme.color.white,
-});
+export const filterListItemHover = style([
+  bottomSheetListItemStyle,
+  {
+    width: "100%",
+    borderRadius: 16.5,
+    padding: "10px 12px",
+    ":hover": {
+      background: globalTheme.color.gray.background,
+    },
+  },
+]);
 
-globalStyle(`.${active} .${pickupTime}`, {
-  color: globalTheme.color.white,
-});
+export const filterListItemSelected = style([
+  bottomSheetListItemStyle,
+  {
+    borderRadius: 16.5,
+    padding: "10px 12px",
+    border: `1px solid ${globalTheme.color.primary}`,
+  },
+]);
 
-globalStyle(`.${active} img`, {
-  filter: "invert(1)",
-});
+export const filterListItemButtonStyle = style([bottomSheetListItemButtonStyle]);
 
-// active 상태일 때 hover 스타일 추가
-globalStyle(`.${active}:hover`, {
-  background: "rgba(51, 51, 51, 0.95)",
+export const filterButtonContainer = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: 10,
+  marginTop: 20,
 });
