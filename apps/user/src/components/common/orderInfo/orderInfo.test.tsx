@@ -58,6 +58,7 @@ const mockOrderDetail: OrderDetail = {
       status: "ACTIVE",
     },
   ],
+  status: "PENDING",
 };
 
 describe("OrderInfo", () => {

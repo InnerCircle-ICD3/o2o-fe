@@ -1,3 +1,4 @@
+import { ORDER_STATUS } from "@/constants/my-orders";
 import * as globalStyle from "@/styles/global.css";
 import type { OrderDetail } from "@/types/apis/order.type";
 import { formatCurrency, formatHourTo12HourText } from "@/utils/format";
@@ -5,6 +6,12 @@ import classNames from "classnames";
 import Image from "next/image";
 import Products from "../products";
 import * as style from "./orderInfo.css";
+
+const paymentLabel = {
+  [ORDER_STATUS.pending]: "결제 예정 금액",
+  [ORDER_STATUS.completed]: "결제 금액",
+  [ORDER_STATUS.canceled]: "결제 취소 금액",
+};
 
 interface OrderInfoProps {
   orderDetail: OrderDetail;
@@ -44,7 +51,7 @@ const OrderInfo = (props: OrderInfoProps) => {
         </div>
 
         <div className={classNames(style.wrapper, style.paymentAmount)}>
-          <h3 className={style.subTitle}>결제 예정 금액</h3>
+          <h3 className={style.subTitle}>{paymentLabel[orderDetail.status]}</h3>
 
           <p className={classNames(globalStyle.primaryColor, style.price)}>
             {formatCurrency(20000)}
