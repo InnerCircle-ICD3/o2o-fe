@@ -3,7 +3,7 @@ import OrderItem from "@/components/ui/my-orders/orderItem";
 import * as style from "./myOrders.css";
 
 const Page = async () => {
-  const orderList = await getOrderList(1);
+  const orderList = await getOrderList(2);
 
   return (
     <div className={style.container}>
