@@ -22,6 +22,7 @@ export const title = style({
 
   fontSize: 20,
   textAlign: "center",
+  fontWeight: 500,
 
   borderBottom: `1px solid ${globalTheme.color.line}`,
   backgroundColor: globalTheme.color.white,
