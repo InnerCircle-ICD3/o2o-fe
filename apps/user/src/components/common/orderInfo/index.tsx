@@ -8,9 +8,9 @@ import Products from "../products";
 import * as style from "./orderInfo.css";
 
 const paymentLabel = {
-  [ORDER_STATUS.pending]: "결제 예정 금액",
-  [ORDER_STATUS.completed]: "결제 금액",
-  [ORDER_STATUS.canceled]: "결제 취소 금액",
+  [ORDER_STATUS.PENDING]: "결제 예정 금액",
+  [ORDER_STATUS.COMPLETED]: "결제 금액",
+  [ORDER_STATUS.CANCELLED]: "결제 취소 금액",
 };
 
 interface OrderInfoProps {
@@ -51,7 +51,7 @@ const OrderInfo = (props: OrderInfoProps) => {
         </div>
 
         <div className={classNames(style.wrapper, style.paymentAmount)}>
-          <h3 className={style.subTitle}>{paymentLabel[orderDetail.status]}</h3>
+          <h3 className={style.subTitle}>{paymentLabel[ORDER_STATUS[orderDetail.status]]}</h3>
 
           <p className={classNames(globalStyle.primaryColor, style.price)}>
             {formatCurrency(20000)}
