@@ -4,7 +4,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import ProductSelector from ".";
 
 vi.mock("../productBottomSheet", () => ({
-  __esModule: true,
   default: ({ isShow, onClose }: { isShow: boolean; onClose: () => void }) => (
     <div>
       <p>BottomSheet is {isShow ? "Open" : "Closed"}</p>
@@ -29,7 +28,7 @@ describe("ProductSelector Test", () => {
         discountRate: 10,
         finalPrice: 9000,
       },
-      size: "S",
+      size: "s",
       status: "OPEN",
       storeId: 1,
       createdAt: "",

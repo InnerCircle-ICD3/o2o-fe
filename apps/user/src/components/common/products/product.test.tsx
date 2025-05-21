@@ -27,7 +27,7 @@ describe("Products Component", () => {
           discountRate: 0.5,
           finalPrice: 12000,
         },
-        size: "M",
+        size: "m",
         status: "ACTIVE",
       },
     ];
@@ -63,7 +63,7 @@ describe("Products Component", () => {
           discountRate: 0.5,
           finalPrice: 5000,
         },
-        size: "L",
+        size: "l",
         status: "ACTIVE",
       },
     ];

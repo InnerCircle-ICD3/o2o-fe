@@ -1,5 +1,5 @@
-import type { Product, SelectedProduct } from "@/types/apis/store.type";
-// Select.test.tsx
+import type { Product } from "@/types/apis/store.type";
+import type { SelectedProduct } from "@/types/orders.type";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import Select from ".";
@@ -18,7 +18,7 @@ describe("Select Test", () => {
         discountRate: 10,
         finalPrice: 9000,
       },
-      size: "S",
+      size: "s",
       status: "OPEN",
       storeId: 1,
       createdAt: "",
@@ -35,7 +35,7 @@ describe("Select Test", () => {
         discountRate: 0,
         finalPrice: 8000,
       },
-      size: "S",
+      size: "s",
       status: "OPEN",
       storeId: 1,
       createdAt: "",

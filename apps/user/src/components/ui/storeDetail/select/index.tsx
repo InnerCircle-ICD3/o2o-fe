@@ -1,5 +1,6 @@
 import Checkbox from "@/components/common/checkbox";
-import type { Product, SelectedProduct } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/store.type";
+import type { SelectedProduct } from "@/types/orders.type";
 import Image from "next/image";
 import { useState } from "react";
 import * as style from "./select.css";
