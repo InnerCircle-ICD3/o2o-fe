@@ -96,6 +96,73 @@ export const renderMyLocation = (
   return circle;
 };
 
+
+const getCentroid = (points: kakao.maps.LatLng[]): { lat: number; lng: number } => {
+  const total = points.length;
+  const sum = points.reduce(
+    (acc, cur) => ({
+      lat: acc.lat + cur.getLat(),
+      lng: acc.lng + cur.getLng(),
+    }),
+    { lat: 0, lng: 0 }
+  );
+
+  return {
+    lat: sum.lat / total,
+    lng: sum.lng / total,
+  };
+};
+
+const scalePolygon = (
+  points: kakao.maps.LatLng[],
+  scale: number
+): kakao.maps.LatLng[] => {
+  const center = getCentroid(points);
+
+  return points.map((point) => {
+    const latDiff = point.getLat() - center.lat;
+    const lngDiff = point.getLng() - center.lng;
+
+    return new window.kakao.maps.LatLng(
+      center.lat + latDiff * scale,
+      center.lng + lngDiff * scale
+    );
+  });
+};
+
+export const renderMyLocationPolygon = (
+  map: kakao.maps.Map,
+  polygonPath: kakao.maps.LatLng[],
+  range: number
+) => {
+  // 1. range 값을 기반으로 스케일 비율 결정
+  const scale = range / 500; // 500이 기본값일 때 1배 크기
+
+  // 2. 폴리곤 좌표 스케일링
+  const scaledPath = scalePolygon(polygonPath, scale);
+
+  // 3. 폴리곤 생성
+  const polygon = new window.kakao.maps.Polygon({
+    path: scaledPath,
+    strokeWeight: 2,
+    strokeColor: "#35A865",
+    strokeOpacity: 1,
+    strokeStyle: "longdash",
+    fillColor: "#35A865",
+    fillOpacity: 0.4,
+  });
+
+  polygon.setMap(map);
+
+  // 4. 자동 중심 이동
+  const bounds = new window.kakao.maps.LatLngBounds();
+  scaledPath.forEach((latlng) => bounds.extend(latlng));
+  map.setBounds(bounds);
+
+  return polygon;
+};
+
+
 export const getRegionByCoords = (lat: number, lng: number): Promise<string | null> => {
   return new Promise((resolve, reject) => {
     if (!window.kakao?.maps) {

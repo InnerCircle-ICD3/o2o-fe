@@ -40,12 +40,19 @@ declare namespace kakao {
       setMaxLevel(level: number): void;
       setCenter(latlng: LatLng): void;
       setLevel(level: number): void;
+      setBounds(bounds: LatLngBounds): void;
     }
 
     class LatLng {
       constructor(lat: number, lng: number);
       getLat(): number;
       getLng(): number;
+    }
+
+    class LatLngBounds {
+      constructor();
+      extend(latlng: LatLng): void;
+      getBounds(): LatLngBounds;
     }
 
     class Size {
@@ -58,6 +65,11 @@ declare namespace kakao {
 
     class Circle {
       constructor(options: CircleOptions);
+    }
+
+    class Polygon {
+      constructor(options: PolygonOptions);
+      setMap(map: Map | null): void;
     }
 
     class Marker {

@@ -6,14 +6,14 @@ import { LoadingMap } from "@/components/common/skeleton/LoadingMap";
 import { RANGE_OPTIONS } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import { createUserMarker, renderMyLocation } from "@/utils/locations/locationUtils";
-import { useCallback, useRef, useState } from "react";
+import { createUserMarker, renderMyLocation, renderMyLocationPolygon } from "@/utils/locations/locationUtils";
+import { useCallback, useMemo, useRef, useState } from "react";
 import * as styles from "./page.css";
 
 type RangeOption = 0 | 100 | 500 | 1000;
 
+
 export default function MyLocationPage() {
-  const geocoder = new kakao.maps.services.Geocoder();
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const location = useGeolocation();
   const isLoaded = useKakaoLoader();
@@ -21,11 +21,36 @@ export default function MyLocationPage() {
   const [range, setRange] = useState<RangeOption>(500);
   const selectedIndex = RANGE_OPTIONS.findIndex((option) => option.value === range);
 
+  const geocoder = useMemo(() => {
+    if (isLoaded && window.kakao?.maps?.services) {
+      return new window.kakao.maps.services.Geocoder();
+    }
+    return null;
+  }, [isLoaded]);
+
+  const districtBoundary = useMemo(() => {
+    if (!isLoaded || !window.kakao?.maps) return [];
+  
+    return [
+      new window.kakao.maps.LatLng(33.4499, 126.5698),
+      new window.kakao.maps.LatLng(33.4490, 126.5710),
+      new window.kakao.maps.LatLng(33.4495, 126.5725),
+      new window.kakao.maps.LatLng(33.4502, 126.5732),
+      new window.kakao.maps.LatLng(33.4512, 126.5730),
+      new window.kakao.maps.LatLng(33.4520, 126.5720),
+      new window.kakao.maps.LatLng(33.4523, 126.5705),
+      new window.kakao.maps.LatLng(33.4517, 126.5692),
+      new window.kakao.maps.LatLng(33.4505, 126.5688),
+      new window.kakao.maps.LatLng(33.4499, 126.5698),
+    ];
+  }, [isLoaded]);
+
   const handleMapReady = useCallback(
     async (map: kakao.maps.Map) => {
       mapRef.current = map;
       if (location) {
-        renderMyLocation(map, location.lat, location.lng, range);
+        // renderMyLocation(map, location.lat, location.lng, range);
+        renderMyLocationPolygon(map, districtBoundary, range);
         createUserMarker(location, map);
       }
     },
@@ -33,7 +58,7 @@ export default function MyLocationPage() {
   );
 
   const handleGetRegion = () => {
-    if (!location) return;
+    if (!location || !geocoder) return;
 
     geocoder.coord2RegionCode(location.lng, location.lat, (result, status) => {
       if (status === "OK" && result.length > 0) {
