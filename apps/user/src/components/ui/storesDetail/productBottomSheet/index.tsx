@@ -2,7 +2,7 @@ import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import usePostOrder from "@/hooks/api/usePostOrder";
 import useSelectedProducts from "@/hooks/useSelectedProducts";
-import type { Product } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
 import Select from "../select";
 import SelectedItem from "../selectedItem";
 import TotalPrice from "../totalPrice";
@@ -10,12 +10,12 @@ import * as style from "./productBottomSheet.css";
 
 interface ProductBottomSheetProps {
   isShow: boolean;
-  storeProducts: Product[];
+  storesProducts: Product[];
   onClose: () => void;
 }
 
 const ProductBottomSheet = (props: ProductBottomSheetProps) => {
-  const { isShow, storeProducts, onClose } = props;
+  const { isShow, storesProducts, onClose } = props;
   const submitOrder = usePostOrder();
   const {
     selectedProducts,
@@ -27,7 +27,7 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
 
   const handleSubmit = () => {
     const orderBody = {
-      storeId: storeProducts[0].storeId,
+      storeId: storesProducts[0].storeId,
       products: selectedProducts.map((product) => ({
         productId: product.id,
         selectedCount: product.selectedCount,
@@ -41,7 +41,7 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
     <BottomSheet type={"shadow"} isShow={isShow} title={"럭키백 선택하기"} onClose={onClose}>
       <div className={style.container}>
         <Select
-          storeProducts={storeProducts}
+          storesProducts={storesProducts}
           selectedProducts={selectedProducts}
           onChange={handleSelectProduct}
         />

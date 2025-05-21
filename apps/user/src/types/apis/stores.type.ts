@@ -1,4 +1,4 @@
-export interface StoreDetail {
+export interface StoresDetail {
   storeId: number;
   name: string;
   roadAddress: {

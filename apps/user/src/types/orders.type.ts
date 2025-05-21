@@ -1,4 +1,4 @@
-import type { Price } from "./apis/store.type";
+import type { Price } from "./apis/stores.type";
 
 export interface OrderSummary {
   count: number;
