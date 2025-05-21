@@ -63,7 +63,7 @@ export default function MyLocationPage() {
     geocoder.coord2RegionCode(location.lng, location.lat, (result, status) => {
       if (status === "OK" && result.length > 0) {
         const region = result.find((r) => r.region_type === "H");
-        console.log(region?.address_name);
+        console.log(region?.address_name, range);
       }
     });
   };

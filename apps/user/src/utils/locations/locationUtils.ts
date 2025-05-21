@@ -66,10 +66,9 @@ export const calculateMovedDistance = (
  * 반경에 따른 카카오 지도 줌 레벨을 반환
  */
 const getZoomLevelByRadius = (radius: number): number => {
-  if (radius <= 500) return 4;
-  if (radius <= 1000) return 5;
-  if (radius <= 2000) return 6;
-  return 7;
+  if (radius <= 800) return 4;
+  if (radius <= 2000) return 5;
+  return 6;
 };
 
 export const renderMyLocation = (
@@ -132,16 +131,12 @@ const scalePolygon = (
 
 export const renderMyLocationPolygon = (
   map: kakao.maps.Map,
-  polygonPath: kakao.maps.LatLng[],
-  range: number
+  basePolygonPath: kakao.maps.LatLng[],
+  radius: number
 ) => {
-  // 1. range 값을 기반으로 스케일 비율 결정
-  const scale = range / 500; // 500이 기본값일 때 1배 크기
+  const scale = radius / 500;
+  const scaledPath = scalePolygon(basePolygonPath, scale);
 
-  // 2. 폴리곤 좌표 스케일링
-  const scaledPath = scalePolygon(polygonPath, scale);
-
-  // 3. 폴리곤 생성
   const polygon = new window.kakao.maps.Polygon({
     path: scaledPath,
     strokeWeight: 2,
@@ -154,10 +149,12 @@ export const renderMyLocationPolygon = (
 
   polygon.setMap(map);
 
-  // 4. 자동 중심 이동
   const bounds = new window.kakao.maps.LatLngBounds();
   scaledPath.forEach((latlng) => bounds.extend(latlng));
   map.setBounds(bounds);
+
+  const zoomLevel = getZoomLevelByRadius(radius);
+  map.setLevel(zoomLevel);
 
   return polygon;
 };
