@@ -1,10 +1,10 @@
 import type { ORDER_STATUS } from "@/constants/my-orders";
-import type { Product, StoreDetail } from "./store.type";
+import type { Product, StoresDetail } from "./stores.type";
 
 export type OrderStatus = keyof typeof ORDER_STATUS;
 export interface OrderDetail {
   orderId: number;
-  store: StoreDetail;
+  store: StoresDetail;
   products: Product[];
   status: OrderStatus;
   orderDate: string;

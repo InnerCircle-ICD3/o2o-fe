@@ -1,17 +1,14 @@
+import type { OrderSummary } from "@/types/orders.type";
 import { formatCurrency } from "@/utils/format";
 import * as style from "./totalPrice.css";
 
 interface TotalPriceProps {
-  result: {
-    count: number;
-    originalPrice: number;
-    finalPrice: number;
-  };
+  orderSummary: OrderSummary;
 }
 
 const TotalPrice = (props: TotalPriceProps) => {
-  const { result } = props;
-  const { count, originalPrice, finalPrice } = result;
+  const { orderSummary } = props;
+  const { count, originalPrice, finalPrice } = orderSummary;
 
   return (
     <div className={style.container}>

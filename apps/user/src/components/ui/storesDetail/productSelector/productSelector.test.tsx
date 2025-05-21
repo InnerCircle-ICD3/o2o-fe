@@ -1,10 +1,9 @@
-import type { Product } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ProductSelector from ".";
 
 vi.mock("../productBottomSheet", () => ({
-  __esModule: true,
   default: ({ isShow, onClose }: { isShow: boolean; onClose: () => void }) => (
     <div>
       <p>BottomSheet is {isShow ? "Open" : "Closed"}</p>
@@ -29,7 +28,7 @@ describe("ProductSelector Test", () => {
         discountRate: 10,
         finalPrice: 9000,
       },
-      size: "S",
+      size: "s",
       status: "OPEN",
       storeId: 1,
       createdAt: "",
@@ -41,7 +40,7 @@ describe("ProductSelector Test", () => {
   });
 
   it("주문하기 버튼 클릭 시 ProductBottomSheet 열림", () => {
-    render(<ProductSelector storeProducts={mockProducts} />);
+    render(<ProductSelector storesProducts={mockProducts} />);
 
     expect(screen.getByText("BottomSheet is Closed")).not.toBeNull();
 
@@ -51,7 +50,7 @@ describe("ProductSelector Test", () => {
   });
 
   it("BottomSheet에서 onClose 실행 시 닫힘", () => {
-    render(<ProductSelector storeProducts={mockProducts} />);
+    render(<ProductSelector storesProducts={mockProducts} />);
 
     fireEvent.click(screen.getByRole("button", { name: "주문하기" }));
     expect(screen.getByText("BottomSheet is Open")).not.toBeNull();

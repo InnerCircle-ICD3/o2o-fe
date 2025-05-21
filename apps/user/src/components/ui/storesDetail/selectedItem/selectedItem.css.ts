@@ -75,5 +75,3 @@ export const length = style({
 export const price = style({
   fontWeight: 700,
 });
-
-// export const;

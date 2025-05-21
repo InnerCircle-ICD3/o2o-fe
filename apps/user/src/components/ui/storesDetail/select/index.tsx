@@ -1,17 +1,18 @@
 import Checkbox from "@/components/common/checkbox";
-import type { Product, SelectedProduct } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
+import type { SelectedProduct } from "@/types/orders.type";
 import Image from "next/image";
 import { useState } from "react";
 import * as style from "./select.css";
 
 interface SelectProps {
-  storeProducts: Product[];
+  storesProducts: Product[];
   selectedProducts: SelectedProduct[];
   onChange: (product: Product) => void;
 }
 
 const Select = (props: SelectProps) => {
-  const { storeProducts, selectedProducts, onChange } = props;
+  const { storesProducts, selectedProducts, onChange } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const buttonStyle = isOpen ? style.button.opened : style.button.default;
@@ -34,7 +35,7 @@ const Select = (props: SelectProps) => {
 
       {isOpen && (
         <ul className={style.list}>
-          {storeProducts.map((product) => {
+          {storesProducts.map((product) => {
             const isSoldOut = product.inventory.quantity === 0;
             const itemStyle = isSoldOut ? style.item.soldOut : style.item.default;
 

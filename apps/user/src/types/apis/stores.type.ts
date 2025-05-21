@@ -1,4 +1,4 @@
-export interface StoreDetail {
+export interface StoresDetail {
   storeId: number;
   name: string;
   roadAddress: {
@@ -44,14 +44,6 @@ export interface Product {
   storeId: number;
   name: string;
   price: Price;
-  size: "S" | "M" | "L";
+  size: "s" | "m" | "l";
   status: string;
-}
-
-export interface SelectedProduct {
-  id: number;
-  name: string;
-  price: Price;
-  quantity: number;
-  selectedCount: number;
 }
