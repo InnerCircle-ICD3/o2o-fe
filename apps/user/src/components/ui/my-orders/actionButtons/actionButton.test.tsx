@@ -29,7 +29,7 @@ describe("ActionButtons Test", () => {
   });
 
   it("status가 pending이 아니면 아무것도 렌더링되지 않아야 한다", () => {
-    render(<ActionButtons orderDetail={{ ...baseOrder, status: "COMPLATED" }} />);
+    render(<ActionButtons orderDetail={{ ...baseOrder, status: "COMPLETED" }} />);
 
     expect(screen.queryByRole("button", { name: "주문 취소" })).toBeNull();
     expect(screen.queryByRole("button", { name: "픽업 완료" })).toBeNull();

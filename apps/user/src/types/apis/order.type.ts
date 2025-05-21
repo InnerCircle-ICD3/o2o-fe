@@ -7,4 +7,8 @@ export interface OrderDetail {
   store: StoreDetail;
   products: Product[];
   status: OrderStatus;
+  orderDate: string;
+  pickupDate?: string;
+  cancelDate?: string;
+  totalPrice: number;
 }
