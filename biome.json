@@ -33,7 +33,19 @@
       "style": {
         "useConst": "error",
         "useTemplate": "error",
-        "useNamingConvention": "error"
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "objectLiteralProperty"
+                },
+                "formats": ["camelCase", "CONSTANT_CASE"]
+              }
+            ]
+          }
+        }
       },
       "a11y": {
         "noLabelWithoutControl": "off"
