@@ -28,7 +28,7 @@ describe("ProductSelector Test", () => {
         discountRate: 10,
         finalPrice: 9000,
       },
-      size: "s",
+      size: "S",
       status: "OPEN",
       storeId: 1,
       createdAt: "",
