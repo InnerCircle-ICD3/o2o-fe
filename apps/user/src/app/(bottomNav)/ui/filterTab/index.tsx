@@ -4,6 +4,7 @@ import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import { useBottomSheet } from "@/hooks/useBottomSheet";
 import { formatTime } from "@/utils/format";
+import classNames from "classnames";
 import Image from "next/image";
 import { useState } from "react";
 import * as styles from "./filterTab.css";
@@ -13,8 +14,8 @@ type MinuteType = number & { __brand: "Minute" };
 
 type PickupTime = {
   day: "오전" | "오후";
-  hour: HourType; // 0-23
-  minute: MinuteType; // 0-55 (5의 배수)
+  hour: HourType;
+  minute: MinuteType;
 };
 
 const foodTypeList = ["빵", "디저트", "한식", "과일", "피자", "샐러드"];
@@ -111,11 +112,18 @@ export default function FilterTab() {
           <span
             className={styles.textStyle({ type: "tab", parentActive: activeTab === "pickupTime" })}
           >
-            {Object.keys(selectedPickupTime).length > 0
-              ? Object.values(selectedPickupTime).join(":")
+            픽업 가능시간
+          </span>
+          <span
+            className={classNames(
+              styles.pickupTime,
+              selectedPickupTime.day ? styles.pickupTimeActive : "",
+            )}
+          >
+            {selectedPickupTime.day
+              ? `${selectedPickupTime.day} ${formatTime(Number(selectedPickupTime.hour))}:${formatTime(Number(selectedPickupTime.minute))}`
               : "픽업 가능시간"}
           </span>
-          <span className={styles.pickupTime}>비어있음</span>
         </button>
       </div>
 
@@ -155,6 +163,7 @@ export default function FilterTab() {
           </Button>
         </div>
       </BottomSheet>
+
       {/* 픽업 가능시간 선택 */}
       <BottomSheet
         type="shadow"
@@ -168,7 +177,7 @@ export default function FilterTab() {
               <li key={day}>
                 <button
                   type="button"
-                  className={styles.timeItem}
+                  className={tempPickupTime.day === day ? styles.timeItemSelected : styles.timeItem}
                   onClick={() => handleTempPickupTimeClick({ day: day as "오전" | "오후" })}
                 >
                   {day}

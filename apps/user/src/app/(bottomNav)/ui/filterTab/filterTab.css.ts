@@ -186,3 +186,7 @@ export const timeItemSelected = style([
     },
   },
 ]);
+
+export const pickupTimeActive = style({
+  color: globalTheme.color.primary,
+});
