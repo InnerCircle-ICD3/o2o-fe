@@ -14,7 +14,7 @@ import {
 import { useCallback, useMemo, useRef, useState } from "react";
 import * as styles from "./myLocation.css";
 
-type RangeOption = 0 | 100 | 500 | 1000;
+type RangeOption = (typeof RANGE_OPTIONS)[number]["value"];
 
 export default function MyLocation() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
