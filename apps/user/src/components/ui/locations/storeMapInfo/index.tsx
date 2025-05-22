@@ -1,4 +1,5 @@
 import type { Store } from "@/types/searchMap.type";
+import { formatCurrency } from "@/utils/format";
 import Image from "next/image";
 import * as styles from "./storeMapInfo.css";
 
@@ -27,7 +28,7 @@ export const StoreInfoCard = ({ store }: StoreInfoCardProps) => {
             <h3 className={styles.storeCardTitle}>{store.name}</h3>
             <div className={styles.categoryText}>{store.category.split(",").join(" / ")}</div>
           </div>
-          <div className={styles.originPrice}>{store.minPrice * 2} ₩</div>
+          <div className={styles.originPrice}>{formatCurrency(store.minPrice * 2)}</div>
         </div>
         <div className={styles.ratingRow}>
           <div className={styles.flexRow}>
@@ -36,7 +37,7 @@ export const StoreInfoCard = ({ store }: StoreInfoCardProps) => {
             <span>(100)</span>
             <span>{store.distance}km</span>
           </div>
-          <div className={styles.salePrice}>{store.minPrice} ₩</div>
+          <div className={styles.salePrice}>{formatCurrency(store.minPrice)}</div>
         </div>
       </div>
     </div>
