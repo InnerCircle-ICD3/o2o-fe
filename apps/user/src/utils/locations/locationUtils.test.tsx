@@ -68,7 +68,7 @@ describe("locationUtils", () => {
                       address_name: "제주특별자치도 제주시 아라동",
                     },
                   ],
-                  "OK"
+                  "OK",
                 );
               } else {
                 callback([], "ZERO_RESULT");
@@ -97,7 +97,7 @@ describe("locationUtils", () => {
 
       expect(fetch).toHaveBeenCalledWith(
         expect.stringContaining("/search/stores/map"),
-        expect.any(Object)
+        expect.any(Object),
       );
       expect(result).toEqual(mockResponse.data.storeList);
     });
@@ -130,13 +130,13 @@ describe("locationUtils", () => {
           position: expect.any(Object),
           image: expect.any(Object),
           title: mockStore.name,
-        })
+        }),
       );
 
       expect(globalThis.kakao.maps.event.addListener).toHaveBeenCalledWith(
         expect.any(Object),
         "click",
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -164,7 +164,7 @@ describe("locationUtils", () => {
       expect(markerImageSpy).toHaveBeenCalledWith(
         "/icons/selected_store_marker.svg",
         expect.any(globalThis.kakao.maps.Size),
-        expect.anything()
+        expect.anything(),
       );
     });
   });
@@ -224,8 +224,15 @@ describe("locationUtils", () => {
 
     it("region_type이 'H'가 없으면 null을 반환해야 합니다.", async () => {
       globalThis.kakao.maps.services.Geocoder = vi.fn().mockImplementation(() => ({
-        // biome-ignore lint/style/useNamingConvention: false
-        coord2RegionCode: (_lng: number, _lat: number, callback: (result: Array<{ region_type: string; address_name: string }>, status: string) => void) => {
+        coord2RegionCode: (
+          _lng: number,
+          _lat: number,
+          callback: (
+            // biome-ignore lint/style/useNamingConvention: false
+            result: Array<{ region_type: string; address_name: string }>,
+            status: string,
+          ) => void,
+        ) => {
           // biome-ignore lint/style/useNamingConvention: false
           callback([{ region_type: "B", address_name: "다른 주소" }], "OK");
         },
@@ -237,8 +244,15 @@ describe("locationUtils", () => {
 
     it("status가 OK가 아니면 null을 반환해야 합니다.", async () => {
       globalThis.kakao.maps.services.Geocoder = vi.fn().mockImplementation(() => ({
-        // biome-ignore lint/style/useNamingConvention: false
-        coord2RegionCode: (_lng: number, _lat: number, callback: (result: Array<{ region_type: string; address_name: string }>, status: string) => void) => {
+        coord2RegionCode: (
+          _lng: number,
+          _lat: number,
+          callback: (
+            // biome-ignore lint/style/useNamingConvention: false
+            result: Array<{ region_type: string; address_name: string }>,
+            status: string,
+          ) => void,
+        ) => {
           callback([], "ZERO_RESULT");
         },
       }));

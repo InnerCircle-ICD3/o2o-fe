@@ -21,7 +21,6 @@ import {
   fetchStoresByCenter,
 } from "@/utils/locations/locationUtils";
 
-
 export default function SearchMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const storeMarkerMap = useRef<Map<number, kakao.maps.Marker>>(new Map());

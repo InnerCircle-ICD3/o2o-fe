@@ -6,7 +6,11 @@ import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { RANGE_OPTIONS } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import { createUserMarker, getRegionByCoords, renderMyLocationPolygon } from "@/utils/locations/locationUtils";
+import {
+  createUserMarker,
+  getRegionByCoords,
+  renderMyLocationPolygon,
+} from "@/utils/locations/locationUtils";
 import { useCallback, useMemo, useRef, useState } from "react";
 import * as styles from "./myLocation.css";
 
@@ -50,7 +54,7 @@ export default function MyLocation() {
 
   const handleGetRegion = async () => {
     if (!location) return;
-  
+
     try {
       const region = await getRegionByCoords(location.lat, location.lng);
       if (region) {

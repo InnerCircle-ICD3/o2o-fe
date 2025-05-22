@@ -4,7 +4,6 @@ import { render, screen } from "@testing-library/react";
 import { type Mock, beforeEach, describe, expect, it, vi } from "vitest";
 import SearchMap from "../../../../app/(bottomNav)/locations/search/page";
 
-
 vi.mock("@/hooks/useGeolocation");
 vi.mock("@/hooks/useKakaoLoader");
 
