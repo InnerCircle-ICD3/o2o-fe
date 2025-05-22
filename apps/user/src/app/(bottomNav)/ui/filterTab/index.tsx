@@ -3,9 +3,19 @@
 import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import { useBottomSheet } from "@/hooks/useBottomSheet";
+import { formatTime } from "@/utils/format";
 import Image from "next/image";
 import { useState } from "react";
 import * as styles from "./filterTab.css";
+
+type HourType = number & { __brand: "Hour" };
+type MinuteType = number & { __brand: "Minute" };
+
+type PickupTime = {
+  day: "오전" | "오후";
+  hour: HourType; // 0-23
+  minute: MinuteType; // 0-55 (5의 배수)
+};
 
 const foodTypeList = ["빵", "디저트", "한식", "과일", "피자", "샐러드"];
 
@@ -13,12 +23,18 @@ export default function FilterTab() {
   const [activeTab, setActiveTab] = useState<string>("reservation");
   const [tempSelectedFoodType, setTempSelectedFoodType] = useState<string>();
   const [selectedFoodType, setSelectedFoodType] = useState<string>();
+  const [tempPickupTime, setTempPickupTime] = useState<PickupTime>({
+    day: "오전",
+    hour: 0 as HourType,
+    minute: 0 as MinuteType,
+  });
+  const [selectedPickupTime, setSelectedPickupTime] = useState<Partial<PickupTime>>({});
 
   const { showBottomSheet, handleShowBottomSheet, handleCloseBottomSheet } = useBottomSheet();
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-    handleShowBottomSheet("foodType");
+    handleShowBottomSheet(tab);
   };
 
   const handleTempFoodTypeClick = (foodType: string) => {
@@ -32,6 +48,19 @@ export default function FilterTab() {
 
   const handleResetClick = () => {
     setSelectedFoodType("");
+  };
+
+  const handleTempPickupTimeClick = (values: Partial<PickupTime>) => {
+    setTempPickupTime((prev) => ({ ...prev, ...values }));
+  };
+
+  const handlePickupTimeClick = () => {
+    setSelectedPickupTime(tempPickupTime);
+    handleCloseBottomSheet("pickupTime");
+  };
+
+  const handleResetPickupTimeClick = () => {
+    setSelectedPickupTime({});
   };
 
   console.log(selectedFoodType);
@@ -82,7 +111,9 @@ export default function FilterTab() {
           <span
             className={styles.textStyle({ type: "tab", parentActive: activeTab === "pickupTime" })}
           >
-            픽업 가능시간
+            {Object.keys(selectedPickupTime).length > 0
+              ? Object.values(selectedPickupTime).join(":")
+              : "픽업 가능시간"}
           </span>
           <span className={styles.pickupTime}>비어있음</span>
         </button>
@@ -121,6 +152,75 @@ export default function FilterTab() {
           </Button>
           <Button status="primary" onClick={handleFoodTypeClick}>
             선택완료
+          </Button>
+        </div>
+      </BottomSheet>
+      {/* 픽업 가능시간 선택 */}
+      <BottomSheet
+        type="shadow"
+        isShow={showBottomSheet.has("pickupTime")}
+        title="픽업 가능시간"
+        onClose={() => handleCloseBottomSheet("pickupTime")}
+      >
+        <div className={styles.timePickerContainer}>
+          <ul className={styles.timePickerColumn}>
+            {["오전", "오후"].map((day) => (
+              <li key={day}>
+                <button
+                  type="button"
+                  className={styles.timeItem}
+                  onClick={() => handleTempPickupTimeClick({ day: day as "오전" | "오후" })}
+                >
+                  {day}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <ul className={styles.timePickerColumn}>
+            {Array.from({ length: 13 }).map((_, index) => (
+              /**
+               * biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+               * 숫자형 데이터 이므로, 배열의 인덱스를 키로 사용해도 무방하여 린트 주석 처리 했습니다.
+               * */
+              <li key={index}>
+                <button
+                  type="button"
+                  className={
+                    tempPickupTime.hour === index ? styles.timeItemSelected : styles.timeItem
+                  }
+                  onClick={() => handleTempPickupTimeClick({ hour: index as HourType })}
+                >
+                  <span>{formatTime(index)}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <ul className={styles.timePickerColumn}>
+            {Array.from({ length: 12 }).map((_, index) => (
+              /**
+               * biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+               * 숫자형 데이터 이므로, 배열의 인덱스를 키로 사용해도 무방하여 린트 주석 처리 했습니다.
+               * */
+              <li key={index}>
+                <button
+                  type="button"
+                  className={
+                    tempPickupTime.minute === 5 * index ? styles.timeItemSelected : styles.timeItem
+                  }
+                  onClick={() => handleTempPickupTimeClick({ minute: (5 * index) as MinuteType })}
+                >
+                  <span>{formatTime(5 * index)}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className={styles.filterButtonContainer}>
+          <Button status="common" onClick={handleResetPickupTimeClick}>
+            초기화
+          </Button>
+          <Button status="primary" onClick={handlePickupTimeClick}>
+            시간 적용
           </Button>
         </div>
       </BottomSheet>
