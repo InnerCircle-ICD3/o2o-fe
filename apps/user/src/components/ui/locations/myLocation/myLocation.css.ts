@@ -7,12 +7,12 @@ export const container = style({
 });
 
 export const bottomSheetContainer = style({
-  position: "fixed",
+  position: "absolute",
   bottom: 0,
   left: 0,
   zIndex: 1000,
   width: "100%",
-  height: "25%",
+  height: "30%",
   padding: "20px",
   backgroundColor: "#fff",
   borderRadius: "20px 20px 0 0",

@@ -2,21 +2,8 @@ import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { render, screen } from "@testing-library/react";
 import { type Mock, beforeEach, describe, expect, it, vi } from "vitest";
-import SearchMap from "./page";
+import SearchMap from "../../../../app/(bottomNav)/locations/search/page";
 
-declare global {
-  namespace kakao.maps {
-    interface Map {
-      getCenter: () => {
-        getLat: () => number;
-        getLng: () => number;
-      };
-      setMinLevel: (level: number) => void;
-      setMaxLevel: (level: number) => void;
-      setCenter: (latlng: { getLat: () => number; getLng: () => number }) => void;
-    }
-  }
-}
 
 vi.mock("@/hooks/useGeolocation");
 vi.mock("@/hooks/useKakaoLoader");
@@ -37,6 +24,8 @@ vi.mock("@/components/common/kakaoMap", () => ({
         setMinLevel: () => {},
         setMaxLevel: () => {},
         setCenter: () => {},
+        setLevel: () => {},
+        setBounds: () => {},
       });
     }, 0);
     return (

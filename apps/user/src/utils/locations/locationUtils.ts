@@ -62,37 +62,10 @@ export const calculateMovedDistance = (
   return Math.sqrt((center.getLng() - location.lng) ** 2 + (center.getLat() - location.lat) ** 2);
 };
 
-/**
- * 반경에 따른 카카오 지도 줌 레벨을 반환
- */
 const getZoomLevelByRadius = (radius: number): number => {
   if (radius <= 800) return 4;
   if (radius <= 2000) return 5;
   return 6;
-};
-
-export const renderMyLocation = (
-  map: kakao.maps.Map,
-  lat: number,
-  lng: number,
-  radius?: number,
-) => {
-  const circle = new kakao.maps.Circle({
-    center: new kakao.maps.LatLng(lat, lng),
-    radius: radius ?? 500,
-    map,
-    strokeWeight: 2,
-    strokeOpacity: 1,
-    strokeColor: "#35A865",
-    fillColor: "#35A865",
-    fillOpacity: 0.1,
-  });
-
-  const range = radius ?? 500;
-  const level = getZoomLevelByRadius(range);
-  map.setLevel(level);
-
-  return circle;
 };
 
 const getCentroid = (points: kakao.maps.LatLng[]): { lat: number; lng: number } => {

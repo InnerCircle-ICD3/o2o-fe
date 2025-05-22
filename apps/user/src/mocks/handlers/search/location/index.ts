@@ -187,8 +187,6 @@ const searchMapHandlers = [
         store.longitude,
       );
 
-      console.log(`${store.name}: ${distance.toFixed(2)}m`);
-
       return distance <= 1000;
     });
 

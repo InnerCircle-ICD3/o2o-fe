@@ -5,58 +5,12 @@ import {
   createStoreMarker,
   createUserMarker,
   fetchStoresByCenter,
+  getRegionByCoords,
+  renderMyLocationPolygon,
 } from "./locationUtils";
-
-declare global {
-  namespace kakao.maps {
-    interface Map {
-      getCenter: () => {
-        getLat: () => number;
-        getLng: () => number;
-      };
-    }
-    interface LatLng {
-      getLat: () => number;
-      getLng: () => number;
-    }
-    interface Marker {
-      setMap: (map: Map | null) => void;
-    }
-    interface MarkerImage {}
-    interface Size {}
-    interface Circle {}
-    interface InfoWindow {}
-  }
-}
 
 vi.mock("@/hooks/useGeolocation");
 vi.mock("@/hooks/useKakaoLoader");
-vi.mock("@/components/common/kakaoMap", () => ({
-  // biome-ignore lint/style/useNamingConvention: false
-  KakaoMap: ({
-    lat,
-    lng,
-    onMapIdle,
-  }: { lat: number; lng: number; onMapIdle: (map: kakao.maps.Map) => void }) => {
-    setTimeout(() => {
-      onMapIdle?.({
-        getCenter: () => ({
-          getLat: () => lat,
-          getLng: () => lng,
-        }),
-        setMinLevel: () => {},
-        setMaxLevel: () => {},
-        setCenter: () => {},
-        setLevel: () => {},
-      });
-    }, 0);
-    return (
-      <div data-testid="mock-kakao-map">
-        Map at {lat},{lng}
-      </div>
-    );
-  },
-}));
 
 describe("locationUtils", () => {
   beforeEach(() => {
@@ -64,8 +18,6 @@ describe("locationUtils", () => {
 
     globalThis.kakao = {
       maps: {
-        // biome-ignore lint/style/useNamingConvention: false
-        LatLng: vi.fn((lat, lng) => ({ getLat: () => lat, getLng: () => lng })),
         // biome-ignore lint/style/useNamingConvention: false
         Marker: vi.fn().mockImplementation((options) => ({
           ...options,
@@ -85,6 +37,45 @@ describe("locationUtils", () => {
         Circle: vi.fn(),
         // biome-ignore lint/style/useNamingConvention: false
         InfoWindow: vi.fn(),
+        // biome-ignore lint/style/useNamingConvention: false
+        Polygon: vi.fn().mockImplementation(() => ({
+          setMap: vi.fn(),
+        })),
+        // biome-ignore lint/style/useNamingConvention: false
+        LatLng: vi.fn().mockImplementation((lat, lng) => ({
+          getLat: () => lat,
+          getLng: () => lng,
+        })),
+        // biome-ignore lint/style/useNamingConvention: false
+        LatLngBounds: vi.fn().mockImplementation(() => {
+          const points: { lat: number; lng: number }[] = [];
+          return {
+            extend: vi.fn((point) => points.push(point)),
+            getBounds: vi.fn(() => points),
+          };
+        }),
+        services: {
+          // biome-ignore lint/style/useNamingConvention: false
+          Geocoder: vi.fn().mockImplementation(() => ({
+            coord2RegionCode: vi.fn((lng, lat, callback) => {
+              if (lng === 126.570677 && lat === 33.450705) {
+                callback(
+                  [
+                    {
+                      // biome-ignore lint/style/useNamingConvention: false
+                      region_type: "H",
+                      // biome-ignore lint/style/useNamingConvention: false
+                      address_name: "제주특별자치도 제주시 아라동",
+                    },
+                  ],
+                  "OK"
+                );
+              } else {
+                callback([], "ZERO_RESULT");
+              }
+            }),
+          })),
+        },
       },
     };
   });
@@ -106,7 +97,7 @@ describe("locationUtils", () => {
 
       expect(fetch).toHaveBeenCalledWith(
         expect.stringContaining("/search/stores/map"),
-        expect.any(Object),
+        expect.any(Object)
       );
       expect(result).toEqual(mockResponse.data.storeList);
     });
@@ -139,17 +130,17 @@ describe("locationUtils", () => {
           position: expect.any(Object),
           image: expect.any(Object),
           title: mockStore.name,
-        }),
+        })
       );
 
       expect(globalThis.kakao.maps.event.addListener).toHaveBeenCalledWith(
         expect.any(Object),
         "click",
-        expect.any(Function),
+        expect.any(Function)
       );
     });
 
-    it("선택된 마커는 더 큰 크기로 생성되어야 합니다", () => {
+    it("선택된 마커는 '/icons/selected_store_marker.svg' 이미지를 사용해야 한다", () => {
       const mockStore: Store = {
         id: 1,
         name: "테스트 가게",
@@ -164,12 +155,17 @@ describe("locationUtils", () => {
         maxPrice: 0,
         pickupTime: "",
       };
+      const map = {} as kakao.maps.Map;
+      const onClick = vi.fn();
 
-      const mockMap = {} as kakao.maps.Map;
-      const mockOnMarkerClick = vi.fn();
+      const markerImageSpy = vi.spyOn(globalThis.kakao.maps, "MarkerImage");
+      createStoreMarker(mockStore, map, onClick, true);
 
-      const marker = createStoreMarker(mockStore, mockMap, mockOnMarkerClick, true);
-      expect(marker).toBeDefined();
+      expect(markerImageSpy).toHaveBeenCalledWith(
+        "/icons/selected_store_marker.svg",
+        expect.any(globalThis.kakao.maps.Size),
+        expect.anything()
+      );
     });
   });
 
@@ -188,7 +184,6 @@ describe("locationUtils", () => {
       const center = new kakao.maps.LatLng(37.5665, 126.978);
       const location = { lat: 37.5665, lng: 126.978 };
       const distance = calculateMovedDistance(center, location);
-
       expect(distance).toBe(0);
     });
 
@@ -196,8 +191,60 @@ describe("locationUtils", () => {
       const center = new kakao.maps.LatLng(37.5665, 126.978);
       const location = { lat: 37.5666, lng: 126.9781 };
       const distance = calculateMovedDistance(center, location);
-
       expect(distance).toBeGreaterThan(0);
+    });
+  });
+
+  describe("renderMyLocationPolygon()", () => {
+    it("내 위치 표시 영역을 렌더링해야 합니다", () => {
+      const map = {
+        setBounds: vi.fn(),
+        setLevel: vi.fn(),
+      } as unknown as kakao.maps.Map;
+
+      const basePolygonPath = [
+        new kakao.maps.LatLng(37.5665, 126.978),
+        new kakao.maps.LatLng(37.5665, 126.9781),
+        new kakao.maps.LatLng(37.5666, 126.9781),
+        new kakao.maps.LatLng(37.5666, 126.978),
+        new kakao.maps.LatLng(37.5665, 126.978),
+      ];
+
+      const radius = 1000;
+      const polygon = renderMyLocationPolygon(map, basePolygonPath, radius);
+      expect(polygon).toBeDefined();
+    });
+  });
+
+  describe("getRegionByCoords()", () => {
+    it("정상 응답이 오면 해당 지역명을 반환해야 합니다.", async () => {
+      const result = await getRegionByCoords(33.450705, 126.570677);
+      expect(result).toBe("제주특별자치도 제주시 아라동");
+    });
+
+    it("region_type이 'H'가 없으면 null을 반환해야 합니다.", async () => {
+      globalThis.kakao.maps.services.Geocoder = vi.fn().mockImplementation(() => ({
+        // biome-ignore lint/style/useNamingConvention: false
+        coord2RegionCode: (_lng: number, _lat: number, callback: (result: Array<{ region_type: string; address_name: string }>, status: string) => void) => {
+          // biome-ignore lint/style/useNamingConvention: false
+          callback([{ region_type: "B", address_name: "다른 주소" }], "OK");
+        },
+      }));
+
+      const result = await getRegionByCoords(33.450705, 126.570677);
+      expect(result).toBeNull();
+    });
+
+    it("status가 OK가 아니면 null을 반환해야 합니다.", async () => {
+      globalThis.kakao.maps.services.Geocoder = vi.fn().mockImplementation(() => ({
+        // biome-ignore lint/style/useNamingConvention: false
+        coord2RegionCode: (_lng: number, _lat: number, callback: (result: Array<{ region_type: string; address_name: string }>, status: string) => void) => {
+          callback([], "ZERO_RESULT");
+        },
+      }));
+
+      const result = await getRegionByCoords(33.450705, 126.570677);
+      expect(result).toBeNull();
     });
   });
 });
