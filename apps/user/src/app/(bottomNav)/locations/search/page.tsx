@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import * as styles from "./page.css";
 
@@ -18,16 +18,33 @@ import {
   createStoreMarker,
   createUserMarker,
   fetchStoresByCenter,
-} from "../../../../utils/locations/locationUtils";
+} from "@/utils/locations/locationUtils";
 
-import { StoreInfoCard } from "./ui/StoreInfoCard";
+import { StoreInfoCard } from "../../../../components/ui/storeDetail/storeMapInfo";
 
 export default function SearchMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
+  const storeMarkerMap = useRef<Map<number, kakao.maps.Marker>>(new Map());
+  const storeListRef = useRef<Store[]>([]);
+
   const isLoaded = useKakaoLoader();
   const location = useGeolocation();
+
   const [shouldShowRefetch, setShouldShowRefetch] = useState(false);
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+
+  useEffect(() => {
+    storeMarkerMap.current.forEach((marker, storeId) => {
+      const isSelected = selectedStore?.id === storeId;
+      const imageUrl = isSelected ? "/icons/selected_store_marker.svg" : "/icons/store_marker.svg";
+
+      const image = new kakao.maps.MarkerImage(imageUrl, new kakao.maps.Size(48, 48), {
+        verticalAlign: "bottom",
+      });
+
+      marker.setImage(image);
+    });
+  }, [selectedStore]);
 
   const handleMapIdle = useCallback(
     async (map: kakao.maps.Map) => {
@@ -36,7 +53,7 @@ export default function SearchMap() {
       const center = map.getCenter();
       const movedDistance = calculateMovedDistance(center, location);
 
-      setShouldShowRefetch(movedDistance > 0.02);
+      setShouldShowRefetch(movedDistance > 0.01);
     },
     [location],
   );
@@ -47,35 +64,52 @@ export default function SearchMap() {
       const center = map.getCenter();
 
       const storeList = await fetchStoresByCenter(center);
+      storeListRef.current = storeList;
+
       for (const store of storeList) {
-        createStoreMarker(
+        const marker = createStoreMarker(
           store,
           map,
           (clickedStore) => {
             setSelectedStore((prev) => (prev?.id === clickedStore.id ? null : clickedStore));
           },
-          selectedStore?.id === store.id,
+          false,
         );
+        storeMarkerMap.current.set(store.id, marker);
       }
 
       if (location) {
         createUserMarker(location, map);
       }
     },
-    [location, selectedStore],
+    [location],
   );
 
   const handleRefetch = async () => {
     const map = mapRef.current;
     if (!map) return;
 
+    for (const marker of storeMarkerMap.current.values()) {
+      marker.setMap(null);
+    }
+    storeMarkerMap.current.clear();
+
     const center = map.getCenter();
     const storeList = await fetchStoresByCenter(center);
+    storeListRef.current = storeList;
+
     for (const store of storeList) {
-      createStoreMarker(store, map, (clickedStore) => {
-        setSelectedStore((prev) => (prev?.id === clickedStore.id ? null : clickedStore));
-      });
+      const marker = createStoreMarker(
+        store,
+        map,
+        (clickedStore) => {
+          setSelectedStore((prev) => (prev?.id === clickedStore.id ? null : clickedStore));
+        },
+        false,
+      );
+      storeMarkerMap.current.set(store.id, marker);
     }
+
     setShouldShowRefetch(false);
   };
 
@@ -83,6 +117,7 @@ export default function SearchMap() {
     if (mapRef.current && location) {
       const latLng = new kakao.maps.LatLng(location.lat, location.lng);
       mapRef.current.setCenter(latLng);
+      handleRefetch();
     }
   };
 
@@ -96,6 +131,7 @@ export default function SearchMap() {
         onMapIdle={handleMapIdle}
         onMapReady={handleMapReady}
       />
+
       {shouldShowRefetch && (
         <Button
           type="button"
@@ -106,7 +142,7 @@ export default function SearchMap() {
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 2,
-            width: "100px",
+            width: "120px",
             height: "40px",
           }}
           status="primary"
@@ -114,6 +150,7 @@ export default function SearchMap() {
           현 지도에서 검색
         </Button>
       )}
+
       <button
         type="button"
         onClick={handleResetPosition}
