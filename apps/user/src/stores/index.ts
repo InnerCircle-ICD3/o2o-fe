@@ -1,1 +1,1 @@
-export { useCounterStore } from "@/stores/counter/counterStore";
+export { useSearchHistoryStore } from "@/stores/searchHistory/searchHistoryStore";

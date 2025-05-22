@@ -9,23 +9,21 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
-    // TODO: Remove this after initial test coverage setup
     coverage: {
       provider: "v8",
       reporter: ["text", "json-summary", "html", "lcov"],
       reportsDirectory: "./coverage",
       include: [
-        "src/app/page.tsx", 
-        "src/components/sample/Counter.tsx",
-        "src/stores/**/*.ts"
+        "src/**/*.{ts,tsx}",
       ],
       exclude: [
         "**/*.d.ts",
         "**/*.test.ts",
         "**/*.test.tsx",
         "src/mocks/**",
-        "src/test/**"
-      ]
-    }
+        "src/test/**",
+        "**/__test__/**",
+      ],
+    },
   },
 });
