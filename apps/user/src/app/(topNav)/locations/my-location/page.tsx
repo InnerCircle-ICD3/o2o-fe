@@ -6,12 +6,11 @@ import { LoadingMap } from "@/components/common/skeleton/LoadingMap";
 import { RANGE_OPTIONS } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import { createUserMarker, renderMyLocation, renderMyLocationPolygon } from "@/utils/locations/locationUtils";
+import { createUserMarker, renderMyLocationPolygon } from "@/utils/locations/locationUtils";
 import { useCallback, useMemo, useRef, useState } from "react";
 import * as styles from "./page.css";
 
 type RangeOption = 0 | 100 | 500 | 1000;
-
 
 export default function MyLocationPage() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
@@ -30,14 +29,14 @@ export default function MyLocationPage() {
 
   const districtBoundary = useMemo(() => {
     if (!isLoaded || !window.kakao?.maps) return [];
-  
+
     return [
       new window.kakao.maps.LatLng(33.4499, 126.5698),
-      new window.kakao.maps.LatLng(33.4490, 126.5710),
+      new window.kakao.maps.LatLng(33.449, 126.571),
       new window.kakao.maps.LatLng(33.4495, 126.5725),
       new window.kakao.maps.LatLng(33.4502, 126.5732),
-      new window.kakao.maps.LatLng(33.4512, 126.5730),
-      new window.kakao.maps.LatLng(33.4520, 126.5720),
+      new window.kakao.maps.LatLng(33.4512, 126.573),
+      new window.kakao.maps.LatLng(33.452, 126.572),
       new window.kakao.maps.LatLng(33.4523, 126.5705),
       new window.kakao.maps.LatLng(33.4517, 126.5692),
       new window.kakao.maps.LatLng(33.4505, 126.5688),
@@ -54,7 +53,7 @@ export default function MyLocationPage() {
         createUserMarker(location, map);
       }
     },
-    [location, range],
+    [location, range, districtBoundary],
   );
 
   const handleGetRegion = () => {

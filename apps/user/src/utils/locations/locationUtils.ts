@@ -9,8 +9,8 @@ export const fetchStoresByCenter = async (center: kakao.maps.LatLng): Promise<St
     },
     body: JSON.stringify({
       viewPoint: {
-        lat: center.getLat(),
-        lng: center.getLng(),
+        latitude: center.getLat(),
+        longitude: center.getLng(),
       },
     }),
   });
@@ -95,7 +95,6 @@ export const renderMyLocation = (
   return circle;
 };
 
-
 const getCentroid = (points: kakao.maps.LatLng[]): { lat: number; lng: number } => {
   const total = points.length;
   const sum = points.reduce(
@@ -103,7 +102,7 @@ const getCentroid = (points: kakao.maps.LatLng[]): { lat: number; lng: number } 
       lat: acc.lat + cur.getLat(),
       lng: acc.lng + cur.getLng(),
     }),
-    { lat: 0, lng: 0 }
+    { lat: 0, lng: 0 },
   );
 
   return {
@@ -112,27 +111,21 @@ const getCentroid = (points: kakao.maps.LatLng[]): { lat: number; lng: number } 
   };
 };
 
-const scalePolygon = (
-  points: kakao.maps.LatLng[],
-  scale: number
-): kakao.maps.LatLng[] => {
+const scalePolygon = (points: kakao.maps.LatLng[], scale: number): kakao.maps.LatLng[] => {
   const center = getCentroid(points);
 
   return points.map((point) => {
     const latDiff = point.getLat() - center.lat;
     const lngDiff = point.getLng() - center.lng;
 
-    return new window.kakao.maps.LatLng(
-      center.lat + latDiff * scale,
-      center.lng + lngDiff * scale
-    );
+    return new window.kakao.maps.LatLng(center.lat + latDiff * scale, center.lng + lngDiff * scale);
   });
 };
 
 export const renderMyLocationPolygon = (
   map: kakao.maps.Map,
   basePolygonPath: kakao.maps.LatLng[],
-  radius: number
+  radius: number,
 ) => {
   const scale = radius / 500;
   const scaledPath = scalePolygon(basePolygonPath, scale);
@@ -142,7 +135,6 @@ export const renderMyLocationPolygon = (
     strokeWeight: 2,
     strokeColor: "#35A865",
     strokeOpacity: 1,
-    strokeStyle: "longdash",
     fillColor: "#35A865",
     fillOpacity: 0.4,
   });
@@ -150,7 +142,9 @@ export const renderMyLocationPolygon = (
   polygon.setMap(map);
 
   const bounds = new window.kakao.maps.LatLngBounds();
-  scaledPath.forEach((latlng) => bounds.extend(latlng));
+  for (const latlng of scaledPath) {
+    bounds.extend(latlng);
+  }
   map.setBounds(bounds);
 
   const zoomLevel = getZoomLevelByRadius(radius);
@@ -158,7 +152,6 @@ export const renderMyLocationPolygon = (
 
   return polygon;
 };
-
 
 export const getRegionByCoords = (lat: number, lng: number): Promise<string | null> => {
   return new Promise((resolve, reject) => {

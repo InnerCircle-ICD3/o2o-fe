@@ -25,6 +25,6 @@ export const useGeolocation = (): Coordinates | null => {
     );
   }, []);
 
-  // 33.450701, 126.570667
-  return null || { lat: 33.450701, lng: 126.570667 };
+  return location || { lat: 33.450705, lng: 126.570677 };
+  // return location || { lat: 37.539817, lng: 127.056888 };
 };

@@ -75,6 +75,7 @@ declare namespace kakao {
     class Marker {
       constructor(options: MarkerOptions);
       setMap(map: Map | null): void;
+      setImage(image: MarkerImage): void;
     }
 
     class InfoWindow {
