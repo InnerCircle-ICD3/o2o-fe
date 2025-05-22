@@ -9,9 +9,9 @@ import generateProductStatus from "@/utils/productStatus";
 import classNames from "classnames";
 
 const PRODUCTS_IMAGE = {
-  s: "/images/back_s.png",
-  m: "/images/back_m.png",
-  l: "/images/back_l.png",
+  S: "/images/back_s.png",
+  M: "/images/back_m.png",
+  L: "/images/back_l.png",
 };
 
 interface ProductsProps {

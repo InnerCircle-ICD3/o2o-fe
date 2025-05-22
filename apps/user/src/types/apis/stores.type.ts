@@ -44,6 +44,6 @@ export interface Product {
   storeId: number;
   name: string;
   price: Price;
-  size: "s" | "m" | "l";
+  size: "S" | "M" | "L";
   status: string;
 }

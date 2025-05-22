@@ -35,15 +35,15 @@ export const globalTheme = createThemeContract({
         background: null,
         color: null,
       },
-      readyForPickup: {
+      pending: {
         background: null,
         color: null,
       },
-      collected: {
+      completed: {
         background: null,
         color: null,
       },
-      cancel: {
+      cancelled: {
         background: null,
         color: null,
       },
@@ -84,15 +84,15 @@ export const theme = createGlobalTheme(":root", globalTheme, {
         background: "#FFDDCF",
         color: " #F15937",
       },
-      readyForPickup: {
+      pending: {
         background: "#D7E3FA",
         color: "#447CC2",
       },
-      collected: {
+      completed: {
         background: "#D8F4E4",
         color: "#35A865",
       },
-      cancel: {
+      cancelled: {
         background: "#F3F3F3",
         color: "#666666",
       },
