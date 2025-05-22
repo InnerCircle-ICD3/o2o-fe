@@ -9,26 +9,29 @@ import Image from "next/image";
 import { useState } from "react";
 import * as styles from "./filterTab.css";
 
+type DayType = "오전" | "오후";
 type HourType = number & { __brand: "Hour" };
 type MinuteType = number & { __brand: "Minute" };
 
 type PickupTime = {
-  day: "오전" | "오후";
+  day: DayType;
   hour: HourType;
   minute: MinuteType;
 };
 
 const foodTypeList = ["빵", "디저트", "한식", "과일", "피자", "샐러드"];
 
+const pickupTimeDefaultValue: PickupTime = {
+  day: "오전",
+  hour: 0 as HourType,
+  minute: 0 as MinuteType,
+};
+
 export default function FilterTab() {
   const [activeTab, setActiveTab] = useState<string>("reservation");
   const [tempSelectedFoodType, setTempSelectedFoodType] = useState<string>();
   const [selectedFoodType, setSelectedFoodType] = useState<string>();
-  const [tempPickupTime, setTempPickupTime] = useState<PickupTime>({
-    day: "오전",
-    hour: 0 as HourType,
-    minute: 0 as MinuteType,
-  });
+  const [tempPickupTime, setTempPickupTime] = useState<PickupTime>(pickupTimeDefaultValue);
   const [selectedPickupTime, setSelectedPickupTime] = useState<Partial<PickupTime>>({});
 
   const { showBottomSheet, handleShowBottomSheet, handleCloseBottomSheet } = useBottomSheet();
@@ -49,6 +52,7 @@ export default function FilterTab() {
 
   const handleResetClick = () => {
     setSelectedFoodType("");
+    setTempSelectedFoodType("");
   };
 
   const handleTempPickupTimeClick = (values: Partial<PickupTime>) => {
@@ -62,6 +66,7 @@ export default function FilterTab() {
 
   const handleResetPickupTimeClick = () => {
     setSelectedPickupTime({});
+    setTempPickupTime(pickupTimeDefaultValue);
   };
 
   console.log(selectedFoodType);
