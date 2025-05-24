@@ -1,5 +1,3 @@
-import SearchInput from "@/app/(topNav)/search/ui/searchInput";
-
 const ROUTE = {
   bottomNav: {
     home: {
@@ -142,7 +140,6 @@ const ROUTE = {
     search: {
       name: "",
       path: "/search",
-      sub: <SearchInput />,
     },
   },
 };

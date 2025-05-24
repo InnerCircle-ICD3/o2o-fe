@@ -1,34 +1,26 @@
-import Image from "next/image";
-import * as styles from "./page.css";
+"use client";
 
-export default function Page() {
+import { SearchProvider } from "@/providers/search";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import * as styles from "./page.css";
+import SearchInput from "./ui/searchInput";
+import SearchResult from "./ui/searchResult";
+
+export default function SearchPage() {
+  const router = useRouter();
+
   return (
-    <section className={styles.sectionContainerStyle}>
-      <div className={styles.recommendationStyle}>
-        <ol>
-          <h2>
-            추천 검색어 <span>Top 3</span>
-          </h2>
-          {["김밥", "피자", "반찬"].map((item) => (
-            <li key={item}>
-              <button type="button">
-                <span>{item}</span>
-                <Image src="/icons/search.svg" alt="search" width={24} height={24} />
-              </button>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div className={styles.searchHistoryStyle}>
-        <ul>
-          <li>
-            <button type="button">
-              <span>최근 검색어</span>
-              <Image src="/icons/search.svg" alt="search" width={24} height={24} />
-            </button>
-          </li>
-        </ul>
-      </div>
-    </section>
+    <SearchProvider>
+      <header className={styles.headerStyle}>
+        <button className={styles.backButton} type={"button"} onClick={router.back}>
+          <Image src={"/icons/chevron_left.svg"} alt="뒤로가기" width={24} height={24} />
+        </button>
+        <SearchInput />
+      </header>
+      <main className={styles.contentStyle}>
+        <SearchResult />
+      </main>
+    </SearchProvider>
   );
 }

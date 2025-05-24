@@ -4,6 +4,7 @@ import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import { useBottomSheet } from "@/hooks/useBottomSheet";
 import Image from "next/image";
+import Link from "next/link";
 import * as styles from "./mainHeader.css";
 
 export default function MainHeader() {
@@ -27,9 +28,9 @@ export default function MainHeader() {
           <button type="button">
             <Image src="/icons/bookmark.svg" alt="bookmark" width={24} height={24} />
           </button>
-          <button type="button">
+          <Link href="/search">
             <Image src="/icons/search.svg" alt="search" width={24} height={24} />
-          </button>
+          </Link>
         </div>
       </header>
 

@@ -1,28 +1,37 @@
 import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
-export const containerStyle = style({
+export const searchInputWrapper = style({
   display: "flex",
   alignItems: "center",
-  gap: 8,
   width: "100%",
-  height: 44,
-  padding: 12,
-  border: `1px solid ${globalTheme.color.gray}`,
-  borderRadius: 8,
+  height: "40px",
+  padding: "0 16px",
+  borderRadius: "20px",
+  gap: "8px",
 });
 
-export const inputStyle = style({
+export const searchInput = style({
   flex: 1,
+  height: "100%",
   border: "none",
-  outline: "none",
-  fontSize: 16,
-  fontWeight: 400,
+  backgroundColor: "transparent",
+  fontSize: "14px",
   color: globalTheme.color.black,
-
-  selectors: {
-    "&::placeholder": {
-      color: globalTheme.color.black,
-    },
+  outline: "none",
+  "::placeholder": {
+    color: globalTheme.color.gray.base,
   },
+});
+
+export const searchButton = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "24px",
+  height: "24px",
+  padding: 0,
+  border: "none",
+  backgroundColor: "transparent",
+  cursor: "pointer",
 });
