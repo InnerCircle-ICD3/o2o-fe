@@ -26,7 +26,7 @@ const BottomNav = (props: PropsWithChildren) => {
   return (
     <div className={style.container}>
       <main className={style.main}>{children}</main>
-      <footer>
+      <footer className={style.bottomNavContainer}>
         <nav className={style.bottomNav}>
           {bottomNav.map(({ path, name, icon: Icon }) => (
             <Link href={path} key={name} className={getRouteStyle(path)}>
