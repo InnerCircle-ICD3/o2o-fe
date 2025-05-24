@@ -10,7 +10,7 @@ interface ActionButtonsProps {
 const ActionButtons = (props: ActionButtonsProps) => {
   const { orderDetail } = props;
 
-  if (orderDetail.status !== ORDER_STATUS.pending) {
+  if (ORDER_STATUS[orderDetail.status] !== ORDER_STATUS.PENDING) {
     return null;
   }
 

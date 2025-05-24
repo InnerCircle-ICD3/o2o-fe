@@ -1,4 +1,4 @@
-import type { Product } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import Products from ".";
@@ -27,7 +27,7 @@ describe("Products Component", () => {
           discountRate: 0.5,
           finalPrice: 12000,
         },
-        size: "m",
+        size: "M",
         status: "ACTIVE",
       },
     ];
@@ -63,7 +63,7 @@ describe("Products Component", () => {
           discountRate: 0.5,
           finalPrice: 5000,
         },
-        size: "l",
+        size: "L",
         status: "ACTIVE",
       },
     ];

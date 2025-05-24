@@ -26,6 +26,26 @@ export const formatDate = (date: Date): string => {
 };
 
 /**
+ * 올해라면 MM월 DD일 (요일) 형식으로 날짜를 포맷팅합니다.
+ * 올해가 아니라면 YYYY년 MM월 DD일 (요일) 형식으로 날짜를 포맷팅합니다.
+ */
+export const formatLocalizedDate = (isoDate: string): string => {
+  const date = new Date(isoDate);
+
+  const today = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"][date.getDay()];
+
+  if (year === today.getFullYear()) {
+    return `${month}월 ${day}일 (${dayOfWeek})`;
+  }
+
+  return `${year}년 ${month}월 ${day}일 (${dayOfWeek})`;
+};
+
+/**
  * 오후/오전 HH시 형식으로 시간을 포맷팅합니다.
  */
 export const formatHourTo12HourText = (time: string) => {

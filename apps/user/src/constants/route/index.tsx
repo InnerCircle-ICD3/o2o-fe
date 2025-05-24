@@ -125,7 +125,7 @@ const ROUTE = {
   },
 
   topNav: {
-    storeDetail: {
+    storesDetail: {
       name: "매장 상세",
       path: "/stores",
     },
