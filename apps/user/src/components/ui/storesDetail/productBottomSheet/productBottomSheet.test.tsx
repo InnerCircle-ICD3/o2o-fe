@@ -1,6 +1,6 @@
 import type { Product } from "@/types/apis/stores.type";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import ProductBottomSheet from ".";
 const mockSubmit = vi.fn();
 
@@ -41,8 +41,8 @@ describe("ProductBottomSheet Test", () => {
       </>,
     );
 
-    expect(screen.getByText("럭키백 선택하기")).not.toBeNull();
-    expect(screen.getByRole("button", { name: "주문하기" })).not.toBeNull();
+    expect(screen.getByText("럭키백 선택하기")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "주문하기" })).toBeInTheDocument();
   });
 
   it("주문하기 버튼 클릭 시 usePostOrder가 호출됨", () => {

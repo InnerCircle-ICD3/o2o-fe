@@ -1,7 +1,7 @@
 import type { Product } from "@/types/apis/stores.type";
 import type { SelectedProduct } from "@/types/orders.type";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import Select from ".";
 
 describe("Select Test", () => {
@@ -53,13 +53,13 @@ describe("Select Test", () => {
     render(<Select storesProducts={mockProducts} selectedProducts={[]} onChange={mockOnChange} />);
 
     const button = screen.getByRole("button", { name: /럭키백 선택/i });
-    expect(screen.queryByText("상품 1")).toBeNull();
+    expect(screen.queryByText("상품 1")).not.toBeInTheDocument();
 
     fireEvent.click(button);
-    expect(screen.queryByText("상품 1")).not.toBeNull();
+    expect(screen.queryByText("상품 1")).toBeInTheDocument();
 
     fireEvent.click(button);
-    expect(screen.queryByText("상품 1")).toBeNull();
+    expect(screen.queryByText("상품 1")).not.toBeInTheDocument();
   });
 
   it("선택 가능한 상품을 클릭하면 onChange가 호출됨", () => {

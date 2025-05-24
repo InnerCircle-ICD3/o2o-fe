@@ -1,6 +1,6 @@
 // Page.test.tsx
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import Page from "./page";
 
 const mockReplace = vi.fn();
@@ -28,10 +28,10 @@ describe("Success Page Test", () => {
     const homeButton = await screen.findByRole("button", { name: "홈으로" });
     const orderButton = await screen.findByRole("button", { name: "주문 내역 보러가기" });
 
-    expect(title).not.toBeNull();
-    expect(description).not.toBeNull();
-    expect(homeButton).not.toBeNull();
-    expect(orderButton).not.toBeNull();
+    expect(title).toBeInTheDocument();
+    expect(description).toBeInTheDocument();
+    expect(homeButton).toBeInTheDocument();
+    expect(orderButton).toBeInTheDocument();
   });
 
   it("홈으로 버튼 클릭 시 router.replace가 호출된다", async () => {
