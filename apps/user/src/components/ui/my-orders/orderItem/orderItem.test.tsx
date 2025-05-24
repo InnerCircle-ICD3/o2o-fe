@@ -1,7 +1,7 @@
 import type { OrderDetail } from "@/types/apis/order.type";
 import { cleanup, render, screen } from "@testing-library/react";
 import type { AnchorHTMLAttributes, ImgHTMLAttributes } from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import OrderItem from ".";
 import * as style from "./orderItem.css";
 
