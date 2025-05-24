@@ -30,6 +30,11 @@ export const listStyle = style({
   padding: "14px 20px",
 });
 
+export const listItemText = style({
+  flex: 1,
+  color: globalTheme.color.gray.base,
+});
+
 export const text = style({
   color: globalTheme.color.text.primary,
   fontSize: 16,
