@@ -7,7 +7,7 @@ vi.mock("../products", () => ({
   default: () => <div data-testid="products-component">Products Component</div>,
 }));
 
-const mockOrderDetail: OrderDetail = {
+const mockOrderDetail = {
   orderId: 2,
   store: {
     storeId: 1001,
@@ -54,12 +54,12 @@ const mockOrderDetail: OrderDetail = {
         discountRate: 0.5,
         finalPrice: 10000,
       },
-      size: "l",
+      size: "L",
       status: "ACTIVE",
     },
   ],
   status: "PENDING",
-};
+} as unknown as OrderDetail;
 
 describe("OrderInfo", () => {
   it("매장명, 주소, 시간, 금액이 올바르게 표시된다", () => {

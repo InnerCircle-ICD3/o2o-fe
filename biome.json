@@ -41,7 +41,7 @@
                 "selector": {
                   "kind": "objectLiteralProperty"
                 },
-                "formats": ["camelCase"]
+                "formats": ["camelCase", "CONSTANT_CASE"]
               }
             ]
           }

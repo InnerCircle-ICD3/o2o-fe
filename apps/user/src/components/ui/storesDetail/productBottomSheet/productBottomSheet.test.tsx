@@ -21,7 +21,7 @@ const mockProducts: Product[] = [
       discountRate: 0,
       finalPrice: 5000,
     },
-    size: "s",
+    size: "S",
     status: "OPEN",
     storeId: 101,
     createdAt: "",
