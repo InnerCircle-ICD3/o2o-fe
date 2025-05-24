@@ -1,4 +1,5 @@
 import { apiClient } from "@/apis/client";
+import type { Result } from "@/apis/utils/result";
 import type { OrderDetail } from "@/types/apis/order.type";
 import { useQuery } from "@tanstack/react-query";
 
@@ -9,7 +10,7 @@ const getMyOrder = (id: number) => {
 const MY_ORDER_QUERY_KEY = "myOrder";
 
 const useGetMyOrder = (id: number) => {
-  return useQuery<OrderDetail[]>({
+  return useQuery<Result<OrderDetail[]>>({
     queryKey: [MY_ORDER_QUERY_KEY, id],
     queryFn: () => getMyOrder(id),
   });

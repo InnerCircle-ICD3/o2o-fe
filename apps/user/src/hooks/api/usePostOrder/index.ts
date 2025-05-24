@@ -27,7 +27,11 @@ const usePostOrder = () => {
   const submitOrder = (body: OrderBody) => {
     return mutation.mutate(body, {
       onSuccess: (res) => {
-        router.push(`/orders/${res.orderId}`);
+        if (res.success) {
+          router.push(`/orders/${res.data.orderId}`);
+        } else {
+          alert("주문에 실패했습니다.");
+        }
       },
       onError: (error) => {
         console.error("Order submission failed:", error);
