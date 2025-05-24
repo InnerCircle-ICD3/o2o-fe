@@ -1,5 +1,5 @@
 import Image from "next/image";
-import * as styles from "../page.css";
+import * as styles from "./LoadingMap.css";
 
 export const LoadingMap = () => {
   return (

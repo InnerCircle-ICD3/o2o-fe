@@ -48,7 +48,7 @@ const ROUTE = {
     },
     location: {
       name: "지도",
-      path: "/locations",
+      path: "/locations/search",
       icon: () => (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -136,6 +136,10 @@ const ROUTE = {
     myOrderDetail: {
       name: "주문내역 확인",
       path: "/my-orders",
+    },
+    myLocation: {
+      name: "내 동네 인증",
+      path: "locations/my-location",
     },
   },
 };
