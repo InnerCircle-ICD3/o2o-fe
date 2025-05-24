@@ -1,5 +1,3 @@
-"use client";
-
 import MyLocation from "@/components/ui/locations/myLocation";
 
 export default function Page() {
