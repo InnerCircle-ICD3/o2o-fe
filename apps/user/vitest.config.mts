@@ -6,5 +6,10 @@ export default mergeConfig(
   base,
   defineConfig({
     plugins: [vanillaExtractPlugin()],
+    test: {
+      coverage: {
+        exclude: ["src/app/(not-used)/**"],
+      },
+    },
   }),
 );

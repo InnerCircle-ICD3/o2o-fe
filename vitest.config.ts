@@ -20,6 +20,8 @@ export default defineConfig({
         "src/mocks/**",
         "src/test/**",
         "**/__test__/**",
+        "src/providers/**",
+        "src/apis/**",
       ],
     },
   },
