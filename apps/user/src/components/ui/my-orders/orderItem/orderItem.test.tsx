@@ -56,9 +56,9 @@ describe("OrderItem Test", () => {
   it("주문 내역은 스토어 이름과 주문 일자, 픽업 일시, 가격이 렌더링된다.", () => {
     render(<OrderItem order={mockOrder.pending} />);
 
-    expect(screen.getByText("테스트 매장")).not.toBeNull();
-    expect(screen.getByText(/주문 일자:/)).not.toBeNull();
-    expect(screen.getByText("12,000₩")).not.toBeNull();
+    expect(screen.getByText("테스트 매장")).toBeInTheDocument();
+    expect(screen.getByText(/주문 일자:/)).toBeInTheDocument();
+    expect(screen.getByText("12,000₩")).toBeInTheDocument();
   });
 
   it("주문 내역의 Link가 orderId를 기준으로 href를 가진다.", () => {
@@ -69,50 +69,50 @@ describe("OrderItem Test", () => {
 
   it("픽업 대기중 상태일 경우 픽업 완료 일자와 주문 취소 일자가가 렌더링되지 않는다.", () => {
     render(<OrderItem order={mockOrder.pending} />);
-    expect(screen.queryByText(/픽업 완료 일자:/)).toBeNull();
-    expect(screen.queryByText(/픽업 취소 일자:/)).toBeNull();
+    expect(screen.queryByText(/픽업 완료 일자:/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/픽업 취소 일자:/)).not.toBeInTheDocument();
   });
 
   it("픽업 대기중 상태일 경우 픽업 대기중 라벨이 렌더링된다.", () => {
     render(<OrderItem order={mockOrder.pending} />);
-    expect(screen.getByText("픽업 대기중")).not.toBeNull();
+    expect(screen.getByText("픽업 대기중")).toBeInTheDocument();
   });
 
   it("픽업 대기중 상태일 경우 cover가 렌더링되지 않는다.", () => {
     const { container } = render(<OrderItem order={mockOrder.pending} />);
     const cover = container.querySelector(`.${"cover"}`);
-    expect(cover).toBeNull();
+    expect(cover).not.toBeInTheDocument();
   });
 
   it("픽업 완료 상태일 경우 픽업 완료 일자가 렌더링된다.", () => {
     render(<OrderItem order={mockOrder.success} />);
-    expect(screen.getByText(/픽업 완료 일자:/)).not.toBeNull();
+    expect(screen.getByText(/픽업 완료 일자:/)).toBeInTheDocument();
   });
 
   it("픽업 완료 상태일 경우 상태 라벨이 '픽업 완료'로 출력된다.", () => {
     render(<OrderItem order={mockOrder.success} />);
-    expect(screen.getByText("픽업 완료")).not.toBeNull();
+    expect(screen.getByText("픽업 완료")).toBeInTheDocument();
   });
 
   it("픽업 완료 상태일 경우 cover가 렌더링된다.", () => {
     const { container } = render(<OrderItem order={mockOrder.success} />);
     const cover = container.querySelector(`.${style.cover}`);
-    expect(cover).not.toBeNull();
+    expect(cover).toBeInTheDocument();
   });
 
   it("주문 취소 상태일 경우 주문 취소 일자가 렌더링된다.", () => {
     render(<OrderItem order={mockOrder.cancelled} />);
-    expect(screen.getByText(/주문 취소 일자:/)).not.toBeNull();
+    expect(screen.getByText(/주문 취소 일자:/)).toBeInTheDocument();
   });
 
   it("주문 취소 상태일 경우 상태 라벨이 '주문 취소'로 출력된다.", () => {
     render(<OrderItem order={mockOrder.cancelled} />);
-    expect(screen.getByText("주문 취소")).not.toBeNull();
+    expect(screen.getByText("주문 취소")).toBeInTheDocument();
   });
 
   it("주문 취소 상태일 경우 cover가 렌더링된다.", () => {
     const { container } = render(<OrderItem order={mockOrder.cancelled} />);
     const cover = container.querySelector(`.${style.cover}`);
-    expect(cover).not.toBeNull();
+    expect(cover).toBeInTheDocument();
   });
 });

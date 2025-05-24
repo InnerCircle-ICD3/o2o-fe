@@ -1,7 +1,7 @@
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { render, screen } from "@testing-library/react";
-import { type Mock, beforeEach, describe, expect, it, vi } from "vitest";
+import { type Mock, vi } from "vitest";
 import SearchMap from "./page";
 
 declare global {
@@ -69,7 +69,7 @@ describe("SearchMap", () => {
 
     render(<SearchMap />);
 
-    expect(screen.queryByTestId("mock-kakao-map")).toBeNull();
+    expect(screen.queryByTestId("mock-kakao-map")).not.toBeInTheDocument();
 
     expect(screen.getByText((text) => text.includes("지도를 불러오는 중"))).toBeTruthy();
   });
@@ -92,6 +92,6 @@ describe("SearchMap", () => {
 
     const refreshBtn = await screen.findByRole("button", { name: /현 지도에서 검색/i });
 
-    expect(refreshBtn).not.toBeNull();
+    expect(refreshBtn).toBeInTheDocument();
   });
 });

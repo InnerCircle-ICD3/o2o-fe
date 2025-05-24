@@ -1,5 +1,5 @@
 import type { Store } from "@/types/searchMap.type";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import {
   calculateMovedDistance,
   createStoreMarker,

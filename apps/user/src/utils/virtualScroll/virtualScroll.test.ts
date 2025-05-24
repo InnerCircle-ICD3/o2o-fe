@@ -1,6 +1,6 @@
 import type { HeightSpec, VirtualItemProps } from "@/types/virtualScroll.type";
 import { createElement } from "react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, it } from "vitest";
 import { getItemHeights, getTranslateY, getVirtualRange, renderVirtualContent } from ".";
 
 // 가짜 컴포넌트 생성 함수
