@@ -1,6 +1,6 @@
 import { apiClient } from "@/apis/client";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useMutation } from "../utils/useMutation";
 
 interface OrderBody {
   storeId: number;
@@ -27,11 +27,7 @@ const usePostOrder = () => {
   const submitOrder = (body: OrderBody) => {
     return mutation.mutate(body, {
       onSuccess: (res) => {
-        if (res.success) {
-          router.push(`/orders/${res.data.orderId}`);
-        } else {
-          alert("주문에 실패했습니다.");
-        }
+        router.push(`/orders/${res.orderId}`);
       },
       onError: (error) => {
         console.error("Order submission failed:", error);
