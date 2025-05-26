@@ -12,8 +12,19 @@ const Page = async (props: PageProps) => {
   const { params } = props;
   const { id } = await params;
 
-  const storesDetail = await getStoresDetail(id);
-  const storesProducts = await getStoresDetailProducts(id);
+  const storesData = await getStoresDetail(id);
+  const productsData = await getStoresDetailProducts(id);
+
+  if (!storesData.success || !productsData.success) {
+    return (
+      <div>
+        <h2>매장 정보를 불러오는 데 실패했습니다.</h2>
+      </div>
+    );
+  }
+
+  const { data: storesDetail } = storesData;
+  const { data: storesProducts } = productsData;
 
   return (
     <section className={style.container}>
