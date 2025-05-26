@@ -9,9 +9,6 @@ export default defineConfig({
 	test: {
 		environment: "jsdom",
 		setupFiles: ["./src/test/setup.ts"],
-		env: {
-			NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-		},
 		coverage: {
 			provider: "v8",
 			reporter: ["text", "json-summary", "html", "lcov"],

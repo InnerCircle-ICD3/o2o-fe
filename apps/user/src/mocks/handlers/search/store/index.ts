@@ -1,3 +1,4 @@
+import { baseUrl } from "@/mocks/utils";
 import { http, HttpResponse } from "msw";
 
 interface Store {
@@ -24,7 +25,7 @@ const stores = Array.from(Array(1024).keys()).map(
 );
 
 const searchStoreHandlers = [
-  http.get("/search/store", async ({ request }) => {
+  http.get(`${baseUrl}/search/store`, async ({ request }) => {
     const url = new URL(request.url);
     const size = Number(url.searchParams.get("size")) || 10;
     const page = Number(url.searchParams.get("page")) || 0;
