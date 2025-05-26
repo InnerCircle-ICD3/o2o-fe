@@ -1,10 +1,10 @@
+import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const loginContainer = style({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  // justifyContent: "center",
   marginTop: "50px",
   height: "100vh",
 });
@@ -15,7 +15,7 @@ export const kakaoButton = style({
   justifyContent: "center",
   gap: "10px",
   background: "#FFEB3B",
-  color: "#222",
+  color: globalTheme.color.black,
   border: "none",
   borderRadius: "10px",
   padding: "12px 0",
