@@ -1,26 +1,12 @@
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import { render, screen } from "@testing-library/react";
+import * as locationUtils from "@/utils/locations/locationUtils";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { type Mock, beforeEach, describe, expect, it, vi } from "vitest";
-import SearchMap from "./page";
-
-declare global {
-  namespace kakao.maps {
-    interface Map {
-      getCenter: () => {
-        getLat: () => number;
-        getLng: () => number;
-      };
-      setMinLevel: (level: number) => void;
-      setMaxLevel: (level: number) => void;
-      setCenter: (latlng: { getLat: () => number; getLng: () => number }) => void;
-    }
-  }
-}
+import MyLocation from ".";
 
 vi.mock("@/hooks/useGeolocation");
 vi.mock("@/hooks/useKakaoLoader");
-
 vi.mock("@/components/common/kakaoMap", () => ({
   // biome-ignore lint/style/useNamingConvention: false
   KakaoMap: ({
@@ -37,6 +23,8 @@ vi.mock("@/components/common/kakaoMap", () => ({
         setMinLevel: () => {},
         setMaxLevel: () => {},
         setCenter: () => {},
+        setLevel: () => {},
+        setBounds: () => {},
       });
     }, 0);
     return (
@@ -47,51 +35,56 @@ vi.mock("@/components/common/kakaoMap", () => ({
   },
 }));
 
-vi.mock("@/utils/locations/locationUtils", async () => {
-  return {
-    fetchStoresByCenter: vi.fn().mockResolvedValue([]),
-    calculateMovedDistance: vi.fn().mockReturnValue(0.03),
-    createStoreMarker: vi.fn(),
-    createUserMarker: vi.fn(),
-  };
-});
-
-describe("SearchMap", () => {
+describe("MyLocation", () => {
   const mockLocation = { lat: 37.123456, lng: 127.123456 };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    (useGeolocation as Mock).mockReturnValue(mockLocation);
+    (useKakaoLoader as Mock).mockReturnValue(true);
+
+    vi.spyOn(locationUtils, "getRegionByCoords").mockResolvedValue("제주특별자치도 제주시 아라동");
   });
 
   it("useKakaoLoader나 useGeolocation이 로드되지 않으면 LoadingMap을 보여준다", () => {
-    (useKakaoLoader as Mock).mockReturnValue(false);
     (useGeolocation as Mock).mockReturnValue(null);
+    (useKakaoLoader as Mock).mockReturnValue(false);
 
-    render(<SearchMap />);
+    render(<MyLocation />);
 
     expect(screen.queryByTestId("mock-kakao-map")).toBeNull();
-
     expect(screen.getByText((text) => text.includes("지도를 불러오는 중"))).toBeTruthy();
   });
 
   it("지도가 렌더링되면 KakaoMap이 좌표에 맞춰 렌더링된다.", () => {
-    (useKakaoLoader as Mock).mockReturnValue(true);
-    (useGeolocation as Mock).mockReturnValue(mockLocation);
-
-    render(<SearchMap />);
+    render(<MyLocation />);
 
     const map = screen.getByTestId("mock-kakao-map");
     expect(map.textContent).toContain(`${mockLocation.lat},${mockLocation.lng}`);
   });
 
-  it("지도가 이동하고 0.02 이상 떨어지면 '현 지도에서 검색' 버튼이 보인다", async () => {
-    (useGeolocation as Mock).mockReturnValue(mockLocation);
-    (useKakaoLoader as Mock).mockReturnValue(true);
+  it("거리 옵션을 클릭하면 선택 상태가 변경된다", () => {
+    render(<MyLocation />);
+    const radios = screen.getAllByRole("radio") as HTMLInputElement[];
 
-    render(<SearchMap />);
+    expect(radios[3].checked).toBe(false);
+    fireEvent.change(radios[3], { target: { checked: true } });
+    expect(radios[3].checked).toBe(true);
+  });
 
-    const refreshBtn = await screen.findByRole("button", { name: /현 지도에서 검색/i });
+  it("설정하기 버튼을 클릭하면 getRegionByCoords가가 호출된다", async () => {
+    render(<MyLocation />);
 
-    expect(refreshBtn).not.toBeNull();
+    const span = screen.getAllByText("설정하기");
+    const button = span[0].closest("button");
+    if (!button) throw new Error("button not found");
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(locationUtils.getRegionByCoords).toHaveBeenCalledWith(
+        mockLocation.lat,
+        mockLocation.lng,
+      );
+    });
   });
 });
