@@ -1,5 +1,5 @@
 // TODO: 테스트를 위해 임시로 추가한 코드
-import { describe, expect, it } from "vitest";
+import { it } from "vitest";
 import { capitalize, formatCurrency, formatDate, formatHourTo12HourText } from ".";
 
 describe("capitalize", () => {

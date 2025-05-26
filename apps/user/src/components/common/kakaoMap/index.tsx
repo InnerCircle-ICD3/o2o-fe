@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import * as styles from "./kakaoMap.css";
 
 interface KakaoMapProps {
@@ -16,13 +16,13 @@ interface KakaoMapProps {
    * 지도가 이동/확대/축소 후 정지했을 때 호출되는 콜백
    * 지도 중심 좌표가 바뀌었는지 확인하는 데 유용함
    */
-  onMapIdle: (map: kakao.maps.Map) => void | Promise<void>;
+  onMapIdle?: (map: kakao.maps.Map) => void | Promise<void>;
 
   /**
    * 지도가 최초 로드되었을 때 호출되는 콜백
    * 지도 인스턴스를 외부에서 저장하거나 초기 fetch 등에 사용
    */
-  onMapReady: (map: kakao.maps.Map) => void | Promise<void>;
+  onMapReady?: (map: kakao.maps.Map) => void | Promise<void>;
 }
 
 /**
@@ -34,7 +34,7 @@ interface KakaoMapProps {
  * 이 컴포넌트는 공통적으로 지도가 필요한 페이지에서 사용할 수 있으며,
  * 지도를 직접 제어하거나 마커를 렌더링하는 로직은 부모에서 수행합니다.
  */
-export const KakaoMap = ({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps) => {
+export const KakaoMap = memo(({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstace = useRef<kakao.maps.Map | null>(null);
 
@@ -54,11 +54,11 @@ export const KakaoMap = ({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps) => 
     mapInstace.current = map;
 
     kakaoMaps.event.addListener(map, "idle", () => {
-      onMapIdle(map);
+      onMapIdle?.(map);
     });
 
     onMapReady?.(map);
   }, [lat, lng, onMapIdle, onMapReady]);
 
   return <div ref={mapRef} className={styles.kakaoMap} />;
-};
+});
