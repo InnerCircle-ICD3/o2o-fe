@@ -10,9 +10,9 @@ const Page = async (props: PageProps) => {
   const { params } = props;
   const { id } = await params;
 
-  const data = await getOrderDetail(id);
+  const response = await getOrderDetail(id);
 
-  if (!data.success) {
+  if (!response.success) {
     return (
       <div>
         <h2>주문 내역을 불러오는 데 실패했습니다.</h2>
@@ -20,12 +20,12 @@ const Page = async (props: PageProps) => {
     );
   }
 
-  const { data: orderDetail } = data;
+  const { data } = response;
 
   return (
     <div>
-      <OrderInfo orderDetail={orderDetail} />
-      <ActionButtons orderDetail={orderDetail} />
+      <OrderInfo orderDetail={data} />
+      <ActionButtons orderDetail={data} />
     </div>
   );
 };

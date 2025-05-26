@@ -5,7 +5,7 @@ import useGetMyOrder from "@/hooks/api/useGetMyOrder";
 import * as style from "./myOrders.css";
 
 const Page = () => {
-  const { data, error, isError, isLoading } = useGetMyOrder(1);
+  const { data: response, error, isError, isLoading } = useGetMyOrder(1);
 
   if (isLoading) {
     return <div>로딩 중입니다...</div>;
@@ -24,7 +24,7 @@ const Page = () => {
     <div className={style.container}>
       <h2 className={style.title}>나의 주문 내역</h2>
       <ul>
-        {data?.data.map((order) => (
+        {response?.data.map((order) => (
           <OrderItem key={order.orderId} order={order} />
         ))}
       </ul>

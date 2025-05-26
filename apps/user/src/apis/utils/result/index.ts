@@ -55,9 +55,7 @@ export const toResult = async <T>(
   }
 };
 
-export const toResultWithError = async <T>(
-  fn: () => Promise<ResultSuccess<T>>,
-): Promise<Result<T>> => {
+export const toSafeResult = async <T>(fn: () => Promise<ResultSuccess<T>>): Promise<Result<T>> => {
   try {
     return await fn();
   } catch (error) {

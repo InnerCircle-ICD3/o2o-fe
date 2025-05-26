@@ -12,10 +12,10 @@ const Page = async (props: PageProps) => {
   const { params } = props;
   const { id } = await params;
 
-  const storesData = await getStoresDetail(id);
-  const productsData = await getStoresDetailProducts(id);
+  const storesResponse = await getStoresDetail(id);
+  const productsResponse = await getStoresDetailProducts(id);
 
-  if (!storesData.success || !productsData.success) {
+  if (!storesResponse.success || !productsResponse.success) {
     return (
       <div>
         <h2>매장 정보를 불러오는 데 실패했습니다.</h2>
@@ -23,14 +23,14 @@ const Page = async (props: PageProps) => {
     );
   }
 
-  const { data: storesDetail } = storesData;
-  const { data: storesProducts } = productsData;
+  const { data: storesData } = storesResponse;
+  const { data: productsData } = productsResponse;
 
   return (
     <section className={style.container}>
-      <StoresInfo storesDetail={storesDetail} />
-      <StoresProducts storesDetail={storesDetail} storesProducts={storesProducts} />
-      <ProductSelector storesProducts={storesProducts} />
+      <StoresInfo storesDetail={storesData} />
+      <StoresProducts storesDetail={storesData} storesProducts={productsData} />
+      <ProductSelector storesProducts={productsData} />
     </section>
   );
 };
