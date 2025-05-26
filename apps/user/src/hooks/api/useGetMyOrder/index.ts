@@ -12,7 +12,6 @@ const useGetMyOrder = (id: number) => {
   return useQuery<OrderDetail[]>({
     queryKey: [MY_ORDER_QUERY_KEY, id],
     queryFn: () => getMyOrder(id),
-    initialData: [],
   });
 };
 

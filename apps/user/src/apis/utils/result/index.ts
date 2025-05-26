@@ -26,7 +26,16 @@ type ResultError = {
   errorMessage: string;
 };
 
-export const toResult = async <T>(fn: () => Promise<T>): Promise<T> => {
+export type ResultSuccess<T> = {
+  success: true;
+  data: T;
+};
+
+type Result<T> = ResultSuccess<T> | ResultError;
+
+export const toResult = async <T>(
+  fn: () => Promise<ResultSuccess<T>>,
+): Promise<ResultSuccess<T>> => {
   try {
     return await fn();
   } catch (error) {
@@ -46,29 +55,18 @@ export const toResult = async <T>(fn: () => Promise<T>): Promise<T> => {
   }
 };
 
-type ResultSuccess<T> = {
-  success: true;
-  data: T;
-};
-
-export type Result<T> = ResultSuccess<T> | ResultError;
-
-export const toResultWithError = async <T>(fn: () => Promise<T>): Promise<Result<T>> => {
+export const toResultWithError = async <T>(
+  fn: () => Promise<ResultSuccess<T>>,
+): Promise<Result<T>> => {
   try {
-    const data = await fn();
-
-    return {
-      success: true,
-      data,
-    };
+    return await fn();
   } catch (error) {
-    if (error instanceof HTTPError) {
+    if (error instanceof AppError) {
       try {
-        const json = await error.response.json<ResultError>();
         return {
           success: false,
-          errorCode: json.errorCode || "UNKNOWN",
-          errorMessage: json.errorMessage || "알 수 없는 서버 오류입니다.",
+          errorCode: error.errorCode || "UNKNOWN",
+          errorMessage: error.errorMessage || "알 수 없는 서버 오류입니다.",
         };
       } catch {
         return {

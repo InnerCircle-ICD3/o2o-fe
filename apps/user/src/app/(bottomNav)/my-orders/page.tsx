@@ -24,7 +24,7 @@ const Page = () => {
     <div className={style.container}>
       <h2 className={style.title}>나의 주문 내역</h2>
       <ul>
-        {data?.map((order) => (
+        {data?.data.map((order) => (
           <OrderItem key={order.orderId} order={order} />
         ))}
       </ul>
