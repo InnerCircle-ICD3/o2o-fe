@@ -14,7 +14,7 @@ export const kakaoButton = style({
   alignItems: "center",
   justifyContent: "center",
   gap: "10px",
-  background: "#FFEB3B",
+  background: "#FEE500",
   color: globalTheme.color.black,
   border: "none",
   borderRadius: "10px",
