@@ -31,7 +31,7 @@ export type ResultSuccess<T> = {
   data: T;
 };
 
-type Result<T> = ResultSuccess<T> | ResultError;
+export type Result<T> = ResultSuccess<T> | ResultError;
 
 export const toResult = async <T>(
   fn: () => Promise<ResultSuccess<T>>,

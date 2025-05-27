@@ -1,3 +1,4 @@
+import accountsHandlers from "./accounts";
 import exampleHandlers from "./example";
 import ordersHandlers from "./orders";
 import recommendationsHandlers from "./recommendations";
@@ -13,4 +14,5 @@ export const handlers = [
   ...ordersHandlers,
   ...searchMapHandlers,
   ...searchStoreHandlers,
+  ...accountsHandlers,
 ];
