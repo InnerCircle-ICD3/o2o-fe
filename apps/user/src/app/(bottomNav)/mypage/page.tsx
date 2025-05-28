@@ -49,7 +49,7 @@ const Page = async () => {
                 설정
               </Link>
 
-              <p className={style.menuItem}>현재 버전 1.0.0</p>
+              <p>현재 버전 1.0.0</p>
             </div>
           </>
         )}

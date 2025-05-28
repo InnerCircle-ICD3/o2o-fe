@@ -1,12 +1,12 @@
 import { HTTPError } from "ky";
 
-export class AppError extends Error {
+export class ApiError extends Error {
   errorCode: string;
   errorMessage: string;
 
   constructor(errorCode: string, errorMessage: string) {
     super(errorMessage);
-    this.name = "AppError";
+    this.name = "ApiError";
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
   }
@@ -42,13 +42,13 @@ export const toResult = async <T>(
     if (error instanceof HTTPError) {
       try {
         const json = await error.response.json<ResultError>();
-        throw new AppError(json.errorCode, json.errorMessage);
+        throw new ApiError(json.errorCode, json.errorMessage);
       } catch {
-        throw new AppError("INVALID_JSON", "에러 응답 파싱 실패");
+        throw new ApiError("INVALID_JSON", "에러 응답 파싱 실패");
       }
     }
 
-    throw new AppError(
+    throw new ApiError(
       "UNEXPECTED_ERROR",
       error instanceof Error ? error.message : "알 수 없는 오류입니다.",
     );
@@ -59,26 +59,18 @@ export const toSafeResult = async <T>(fn: () => Promise<ResultSuccess<T>>): Prom
   try {
     return await fn();
   } catch (error) {
-    if (error instanceof AppError) {
-      try {
-        return {
-          success: false,
-          errorCode: error.errorCode || "UNKNOWN",
-          errorMessage: error.errorMessage || "알 수 없는 서버 오류입니다.",
-        };
-      } catch {
-        return {
-          success: false,
-          errorCode: "INVALID_JSON",
-          errorMessage: "에러 응답을 파싱할 수 없습니다.",
-        };
-      }
+    if (error instanceof ApiError) {
+      return {
+        success: false,
+        errorCode: error.errorCode ?? "UNKNOWN",
+        errorMessage: error.errorMessage ?? "알 수 없는 서버 오류입니다.",
+      };
     }
 
     return {
       success: false,
-      errorCode: "UNEXPECTED_ERROR",
-      errorMessage: error instanceof Error ? error.message : "알 수 없는 오류입니다.",
+      errorCode: "UNKNOWN",
+      errorMessage: "알 수 없는 오류입니다.",
     };
   }
 };
