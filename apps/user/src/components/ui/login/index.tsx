@@ -1,10 +1,9 @@
 "use client";
 
 import { SOCIAL_PROVIDERS } from "@/constants/login";
+import type { Provider } from "@/types/login";
 import Image from "next/image";
 import * as styles from "./login.css";
-
-type Provider = keyof typeof SOCIAL_PROVIDERS;
 
 export default function Login() {
   const handleSocialLogin = async (provider: Provider) => {

@@ -4,7 +4,6 @@ import type { ImageProps } from "next/image";
 import React from "react";
 import Login from "./index";
 
-// Next.js의 Image 컴포넌트를 모킹
 jest.mock("next/image", () => ({
   esModule: true,
   default: (props: ImageProps) =>

@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/constants/*": ["../../packages/constants/*"],
+      "@/types/*": ["../../packages/types/*"]
     }
   },
   "include": [
