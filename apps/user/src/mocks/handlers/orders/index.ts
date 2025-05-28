@@ -316,17 +316,20 @@ const mockOrder = [
 
 const handlers = [
   http.post(`${baseUrl}/orders`, () => {
-    return HttpResponse.json({ orderId: 1 });
+    return HttpResponse.json({ success: true, data: { orderId: 1 } });
   }),
 
   http.get(`${baseUrl}/customer/:id/orders`, () => {
-    return HttpResponse.json(mockOrder);
+    return HttpResponse.json({ success: true, data: mockOrder });
   }),
 
   http.get(`${baseUrl}/orders/:id`, ({ params }) => {
     const id = Number(params.id);
 
-    return HttpResponse.json(mockOrder.find((order) => order.orderId === id));
+    return HttpResponse.json({
+      success: true,
+      data: mockOrder.find((order) => order.orderId === id),
+    });
   }),
 ];
 
