@@ -1,4 +1,4 @@
-import type { AppError } from "@/apis/utils/result";
+import type { ApiError } from "@/apis/utils/result";
 import {
   type UseMutationOptions,
   type UseMutationResult,
@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 
 export const useMutation = <Data, Variables>(
-  options: UseMutationOptions<Data, AppError, Variables>,
-): UseMutationResult<Data, AppError, Variables> => {
+  options: UseMutationOptions<Data, ApiError, Variables>,
+): UseMutationResult<Data, ApiError, Variables> => {
   return useAppMutation(options);
 };
