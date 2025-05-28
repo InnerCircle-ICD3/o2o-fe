@@ -141,6 +141,22 @@ const ROUTE = {
       name: "내 동네 인증",
       path: "locations/my-location",
     },
+    notice: {
+      name: "공지사항",
+      path: "/mypage/notice",
+    },
+    faq: {
+      name: "자주 묻는 질문",
+      path: "/mypage/faq",
+    },
+    terms: {
+      name: "이용 약관",
+      path: "/mypage/terms",
+    },
+    setting: {
+      name: "설정",
+      path: "/mypage/setting",
+    },
   },
 };
 

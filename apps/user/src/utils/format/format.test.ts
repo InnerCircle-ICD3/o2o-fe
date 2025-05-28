@@ -30,12 +30,12 @@ describe("formatCurrency", () => {
 
 describe("formatDate", () => {
   it("날짜를 YYYY-MM-DD 형식으로 포맷팅합니다", () => {
-    const date = new Date(2023, 0, 15); // 2023-01-15
+    const date = "2023-01-15";
     expect(formatDate(date)).toBe("2023-01-15");
   });
 
   it("한 자리 숫자인 월과 일을 두 자리로 패딩합니다", () => {
-    const date = new Date(2023, 8, 5); // 2023-09-05
+    const date = "2023-09-05";
     expect(formatDate(date)).toBe("2023-09-05");
   });
 });
