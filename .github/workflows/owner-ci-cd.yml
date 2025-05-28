@@ -214,7 +214,7 @@ jobs:
 
       - name: Deploy to Vercel (Dev)
         run:
-          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_OWNER }}
