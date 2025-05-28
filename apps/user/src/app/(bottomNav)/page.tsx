@@ -1,6 +1,6 @@
 "use client";
 
-import { productTitle } from "@/components/ui/storesDetail/storesProducts/storesProduct.css";
+import { productTitle } from "@/styles/common.css";
 import * as styles from "./page.css";
 import StoreListContainer from "./stores/StoreListContainer";
 export default function Home() {
