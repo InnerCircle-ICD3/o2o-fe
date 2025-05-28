@@ -3,17 +3,14 @@ import Image from "next/image";
 import * as style from "./products.css";
 
 import StatusLabel from "@/components/common/statusLabel";
-import type { Product } from "@/types/apis/store.type";
+import type { Product } from "@/types/apis/stores.type";
 import { formatCurrency } from "@/utils/format";
 import generateProductStatus from "@/utils/productStatus";
 import classNames from "classnames";
 
 const PRODUCTS_IMAGE = {
-  // biome-ignore lint/style/useNamingConvention: false
   S: "/images/back_s.png",
-  // biome-ignore lint/style/useNamingConvention: false
   M: "/images/back_m.png",
-  // biome-ignore lint/style/useNamingConvention: false
   L: "/images/back_l.png",
 };
 

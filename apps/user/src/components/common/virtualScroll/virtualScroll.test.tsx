@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { HeightSpec } from "@/types/virtualScroll.type";
 import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, vi } from "vitest";
 import VirtualScroll, { VirtualItem } from ".";
 
 const generateItems = (count: number) =>

@@ -1,14 +1,11 @@
 import { apiClient } from "@/apis/client";
-import type { Product, StoreDetail } from "@/types/apis/store.type";
+import { toSafeResult } from "@/apis/utils/result";
+import type { Product, StoresDetail } from "@/types/apis/stores.type";
 
-export const getStoreDetail = async (id: string) => {
-  const data = await apiClient.get<StoreDetail>(`stores/${id}`);
-
-  return data;
+export const getStoresDetail = async (id: string) => {
+  return await toSafeResult(() => apiClient.get<StoresDetail>(`stores/${id}`));
 };
 
-export const getStoreDetailProducts = async (id: string) => {
-  const data = await apiClient.get<Product[]>(`stores/${id}/products`);
-
-  return data;
+export const getStoresDetailProducts = async (id: string) => {
+  return await toSafeResult(() => apiClient.get<Product[]>(`stores/${id}/products`));
 };
