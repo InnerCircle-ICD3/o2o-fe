@@ -11,7 +11,7 @@ vi.mock("next/image", () => ({
     React.createElement("img", { ...props, alt: props.alt || "image" }),
 }));
 
-describe("User Login Component", () => {
+describe("Owner Login Component", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
@@ -29,8 +29,8 @@ describe("User Login Component", () => {
   it("모든 UI 요소가 올바르게 렌더링되어야 합니다", () => {
     render(<Login />);
 
-    const loadingImages = screen.getAllByAltText("loading");
-    expect(loadingImages).toHaveLength(2);
+    expect(screen.getByAltText("캐릭터")).toBeInTheDocument();
+    expect(screen.getByAltText("로고")).toBeInTheDocument();
 
     for (const { label } of Object.values(SOCIAL_PROVIDERS)) {
       expect(screen.getByText(label)).toBeInTheDocument();
