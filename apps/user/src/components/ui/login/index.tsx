@@ -1,8 +1,8 @@
 "use client";
 
-import { SOCIAL_PROVIDERS } from "@/constants/login";
-import type { Provider } from "@/types/login";
 import Image from "next/image";
+import { SOCIAL_PROVIDERS } from "o2o/constants/login";
+import type { Provider } from "o2o/types/login";
 import * as styles from "./login.css";
 
 export default function Login() {
