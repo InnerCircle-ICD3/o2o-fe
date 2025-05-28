@@ -1,18 +1,28 @@
 "use client";
 
+import { apiClient } from "@/apis/client";
 import { StoreCard } from "@/components/ui/storeList/storeCard";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 
 const StoreListContainer = () => {
   const size = 5;
 
-  const { stores, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage, error } =
-    useInfiniteScroll({
-      size,
-      api: "search/store",
-    });
+  const {
+    data: stores,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+  } = useInfiniteQuery({
+    queryKey: ["stores"],
+    queryFn: ({ pageParam = 0 }) =>
+      apiClient.get("search/store", { params: { size, page: pageParam } }),
+    getNextPageParam: (lastPage) => lastPage.pageNumber + 1,
+    initialPageParam: 0,
+  });
 
   const observerRef = useRef<IntersectionObserver | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
