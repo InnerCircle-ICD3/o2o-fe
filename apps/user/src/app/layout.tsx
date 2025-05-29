@@ -5,6 +5,8 @@ import "@/styles/reset.css";
 import classNames from "classnames";
 import * as style from "./layout.css";
 
+console.log(process.env.VERCEL_MSW_ENV, process.env.VERCEL_ENV);
+
 if (
   process.env.NEXT_RUNTIME === "nodejs" &&
   (process.env.NODE_ENV === "development" ||

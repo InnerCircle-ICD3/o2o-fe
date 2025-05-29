@@ -6,6 +6,8 @@ import { type PropsWithChildren, Suspense, use } from "react";
 const mockingEnabledPromise =
   typeof window !== "undefined"
     ? import("@/mocks/browser").then(async ({ worker }) => {
+        console.log(process.env.VERCEL_MSW_ENV, process.env.VERCEL_ENV);
+
         if (
           process.env.NODE_ENV === "development" ||
           process.env.VERCEL_MSW_ENV === "development" ||
