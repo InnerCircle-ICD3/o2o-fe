@@ -1,6 +1,6 @@
 "use client";
 
-import * as style from "@/styles/common.css";
+import * as commonStyles from "@/styles/common.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import * as styles from "./storeCard.css";
@@ -56,10 +56,10 @@ export const StoreCard: React.FC<StoreCardProps> = ({
         <span className={styles.label}>{label}</span>
         <article>
           <div className={styles.titleWrapper}>
-            <h2 className={style.title}>{title}</h2>
+            <h2 className={commonStyles.title}>{title}</h2>
             <div className={styles.subtitle}>{subtitle}</div>
           </div>
-          <div className={style.reviewAndDistanceWrapper}>
+          <div className={commonStyles.reviewAndDistanceWrapper}>
             <Image src={"/icons/review.svg"} alt={""} width={16} height={16} />
             <span>
               <strong>{rating.toFixed(1)}</strong> ({reviews}) · {distance}
