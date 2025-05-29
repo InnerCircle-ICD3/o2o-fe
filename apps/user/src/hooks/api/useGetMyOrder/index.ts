@@ -1,6 +1,6 @@
 import { apiClient } from "@/apis/client";
 import type { OrderDetail } from "@/types/apis/order.type";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "../utils/useQuery";
 
 const getMyOrder = (id: number) => {
   return apiClient.get<OrderDetail[]>(`customer/${id}/orders`);

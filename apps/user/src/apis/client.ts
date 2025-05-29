@@ -1,4 +1,5 @@
 import ky from "ky";
+import { toResult } from "./utils/result";
 
 // API 기본 설정
 const api = ky.create({
@@ -11,18 +12,18 @@ const api = ky.create({
 // API 함수들
 export const apiClient = {
   get: async <T>(url: string, options = {}) => {
-    return api.get(url, options).json<T>();
+    return toResult<T>(() => api.get(url, options).json());
   },
 
   post: async <T>(url: string, data: unknown, options = {}) => {
-    return api.post(url, { json: data, ...options }).json<T>();
+    return toResult<T>(() => api.post(url, { json: data, ...options }).json());
   },
 
   put: async <T>(url: string, data: unknown, options = {}) => {
-    return api.put(url, { json: data, ...options }).json<T>();
+    return toResult<T>(() => api.put(url, { json: data, ...options }).json());
   },
 
   delete: async <T>(url: string, options = {}) => {
-    return api.delete(url, options).json<T>();
+    return toResult<T>(() => api.delete(url, options).json());
   },
 };
