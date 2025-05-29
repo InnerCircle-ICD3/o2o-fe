@@ -6,6 +6,7 @@ import { type PropsWithChildren, Suspense, use } from "react";
 const mockingEnabledPromise =
   typeof window !== "undefined"
     ? import("@/mocks/browser").then(async ({ worker }) => {
+        console.log("MSW is enabled");
         console.log(process.env.NEXT_PUBLIC_VERCEL_MSW_ENV);
         console.log(process.env.NEXT_PUBLIC_API_URL);
 
