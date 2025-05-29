@@ -9,7 +9,7 @@ const mockingEnabledPromise =
         console.log(
           process.env.NEXT_RUNTIME,
           process.env.NODE_ENV,
-          process.env.VERCEL_MSW_ENV,
+          process.env.NEXT_PUBLIC_VERCEL_MSW_ENV,
           process.env.VERCEL_ENV,
         );
 
@@ -18,8 +18,7 @@ const mockingEnabledPromise =
         console.log(process.env.NEXT_PUBLIC_API_URL);
         if (
           process.env.NODE_ENV === "development" ||
-          process.env.VERCEL_MSW_ENV === "development" ||
-          process.env.VERCEL_ENV === "preview"
+          process.env.NEXT_PUBLIC_VERCEL_MSW_ENV === "development"
         ) {
           await worker.start();
           worker.use(...handlers);
