@@ -20,7 +20,7 @@ export class ApiError extends Error {
   }
 }
 
-type ResultError = {
+export type ResultError = {
   success: false;
   errorCode: string;
   errorMessage: string;
@@ -31,7 +31,7 @@ export type ResultSuccess<T> = {
   data: T;
 };
 
-type Result<T> = ResultSuccess<T> | ResultError;
+export type Result<T> = ResultSuccess<T> | ResultError;
 
 export const toResult = async <T>(
   fn: () => Promise<ResultSuccess<T>>,
