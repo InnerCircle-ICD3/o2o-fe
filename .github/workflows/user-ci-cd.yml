@@ -163,9 +163,15 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel
 
+      - name: Link Vercel Project
+        run: npx vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
+
       - name: Deploy to Vercel (Preview)
         id: vercel-deploy
-        run:
+        run: |
           DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes)
           echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
         env:
@@ -210,6 +216,12 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel
 
+      - name: Link Vercel Project
+        run: npx vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
+
       - name: Deploy to Vercel (Dev)
         run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
@@ -239,6 +251,12 @@ jobs:
       # Vercel 프로젝트 루트 설정
       - name: Install Vercel CLI
         run: npm install -g vercel
+
+      - name: Link Vercel Project
+        run: npx vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
 
       - name: Deploy to Vercel (Production)
         run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
