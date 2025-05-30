@@ -1,8 +1,8 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { SOCIAL_PROVIDERS } from "o2o/constants/login";
 import type { ImageProps } from "next/image";
+import { SOCIAL_PROVIDERS } from "o2o/constants/login";
+import React from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Login from "./index";
 
 const mockPush = vi.fn();
@@ -13,13 +13,13 @@ vi.mock("next/image", () => ({
     React.createElement("img", { ...props, alt: props.alt || "image" }),
 }));
 
-vi.mock('next/navigation', () => {
+vi.mock("next/navigation", () => {
   return {
     useRouter: () => ({
       push: mockPush,
     }),
-  }
-})
+  };
+});
 
 describe("User Login Component", () => {
   const originalEnv = process.env;

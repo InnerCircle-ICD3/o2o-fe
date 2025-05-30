@@ -1,8 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { SOCIAL_PROVIDERS } from "o2o/constants/login";
 import type { Provider } from "o2o/types/login";
 
