@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { SOCIAL_PROVIDERS } from "o2o/constants/login";
 import type { Provider } from "o2o/types/login";
 import * as styles from "./login.css";
-import { useRouter } from "next/navigation";
 
 export default function Login() {
   const router = useRouter();

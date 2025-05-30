@@ -1,8 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import type { ImageProps } from "next/image";
-import { SOCIAL_PROVIDERS } from "o2o/constants/login";
 import React from "react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { SOCIAL_PROVIDERS } from "o2o/constants/login";
+import type { ImageProps } from "next/image";
 import Login from "./index";
 
 const mockPush = vi.fn();
