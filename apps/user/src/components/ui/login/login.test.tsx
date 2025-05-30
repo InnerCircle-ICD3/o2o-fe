@@ -5,11 +5,21 @@ import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Login from "./index";
 
+const mockPush = vi.fn();
+
 vi.mock("next/image", () => ({
   esModule: true,
   default: (props: ImageProps) =>
     React.createElement("img", { ...props, alt: props.alt || "image" }),
 }));
+
+vi.mock('next/navigation', () => {
+  return {
+    useRouter: () => ({
+      push: mockPush,
+    }),
+  }
+})
 
 describe("User Login Component", () => {
   const originalEnv = process.env;
@@ -49,7 +59,7 @@ describe("User Login Component", () => {
     const kakaoButton = screen.getByText(SOCIAL_PROVIDERS.kakao.label);
     fireEvent.click(kakaoButton);
 
-    expect(window.location.href).toBe(
+    expect(mockPush).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao`,
     );
   });

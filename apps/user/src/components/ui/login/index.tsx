@@ -4,16 +4,19 @@ import Image from "next/image";
 import { SOCIAL_PROVIDERS } from "o2o/constants/login";
 import type { Provider } from "o2o/types/login";
 import * as styles from "./login.css";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
-  const handleSocialLogin = async (provider: Provider) => {
+  const router = useRouter();
+
+  const handleSocialLogin = (provider: Provider) => {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     if (!baseUrl) {
       console.error("환경변수 NEXT_PUBLIC_API_URL이 설정되지 않았습니다.");
       return;
     }
 
-    window.location.href = `${baseUrl}/oauth2/authorization/${provider}`;
+    router.push(`${baseUrl}/oauth2/authorization/${provider}`);
   };
 
   return (
