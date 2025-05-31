@@ -38,6 +38,18 @@ declare namespace kakao {
       averageCenter?: boolean;
       minLevel?: number;
       disableClickZoom?: boolean;
+      styles?: {
+        width?: string;
+        height?: string;
+        background?: string;
+        boxShadow?: string;
+        borderRadius?: string;
+        color?: string;
+        textAlign?: string;
+        fontSize?: string;
+        fontWeight?: string;
+        lineHeight?: string;
+      }[];
     }
 
     class MarkerClusterer {

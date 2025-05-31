@@ -24,28 +24,10 @@ export default function MyLocation() {
   const [range, setRange] = useState<RangeOption>(500);
   const selectedIndex = RANGE_OPTIONS.findIndex((option) => option.value === range);
 
-  // const districtBoundary = useMemo(() => {
-  //   if (!isLoaded || !window.kakao?.maps) return [];
-
-  //   return [
-  //     new window.kakao.maps.LatLng(33.4499, 126.5698),
-  //     new window.kakao.maps.LatLng(33.449, 126.571),
-  //     new window.kakao.maps.LatLng(33.4495, 126.5725),
-  //     new window.kakao.maps.LatLng(33.4502, 126.5732),
-  //     new window.kakao.maps.LatLng(33.4512, 126.573),
-  //     new window.kakao.maps.LatLng(33.452, 126.572),
-  //     new window.kakao.maps.LatLng(33.4523, 126.5705),
-  //     new window.kakao.maps.LatLng(33.4517, 126.5692),
-  //     new window.kakao.maps.LatLng(33.4505, 126.5688),
-  //     new window.kakao.maps.LatLng(33.4499, 126.5698),
-  //   ];
-  // }, [isLoaded]);
-
   const handleMapReady = useCallback(
     async (map: kakao.maps.Map) => {
       mapRef.current = map;
       if (location) {
-        // renderMyLocationPolygon(map, districtBoundary, range);
         renderMyLocationCircle(map, location, range);
         createUserMarker(location, map);
       }

@@ -13,6 +13,7 @@ import { KakaoMap } from "@/components/common/kakaoMap";
 import { fetchStoresByCenter } from "@/apis/ssr/locations";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
+import { CLUSTERER_STYLE } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import {
@@ -89,6 +90,7 @@ export default function SearchMap() {
         averageCenter: true,
         minLevel: 5,
         disableClickZoom: true,
+        styles: [CLUSTERER_STYLE],
       });
 
       clustererRef.current = clusterer;
