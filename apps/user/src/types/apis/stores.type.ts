@@ -1,3 +1,5 @@
+import type { Result } from "@/apis/utils/result";
+
 export interface StoresDetail {
   storeId: number;
   name: string;
@@ -44,6 +46,21 @@ export interface Product {
   storeId: number;
   name: string;
   price: Price;
-  size: "s" | "m" | "l";
+  size: "S" | "M" | "L";
   status: string;
+}
+
+export interface StoreList {
+  id: number;
+  name: string;
+}
+
+export interface StoreSearchResponse {
+  pageNumber: number;
+  contents: StoreList[];
+}
+
+export interface InfiniteQueryResponse {
+  pages: Result<StoreSearchResponse>[];
+  pageParams: number[];
 }

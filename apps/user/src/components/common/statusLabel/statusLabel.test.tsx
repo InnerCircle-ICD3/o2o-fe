@@ -1,5 +1,5 @@
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, it } from "vitest";
 import StatusLabel from ".";
 import { statusLabel } from "./statusLabel.css";
 
@@ -21,7 +21,7 @@ describe("StatusLabel Test", () => {
     (status) => {
       render(<StatusLabel status={status}>{status}</StatusLabel>);
       const element = screen.getByText(status);
-      expect(element).not.toBeNull();
+      expect(element).toBeInTheDocument();
       expect(element.className).toContain(statusLabel[status]);
     },
   );

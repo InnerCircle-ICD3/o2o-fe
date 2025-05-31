@@ -1,6 +1,6 @@
 import type { Product } from "@/types/apis/stores.type";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import ProductSelector from ".";
 
 vi.mock("../productBottomSheet", () => ({
@@ -28,7 +28,7 @@ describe("ProductSelector Test", () => {
         discountRate: 10,
         finalPrice: 9000,
       },
-      size: "s",
+      size: "S",
       status: "OPEN",
       storeId: 1,
       createdAt: "",
@@ -42,21 +42,21 @@ describe("ProductSelector Test", () => {
   it("주문하기 버튼 클릭 시 ProductBottomSheet 열림", () => {
     render(<ProductSelector storesProducts={mockProducts} />);
 
-    expect(screen.getByText("BottomSheet is Closed")).not.toBeNull();
+    expect(screen.getByText("BottomSheet is Closed")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "주문하기" }));
 
-    expect(screen.getByText("BottomSheet is Open")).not.toBeNull();
+    expect(screen.getByText("BottomSheet is Open")).toBeInTheDocument();
   });
 
   it("BottomSheet에서 onClose 실행 시 닫힘", () => {
     render(<ProductSelector storesProducts={mockProducts} />);
 
     fireEvent.click(screen.getByRole("button", { name: "주문하기" }));
-    expect(screen.getByText("BottomSheet is Open")).not.toBeNull();
+    expect(screen.getByText("BottomSheet is Open")).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("닫기"));
 
-    expect(screen.getByText("BottomSheet is Closed")).not.toBeNull();
+    expect(screen.getByText("BottomSheet is Closed")).toBeInTheDocument();
   });
 });

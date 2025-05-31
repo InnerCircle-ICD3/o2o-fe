@@ -1,6 +1,6 @@
 import type { Product } from "@/types/apis/stores.type";
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, it } from "vitest";
 import Products from ".";
 
 describe("Products Component", () => {
@@ -27,21 +27,21 @@ describe("Products Component", () => {
           discountRate: 0.5,
           finalPrice: 12000,
         },
-        size: "m",
+        size: "M",
         status: "ACTIVE",
       },
     ];
 
     render(<Products products={mockProducts} />);
 
-    expect(screen.getByText("럭키백 S")).not.toBeNull();
+    expect(screen.getByText("럭키백 S")).toBeInTheDocument();
 
-    expect(screen.getByText("소형 럭키백입니다")).not.toBeNull();
+    expect(screen.getByText("소형 럭키백입니다")).toBeInTheDocument();
 
-    expect(screen.getByText("24,000₩")).not.toBeNull();
-    expect(screen.getByText("12,000₩")).not.toBeNull();
+    expect(screen.getByText("24,000₩")).toBeInTheDocument();
+    expect(screen.getByText("12,000₩")).toBeInTheDocument();
 
-    expect(screen.getByText("과자, 음료")).not.toBeNull();
+    expect(screen.getByText("과자, 음료")).toBeInTheDocument();
   });
 
   it("마감 상품에는 상태 라벨과 그림자 레이블이 표시된다", () => {
@@ -63,14 +63,14 @@ describe("Products Component", () => {
           discountRate: 0.5,
           finalPrice: 5000,
         },
-        size: "l",
+        size: "L",
         status: "ACTIVE",
       },
     ];
 
     render(<Products products={mockProducts} />);
 
-    expect(screen.getByText("마감")).not.toBeNull();
+    expect(screen.getByText("마감")).toBeInTheDocument();
 
     const shadowElements = document.querySelectorAll("[class*='shadowLabel']");
     expect(shadowElements.length).toBeGreaterThanOrEqual(1);

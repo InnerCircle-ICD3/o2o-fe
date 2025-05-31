@@ -4,22 +4,22 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
-      - 'apps/user/**'
-      - 'packages/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - '.github/workflows/user-ci-cd.yml'
+      - "apps/user/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/user-ci-cd.yml"
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deploy Environment'
+        description: "Deploy Environment"
         required: true
-        default: 'dev'
+        default: "dev"
         type: choice
         options:
-          - 'dev'
-          - 'prod'
+          - "dev"
+          - "prod"
 
 # 워크플로우에 필요한 권한 추가
 permissions:
@@ -64,7 +64,7 @@ jobs:
         id: coverage
         run: |
           echo "Checking coverage files..."
-          
+
           # JSON 파일 확인
           if [ -f "coverage/coverage-summary.json" ]; then
             echo "Found coverage/coverage-summary.json"
@@ -79,7 +79,7 @@ jobs:
             ls -la coverage/
             exit 1
           fi
-          
+
           echo "Total coverage: $COVERAGE%"
           if (( $(echo "$COVERAGE < 60" | bc -l) )); then
             echo "::error::Test coverage is below 60%"
@@ -171,6 +171,7 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Comment PR with Preview URL
         uses: actions/github-script@v6
@@ -211,11 +212,11 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel (Dev)
-        run:
-          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
   # 수동 워크플로우 - Vercel 프로덕션 환경 배포
   manual-deploy-prod:
@@ -242,8 +243,8 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel (Production)
-        run:
-          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }} 
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}

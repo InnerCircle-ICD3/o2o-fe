@@ -1,13 +1,13 @@
 import type { OrderDetail } from "@/types/apis/order.type";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import OrderInfo from ".";
 
 vi.mock("../products", () => ({
   default: () => <div data-testid="products-component">Products Component</div>,
 }));
 
-const mockOrderDetail: OrderDetail = {
+const mockOrderDetail = {
   orderId: 2,
   store: {
     storeId: 1001,
@@ -54,33 +54,33 @@ const mockOrderDetail: OrderDetail = {
         discountRate: 0.5,
         finalPrice: 10000,
       },
-      size: "l",
+      size: "L",
       status: "ACTIVE",
     },
   ],
   status: "PENDING",
-};
+} as unknown as OrderDetail;
 
 describe("OrderInfo", () => {
   it("매장명, 주소, 시간, 금액이 올바르게 표시된다", () => {
     render(<OrderInfo orderDetail={mockOrderDetail} />);
 
     // 매장명
-    expect(screen.getByRole("heading", { name: /테스트 매장/i })).not.toBeNull();
+    expect(screen.getByRole("heading", { name: /테스트 매장/i })).toBeInTheDocument();
 
     // 주소
-    expect(screen.getByText(/서울특별시 강남구 강남대로 123/)).not.toBeNull();
+    expect(screen.getByText(/서울특별시 강남구 강남대로 123/)).toBeInTheDocument();
 
     // 픽업 시간 텍스트
-    expect(screen.getByText(/오전 9시 ~ 오후 9시 30분/)).not.toBeNull();
+    expect(screen.getByText(/오전 9시 ~ 오후 9시 30분/)).toBeInTheDocument();
 
     // 픽업 안내 문구
-    expect(screen.getByText(/픽업 가능 해요/)).not.toBeNull();
+    expect(screen.getByText(/픽업 가능 해요/)).toBeInTheDocument();
 
     // 결제 예정 금액
-    expect(screen.getByText(/20,000₩/)).not.toBeNull();
+    expect(screen.getByText(/20,000₩/)).toBeInTheDocument();
 
     // Products 컴포넌트 확인
-    expect(screen.getByTestId("products-component")).not.toBeNull();
+    expect(screen.getByTestId("products-component")).toBeInTheDocument();
   });
 });

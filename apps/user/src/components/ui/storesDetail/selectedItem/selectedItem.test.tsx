@@ -1,6 +1,6 @@
 import type { SelectedProduct } from "@/types/orders.type";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import SelectedItem from ".";
 
 describe("SelectedItem Test", () => {
@@ -59,6 +59,6 @@ describe("SelectedItem Test", () => {
     render(<SelectedItem product={product} onDelete={() => {}} onUpdateCount={() => {}} />);
 
     const expectedPrice = "18,000₩";
-    expect(screen.getByText(expectedPrice)).not.toBeNull();
+    expect(screen.getByText(expectedPrice)).toBeInTheDocument();
   });
 });

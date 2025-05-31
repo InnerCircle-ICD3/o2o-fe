@@ -1,6 +1,6 @@
 import type { Product } from "@/types/apis/stores.type";
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { it } from "vitest";
 import useSelectedProducts from "../useSelectedProducts";
 
 const mockProduct: Product = {
@@ -15,7 +15,7 @@ const mockProduct: Product = {
     discountRate: 0,
     finalPrice: 5000,
   },
-  size: "s",
+  size: "S",
   status: "OPEN",
   storeId: 1,
   createdAt: "",
