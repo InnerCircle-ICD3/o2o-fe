@@ -11,6 +11,11 @@ export const useKakaoLoader = (): boolean => {
     }
 
     const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
+    if (!kakaoKey) {
+      console.error("환경변수 NEXT_PUBLIC_KAKAO_JS_KEY가 설정되지 않았습니다.");
+      return;
+    }
+
     const script = document.createElement("script");
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoKey}&autoload=false&libraries=services,clusterer`;
     script.async = true;
