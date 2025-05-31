@@ -12,7 +12,7 @@ export const useKakaoLoader = (): boolean => {
 
     const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
     const script = document.createElement("script");
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoKey}&autoload=false&libraries=services`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoKey}&autoload=false&libraries=services,clusterer`;
     script.async = true;
     document.head.appendChild(script);
 
