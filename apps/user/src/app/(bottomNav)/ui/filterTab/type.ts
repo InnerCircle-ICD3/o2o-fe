@@ -11,3 +11,5 @@ export type PickupTime = {
 };
 
 export type FoodType = (typeof foodTypeList)[number];
+
+export type TabKey = "reservation" | "foodType" | "pickupTime";
