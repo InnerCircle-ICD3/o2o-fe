@@ -26,7 +26,7 @@ const TopNav = (props: PropsWithChildren) => {
           <Image src={"/icons/chevron_left.svg"} alt="뒤로가기" width={24} height={24} />
         </button>
         <h1 className={style.title}>{route.name}</h1>
-        {"sub" in route ? route.sub : <div className={style.empty} />}
+        <div className={style.empty} />
       </header>
       <main className={style.main}>{children}</main>
     </div>

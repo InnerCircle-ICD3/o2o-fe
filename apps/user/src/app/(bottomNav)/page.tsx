@@ -10,7 +10,7 @@ export default function Home() {
     <>
       <MainHeader />
       <FilterTab />
-      <div className={styles.myStyle}>
+      <div className={styles.mainStyle}>
         <h2 className={productTitle}>우리동네에서 지금 할인중이에요!</h2>
         <StoreListContainer />
       </div>
