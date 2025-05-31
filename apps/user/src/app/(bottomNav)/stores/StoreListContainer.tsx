@@ -53,7 +53,7 @@ const StoreListContainer = () => {
                   <StoreCard
                     key={store.id}
                     id={store.id}
-                    imageUrl="/images/store_1.png"
+                    imageUrl="/images/thumb6.png"
                     title={store.name}
                     subtitle="김밥 / 주먹밥 / 가정식"
                     originalPrice={10000}
