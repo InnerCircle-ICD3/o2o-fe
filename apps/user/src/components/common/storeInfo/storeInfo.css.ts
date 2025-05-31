@@ -5,9 +5,9 @@ export const card = style({
   flexDirection: "column",
   borderRadius: "12px",
   overflow: "hidden",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
   backgroundColor: "#fff",
   cursor: "pointer",
-  marginBottom: "20px",
 });
 
 export const image = style({
@@ -17,6 +17,7 @@ export const image = style({
 });
 
 export const content = style({
+  padding: "12px",
   display: "flex",
   flexDirection: "column",
   gap: "4px",
@@ -74,28 +75,4 @@ export const titleWrapper = style({
   display: "flex",
   alignItems: "center",
   gap: "4px",
-});
-
-export const priceSectionWrapper = style({
-  display: "flex",
-  justifyContent: "space-between",
-  padding: "12px",
-});
-
-export const priceRightSection = style({
-  textAlign: "right",
-});
-
-export const originalPriceText = style({
-  color: "#999",
-  fontSize: "12px",
-  fontWeight: 400,
-  textDecoration: "line-through",
-  marginBottom: "7px",
-});
-
-export const salePriceText = style({
-  color: "#008000",
-  fontSize: "16px",
-  fontWeight: 700,
 });

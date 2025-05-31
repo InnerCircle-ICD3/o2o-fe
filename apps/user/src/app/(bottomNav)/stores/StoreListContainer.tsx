@@ -50,18 +50,7 @@ const StoreListContainer = () => {
         : stores?.pages.map((page) =>
             page.success
               ? page.data.contents.map((store: StoreList) => (
-                  <StoreCard
-                    key={store.id}
-                    id={store.id}
-                    imageUrl="/images/thumb6.png"
-                    title={store.name}
-                    subtitle="김밥 / 주먹밥 / 가정식"
-                    originalPrice={10000}
-                    salePrice={5000}
-                    rating={4.7}
-                    reviews={257}
-                    distance="1km"
-                  />
+                  <StoreCard key={store.storeId} storesDetail={store} />
                 ))
               : null,
           )}
