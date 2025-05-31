@@ -79,6 +79,7 @@ declare namespace kakao {
 
     class Circle {
       constructor(options: CircleOptions);
+      setMap(map: Map | null): void;
     }
 
     class Polygon {
