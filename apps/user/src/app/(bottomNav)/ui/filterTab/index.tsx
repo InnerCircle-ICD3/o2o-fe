@@ -126,7 +126,7 @@ export default function FilterTab() {
             )}
           >
             {selectedPickupTime.day
-              ? `${selectedPickupTime.day} ${formatTime(Number(selectedPickupTime.hour))}:${formatTime(Number(selectedPickupTime.minute))}`
+              ? `${selectedPickupTime.day} ${formatTime(selectedPickupTime.hour ?? 0)}:${formatTime(selectedPickupTime.minute ?? 0)}`
               : "픽업 가능시간"}
           </span>
         </button>
