@@ -6,13 +6,13 @@ import { pickupTimeDefaultValue } from "./constant";
 import * as styles from "./filterTab.css";
 import type { HourType, MinuteType, PickupTime } from "./type";
 
-interface PickUpTypeFilterProps {
+interface PickUpTimeFilterProps {
   isOpen: boolean;
   onChange: (time?: PickupTime) => void;
   onClose: () => void;
 }
 
-export default function PickUpTypeFilter({ isOpen, onChange, onClose }: PickUpTypeFilterProps) {
+export default function PickUpTimeFilter({ isOpen, onChange, onClose }: PickUpTimeFilterProps) {
   const [tempPickupTime, setTempPickupTime] = useState<PickupTime>(pickupTimeDefaultValue);
 
   const handleTempPickupTimeClick = (values: Partial<PickupTime>) => {

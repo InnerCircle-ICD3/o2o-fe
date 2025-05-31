@@ -6,7 +6,7 @@ import Image from "next/image";
 import { type ReactNode, useState } from "react";
 import * as styles from "./filterTab.css";
 import FoodTypeFilter from "./foodTypeFilter";
-import PickUpTypeFilter from "./pickUpTypeFilter";
+import PickUpTimeFilter from "./pickUpTimeFilter";
 import type { FoodType, PickupTime, TabKey } from "./type";
 
 interface FilterTabButtonProps {
@@ -135,7 +135,7 @@ export default function FilterTab() {
       />
 
       {/* 픽업 가능시간 선택 */}
-      <PickUpTypeFilter
+      <PickUpTimeFilter
         isOpen={activeTab === "pickupTime"}
         onChange={handlePickupTimeChange}
         onClose={() => setActiveTab("reservation")}
