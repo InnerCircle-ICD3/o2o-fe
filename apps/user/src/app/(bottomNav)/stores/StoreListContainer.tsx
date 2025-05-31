@@ -9,11 +9,11 @@ import type {
   StoreSearchResponse,
 } from "@/types/apis/stores.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
+const size = 10;
 const StoreListContainer = () => {
-  const size = 10;
-
   const {
     data: stores,
     fetchNextPage,
@@ -28,35 +28,16 @@ const StoreListContainer = () => {
     initialPageParam: 0,
   });
 
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const { ref: bottomRef, inView } = useInView({
+    rootMargin: "100px",
+    threshold: 0,
+  });
 
   useEffect(() => {
-    if (!hasNextPage) return;
-
-    if (observerRef.current) observerRef.current.disconnect();
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      {
-        root: null,
-        rootMargin: "100px",
-        threshold: 0,
-      },
-    );
-
-    if (bottomRef.current) {
-      observerRef.current.observe(bottomRef.current);
+    if (inView && hasNextPage) {
+      fetchNextPage();
     }
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [fetchNextPage, hasNextPage]);
+  }, [inView, hasNextPage, fetchNextPage]);
 
   if (error) return <div>Error: {error.message}</div>;
 
@@ -85,7 +66,7 @@ const StoreListContainer = () => {
               : null,
           )}
 
-      {/* 감지용 sentinel 요소 */}
+      {/* 감지용 sentinel 요소: 화면에 보이면 inView가 true가 됨 */}
       <div ref={bottomRef} style={{ height: 1 }} />
 
       {isFetchingNextPage && <SkeletonStoreCard key="loading-skeleton" />}
