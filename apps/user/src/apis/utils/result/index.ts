@@ -20,7 +20,7 @@ export class ApiError extends Error {
   }
 }
 
-type ResultError = {
+export type ResultError = {
   success: false;
   errorCode: string;
   errorMessage: string;
