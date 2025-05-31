@@ -38,7 +38,7 @@ export const formatLocalizedDate = (isoDate: string): string => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  const dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"][date.getDay()];
+  const dayOfWeek = "일월화수목금토".charAt(date.getDay());
 
   if (year === today.getFullYear()) {
     return `${month}월 ${day}일 (${dayOfWeek})`;
@@ -75,5 +75,5 @@ export const formatHourTo12HourText = (time: string) => {
  * formatTime(10) // "10"
  */
 export const formatTime = (time: number): string => {
-  return time < 10 ? `0${time}` : `${time}`;
+  return String(time).padStart(2, "0");
 };
