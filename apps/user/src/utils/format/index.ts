@@ -66,7 +66,13 @@ export const formatHourTo12HourText = (time: string) => {
 };
 
 /**
- * 10이하의 숫자에 0을 붙입니다.
+ * 10미만의 숫자에 0을 붙입니다.
+ *
+ * @param {number} time - 포맷팅할 시간 값
+ * @returns {string} 두 자리로 포맷팅된 시간 문자열
+ * @example
+ * formatTime(1) // "01"
+ * formatTime(10) // "10"
  */
 export const formatTime = (time: number): string => {
   return time < 10 ? `0${time}` : `${time}`;
