@@ -10,6 +10,7 @@ import type { Store } from "@/types/searchMap.type";
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 
+import { fetchStoresByCenter } from "@/apis/ssr/locations";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -18,7 +19,6 @@ import {
   calculateMovedDistance,
   createStoreMarker,
   createUserMarker,
-  fetchStoresByCenter,
 } from "@/utils/locations/locationUtils";
 
 export default function SearchMap() {
@@ -80,8 +80,9 @@ export default function SearchMap() {
       mapRef.current = map;
       const center = map.getCenter();
 
-      const storeList = await fetchStoresByCenter(center);
-      storeListRef.current = storeList;
+      const result = await fetchStoresByCenter(center);
+      if (!result.success) return;
+      storeListRef.current = result.data.storeList;
 
       const clusterer = new kakao.maps.MarkerClusterer({
         map,
@@ -89,11 +90,12 @@ export default function SearchMap() {
         minLevel: 5,
         disableClickZoom: true,
       });
+
       clustererRef.current = clusterer;
 
       const markers: kakao.maps.Marker[] = [];
 
-      for (const store of storeList) {
+      for (const store of storeListRef.current) {
         const marker = createStoreMarker(
           store,
           map,
@@ -131,11 +133,12 @@ export default function SearchMap() {
     clusterer.clear();
 
     const center = map.getCenter();
-    const storeList = await fetchStoresByCenter(center);
-    storeListRef.current = storeList;
+    const result = await fetchStoresByCenter(center);
+    if (!result.success) return;
+    storeListRef.current = result.data.storeList;
 
     // 새로운 마커 추가
-    const newMarkers = createStoreMarkers(storeList, map);
+    const newMarkers = createStoreMarkers(storeListRef.current, map);
     clusterer.addMarkers(newMarkers);
 
     setShouldShowRefetch(false);
