@@ -5,7 +5,11 @@ import "@/styles/reset.css";
 import classNames from "classnames";
 import * as style from "./layout.css";
 
-if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "development") {
+if (
+  process.env.NEXT_RUNTIME === "nodejs" &&
+  (process.env.NODE_ENV === "development" ||
+    process.env.NEXT_PUBLIC_VERCEL_MSW_ENV === "development")
+) {
   const { worker } = await import("../mocks/server");
 
   worker.listen();

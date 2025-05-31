@@ -186,7 +186,6 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Comment PR with Preview URL
         uses: actions/github-script@v6
@@ -227,11 +226,10 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel (Dev)
-        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
   # 수동 워크플로우 - Vercel 프로덕션 환경 배포
   manual-deploy-prod:
@@ -262,4 +260,3 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
