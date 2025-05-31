@@ -66,14 +66,14 @@ export const formatHourTo12HourText = (time: string) => {
 };
 
 /**
- * 10미만의 숫자에 0을 붙입니다.
+ * 숫자를 두 자리로 패딩합니다.
  *
- * @param {number} time - 포맷팅할 시간 값
- * @returns {string} 두 자리로 포맷팅된 시간 문자열
+ * @param {number} num - 패딩할 숫자
+ * @returns {string} 두 자리로 패딩된 문자열
  * @example
- * formatTime(1) // "01"
- * formatTime(10) // "10"
+ * padTwoDigits(1) // "01"
+ * padTwoDigits(10) // "10"
  */
-export const formatTime = (time: number): string => {
-  return String(time).padStart(2, "0");
+export const padTwoDigits = (num: number): string => {
+  return String(num).padStart(2, "0");
 };

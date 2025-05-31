@@ -3,7 +3,7 @@
 import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import { useBottomSheet } from "@/hooks/useBottomSheet";
-import { formatTime } from "@/utils/format";
+import { padTwoDigits } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import { useState } from "react";
@@ -126,7 +126,7 @@ export default function FilterTab() {
             )}
           >
             {selectedPickupTime.day
-              ? `${selectedPickupTime.day} ${formatTime(selectedPickupTime.hour ?? 0)}:${formatTime(selectedPickupTime.minute ?? 0)}`
+              ? `${selectedPickupTime.day} ${padTwoDigits(selectedPickupTime.hour ?? 0)}:${padTwoDigits(selectedPickupTime.minute ?? 0)}`
               : "픽업 가능시간"}
           </span>
         </button>
@@ -204,7 +204,7 @@ export default function FilterTab() {
                   }
                   onClick={() => handleTempPickupTimeClick({ hour: index as HourType })}
                 >
-                  <span>{formatTime(index)}</span>
+                  <span>{padTwoDigits(index)}</span>
                 </button>
               </li>
             ))}
@@ -223,7 +223,7 @@ export default function FilterTab() {
                   }
                   onClick={() => handleTempPickupTimeClick({ minute: (5 * index) as MinuteType })}
                 >
-                  <span>{formatTime(5 * index)}</span>
+                  <span>{padTwoDigits(5 * index)}</span>
                 </button>
               </li>
             ))}
