@@ -55,7 +55,6 @@ declare namespace kakao {
       setCenter(latlng: LatLng): void;
       setLevel(level: number): void;
       setBounds(bounds: LatLngBounds): void;
-      getLevel(): number;
     }
 
     class LatLng {

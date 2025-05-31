@@ -66,8 +66,6 @@ export default function SearchMap() {
   const handleMapIdle = useCallback(
     async (map: kakao.maps.Map) => {
       if (!location) return;
-      const level = map.getLevel();
-      console.log(level);
 
       const center = map.getCenter();
       const movedDistance = calculateMovedDistance(center, location);

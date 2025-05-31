@@ -76,6 +76,11 @@ describe("locationUtils", () => {
             }),
           })),
         },
+        // biome-ignore lint/style/useNamingConvention: false
+        MarkerClusterer: vi.fn().mockImplementation(() => ({
+          addMarkers: vi.fn(),
+          clear: vi.fn(),
+        })),
       },
     };
   });
