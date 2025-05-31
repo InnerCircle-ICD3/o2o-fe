@@ -38,7 +38,7 @@ export const formatLocalizedDate = (isoDate: string): string => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  const dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"][date.getDay()];
+  const dayOfWeek = "일월화수목금토".charAt(date.getDay());
 
   if (year === today.getFullYear()) {
     return `${month}월 ${day}일 (${dayOfWeek})`;
@@ -63,4 +63,17 @@ export const formatHourTo12HourText = (time: string) => {
   }
 
   return `${period} ${hour12}시 ${minute}분`;
+};
+
+/**
+ * 숫자를 두 자리로 패딩합니다.
+ *
+ * @param {number} num - 패딩할 숫자
+ * @returns {string} 두 자리로 패딩된 문자열
+ * @example
+ * padTwoDigits(1) // "01"
+ * padTwoDigits(10) // "10"
+ */
+export const padTwoDigits = (num: number): string => {
+  return String(num).padStart(2, "0");
 };

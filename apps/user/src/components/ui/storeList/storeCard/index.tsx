@@ -1,5 +1,4 @@
 "use client";
-
 import * as commonStyles from "@/styles/common.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
