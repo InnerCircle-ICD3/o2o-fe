@@ -6,16 +6,12 @@ import * as styles from "./filterTab.css";
 import type { FoodType } from "./type";
 
 interface FoodTypeFilterProps {
-  setSelectedFoodType: (foodType?: FoodType) => void;
-  showBottomSheet: Set<string>;
-  handleCloseBottomSheet: (type: string) => void;
+  isOpen: boolean;
+  onChange: (foodType?: FoodType) => void;
+  onClose: () => void;
 }
 
-export default function FoodTypeFilter({
-  setSelectedFoodType,
-  showBottomSheet,
-  handleCloseBottomSheet,
-}: FoodTypeFilterProps) {
+export default function FoodTypeFilter({ isOpen, onChange, onClose }: FoodTypeFilterProps) {
   const [tempSelectedFoodType, setTempSelectedFoodType] = useState<string>();
 
   const handleTempFoodTypeClick = (foodType: string) => {
@@ -23,21 +19,17 @@ export default function FoodTypeFilter({
   };
 
   const handleFoodTypeClick = () => {
-    setSelectedFoodType(tempSelectedFoodType);
-    handleCloseBottomSheet("foodType");
+    onChange(tempSelectedFoodType as FoodType);
+    onClose();
   };
+
   const handleResetClick = () => {
-    setSelectedFoodType(undefined);
+    onChange(undefined);
     setTempSelectedFoodType(undefined);
   };
 
   return (
-    <BottomSheet
-      type="shadow"
-      isShow={showBottomSheet.has("foodType")}
-      title="음식 종류"
-      onClose={() => handleCloseBottomSheet("foodType")}
-    >
+    <BottomSheet type="shadow" isShow={isOpen} title="음식 종류" onClose={onClose}>
       <ul className={styles.filterListStyle}>
         {foodTypeList.map((item) => (
           <li

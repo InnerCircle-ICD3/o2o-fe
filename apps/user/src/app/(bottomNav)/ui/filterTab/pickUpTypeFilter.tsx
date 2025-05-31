@@ -7,16 +7,12 @@ import * as styles from "./filterTab.css";
 import type { HourType, MinuteType, PickupTime } from "./type";
 
 interface PickUpTypeFilterProps {
-  setSelectedPickupTime: (time: PickupTime | undefined) => void;
-  showBottomSheet: Set<string>;
-  handleCloseBottomSheet: (type: string) => void;
+  isOpen: boolean;
+  onChange: (time?: PickupTime) => void;
+  onClose: () => void;
 }
 
-export default function PickUpTypeFilter({
-  setSelectedPickupTime,
-  showBottomSheet,
-  handleCloseBottomSheet,
-}: PickUpTypeFilterProps) {
+export default function PickUpTypeFilter({ isOpen, onChange, onClose }: PickUpTypeFilterProps) {
   const [tempPickupTime, setTempPickupTime] = useState<PickupTime>(pickupTimeDefaultValue);
 
   const handleTempPickupTimeClick = (values: Partial<PickupTime>) => {
@@ -24,22 +20,17 @@ export default function PickUpTypeFilter({
   };
 
   const handlePickupTimeClick = () => {
-    setSelectedPickupTime(tempPickupTime);
-    handleCloseBottomSheet("pickupTime");
+    onChange(tempPickupTime);
+    onClose();
   };
 
   const handleResetPickupTimeClick = () => {
-    setSelectedPickupTime(undefined);
+    onChange(undefined);
     setTempPickupTime(pickupTimeDefaultValue);
   };
 
   return (
-    <BottomSheet
-      type="shadow"
-      isShow={showBottomSheet.has("pickupTime")}
-      title="픽업 가능시간"
-      onClose={() => handleCloseBottomSheet("pickupTime")}
-    >
+    <BottomSheet type="shadow" isShow={isOpen} title="픽업 가능시간" onClose={onClose}>
       <div className={styles.timePickerContainer}>
         <ul className={styles.timePickerColumn}>
           {["오전", "오후"].map((day) => (

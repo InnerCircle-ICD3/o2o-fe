@@ -1,6 +1,5 @@
 "use client";
 
-import { useBottomSheet } from "@/hooks/useBottomSheet";
 import { padTwoDigits } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
@@ -37,11 +36,16 @@ export default function FilterTab() {
   const [selectedFoodType, setSelectedFoodType] = useState<FoodType | undefined>(undefined);
   const [selectedPickupTime, setSelectedPickupTime] = useState<PickupTime | undefined>(undefined);
 
-  const { handleShowBottomSheet, showBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-
   const handleTabClick = (tab: TabKey) => {
     setActiveTab(tab);
-    handleShowBottomSheet(tab);
+  };
+
+  const handleFoodTypeChange = (foodType?: FoodType) => {
+    setSelectedFoodType(foodType);
+  };
+
+  const handlePickupTimeChange = (time?: PickupTime) => {
+    setSelectedPickupTime(time);
   };
 
   const renderTabContent = (tabKey: TabKey) => {
@@ -125,16 +129,16 @@ export default function FilterTab() {
 
       {/* 음식 종류 선택 */}
       <FoodTypeFilter
-        setSelectedFoodType={setSelectedFoodType}
-        showBottomSheet={showBottomSheet}
-        handleCloseBottomSheet={handleCloseBottomSheet}
+        isOpen={activeTab === "foodType"}
+        onChange={handleFoodTypeChange}
+        onClose={() => setActiveTab("reservation")}
       />
 
       {/* 픽업 가능시간 선택 */}
       <PickUpTypeFilter
-        setSelectedPickupTime={setSelectedPickupTime}
-        showBottomSheet={showBottomSheet}
-        handleCloseBottomSheet={handleCloseBottomSheet}
+        isOpen={activeTab === "pickupTime"}
+        onChange={handlePickupTimeChange}
+        onClose={() => setActiveTab("reservation")}
       />
     </>
   );
