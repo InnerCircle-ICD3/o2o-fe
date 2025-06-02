@@ -95,11 +95,18 @@ const mockProduct = [
 
 const handlers = [
   http.get(`${baseUrl}/stores/:id`, () => {
-    return HttpResponse.json(mockStore[1001]);
+    console.log("mockStore[1001]", mockStore[1001]);
+    return HttpResponse.json({
+      success: true,
+      data: mockStore[1001],
+    });
   }),
 
   http.get(`${baseUrl}/stores/:id/products`, () => {
-    return HttpResponse.json(mockProduct);
+    return HttpResponse.json({
+      success: true,
+      data: mockProduct,
+    });
   }),
 ];
 

@@ -51,8 +51,35 @@ export interface Product {
 }
 
 export interface StoreList {
-  id: number;
-  name: string;
+  storeId: number;
+  storeName: string;
+  storeImage: string;
+  category: string[];
+  distanceKm: number;
+  open: boolean;
+  stock: number;
+  roadAddress: {
+    addressName: string;
+    zoneNo: string;
+    buildingName: string;
+  };
+  lotAddress: {
+    addressName: string;
+    mainAddressNo: string;
+    subAddressNo: string;
+  };
+  addressType: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
+  businessHours: {
+    openTime: string;
+    closeTime: string;
+  };
+  reviewCount: number;
+  reviewScore: number;
+  isFavorite: boolean;
 }
 
 export interface StoreSearchResponse {

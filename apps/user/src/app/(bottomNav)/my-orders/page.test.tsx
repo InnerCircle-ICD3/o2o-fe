@@ -28,7 +28,8 @@ describe("My Orders Page", () => {
 
     render(<Page />);
 
-    expect(screen.getByText("로딩 중입니다...")).toBeInTheDocument();
+    const skeletonCard = document.querySelector('[class*="skeletonCardStyle"]');
+    expect(skeletonCard).toBeInTheDocument();
   });
 
   it("에러가 발생했을 때 에러 메시지가 표시된다", () => {

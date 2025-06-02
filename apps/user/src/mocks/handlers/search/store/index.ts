@@ -4,8 +4,35 @@ import { http, HttpResponse } from "msw";
 // Mock 데이터 생성
 const stores = Array.from(Array(1024).keys()).map(
   (id): StoreList => ({
-    id,
-    name: `Store ${id}`,
+    storeId: id,
+    storeName: `store ${id}`,
+    storeImage: "/images/thumb6.png",
+    category: ["김밥", "주먹밥", "가정식"],
+    distanceKm: 0.1,
+    open: true,
+    stock: 10,
+    roadAddress: {
+      addressName: "string",
+      zoneNo: "string",
+      buildingName: "string",
+    },
+    lotAddress: {
+      addressName: "string",
+      mainAddressNo: "string",
+      subAddressNo: "string",
+    },
+    addressType: "ROAD",
+    location: {
+      lat: 37.514575,
+      lng: 127.049555,
+    },
+    businessHours: {
+      openTime: "2025-05-21T11:00:46.191Z",
+      closeTime: "2025-05-21T19:00:46.191Z",
+    },
+    reviewCount: 1073741824,
+    reviewScore: 1.5,
+    isFavorite: true,
   }),
 );
 
