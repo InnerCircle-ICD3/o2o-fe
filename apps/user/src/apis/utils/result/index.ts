@@ -24,7 +24,6 @@ export class ApiError extends Error {
 export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T>> => {
   try {
     const data = await fn();
-    console.log(data, "data");
     if (data && typeof data === "object" && "success" in data) {
       // ResultType으로 들어올 때
       return data as unknown as ResultSuccess<T>;

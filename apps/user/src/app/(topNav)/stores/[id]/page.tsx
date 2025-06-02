@@ -15,9 +15,6 @@ const Page = async (props: PageProps) => {
   const storesResponse = await getStoresDetail(id);
   const productsResponse = await getStoresDetailProducts(id);
 
-  console.log(storesResponse, "storesResponse");
-  console.log(productsResponse, "productsResponse");
-
   if (!storesResponse.success || !productsResponse.success) {
     return (
       <div>
