@@ -1,4 +1,4 @@
-import { useSearchHistoryStore } from "@/stores/searchHistory/searchHistoryStore";
+import { useSearchHistoryStore } from "@/stores/searchHistoryStore";
 import { useMemo, useState } from "react";
 import { useSearchRecommendations } from "../useSearchRecommendations";
 

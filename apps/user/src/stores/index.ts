@@ -1,1 +1,1 @@
-export { useSearchHistoryStore } from "@/stores/searchHistory/searchHistoryStore";
+export { useSearchHistoryStore } from "@/stores/searchHistoryStore";
