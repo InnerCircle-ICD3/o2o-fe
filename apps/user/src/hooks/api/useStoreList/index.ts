@@ -1,11 +1,19 @@
 import { getStoreList } from "@/apis/ssr/stores";
-import type { Result } from "@/apis/utils/result";
-import type { InfiniteQueryResponse, StoreSearchResponse } from "@/types/apis/stores.type";
+import type { InfiniteQueryResponse, Result } from "@/apis/types";
+import { useQueryParams } from "@/hooks/useQueryParams";
+import type { StoreListResponse } from "@/types/apis/stores.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
+
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
 
 const SIZE = 10;
 
-export const useStoreList = () => {
+export const useStoreList = (locations: Coordinates | null) => {
+  const { queryParams, setAllQueryParams } = useQueryParams();
+
   const {
     data: stores,
     fetchNextPage,
@@ -13,10 +21,19 @@ export const useStoreList = () => {
     isFetchingNextPage,
     isLoading,
     error,
-  } = useInfiniteQuery<Result<StoreSearchResponse>, Error, InfiniteQueryResponse>({
+  } = useInfiniteQuery<Result<StoreListResponse>, Error, InfiniteQueryResponse<StoreListResponse>>({
     queryKey: ["stores"],
-    queryFn: ({ pageParam = 0 }) => getStoreList(SIZE, pageParam as number),
-    getNextPageParam: (lastPage) => (lastPage.success ? lastPage.data.pageNumber + 1 : undefined),
+    queryFn: ({ pageParam = 0 }) => {
+      setAllQueryParams({
+        size: SIZE,
+        page: pageParam as number,
+        latitude: locations?.lat,
+        longitude: locations?.lng,
+      });
+      return getStoreList(queryParams.toString());
+    },
+    getNextPageParam: (lastPage) =>
+      lastPage.success ? lastPage.data.storeList.length + 1 : undefined,
     initialPageParam: 0,
   });
 
