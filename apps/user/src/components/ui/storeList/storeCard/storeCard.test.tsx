@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { StoreCard } from ".";
+import SkeletonStoreCard from "./skeletonStoreCard";
 
 const mockPush = vi.fn();
 
@@ -54,5 +55,13 @@ describe("StoreCard Test", () => {
     if (!storeCard) throw new Error("Store card element not found");
     fireEvent.click(storeCard);
     expect(mockPush).toHaveBeenCalledWith("/stores/1");
+  });
+
+  describe("SkeletonStoreCard Test", () => {
+    it("SkeletonStoreCard가 로드된다.", () => {
+      render(<SkeletonStoreCard />);
+      const skeletonCard = document.querySelector('[class*="skeletonCardStyle"]');
+      expect(skeletonCard).toBeInTheDocument();
+    });
   });
 });
