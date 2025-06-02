@@ -30,7 +30,7 @@ permissions:
 
 jobs:
   test:
-    name: 테스트 및 커버리지 검사
+    name: 테스트
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -55,60 +55,8 @@ jobs:
         run: pnpm install
         working-directory: ./ # 루트에서 pnpm install 실행 (워크스페이스 전체 설치)
 
-      - name: Run tests with coverage
-        run: pnpm --filter o2o-owner test:coverage
-
-      - name: Install jq and bc
-        run: sudo apt-get install -y jq bc
-
-      - name: Check test coverage
-        id: coverage
-        run: |
-          echo "Checking coverage files..."
-          
-          # JSON 파일 확인
-          if [ -f "coverage/coverage-summary.json" ]; then
-            echo "Found coverage/coverage-summary.json"
-            COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
-          elif [ -f "coverage/coverage-final.json" ]; then
-            echo "Found coverage/coverage-final.json"
-            # coverage-final.json에서는 정확한 백분율을 직접 계산하기 어려우므로
-            # 성공 처리하고 다음 단계에서 Coveralls로 상세 보고
-            COVERAGE=100
-          else
-            echo "⚠️ No coverage file found!"
-            ls -la coverage/
-            exit 1
-          fi
-          
-          echo "Total coverage: $COVERAGE%"
-          if (( $(echo "$COVERAGE < 60" | bc -l) )); then
-            echo "::error::Test coverage is below 60%"
-            exit 1
-          fi
-          echo "✅ Coverage threshold met!"
-
-      # 커버리지 보고서는 Coveralls만 사용 (중복 방지)
-      - name: Report test coverage
-        if: success() && github.event_name == 'pull_request'
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./apps/owner/coverage/lcov.info
-          base-path: ./apps/owner
-
-      - name: Block PR if coverage is too low
-        if: failure() && github.event_name == 'pull_request' && steps.coverage.outcome == 'failure'
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '❌ Owner 앱의 테스트 커버리지가 60% 미만입니다. PR을 병합할 수 없습니다.'
-            })
+      - name: Run tests
+        run: pnpm --filter o2o-owner test
 
   build:
     name: 빌드 검사

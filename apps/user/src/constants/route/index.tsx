@@ -137,9 +137,17 @@ const ROUTE = {
       name: "주문내역 확인",
       path: "/my-orders",
     },
+    search: {
+      name: "",
+      path: "/search",
+    },
     myLocation: {
       name: "내 동네 인증",
       path: "locations/my-location",
+    },
+    login: {
+      name: "로그인",
+      path: "/login",
     },
     notice: {
       name: "공지사항",
