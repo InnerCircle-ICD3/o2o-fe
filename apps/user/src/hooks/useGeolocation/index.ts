@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useUserLocation } from "@/stores/userLocationStore";
+import { useEffect } from "react";
 
 interface Coordinates {
   lat: number;
@@ -6,14 +7,14 @@ interface Coordinates {
 }
 
 export const useGeolocation = (): Coordinates | null => {
-  const [location, setLocation] = useState<Coordinates | null>(null);
+  const { updateLocations, getLocations } = useUserLocation();
 
   useEffect(() => {
     if (!navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setLocation({
+        updateLocations({
           lat: Number(position.coords.latitude.toFixed(6)),
           lng: Number(position.coords.longitude.toFixed(6)),
         });
@@ -23,8 +24,8 @@ export const useGeolocation = (): Coordinates | null => {
       },
       { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 },
     );
-  }, []);
+  }, [updateLocations]);
 
+  const location = getLocations();
   return location || { lat: 33.450705, lng: 126.570677 };
-  // return location || { lat: 37.539817, lng: 127.056888 };
 };
