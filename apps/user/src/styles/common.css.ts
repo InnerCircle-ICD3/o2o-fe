@@ -24,6 +24,4 @@ export const reviewAndDistanceWrapper = style({
 
   fontSize: 12,
   lineHeight: 1.2,
-
-  marginBottom: 16,
 });

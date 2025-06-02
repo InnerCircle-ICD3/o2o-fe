@@ -1,37 +1,22 @@
 "use client";
-import * as commonStyles from "@/styles/common.css";
+
+import StoreInfo from "@/components/common/storeInfo";
+import type { StoreList } from "@/types/apis/stores.type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import * as styles from "./storeCard.css";
 
 interface StoreCardProps {
-  id: number;
-  imageUrl: string;
-  title: string;
-  subtitle: string;
-  originalPrice: number;
-  salePrice: number;
-  rating: number;
-  reviews: number;
-  distance: string;
-  label?: string;
+  storesDetail: StoreList;
 }
 
-export const StoreCard: React.FC<StoreCardProps> = ({
-  id,
-  imageUrl,
-  title,
-  subtitle,
-  originalPrice,
-  salePrice,
-  rating,
-  reviews,
-  distance,
-  label = "판매중",
-}) => {
+export const StoreCard: React.FC<StoreCardProps> = ({ storesDetail }: StoreCardProps) => {
   const router = useRouter();
+
+  const { storeId, storeImage, storeName } = storesDetail;
+
   const handleClick = () => {
-    router.push(`/stores/${id}`);
+    router.push(`/stores/${storeId}`);
   };
   return (
     <div
@@ -39,35 +24,25 @@ export const StoreCard: React.FC<StoreCardProps> = ({
       onClick={handleClick}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
-          router.push(`/stores/${id}`);
+          router.push(`/stores/${storeId}`);
         }
       }}
     >
       <Image
-        src={imageUrl}
-        alt={title}
+        src={storeImage}
+        alt={storeName}
         className={styles.image}
         width={240}
         height={140}
         priority={false}
       />
-      <div className={styles.content}>
-        <span className={styles.label}>{label}</span>
-        <article>
-          <div className={styles.titleWrapper}>
-            <h2 className={commonStyles.title}>{title}</h2>
-            <div className={styles.subtitle}>{subtitle}</div>
-          </div>
-          <div className={commonStyles.reviewAndDistanceWrapper}>
-            <Image src={"/icons/review.svg"} alt={""} width={16} height={16} />
-            <span>
-              <strong>{rating.toFixed(1)}</strong> ({reviews}) · {distance}
-            </span>
-          </div>
-        </article>
-        <div className={styles.priceWrapper}>
-          <div className={styles.originalPrice}>{originalPrice.toLocaleString()}₩</div>
-          <div className={styles.salePrice}>{salePrice.toLocaleString()}₩</div>
+      <div className={styles.priceSectionWrapper}>
+        <div className={styles.content}>
+          <StoreInfo storesDetail={storesDetail} />
+        </div>
+        <div className={styles.priceRightSection}>
+          <p className={styles.originalPriceText}>10,000₩</p>
+          <p className={styles.salePriceText}>5,000₩</p>
         </div>
       </div>
     </div>
