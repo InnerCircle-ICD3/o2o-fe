@@ -1,14 +1,14 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-type Index = {
+interface SearchHistoryStore {
   searchHistory: string[];
   addSearchHistory: (keyword: string) => void;
   removeSearchHistory: (keyword: string) => void;
   clearSearchHistory: () => void;
-};
+}
 
-export const useSearchHistoryStore = create<Index>()(
+export const useSearchHistoryStore = create<SearchHistoryStore>()(
   persist(
     (set) => ({
       searchHistory: [],
