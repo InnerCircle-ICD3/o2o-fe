@@ -14,6 +14,7 @@
     "lint:check": "biome check src"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.2",
     "@tailwindcss/postcss": "^4.1.5",
     "class-variance-authority": "^0.7.1",
