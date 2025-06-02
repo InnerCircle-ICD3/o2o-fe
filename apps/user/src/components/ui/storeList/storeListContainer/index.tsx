@@ -3,13 +3,15 @@
 import { StoreCard } from "@/components/ui/storeList/storeCard";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import { useStoreList } from "@/hooks/api/useStoreList";
+import { useGeolocation } from "@/hooks/useGeolocation";
 import type { StoreList } from "@/types/apis/stores.type";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 const StoreListContainer = () => {
+  const locations = useGeolocation();
   const { stores, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage, error } =
-    useStoreList();
+    useStoreList(locations);
 
   const { ref: bottomRef, inView } = useInView({
     rootMargin: "100px",
@@ -32,7 +34,7 @@ const StoreListContainer = () => {
           ))
         : stores?.pages.map((page) =>
             page.success
-              ? page.data.contents.map((store: StoreList) => (
+              ? page.data.storeList.map((store: StoreList) => (
                   <StoreCard key={store.storeId} storesDetail={store} />
                 ))
               : null,
