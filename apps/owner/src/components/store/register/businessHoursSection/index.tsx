@@ -10,7 +10,7 @@ const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"];
 export function BusinessHoursSection({
   form,
 }: { form: ReturnType<typeof useForm<StoreFormData>> }) {
-  const { selectedDays, businessHours, toggleDay, handleBusinessHoursChange } =
+  const { selectedDays, businessHours, toggleDay, handleBusinessHoursChange, applyToAllDays } =
     useBusinessHours(form);
 
   return (
@@ -30,6 +30,28 @@ export function BusinessHoursSection({
           ))}
         </div>
         <div className="space-y-3">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-16">전체</span>
+            <Input
+              type="time"
+              className="w-32"
+              onChange={(e) => {
+                const openTime = e.target.value;
+                const closeTime = businessHours[0]?.closeTime || "";
+                applyToAllDays(openTime, closeTime);
+              }}
+            />
+            <span>~</span>
+            <Input
+              type="time"
+              className="w-32"
+              onChange={(e) => {
+                const openTime = businessHours[0]?.openTime || "";
+                const closeTime = e.target.value;
+                applyToAllDays(openTime, closeTime);
+              }}
+            />
+          </div>
           {WEEKDAYS.map((day) => (
             <div key={day} className="flex items-center gap-2">
               <span className="w-16">{day}요일</span>

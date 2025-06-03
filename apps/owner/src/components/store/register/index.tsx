@@ -1,5 +1,6 @@
 "use client";
 
+import { postStore } from "@/apis/ssr/store";
 import { FormField } from "@/components/store/register/formField";
 import { Button } from "@/components/ui/button";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
@@ -24,10 +25,12 @@ export default function StoreRegisterFormWizard() {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const onSubmit = (data: StoreFormData) => {
+  const onSubmit = async (data: StoreFormData) => {
     const isValid = validate();
     if (!isValid) return;
-    console.log("최종 제출 데이터:", data);
+    // storeOwnerId 필요
+    const result = await postStore(1, data);
+    console.log(result);
   };
 
   return (

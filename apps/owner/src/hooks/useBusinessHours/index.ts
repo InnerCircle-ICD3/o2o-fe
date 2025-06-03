@@ -50,10 +50,24 @@ export const useBusinessHours = (form: UseFormReturn<StoreFormData>) => {
     }
   };
 
+  const applyToAllDays = (openTime: string, closeTime: string) => {
+    const formattedOpenTime = openTime.length === 5 ? `${openTime}:00` : openTime;
+    const formattedCloseTime = closeTime.length === 5 ? `${closeTime}:00` : closeTime;
+
+    const newBusinessHours = WEEKDAYS.map((day) => ({
+      dayOfWeek: day,
+      openTime: formattedOpenTime,
+      closeTime: formattedCloseTime,
+    }));
+
+    setValue("businessHours", newBusinessHours);
+  };
+
   return {
     selectedDays,
     businessHours,
     toggleDay,
     handleBusinessHoursChange,
+    applyToAllDays,
   };
 };
