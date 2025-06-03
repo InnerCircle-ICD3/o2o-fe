@@ -1,5 +1,3 @@
-import type { Result } from "@/apis/utils/result";
-
 export interface StoresDetail {
   storeId: number;
   name: string;
@@ -82,12 +80,7 @@ export interface StoreList {
   isFavorite: boolean;
 }
 
-export interface StoreSearchResponse {
-  pageNumber: number;
-  contents: StoreList[];
-}
-
-export interface InfiniteQueryResponse {
-  pages: Result<StoreSearchResponse>[];
-  pageParams: number[];
+export interface StoreListResponse {
+  pageNumber?: number;
+  storeList: StoreList[];
 }

@@ -48,9 +48,7 @@ describe("My Orders Page", () => {
 
   it("주문 내역이 정상적으로 표시된다", () => {
     mockUseGetMyOrder.mockReturnValue({
-      data: {
-        data: [{ orderId: 1 }, { orderId: 2 }, { orderId: 3 }],
-      },
+      data: [{ orderId: 1 }, { orderId: 2 }, { orderId: 3 }],
       error: null,
       isError: false,
       isLoading: false,

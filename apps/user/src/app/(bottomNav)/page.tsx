@@ -1,10 +1,11 @@
 "use client";
 
+import StoreListContainer from "@/components/ui/storeList/storeListContainer";
 import { productTitle } from "@/styles/common.css";
 import * as styles from "./page.css";
-import StoreListContainer from "./stores/StoreListContainer";
 import FilterTab from "./ui/filterTab";
 import MainHeader from "./ui/mainHeader";
+
 export default function Home() {
   return (
     <>
