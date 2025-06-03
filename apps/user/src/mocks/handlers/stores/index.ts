@@ -3,30 +3,40 @@ import { http, HttpResponse } from "msw";
 
 const mockStore = {
   1001: {
-    storeId: 1001,
+    id: 1001,
     name: "happyKimbap",
-    roadAddress: {
-      addressName: "서울 강남구 테헤란로 123",
-      zoneNo: "06232",
-      buildingName: "카카오뱅크",
-    },
-    lotAddress: {
-      addressName: "서울 강남구 역삼동 123-45",
-      mainAddressNo: "123",
-      subAddressNo: "45",
-    },
-    addressType: "ROAD",
-    location: {
-      lat: 37.12345,
-      lng: 127.12345,
-    },
-    businessNumber: "123-45-67890",
-    openTime: "09:00",
-    closeTime: "21:00",
+    mainImageUrl: "/images/thumb.png",
     contact: "02-123-4567",
     description: "정성 가득 김밥집",
-    mainImageUrl: "/images/thumb.png",
+    businessNumber: "123-45-67890",
+    businessHours: [
+      {
+        dayOfWeek: "MONDAY",
+        openTime: "09:00:00",
+        closeTime: "21:00:00",
+      },
+    ],
+    address: {
+      roadNameAddress: "서울 강남구 테헤란로 123",
+      lotNumberAddress: "서울 강남구 역삼동 123-45",
+      buildingName: "카카오뱅크",
+      zipCode: "06232",
+      region1DepthName: "서울특별시",
+      region2DepthName: "강남구",
+      region3DepthName: "역삼동",
+      coordinate: {
+        latitude: 37.12345,
+        longitude: 127.12345,
+      },
+    },
+    pickupDay: "TODAY",
+    todayPickupStartTime: "09:00:00",
+    todayPickupEndTime: "21:00:00",
     status: "OPEN",
+    ratingAverage: 4.8,
+    ratingCount: 250,
+    foodCategory: ["김밥", "한식"],
+    storeCategory: ["RESTAURANT"],
   },
 };
 
