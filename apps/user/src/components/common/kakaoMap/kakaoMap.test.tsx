@@ -6,6 +6,7 @@ import { KakaoMap } from ".";
 const mockMapInstance = {
   setMinLevel: vi.fn(),
   setMaxLevel: vi.fn(),
+  setCenter: vi.fn(),
 };
 
 const mockKakaoMaps = {
@@ -54,5 +55,22 @@ describe("KakaoMap", () => {
 
     // Map 인스턴스가 생성된 후 onMapReady가 호출되었는지 확인
     expect(mockProps.onMapReady).toHaveBeenCalledWith(mockMapInstance);
+  });
+
+  it("위치가 변경되면 지도 중심이 업데이트되어야 합니다", () => {
+    const { rerender } = render(<KakaoMap {...mockProps} />);
+
+    // 새로운 위치로 props 업데이트
+    const newProps = {
+      ...mockProps,
+      lat: 37.5666,
+      lng: 126.9781,
+    };
+
+    rerender(<KakaoMap {...newProps} />);
+
+    // setCenter가 새로운 좌표로 호출되었는지 확인
+    expect(mockMapInstance.setCenter).toHaveBeenCalled();
+    expect(mockKakaoMaps.LatLng).toHaveBeenCalledWith(newProps.lat, newProps.lng);
   });
 });

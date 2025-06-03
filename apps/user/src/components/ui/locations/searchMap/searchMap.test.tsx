@@ -1,7 +1,7 @@
-import { fetchStoresByCenter } from "@/apis/ssr/locations";
+import { getStoresByCenter } from "@/apis/ssr/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import type { Store } from "@/types/searchMap.type";
+import type { MapStore } from "@/types/searchMap.type";
 import { calculateMovedDistance } from "@/utils/locations/locationUtils";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { type Mock, vi } from "vitest";
@@ -137,40 +137,28 @@ vi.mock("@/utils/locations/locationUtils", async () => {
 
 describe("SearchMap", () => {
   const mockLocation = { lat: 37.123456, lng: 127.123456 };
-  const mockStores: Store[] = [
+  const mockStores: MapStore[] = [
     {
-      id: 1,
-      name: "Store 1",
-      thumbnailUrl: "/images/thumb.png",
-      category: "한식",
-      distance: 0.5,
-      address: "서울시 강남구",
-      latitude: 37.123456,
-      longitude: 127.123456,
-      isOpen: true,
-      minPrice: 10000,
-      maxPrice: 20000,
-      pickupTime: "18:00",
+      storeId: 1,
+      storeName: "Store 1",
+      coordinates: {
+        latitude: 37.123456,
+        longitude: 127.123456,
+      },
     },
     {
-      id: 2,
-      name: "Store 2",
-      thumbnailUrl: "/images/thumb.png",
-      category: "중식",
-      distance: 0.7,
-      address: "서울시 서초구",
-      latitude: 37.123457,
-      longitude: 127.123457,
-      isOpen: true,
-      minPrice: 15000,
-      maxPrice: 25000,
-      pickupTime: "19:00",
+      storeId: 2,
+      storeName: "Store 2",
+      coordinates: {
+        latitude: 37.123457,
+        longitude: 127.123457,
+      },
     },
   ];
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (fetchStoresByCenter as Mock).mockResolvedValue({
+    (getStoresByCenter as Mock).mockResolvedValue({
       success: true,
       data: { storeList: mockStores },
     });
@@ -229,7 +217,7 @@ describe("SearchMap", () => {
     fireEvent.click(refreshBtn);
 
     await waitFor(() => {
-      expect(fetchStoresByCenter).toHaveBeenCalled();
+      expect(getStoresByCenter).toHaveBeenCalled();
     });
   });
 
@@ -243,7 +231,7 @@ describe("SearchMap", () => {
     fireEvent.click(resetButton);
 
     await waitFor(() => {
-      expect(fetchStoresByCenter).toHaveBeenCalled();
+      expect(getStoresByCenter).toHaveBeenCalled();
     });
   });
 });

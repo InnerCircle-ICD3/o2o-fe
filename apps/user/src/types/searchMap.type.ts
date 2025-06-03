@@ -1,16 +1,10 @@
-export interface Store {
-  id: number;
-  name: string;
-  thumbnailUrl: string;
-  category: string;
-  distance: number;
-  address: string;
-  latitude: number;
-  longitude: number;
-  isOpen: boolean;
-  minPrice: number;
-  maxPrice: number;
-  pickupTime: string;
+export interface MapStore {
+  storeId: number;
+  storeName: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export interface BoundingBox {
@@ -20,7 +14,7 @@ export interface BoundingBox {
 
 export interface StoreResponseData {
   box: BoundingBox;
-  storeList: Store[];
+  storeList: MapStore[];
 }
 
 // 성공 응답: success + data
