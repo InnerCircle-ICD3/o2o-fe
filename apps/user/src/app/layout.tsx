@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/styles/reset.css";
 import { ToastMessage } from "@/components/common/toastMessage";
+import PullToRefreshWrapper from "@/components/ui/pullToRefresh";
 import classNames from "classnames";
 import * as style from "./layout.css";
 
@@ -35,7 +36,9 @@ export default async function RootLayout({
     <html lang="en">
       <body className={classNames(pretendard.variable, style.container)}>
         <Providers>
-          <div className={style.main}>{children}</div>
+          <PullToRefreshWrapper>
+            <div className={style.main}>{children}</div>
+          </PullToRefreshWrapper>
           <div id="bottom-sheet" />
           <ToastMessage />
         </Providers>
