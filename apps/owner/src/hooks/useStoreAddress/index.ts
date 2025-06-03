@@ -1,0 +1,33 @@
+import { useAddressToCoordinates } from "@/hooks/useAddressToCoordinates";
+import { useDaumPostcode } from "@/hooks/useDaumPostcode";
+import type { StoreFormData } from "@/types/store";
+import type { UseFormReturn } from "use-form-light";
+
+export const useStoreAddress = (form: UseFormReturn<StoreFormData>) => {
+  const { setValue, watch } = form;
+
+  // 도로명 주소 → 위도/경도 자동 입력
+  useAddressToCoordinates({
+    address: watch("roadNameAddress"),
+    onSuccess: ({ latitude, longitude }) => {
+      setValue("latitude", Number.parseFloat(latitude).toFixed(6));
+      setValue("longitude", Number.parseFloat(longitude).toFixed(6));
+    },
+  });
+
+  // 주소 검색 API 연결 (다음 주소 API)
+  // ... existing code ...
+  const openPostcode = useDaumPostcode((data) => {
+    setValue("roadNameAddress", data.roadAddress);
+    setValue("lotNumberAddress", data.jibunAddress);
+    setValue("zipCode", data.zonecode);
+    setValue("region1DepthName", data.sido);
+    setValue("region2DepthName", data.sigungu);
+    setValue("region3DepthName", data.bname);
+    setValue("addressType", data.userSelectedType);
+  });
+
+  return {
+    openPostcode,
+  };
+};
