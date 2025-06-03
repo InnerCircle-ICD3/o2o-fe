@@ -28,7 +28,7 @@ export function FormField({
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-4">
-        <Label className="w-[100px]">{label}</Label>
+        <Label className="w-[90px]">{label}</Label>
         <div className="flex-1 flex gap-2">
           {isTextarea ? (
             <Textarea name={name} {...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)} />

@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { type BusinessHour, useBusinessHours } from "@/hooks/useBusinessHours";
 import type { StoreFormData } from "@/types/store";
 import type { useForm } from "use-form-light";
@@ -15,8 +14,7 @@ export function BusinessHoursSection({
 
   return (
     <div className="space-y-6">
-      <div className="space-y-4">
-        <Label>영업 시간 설정</Label>
+      <div className="space-y-6">
         <div className="flex gap-2 flex-wrap">
           {WEEKDAYS.map((day) => (
             <Button
@@ -34,19 +32,21 @@ export function BusinessHoursSection({
             <span className="w-16">전체</span>
             <Input
               type="time"
-              className="w-32"
+              className="w-34"
+              value={businessHours.length > 0 ? businessHours[0].openTime?.slice(0, 5) || "" : ""}
               onChange={(e) => {
                 const openTime = e.target.value;
-                const closeTime = businessHours[0]?.closeTime || "";
+                const closeTime = businessHours.length > 0 ? businessHours[0].closeTime : "";
                 applyToAllDays(openTime, closeTime);
               }}
             />
             <span>~</span>
             <Input
               type="time"
-              className="w-32"
+              className="w-34"
+              value={businessHours.length > 0 ? businessHours[0].closeTime?.slice(0, 5) || "" : ""}
               onChange={(e) => {
-                const openTime = businessHours[0]?.openTime || "";
+                const openTime = businessHours.length > 0 ? businessHours[0].openTime : "";
                 const closeTime = e.target.value;
                 applyToAllDays(openTime, closeTime);
               }}
@@ -60,7 +60,7 @@ export function BusinessHoursSection({
                 disabled={!selectedDays.includes(day)}
                 value={businessHours.find((h: BusinessHour) => h.dayOfWeek === day)?.openTime || ""}
                 onChange={(e) => handleBusinessHoursChange(day, "openTime", e.target.value)}
-                className="w-32"
+                className="w-34"
               />
               <span>~</span>
               <Input
@@ -70,7 +70,7 @@ export function BusinessHoursSection({
                   businessHours.find((h: BusinessHour) => h.dayOfWeek === day)?.closeTime || ""
                 }
                 onChange={(e) => handleBusinessHoursChange(day, "closeTime", e.target.value)}
-                className="w-32"
+                className="w-34"
               />
             </div>
           ))}

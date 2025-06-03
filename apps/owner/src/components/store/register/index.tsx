@@ -63,7 +63,7 @@ export default function StoreRegisterFormWizard() {
                 name="description"
                 {...register("description")}
                 isTextarea
-                className="h-25 resize-none"
+                className="h-40 resize-none"
               />
             </div>
           )}
