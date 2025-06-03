@@ -11,6 +11,7 @@ interface Coordinates {
 
 const SIZE = 10;
 
+//FIXME 처음 로딩될때 page 2개씩 호출됨
 export const useStoreList = (locations: Coordinates | null) => {
   const { queryParams, setAllQueryParams } = useQueryParams();
 
@@ -32,8 +33,9 @@ export const useStoreList = (locations: Coordinates | null) => {
       });
       return getStoreList(queryParams.toString());
     },
-    getNextPageParam: (lastPage) =>
-      lastPage.success ? lastPage.data.storeList.length + 1 : undefined,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.success && lastPage.data.storeList.length > 0 ? allPages.length : undefined;
+    },
     initialPageParam: 0,
   });
 
