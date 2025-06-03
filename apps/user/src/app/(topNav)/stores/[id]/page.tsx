@@ -1,7 +1,6 @@
 import { getStoresDetail } from "@/apis/ssr/stores";
 import { BottomButton } from "@/components/ui/storesDetail/bottomButton";
 import StoresInfo from "@/components/ui/storesDetail/storesInfo";
-import * as style from "./storesDetail.css";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -24,10 +23,10 @@ const Page = async (props: PageProps) => {
   const { data: storesData } = storesResponse;
 
   return (
-    <section className={style.container}>
+    <>
       <StoresInfo storesDetail={storesData} />
       <BottomButton buttonText="럭키밀 상세보기" href={`/stores/${storesData.id}/products`} />
-    </section>
+    </>
   );
 };
 
