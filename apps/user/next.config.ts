@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "example.com",
       },
+      {
+        protocol: "https",
+        hostname: "eatngo-app.s3.ap-northeast-2.amazonaws.com",
+      },
     ],
   },
 };

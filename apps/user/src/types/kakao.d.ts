@@ -6,6 +6,58 @@ declare global {
 
 declare namespace kakao {
   namespace maps {
+    namespace services {
+      class Geocoder {
+        constructor();
+        coord2RegionCode(
+          lng: number,
+          lat: number,
+          callback: (result: RegionCode[], status: Status) => void,
+        ): void;
+      }
+
+      type Status = "OK" | "ERROR" | "ZERO_RESULT" | "NOT_FOUND" | "INVALID_REQUEST";
+
+      interface RegionCode {
+        /* biome-ignore lint/style/useNamingConvention: false */
+        region_type: string;
+        /* biome-ignore lint/style/useNamingConvention: false */
+        address_name: string;
+        code: string;
+        /* biome-ignore lint/style/useNamingConvention: false */
+        region_1depth_name: string;
+        /* biome-ignore lint/style/useNamingConvention: false */
+        region_2depth_name: string;
+        /* biome-ignore lint/style/useNamingConvention: false */
+        region_3depth_name: string;
+      }
+    }
+
+    interface MarkerClustererOptions {
+      map?: Map;
+      averageCenter?: boolean;
+      minLevel?: number;
+      disableClickZoom?: boolean;
+      styles?: {
+        width?: string;
+        height?: string;
+        background?: string;
+        boxShadow?: string;
+        borderRadius?: string;
+        color?: string;
+        textAlign?: string;
+        fontSize?: string;
+        fontWeight?: string;
+        lineHeight?: string;
+      }[];
+    }
+
+    class MarkerClusterer {
+      constructor(options: MarkerClustererOptions);
+      addMarkers(markers: Marker[]): void;
+      clear(): void;
+    }
+
     /* biome-ignore lint/suspicious/noShadowRestrictedNames: false */
     class Map {
       constructor(container: HTMLElement, options: MapOptions);
@@ -13,12 +65,20 @@ declare namespace kakao {
       setMinLevel(level: number): void;
       setMaxLevel(level: number): void;
       setCenter(latlng: LatLng): void;
+      setLevel(level: number): void;
+      setBounds(bounds: LatLngBounds): void;
     }
 
     class LatLng {
       constructor(lat: number, lng: number);
       getLat(): number;
       getLng(): number;
+    }
+
+    class LatLngBounds {
+      constructor();
+      extend(latlng: LatLng): void;
+      getBounds(): LatLngBounds;
     }
 
     class Size {
@@ -31,11 +91,18 @@ declare namespace kakao {
 
     class Circle {
       constructor(options: CircleOptions);
+      setMap(map: Map | null): void;
+    }
+
+    class Polygon {
+      constructor(options: PolygonOptions);
+      setMap(map: Map | null): void;
     }
 
     class Marker {
       constructor(options: MarkerOptions);
       setMap(map: Map | null): void;
+      setImage(image: MarkerImage): void;
     }
 
     class InfoWindow {

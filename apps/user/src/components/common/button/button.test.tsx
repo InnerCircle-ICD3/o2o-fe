@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import Button from ".";
 import { buttonStatus } from "./button.css";
 
@@ -11,7 +11,7 @@ describe("Button Test", () => {
   it("기본 status(common)으로 렌더링된다", () => {
     render(<Button>기본</Button>);
     const button = screen.getByRole("button");
-    expect(button).not.toBeNull();
+    expect(button).toBeInTheDocument();
     expect(button.className).toContain(buttonStatus.common);
   });
 
@@ -27,7 +27,7 @@ describe("Button Test", () => {
     (status) => {
       render(<Button status={status}>{status}</Button>);
       const element = screen.getByText(status);
-      expect(element).not.toBeNull();
+      expect(element).toBeInTheDocument();
       expect(element.className).toContain(buttonStatus[status]);
     },
   );

@@ -15,6 +15,20 @@ export const main = style({
   padding: "0 20px",
 });
 
+export const mainWithoutPadding = style({
+  height: "calc(100% - 70px)",
+
+  padding: 0,
+});
+
+export const bottomNavContainer = style({
+  position: "fixed",
+  bottom: 0,
+  width: "100%",
+  backgroundColor: "white",
+  maxWidth: "478px",
+});
+
 export const bottomNav = style({
   display: "flex",
   justifyContent: "space-between",

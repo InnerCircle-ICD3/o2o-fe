@@ -23,10 +23,14 @@ const BottomNav = (props: PropsWithChildren) => {
     return isActive ? style.navItem.active : style.navItem.default;
   };
 
+  const getMainStyle = (segment: string | null) => {
+    return segment === "locations" ? style.mainWithoutPadding : style.main;
+  };
+
   return (
     <div className={style.container}>
-      <main className={style.main}>{children}</main>
-      <footer>
+      <main className={getMainStyle(segment)}>{children}</main>
+      <footer className={style.bottomNavContainer}>
         <nav className={style.bottomNav}>
           {bottomNav.map(({ path, name, icon: Icon }) => (
             <Link href={path} key={name} className={getRouteStyle(path)}>

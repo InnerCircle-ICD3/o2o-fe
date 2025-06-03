@@ -10,10 +10,19 @@ export const thumbnail = style({
 });
 
 export const title = style({
-  padding: "0 4px",
+  display: "flex",
+  padding: "0 8px",
   marginBottom: 6,
 
+  fontSize: 18,
   fontWeight: 700,
+});
+
+export const category = style({
+  color: "#6B7684",
+  paddingLeft: 8,
+  fontSize: 16,
+  fontWeight: 300,
 });
 
 export const reviewAndDistanceWrapper = style({
@@ -54,12 +63,10 @@ export const metaValue = style({
   wordBreak: "keep-all",
 });
 
-export const iconDescription = style({
-  display: "flex",
-  gap: 4,
-
-  fontSize: 14,
-  fontWeight: "bold",
-  lineHeight: 1.2,
-  wordBreak: "keep-all",
+export const description = style({
+  overflow: "hidden",
+  color: "#32343E",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  textTransform: "uppercase",
 });

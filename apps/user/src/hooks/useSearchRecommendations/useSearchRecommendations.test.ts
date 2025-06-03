@@ -3,7 +3,7 @@ import { worker } from "@/mocks/server";
 import { renderHook, waitFor } from "@testing-library/react";
 import { cleanup } from "@testing-library/react";
 // src/__test__/hooks/useSearchRecommendations.test.ts
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, it } from "vitest";
 
 beforeAll(() => worker.listen());
 afterEach(() => {

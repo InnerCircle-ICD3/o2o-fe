@@ -106,9 +106,9 @@ const CommonUi = () => {
           <StatusLabel status={"sales"}>판매중</StatusLabel>
           <StatusLabel status={"soldOut"}>마감</StatusLabel>
           <StatusLabel status={"endSoon"}>마감임박</StatusLabel>
-          <StatusLabel status={"readyForPickup"}>픽업대기중</StatusLabel>
-          <StatusLabel status={"collected"}>픽업완료</StatusLabel>
-          <StatusLabel status={"cancel"}>주문취소</StatusLabel>
+          <StatusLabel status={"pending"}>픽업대기중</StatusLabel>
+          <StatusLabel status={"completed"}>픽업완료</StatusLabel>
+          <StatusLabel status={"cancelled"}>주문취소</StatusLabel>
         </div>
       </div>
 

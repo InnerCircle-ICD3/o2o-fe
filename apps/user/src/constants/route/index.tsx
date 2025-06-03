@@ -48,7 +48,7 @@ const ROUTE = {
     },
     location: {
       name: "지도",
-      path: "/locations",
+      path: "/locations/search",
       icon: () => (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -136,6 +136,34 @@ const ROUTE = {
     myOrderDetail: {
       name: "주문내역 확인",
       path: "/my-orders",
+    },
+    search: {
+      name: "",
+      path: "/search",
+    },
+    myLocation: {
+      name: "내 동네 인증",
+      path: "locations/my-location",
+    },
+    login: {
+      name: "로그인",
+      path: "/login",
+    },
+    notice: {
+      name: "공지사항",
+      path: "/mypage/notice",
+    },
+    faq: {
+      name: "자주 묻는 질문",
+      path: "/mypage/faq",
+    },
+    terms: {
+      name: "이용 약관",
+      path: "/mypage/terms",
+    },
+    setting: {
+      name: "설정",
+      path: "/mypage/setting",
     },
   },
 };

@@ -8,9 +8,9 @@ import Products from "../products";
 import * as style from "./orderInfo.css";
 
 const paymentLabel = {
-  [ORDER_STATUS.pending]: "결제 예정 금액",
-  [ORDER_STATUS.completed]: "결제 금액",
-  [ORDER_STATUS.canceled]: "결제 취소 금액",
+  [ORDER_STATUS.PENDING]: "결제 예정 금액",
+  [ORDER_STATUS.COMPLETED]: "결제 금액",
+  [ORDER_STATUS.CANCELLED]: "결제 취소 금액",
 };
 
 interface OrderInfoProps {
@@ -31,7 +31,7 @@ const OrderInfo = (props: OrderInfoProps) => {
           <h2 className={style.title}>{orderDetail.store.name}</h2>
           <p className={style.location}>
             <Image src={"/icons/place.svg"} alt={"위치: "} width={17} height={17} />
-            {orderDetail.store.roadAddress.addressName}
+            {orderDetail.store.address.roadNameAddress}
           </p>
         </div>
         <div className={style.wrapper}>
@@ -43,15 +43,15 @@ const OrderInfo = (props: OrderInfoProps) => {
 
           <div className={globalStyle.grayBackground}>
             <strong>
-              {formatHourTo12HourText(orderDetail.store.openTime)} ~{" "}
-              {formatHourTo12HourText(orderDetail.store.closeTime)}
+              {formatHourTo12HourText(orderDetail.store.todayPickupStartTime)} ~{" "}
+              {formatHourTo12HourText(orderDetail.store.todayPickupEndTime)}
             </strong>{" "}
             픽업 가능 해요!
           </div>
         </div>
 
         <div className={classNames(style.wrapper, style.paymentAmount)}>
-          <h3 className={style.subTitle}>{paymentLabel[orderDetail.status]}</h3>
+          <h3 className={style.subTitle}>{paymentLabel[ORDER_STATUS[orderDetail.status]]}</h3>
 
           <p className={classNames(globalStyle.primaryColor, style.price)}>
             {formatCurrency(20000)}

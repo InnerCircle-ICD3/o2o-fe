@@ -17,12 +17,34 @@ export const formatCurrency = (amount: number): string => {
 /**
  * YYYY-MM-DD 형식으로 날짜를 포맷팅합니다.
  */
-export const formatDate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+export const formatDate = (date: string): string => {
+  const parsedDate = new Date(date);
+
+  const year = parsedDate.getFullYear();
+  const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+  const day = String(parsedDate.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
+};
+
+/**
+ * 올해라면 MM월 DD일 (요일) 형식으로 날짜를 포맷팅합니다.
+ * 올해가 아니라면 YYYY년 MM월 DD일 (요일) 형식으로 날짜를 포맷팅합니다.
+ */
+export const formatLocalizedDate = (isoDate: string): string => {
+  const date = new Date(isoDate);
+
+  const today = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const dayOfWeek = "일월화수목금토".charAt(date.getDay());
+
+  if (year === today.getFullYear()) {
+    return `${month}월 ${day}일 (${dayOfWeek})`;
+  }
+
+  return `${year}년 ${month}월 ${day}일 (${dayOfWeek})`;
 };
 
 /**
@@ -41,4 +63,17 @@ export const formatHourTo12HourText = (time: string) => {
   }
 
   return `${period} ${hour12}시 ${minute}분`;
+};
+
+/**
+ * 숫자를 두 자리로 패딩합니다.
+ *
+ * @param {number} num - 패딩할 숫자
+ * @returns {string} 두 자리로 패딩된 문자열
+ * @example
+ * padTwoDigits(1) // "01"
+ * padTwoDigits(10) // "10"
+ */
+export const padTwoDigits = (num: number): string => {
+  return String(num).padStart(2, "0");
 };

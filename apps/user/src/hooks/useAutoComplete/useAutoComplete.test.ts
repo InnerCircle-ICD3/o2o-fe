@@ -1,9 +1,9 @@
 import { useAutoComplete } from "@/hooks/useAutoComplete";
 import { worker } from "@/mocks/server";
-import { useSearchHistoryStore } from "@/stores/searchHistory/searchHistoryStore";
+import { useSearchHistoryStore } from "@/stores/searchHistoryStore";
 import { act, renderHook } from "@testing-library/react";
 import { cleanup } from "@testing-library/react";
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 
 beforeAll(() => worker.listen());
 afterAll(() => worker.close());

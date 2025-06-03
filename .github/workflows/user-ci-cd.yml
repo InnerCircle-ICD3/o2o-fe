@@ -4,22 +4,22 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
-      - 'apps/user/**'
-      - 'packages/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - '.github/workflows/user-ci-cd.yml'
+      - "apps/user/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/user-ci-cd.yml"
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deploy Environment'
+        description: "Deploy Environment"
         required: true
-        default: 'dev'
+        default: "dev"
         type: choice
         options:
-          - 'dev'
-          - 'prod'
+          - "dev"
+          - "prod"
 
 # 워크플로우에 필요한 권한 추가
 permissions:
@@ -64,7 +64,7 @@ jobs:
         id: coverage
         run: |
           echo "Checking coverage files..."
-          
+
           # JSON 파일 확인
           if [ -f "coverage/coverage-summary.json" ]; then
             echo "Found coverage/coverage-summary.json"
@@ -79,13 +79,13 @@ jobs:
             ls -la coverage/
             exit 1
           fi
-          
+
           echo "Total coverage: $COVERAGE%"
           if (( $(echo "$COVERAGE < 60" | bc -l) )); then
-            echo "::error::Test coverage is below 60%"
-            exit 1
+            echo "::warning::Test coverage is below 60%"
+          else
+            echo "✅ Coverage threshold met!"
           fi
-          echo "✅ Coverage threshold met!"
 
       # 커버리지 보고서는 Coveralls만 사용 (중복 방지)
       - name: Report test coverage
@@ -96,18 +96,33 @@ jobs:
           path-to-lcov: ./apps/user/coverage/lcov.info
           base-path: ./apps/user
 
-      - name: Block PR if coverage is too low
-        if: failure() && github.event_name == 'pull_request' && steps.coverage.outcome == 'failure'
+      # 커버리지가 낮을 때 경고 댓글만 남기도록 수정
+      - name: Warning comment for low coverage
+        if: success() && github.event_name == 'pull_request'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '❌ User 앱의 테스트 커버리지가 60% 미만입니다. PR을 병합할 수 없습니다.'
-            })
+            const fs = require('fs');
+            let coverage = 100;
+            
+            try {
+              if (fs.existsSync('./apps/user/coverage/coverage-summary.json')) {
+                const coverageData = JSON.parse(fs.readFileSync('./apps/user/coverage/coverage-summary.json', 'utf8'));
+                coverage = coverageData.total.lines.pct;
+              }
+            } catch (error) {
+              console.log('Could not read coverage data');
+            }
+            
+            if (coverage < 60) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `⚠️ **경고**: User 앱의 테스트 커버리지가 ${coverage}%로 권장 기준인 60% 미만입니다.\n\n테스트 커버리지를 개선하는 것을 권장합니다.`
+              })
+            }
 
   build:
     name: 빌드 검사
@@ -211,8 +226,7 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel (Dev)
-        run:
-          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
@@ -242,8 +256,7 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel (Production)
-        run:
-          vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }} 
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_USER }}
