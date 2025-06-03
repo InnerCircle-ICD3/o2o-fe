@@ -12,24 +12,35 @@ const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"];
 export default function StoreRegisterFormWizard() {
   const [step, setStep] = useState(1);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const [pickupTimes, setPickupTimes] = useState<Record<string, { start: string; end: string }>>(
-    {},
-  );
+  const [businessHours, setBusinessHours] = useState<
+    Array<{
+      dayOfWeek: string;
+      openTime: string;
+      closeTime: string;
+    }>
+  >([]);
 
   const { register, errors, validate, setValue, watch, handleSubmit } = useForm({
     defaultValues: {
       name: "",
-      mainImageUrl: "",
-      contact: "",
-      description: "",
       businessNumber: "",
+      roadNameAddress: "",
+      lotNumberAddress: "",
+      buildingName: "",
+      zipCode: "",
+      region1DepthName: "",
+      region2DepthName: "",
+      region3DepthName: "",
       latitude: "",
       longitude: "",
       pickupStartTime: "",
       pickupEndTime: "",
       pickupDay: "TOMORROW",
-      foodCategory: [],
+      contact: "",
+      description: "",
+      mainImageUrl: "",
       storeCategory: [],
+      foodCategory: [],
     },
   });
 
@@ -39,14 +50,18 @@ export default function StoreRegisterFormWizard() {
     );
   };
 
-  const handleTimeChange = (day: string, field: "start" | "end", value: string) => {
-    setPickupTimes((prev) => ({
-      ...prev,
-      [day]: {
-        ...prev[day],
-        [field]: value,
-      },
-    }));
+  const handleBusinessHoursChange = (
+    day: string,
+    field: "openTime" | "closeTime",
+    value: string,
+  ) => {
+    setBusinessHours((prev) => {
+      const existingDay = prev.find((item) => item.dayOfWeek === day);
+      if (existingDay) {
+        return prev.map((item) => (item.dayOfWeek === day ? { ...item, [field]: value } : item));
+      }
+      return [...prev, { dayOfWeek: day, openTime: "", closeTime: "", [field]: value }];
+    });
   };
 
   const nextStep = () => setStep((prev) => prev + 1);
@@ -57,10 +72,7 @@ export default function StoreRegisterFormWizard() {
     if (!isValid) return;
     console.log("최종 제출 데이터:", {
       ...data,
-      pickupSchedule: selectedDays.map((day) => ({
-        day,
-        ...pickupTimes[day],
-      })),
+      businessHours,
     });
   };
 
@@ -83,14 +95,47 @@ export default function StoreRegisterFormWizard() {
             register={register}
             error={errors.businessNumber}
           />
+          <FormField
+            label="도로명 주소"
+            name="roadNameAddress"
+            register={register}
+            error={errors.roadNameAddress}
+          />
+          <FormField
+            label="지번 주소"
+            name="lotNumberAddress"
+            register={register}
+            error={errors.lotNumberAddress}
+          />
+          <FormField label="건물명" name="buildingName" register={register} />
+          <FormField label="우편번호" name="zipCode" register={register} error={errors.zipCode} />
+          <div className="grid grid-cols-3 gap-4">
+            <FormField
+              label="시/도"
+              name="region1DepthName"
+              register={register}
+              error={errors.region1DepthName}
+            />
+            <FormField
+              label="시/군/구"
+              name="region2DepthName"
+              register={register}
+              error={errors.region2DepthName}
+            />
+            <FormField
+              label="읍/면/동"
+              name="region3DepthName"
+              register={register}
+              error={errors.region3DepthName}
+            />
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <FormField label="위도" name="latitude" register={register} error={errors.latitude} />
             <FormField label="경도" name="longitude" register={register} error={errors.longitude} />
           </div>
 
-          {/* ✅ 요일별 체크박스 및 시간 설정 추가 */}
           <div className="space-y-4">
-            <Label>픽업 요일 및 시간 선택</Label>
+            <Label>영업 시간 설정</Label>
             <div className="flex gap-2 flex-wrap">
               {WEEKDAYS.map((day) => (
                 <Button
@@ -110,16 +155,16 @@ export default function StoreRegisterFormWizard() {
                   <Input
                     type="time"
                     disabled={!selectedDays.includes(day)}
-                    value={pickupTimes[day]?.start || ""}
-                    onChange={(e) => handleTimeChange(day, "start", e.target.value)}
+                    value={businessHours.find((h) => h.dayOfWeek === day)?.openTime || ""}
+                    onChange={(e) => handleBusinessHoursChange(day, "openTime", e.target.value)}
                     className="w-32"
                   />
                   <span>~</span>
                   <Input
                     type="time"
                     disabled={!selectedDays.includes(day)}
-                    value={pickupTimes[day]?.end || ""}
-                    onChange={(e) => handleTimeChange(day, "end", e.target.value)}
+                    value={businessHours.find((h) => h.dayOfWeek === day)?.closeTime || ""}
+                    onChange={(e) => handleBusinessHoursChange(day, "closeTime", e.target.value)}
                     className="w-32"
                   />
                 </div>
