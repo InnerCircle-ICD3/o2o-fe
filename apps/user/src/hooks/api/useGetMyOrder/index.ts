@@ -9,10 +9,17 @@ const getMyOrder = (id: number) => {
 const MY_ORDER_QUERY_KEY = "myOrder";
 
 const useGetMyOrder = (id: number) => {
-  return useQuery<OrderDetail[]>({
+  const { data, error, isError, isLoading } = useQuery<OrderDetail[]>({
     queryKey: [MY_ORDER_QUERY_KEY, id],
     queryFn: () => getMyOrder(id),
   });
+
+  return {
+    data: data?.data,
+    error,
+    isError,
+    isLoading,
+  };
 };
 
 export default useGetMyOrder;

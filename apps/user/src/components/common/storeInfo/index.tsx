@@ -18,7 +18,7 @@ export default function StoreInfo({
 }) {
   if (!storesDetail) return null;
   const { storeName, reviewScore, reviewCount, distanceKm, category } = storesDetail;
-  const categoryText = category.join(" / ");
+  const categoryText = category?.join(" / ");
 
   return (
     <>
