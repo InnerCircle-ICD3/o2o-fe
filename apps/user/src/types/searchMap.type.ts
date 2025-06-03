@@ -23,10 +23,18 @@ export interface StoreResponseData {
   storeList: Store[];
 }
 
+// 성공 응답: success + data
 export interface StoreApiSuccessResponse {
+  success: true;
   data: StoreResponseData;
 }
 
+// 실패 응답: success + errorCode + errorMessage
 export interface StoreApiErrorResponse {
-  error: string;
+  success: false;
+  errorCode: string;
+  errorMessage: string;
 }
+
+// union type으로 사용할 경우
+export type StoreApiResponse = StoreApiSuccessResponse | StoreApiErrorResponse;

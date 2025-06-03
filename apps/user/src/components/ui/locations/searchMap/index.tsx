@@ -10,21 +10,23 @@ import type { Store } from "@/types/searchMap.type";
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 
+import { fetchStoresByCenter } from "@/apis/ssr/locations";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
+import { CLUSTERER_STYLE } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import {
   calculateMovedDistance,
   createStoreMarker,
   createUserMarker,
-  fetchStoresByCenter,
 } from "@/utils/locations/locationUtils";
 
 export default function SearchMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const storeMarkerMap = useRef<Map<number, kakao.maps.Marker>>(new Map());
   const storeListRef = useRef<Store[]>([]);
+  const clustererRef = useRef<kakao.maps.MarkerClusterer | null>(null);
 
   const isLoaded = useKakaoLoader();
   const location = useGeolocation();
@@ -46,6 +48,7 @@ export default function SearchMap() {
   }, [selectedStore]);
 
   const createStoreMarkers = useCallback((stores: Store[], map: kakao.maps.Map) => {
+    const markers: kakao.maps.Marker[] = [];
     for (const store of stores) {
       const marker = createStoreMarker(
         store,
@@ -56,7 +59,9 @@ export default function SearchMap() {
         false,
       );
       storeMarkerMap.current.set(store.id, marker);
+      markers.push(marker);
     }
+    return markers;
   }, []);
 
   const handleMapIdle = useCallback(
@@ -76,32 +81,67 @@ export default function SearchMap() {
       mapRef.current = map;
       const center = map.getCenter();
 
-      const storeList = await fetchStoresByCenter(center);
-      storeListRef.current = storeList;
+      const result = await fetchStoresByCenter(center);
+      if (!result.success) return;
+      storeListRef.current = result.data.storeList;
 
-      createStoreMarkers(storeList, map);
+      const clusterer = new kakao.maps.MarkerClusterer({
+        map,
+        averageCenter: true,
+        minLevel: 5,
+        disableClickZoom: true,
+        styles: [CLUSTERER_STYLE],
+      });
+
+      clustererRef.current = clusterer;
+
+      const markers: kakao.maps.Marker[] = [];
+
+      for (const store of storeListRef.current) {
+        const marker = createStoreMarker(
+          store,
+          map,
+          (clickedStore) => {
+            setSelectedStore((prev) => (prev?.id === clickedStore.id ? null : clickedStore));
+          },
+          false,
+        );
+
+        storeMarkerMap.current.set(store.id, marker);
+        markers.push(marker);
+      }
+
+      clusterer.addMarkers(markers);
 
       if (location) {
         createUserMarker(location, map);
       }
     },
-    [location, createStoreMarkers],
+    [location],
   );
 
   const handleRefetch = async () => {
     const map = mapRef.current;
-    if (!map) return;
+    const clusterer = clustererRef.current;
+    if (!map || !clusterer) return;
 
+    // 기존 마커 제거
     for (const marker of storeMarkerMap.current.values()) {
       marker.setMap(null);
     }
     storeMarkerMap.current.clear();
 
-    const center = map.getCenter();
-    const storeList = await fetchStoresByCenter(center);
-    storeListRef.current = storeList;
+    // 클러스터 제거
+    clusterer.clear();
 
-    createStoreMarkers(storeList, map);
+    const center = map.getCenter();
+    const result = await fetchStoresByCenter(center);
+    if (!result.success) return;
+    storeListRef.current = result.data.storeList;
+
+    // 새로운 마커 추가
+    const newMarkers = createStoreMarkers(storeListRef.current, map);
+    clusterer.addMarkers(newMarkers);
 
     setShouldShowRefetch(false);
   };

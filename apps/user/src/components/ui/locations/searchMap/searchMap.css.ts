@@ -1,3 +1,4 @@
+import { globalTheme } from "@/styles/theme.css";
 import { style, styleVariants } from "@vanilla-extract/css";
 
 export const container = style({
@@ -11,14 +12,14 @@ export const resetPositionButtonBase = style({
   right: 16,
   zIndex: 10,
   padding: "10px",
-  border: "1px solid #ccc",
+  border: `1px solid ${globalTheme.color.line}`,
   borderRadius: 50,
-  backgroundColor: "#fff",
+  backgroundColor: globalTheme.color.white,
   cursor: "pointer",
 
   selectors: {
     "&:active": {
-      backgroundColor: "#f0f0f0",
+      backgroundColor: globalTheme.color.gray.light,
     },
   },
 });

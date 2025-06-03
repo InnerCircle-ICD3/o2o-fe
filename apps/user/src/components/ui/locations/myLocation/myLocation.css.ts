@@ -1,3 +1,4 @@
+import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
@@ -75,7 +76,7 @@ export const trackProgress = style({
   top: 0,
   left: 0,
   height: "5px",
-  backgroundColor: "#35A865",
+  backgroundColor: globalTheme.color.primary,
   zIndex: 1,
   transition: "width 0.3s ease",
 });
