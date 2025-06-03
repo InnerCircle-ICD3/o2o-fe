@@ -14,7 +14,7 @@ const StoresInfo = (props: StoreInfoProps) => {
   return (
     <>
       <div className={style.thumbnail}>
-        <Image src={storesDetail.mainImageUrl} alt={""} fill />
+        <Image src={storesDetail.mainImageUrl} alt={"store thumbnail"} fill />
       </div>
       <article className={globalStyle.innerPadding}>
         <h2 className={style.title}>{storesDetail.name}</h2>
