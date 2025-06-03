@@ -1,4 +1,5 @@
-import type { ApiError, ResultSuccess } from "@/apis/utils/result";
+import type { ResultSuccess } from "@/apis/types";
+import type { ApiError } from "@/apis/utils/result";
 import {
   type UseQueryOptions,
   type UseQueryResult,
