@@ -36,10 +36,12 @@ interface KakaoMapProps {
  */
 export const KakaoMap = memo(({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstace = useRef<kakao.maps.Map | null>(null);
+  const mapInstance = useRef<kakao.maps.Map | null>(null);
+  const isInitialized = useRef(false);
 
+  // 지도 초기화
   useEffect(() => {
-    if (!kakao?.maps?.Map || !mapRef.current) return;
+    if (!kakao?.maps?.Map || !mapRef.current || isInitialized.current) return;
 
     const kakaoMaps = kakao.maps;
     const center = new kakaoMaps.LatLng(lat, lng);
@@ -51,14 +53,23 @@ export const KakaoMap = memo(({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps
     map.setMinLevel(3);
     map.setMaxLevel(6);
 
-    mapInstace.current = map;
+    mapInstance.current = map;
+    isInitialized.current = true;
 
     kakaoMaps.event.addListener(map, "idle", () => {
       onMapIdle?.(map);
     });
 
     onMapReady?.(map);
-  }, [lat, lng, onMapIdle, onMapReady]);
+  }, [onMapIdle, onMapReady, lat, lng]);
+
+  // 위치 업데이트
+  useEffect(() => {
+    if (!mapInstance.current || !isInitialized.current) return;
+
+    const center = new kakao.maps.LatLng(lat, lng);
+    mapInstance.current.setCenter(center);
+  }, [lat, lng]);
 
   return <div ref={mapRef} className={styles.kakaoMap} />;
 });

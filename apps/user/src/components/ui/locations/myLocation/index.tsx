@@ -11,7 +11,7 @@ import {
   getRegionByCoords,
   renderMyLocationCircle,
 } from "@/utils/locations/locationUtils";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as styles from "./myLocation.css";
 
 type RangeOption = (typeof RANGE_OPTIONS)[number]["value"];
@@ -20,20 +20,28 @@ export default function MyLocation() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const location = useGeolocation();
   const isLoaded = useKakaoLoader();
-
   const [range, setRange] = useState<RangeOption>(500);
   const selectedIndex = RANGE_OPTIONS.findIndex((option) => option.value === range);
+  const markerRef = useRef<kakao.maps.Marker | null>(null);
+  const circleRef = useRef<kakao.maps.Circle | null>(null);
 
-  const handleMapReady = useCallback(
-    async (map: kakao.maps.Map) => {
-      mapRef.current = map;
-      if (location) {
-        renderMyLocationCircle(map, location, range);
-        createUserMarker(location, map);
-      }
-    },
-    [location, range],
-  );
+  // 지도 초기화
+  const handleMapReady = useCallback((map: kakao.maps.Map) => {
+    mapRef.current = map;
+  }, []);
+
+  // 위치나 범위가 변경될 때 마커와 원 업데이트
+  useEffect(() => {
+    if (!mapRef.current || !location) return;
+
+    // 기존 마커와 원 제거
+    if (markerRef.current) markerRef.current.setMap(null);
+    if (circleRef.current) circleRef.current.setMap(null);
+
+    // 새로운 마커와 원 생성
+    markerRef.current = createUserMarker(location, mapRef.current);
+    circleRef.current = renderMyLocationCircle(mapRef.current, location, range);
+  }, [location, range]);
 
   const handleGetRegion = async () => {
     if (!location) return;
@@ -89,7 +97,7 @@ export default function MyLocation() {
           })}
         </div>
         <div className={styles.bottomSheetFooter}>
-          <Button status="primary" onClick={() => handleGetRegion()}>
+          <Button status="primary" onClick={handleGetRegion}>
             <span className={styles.buttonText}>설정하기</span>
           </Button>
         </div>

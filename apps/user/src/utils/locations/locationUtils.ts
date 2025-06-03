@@ -1,32 +1,13 @@
-import { baseUrl } from "@/mocks/utils";
-import type { Store } from "@/types/searchMap.type";
-
-export const fetchStoresByCenter = async (center: kakao.maps.LatLng): Promise<Store[]> => {
-  const response = await fetch(`${baseUrl}/search/stores/map`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      viewPoint: {
-        latitude: center.getLat(),
-        longitude: center.getLng(),
-      },
-    }),
-  });
-
-  const json = await response.json();
-  return json.data.storeList;
-};
+import type { MapStore } from "@/types/searchMap.type";
 
 export const createStoreMarker = (
-  store: Store,
+  store: MapStore,
   map: kakao.maps.Map,
-  onMarkerClick: (store: Store) => void,
+  onMarkerClick: (storeId: number) => void,
   isSelected = false,
 ) => {
   const marker = new kakao.maps.Marker({
-    position: new kakao.maps.LatLng(store.latitude, store.longitude),
+    position: new kakao.maps.LatLng(store.coordinates.latitude, store.coordinates.longitude),
     map,
     image: new kakao.maps.MarkerImage(
       isSelected ? "/icons/selected_store_marker.svg" : "/icons/store_marker.svg",
@@ -35,11 +16,11 @@ export const createStoreMarker = (
         verticalAlign: "bottom",
       },
     ),
-    title: store.name,
+    title: store.storeName,
   });
 
   kakao.maps.event.addListener(marker, "click", () => {
-    onMarkerClick(store);
+    onMarkerClick(store.storeId);
   });
 
   return marker;

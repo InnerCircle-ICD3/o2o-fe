@@ -5,12 +5,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import * as styles from "./searchMap.css";
 
-import type { Store } from "@/types/searchMap.type";
+import type { MapStore } from "@/types/searchMap.type";
 
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 
-import { fetchStoresByCenter } from "@/apis/ssr/locations";
+import { getStoresByCenter } from "@/apis/ssr/locations";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
 import { CLUSTERER_STYLE } from "@/constants/locations";
@@ -25,18 +25,18 @@ import {
 export default function SearchMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const storeMarkerMap = useRef<Map<number, kakao.maps.Marker>>(new Map());
-  const storeListRef = useRef<Store[]>([]);
+  const storeListRef = useRef<MapStore[]>([]);
   const clustererRef = useRef<kakao.maps.MarkerClusterer | null>(null);
 
   const isLoaded = useKakaoLoader();
   const location = useGeolocation();
 
   const [shouldShowRefetch, setShouldShowRefetch] = useState(false);
-  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
 
   useEffect(() => {
-    storeMarkerMap.current.forEach((marker, storeId) => {
-      const isSelected = selectedStore?.id === storeId;
+    for (const [storeId, marker] of storeMarkerMap.current) {
+      const isSelected = selectedStoreId === storeId;
       const imageUrl = isSelected ? "/icons/selected_store_marker.svg" : "/icons/store_marker.svg";
 
       const image = new kakao.maps.MarkerImage(imageUrl, new kakao.maps.Size(48, 48), {
@@ -44,21 +44,21 @@ export default function SearchMap() {
       });
 
       marker.setImage(image);
-    });
-  }, [selectedStore]);
+    }
+  }, [selectedStoreId]);
 
-  const createStoreMarkers = useCallback((stores: Store[], map: kakao.maps.Map) => {
+  const createStoreMarkers = useCallback((stores: MapStore[], map: kakao.maps.Map) => {
     const markers: kakao.maps.Marker[] = [];
     for (const store of stores) {
       const marker = createStoreMarker(
         store,
         map,
-        (clickedStore) => {
-          setSelectedStore((prev) => (prev?.id === clickedStore.id ? null : clickedStore));
+        (storeId) => {
+          setSelectedStoreId((prev) => (prev === storeId ? null : storeId));
         },
         false,
       );
-      storeMarkerMap.current.set(store.id, marker);
+      storeMarkerMap.current.set(store.storeId, marker);
       markers.push(marker);
     }
     return markers;
@@ -81,7 +81,7 @@ export default function SearchMap() {
       mapRef.current = map;
       const center = map.getCenter();
 
-      const result = await fetchStoresByCenter(center);
+      const result = await getStoresByCenter(center);
       if (!result.success) return;
       storeListRef.current = result.data.storeList;
 
@@ -101,13 +101,13 @@ export default function SearchMap() {
         const marker = createStoreMarker(
           store,
           map,
-          (clickedStore) => {
-            setSelectedStore((prev) => (prev?.id === clickedStore.id ? null : clickedStore));
+          (storeId) => {
+            setSelectedStoreId((prev) => (prev === storeId ? null : storeId));
           },
           false,
         );
 
-        storeMarkerMap.current.set(store.id, marker);
+        storeMarkerMap.current.set(store.storeId, marker);
         markers.push(marker);
       }
 
@@ -135,7 +135,7 @@ export default function SearchMap() {
     clusterer.clear();
 
     const center = map.getCenter();
-    const result = await fetchStoresByCenter(center);
+    const result = await getStoresByCenter(center);
     if (!result.success) return;
     storeListRef.current = result.data.storeList;
 
@@ -188,7 +188,7 @@ export default function SearchMap() {
         type="button"
         onClick={handleResetPosition}
         className={`${styles.resetPositionButtonBase} ${
-          selectedStore
+          selectedStoreId
             ? styles.resetPositionVariants.withStoreInfo
             : styles.resetPositionVariants.default
         }`}
@@ -196,7 +196,7 @@ export default function SearchMap() {
         <Image src="/icons/my_location.svg" alt="" width={24} height={24} />
       </button>
 
-      {selectedStore && <StoreInfoCard store={selectedStore} />}
+      {selectedStoreId && <StoreInfoCard storeId={selectedStoreId} />}
     </div>
   );
 }
