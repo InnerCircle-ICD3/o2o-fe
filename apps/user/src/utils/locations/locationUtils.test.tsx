@@ -1,10 +1,9 @@
-import type { Store } from "@/types/searchMap.type";
+import type { MapStore } from "@/types/searchMap.type";
 import { vi } from "vitest";
 import {
   calculateMovedDistance,
   createStoreMarker,
   createUserMarker,
-  fetchStoresByCenter,
   getRegionByCoords,
   renderMyLocationPolygon,
 } from "./locationUtils";
@@ -85,44 +84,15 @@ describe("locationUtils", () => {
     };
   });
 
-  describe("fetchStoresByCenter()", () => {
-    it("중심 좌표를 기반으로 가게 목록을 가져와야 합니다", async () => {
-      const mockResponse = {
-        data: {
-          storeList: [{ id: 1, name: "카페 도치", latitude: 37.5665, longitude: 126.978 }],
-        },
-      };
-
-      global.fetch = vi.fn().mockResolvedValue({
-        json: () => Promise.resolve(mockResponse),
-      });
-
-      const center = new kakao.maps.LatLng(37.5665, 126.978);
-      const result = await fetchStoresByCenter(center);
-
-      expect(fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/search/stores/map"),
-        expect.any(Object),
-      );
-      expect(result).toEqual(mockResponse.data.storeList);
-    });
-  });
-
   describe("createStoreMarker()", () => {
     it("가게 마커를 생성해야 합니다", () => {
-      const mockStore: Store = {
-        id: 1,
-        name: "테스트 가게",
-        latitude: 37.5665,
-        longitude: 126.978,
-        thumbnailUrl: "",
-        category: "",
-        distance: 0,
-        address: "",
-        isOpen: true,
-        minPrice: 0,
-        maxPrice: 0,
-        pickupTime: "",
+      const mockStore: MapStore = {
+        storeId: 1,
+        storeName: "테스트 가게",
+        coordinates: {
+          latitude: 37.5665,
+          longitude: 126.978,
+        },
       };
 
       const map = {} as kakao.maps.Map;
@@ -134,7 +104,7 @@ describe("locationUtils", () => {
         expect.objectContaining({
           position: expect.any(Object),
           image: expect.any(Object),
-          title: mockStore.name,
+          title: mockStore.storeName,
         }),
       );
 
@@ -146,19 +116,13 @@ describe("locationUtils", () => {
     });
 
     it("선택된 마커는 '/icons/selected_store_marker.svg' 이미지를 사용해야 한다", () => {
-      const mockStore: Store = {
-        id: 1,
-        name: "테스트 가게",
-        latitude: 37.5665,
-        longitude: 126.978,
-        thumbnailUrl: "",
-        category: "",
-        distance: 0,
-        address: "",
-        isOpen: true,
-        minPrice: 0,
-        maxPrice: 0,
-        pickupTime: "",
+      const mockStore: MapStore = {
+        storeId: 1,
+        storeName: "테스트 가게",
+        coordinates: {
+          latitude: 37.5665,
+          longitude: 126.978,
+        },
       };
       const map = {} as kakao.maps.Map;
       const onClick = vi.fn();
