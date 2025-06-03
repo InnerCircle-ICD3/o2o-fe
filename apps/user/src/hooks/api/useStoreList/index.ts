@@ -23,7 +23,7 @@ export const useStoreList = (locations: Coordinates | null) => {
     isLoading,
     error,
   } = useInfiniteQuery<Result<StoreListResponse>, Error, InfiniteQueryResponse<StoreListResponse>>({
-    queryKey: ["stores"],
+    queryKey: ["stores", "locations"],
     queryFn: ({ pageParam = 0 }) => {
       setAllQueryParams({
         size: SIZE,
