@@ -45,8 +45,8 @@ describe("useGeolocation", () => {
     const { result } = renderHook(() => useGeolocation());
 
     expect(result.current).toEqual({
-      lat: 33.450705,
-      lng: 126.570677,
+      lat: 37.123456,
+      lng: 127.123456,
     });
   });
 
@@ -57,8 +57,8 @@ describe("useGeolocation", () => {
     const { result } = renderHook(() => useGeolocation());
 
     expect(result.current).toEqual({
-      lat: 33.450705,
-      lng: 126.570677,
+      lat: 37.123456,
+      lng: 127.123456,
     });
   });
 

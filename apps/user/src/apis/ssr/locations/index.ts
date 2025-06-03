@@ -1,6 +1,6 @@
 import { apiClient } from "@/apis/client";
+import type { Result } from "@/apis/types";
 import { toSafeResult } from "@/apis/utils/result";
-import type { Result } from "@/apis/utils/result";
 import type { StoreResponseData } from "@/types/searchMap.type";
 
 type ViewPoint = {
