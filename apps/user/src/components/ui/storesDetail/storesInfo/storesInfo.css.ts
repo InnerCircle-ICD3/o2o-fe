@@ -10,11 +10,19 @@ export const thumbnail = style({
 });
 
 export const title = style({
+  display: "flex",
   padding: "0 8px",
   marginBottom: 6,
 
   fontSize: 18,
   fontWeight: 700,
+});
+
+export const category = style({
+  color: "#6B7684",
+  paddingLeft: 8,
+  fontSize: 16,
+  fontWeight: 300,
 });
 
 export const reviewAndDistanceWrapper = style({

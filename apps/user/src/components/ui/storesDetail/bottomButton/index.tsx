@@ -1,27 +1,18 @@
 "use client";
 
 import Button from "@/components/common/button";
-import { useState } from "react";
+import Link from "next/link";
 import * as style from "./bottomButton.css";
 
-export const BottomButton = () => {
-  const [isShow, setIsShow] = useState(true);
-
-  const handleOpenSelector = () => {
-    setIsShow(true);
-  };
-
-  // const handleCloseSelector = () => {
-  //   setIsShow(false);
-  // };
-
+export const BottomButton = ({
+  buttonText,
+  href,
+}: { buttonText?: React.ReactNode; href: string }) => {
   return (
-    isShow && (
-      <div className={style.fixedButton}>
-        <Button status={"primary"} type={"button"} onClick={handleOpenSelector}>
-          주문하기
-        </Button>
-      </div>
-    )
+    <Link href={href} className={style.fixedButton}>
+      <Button status={"primary"} type={"button"} onClick={(e) => e.preventDefault()}>
+        {buttonText}
+      </Button>
+    </Link>
   );
 };
