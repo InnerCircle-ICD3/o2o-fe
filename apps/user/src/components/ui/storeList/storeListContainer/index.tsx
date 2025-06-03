@@ -1,32 +1,17 @@
 "use client";
-import { getStoreList } from "@/apis/ssr/stores";
-import type { Result } from "@/apis/utils/result";
+
 import { StoreCard } from "@/components/ui/storeList/storeCard";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
-import type {
-  InfiniteQueryResponse,
-  StoreList,
-  StoreSearchResponse,
-} from "@/types/apis/stores.type";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useStoreList } from "@/hooks/api/useStoreList";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import type { StoreList } from "@/types/apis/stores.type";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
-const size = 10;
 const StoreListContainer = () => {
-  const {
-    data: stores,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    error,
-  } = useInfiniteQuery<Result<StoreSearchResponse>, Error, InfiniteQueryResponse>({
-    queryKey: ["stores"],
-    queryFn: ({ pageParam = 0 }) => getStoreList(size, pageParam as number),
-    getNextPageParam: (lastPage) => (lastPage.success ? lastPage.data.pageNumber + 1 : undefined),
-    initialPageParam: 0,
-  });
+  const locations = useGeolocation();
+  const { stores, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage, error } =
+    useStoreList(locations);
 
   const { ref: bottomRef, inView } = useInView({
     rootMargin: "100px",
@@ -49,7 +34,7 @@ const StoreListContainer = () => {
           ))
         : stores?.pages.map((page) =>
             page.success
-              ? page.data.contents.map((store: StoreList) => (
+              ? page.data.storeList.map((store: StoreList) => (
                   <StoreCard key={store.storeId} storesDetail={store} />
                 ))
               : null,

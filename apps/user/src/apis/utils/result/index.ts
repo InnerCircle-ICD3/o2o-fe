@@ -1,3 +1,4 @@
+import type { Result, ResultError, ResultSuccess } from "@/apis/types";
 import { HTTPError } from "ky";
 
 export class ApiError extends Error {
@@ -20,24 +21,17 @@ export class ApiError extends Error {
   }
 }
 
-export type ResultError = {
-  success: false;
-  errorCode: string;
-  errorMessage: string;
-};
-
-export type ResultSuccess<T> = {
-  success: true;
-  data: T;
-};
-
-export type Result<T> = ResultSuccess<T> | ResultError;
-
-export const toResult = async <T>(
-  fn: () => Promise<ResultSuccess<T>>,
-): Promise<ResultSuccess<T>> => {
+export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T>> => {
   try {
-    return await fn();
+    const data = await fn();
+    if (data && typeof data === "object" && "success" in data) {
+      // ResultType으로 들어올 때
+      return data as unknown as ResultSuccess<T>;
+    }
+    return {
+      success: true,
+      data,
+    };
   } catch (error) {
     if (error instanceof HTTPError) {
       try {

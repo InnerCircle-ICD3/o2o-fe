@@ -10,7 +10,7 @@ export const thumbnail = style({
 });
 
 export const title = style({
-  padding: "0 4px",
+  padding: "0 8px",
   marginBottom: 6,
 
   fontWeight: 700,

@@ -1,4 +1,4 @@
-import type { Result } from "@/apis/utils/result";
+import type { Result } from "@/apis/types";
 import type { UserInfo } from "@/types/apis/accounts.type";
 import Image from "next/image";
 import Link from "next/link";
