@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:local": "dotenv -e .env.local -- next dev",
-    "dev:dev": "dotenv -e .env.development -- next dev",
+    "dev:dev": "mv .env.local .env.local.bak && mv .env.local .env.development.local.bak 2>/dev/null || true && dotenv -e .env.development -- next dev && mv .env.local.bak .env.local && mv .env.development.local.bak .env.local 2>/dev/null || true",
     "build": "next build",
     "start": "next start",
     "test": "vitest run",

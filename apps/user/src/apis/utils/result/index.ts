@@ -51,7 +51,15 @@ export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T
 
 export const toSafeResult = async <T>(fn: () => Promise<ResultSuccess<T>>): Promise<Result<T>> => {
   try {
-    return await fn();
+    const data = await fn();
+    if (data && typeof data === "object" && "success" in data) {
+      // ResultType으로 들어올 때
+      return data as unknown as ResultSuccess<T>;
+    }
+    return {
+      success: true,
+      data,
+    };
   } catch (error) {
     if (error instanceof ApiError) {
       return {

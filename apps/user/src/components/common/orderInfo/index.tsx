@@ -31,7 +31,7 @@ const OrderInfo = (props: OrderInfoProps) => {
           <h2 className={style.title}>{orderDetail.store.name}</h2>
           <p className={style.location}>
             <Image src={"/icons/place.svg"} alt={"위치: "} width={17} height={17} />
-            {orderDetail.store.roadAddress.addressName}
+            {orderDetail.store.address.roadNameAddress}
           </p>
         </div>
         <div className={style.wrapper}>
@@ -43,8 +43,8 @@ const OrderInfo = (props: OrderInfoProps) => {
 
           <div className={globalStyle.grayBackground}>
             <strong>
-              {formatHourTo12HourText(orderDetail.store.openTime)} ~{" "}
-              {formatHourTo12HourText(orderDetail.store.closeTime)}
+              {formatHourTo12HourText(orderDetail.store.todayPickupStartTime)} ~{" "}
+              {formatHourTo12HourText(orderDetail.store.todayPickupEndTime)}
             </strong>{" "}
             픽업 가능 해요!
           </div>
