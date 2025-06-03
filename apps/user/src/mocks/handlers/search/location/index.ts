@@ -1,5 +1,4 @@
 import { baseUrl } from "@/mocks/utils";
-import type { StoreApiErrorResponse, StoreApiSuccessResponse } from "@/types/searchMap.type";
 import { http, HttpResponse } from "msw";
 
 interface SearchLocationBody {
@@ -8,22 +7,6 @@ interface SearchLocationBody {
     longitude: number;
   };
 }
-
-const getDistanceInMeters = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
-  const toRad = (v: number) => (v * Math.PI) / 180;
-  const R = 6371000;
-  const dLat = toRad(lat2 - lat1);
-  const dLng = toRad(lng2 - lng1);
-
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
-};
-
 const storeList = [
   {
     id: 101,
@@ -167,14 +150,33 @@ const storeList = [
   },
 ];
 
+const getDistanceInMeters = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
+  const toRad = (v: number) => (v * Math.PI) / 180;
+  const R = 6371000;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+};
+
 const searchMapHandlers = [
   http.post(`${baseUrl}/search/stores/map`, async (req): Promise<HttpResponse> => {
     const body = (await req.request.json()) as SearchLocationBody;
     const { viewPoint } = body;
 
     if (!viewPoint) {
-      return HttpResponse.json<StoreApiErrorResponse>(
-        { error: "Missing viewPoint" },
+      return HttpResponse.json(
+        {
+          success: false,
+          errorCode: "MISSING_VIEWPOINT",
+          errorMessage: "viewPoint가 누락되었습니다.",
+        },
         { status: 400 },
       );
     }
@@ -186,11 +188,11 @@ const searchMapHandlers = [
         store.latitude,
         store.longitude,
       );
-
       return distance <= 1000;
     });
 
-    return HttpResponse.json<StoreApiSuccessResponse>({
+    return HttpResponse.json({
+      success: true,
       data: {
         box: {
           topLeft: { latitude: 37.566826, longitude: 126.9786567 },

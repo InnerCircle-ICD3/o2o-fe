@@ -1,3 +1,4 @@
+import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const storeInfoCard = style({
@@ -7,7 +8,7 @@ export const storeInfoCard = style({
   transform: "translateX(-50%)",
   right: 0,
   width: "90%",
-  backgroundColor: "#fff",
+  backgroundColor: globalTheme.color.white,
   padding: "10px",
   display: "flex",
   flexDirection: "column",
@@ -26,8 +27,8 @@ export const statusBadge = style({
   position: "absolute",
   top: 20,
   left: 25,
-  backgroundColor: "#DFF5E8",
-  color: "#00B26F",
+  backgroundColor: globalTheme.color.label.sales.background,
+  color: globalTheme.color.label.sales.color,
   fontSize: 12,
   fontWeight: 600,
   padding: "6px 10px",
@@ -38,7 +39,7 @@ export const likeButton = style({
   position: "absolute",
   top: 20,
   right: 25,
-  backgroundColor: "#fff",
+  backgroundColor: globalTheme.color.white,
   width: 32,
   height: 32,
   borderRadius: "50%",
@@ -66,12 +67,13 @@ export const storeCardContent = style({
 export const storeCardTitle = style({
   fontSize: 16,
   fontWeight: 700,
+  color: globalTheme.color.text.primary,
 });
 
 // 카테고리
 export const categoryText = style({
   fontSize: 12,
-  color: "#666",
+  color: globalTheme.color.gray.dark,
 });
 
 // 별점 및 거리
@@ -80,18 +82,18 @@ export const ratingRow = style({
   alignItems: "center",
   justifyContent: "space-between",
   fontSize: 12,
-  color: "#666",
+  color: globalTheme.color.gray.base,
   gap: 4,
 });
 
 export const originPrice = style({
   fontSize: 14,
-  color: "#aaa",
+  color: globalTheme.color.gray.base,
   textDecoration: "line-through",
 });
 
 export const salePrice = style({
   fontSize: 18,
   fontWeight: 700,
-  color: "#00B26F",
+  color: globalTheme.color.label.sales.color,
 });

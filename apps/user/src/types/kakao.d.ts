@@ -32,6 +32,32 @@ declare namespace kakao {
         region_3depth_name: string;
       }
     }
+
+    interface MarkerClustererOptions {
+      map?: Map;
+      averageCenter?: boolean;
+      minLevel?: number;
+      disableClickZoom?: boolean;
+      styles?: {
+        width?: string;
+        height?: string;
+        background?: string;
+        boxShadow?: string;
+        borderRadius?: string;
+        color?: string;
+        textAlign?: string;
+        fontSize?: string;
+        fontWeight?: string;
+        lineHeight?: string;
+      }[];
+    }
+
+    class MarkerClusterer {
+      constructor(options: MarkerClustererOptions);
+      addMarkers(markers: Marker[]): void;
+      clear(): void;
+    }
+
     /* biome-ignore lint/suspicious/noShadowRestrictedNames: false */
     class Map {
       constructor(container: HTMLElement, options: MapOptions);
@@ -65,6 +91,7 @@ declare namespace kakao {
 
     class Circle {
       constructor(options: CircleOptions);
+      setMap(map: Map | null): void;
     }
 
     class Polygon {

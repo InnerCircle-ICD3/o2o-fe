@@ -64,7 +64,7 @@ export const calculateMovedDistance = (
 
 const getZoomLevelByRadius = (radius: number): number => {
   if (radius <= 800) return 4;
-  if (radius <= 2000) return 5;
+  if (radius <= 1500) return 5;
   return 6;
 };
 
@@ -93,6 +93,29 @@ const scalePolygon = (points: kakao.maps.LatLng[], scale: number): kakao.maps.La
 
     return new window.kakao.maps.LatLng(center.lat + latDiff * scale, center.lng + lngDiff * scale);
   });
+};
+
+export const renderMyLocationCircle = (
+  map: kakao.maps.Map,
+  location: { lat: number; lng: number },
+  radius: number,
+) => {
+  const circle = new window.kakao.maps.Circle({
+    center: new window.kakao.maps.LatLng(location.lat, location.lng),
+    radius: radius,
+    strokeWeight: 2,
+    strokeColor: "#35A865",
+    strokeOpacity: 1,
+    fillColor: "#35A865",
+    fillOpacity: 0.4,
+  });
+
+  circle.setMap(map);
+
+  const zoomLevel = getZoomLevelByRadius(radius);
+  map.setLevel(zoomLevel);
+
+  return circle;
 };
 
 export const renderMyLocationPolygon = (
