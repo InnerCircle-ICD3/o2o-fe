@@ -61,7 +61,7 @@ export const globalTheme = createThemeContract({
 
 export const theme = createGlobalTheme(":root", globalTheme, {
   color: {
-    primary: "#35A865",
+    primary: "#008000",
     secondary: "#284835",
     tertiary: "#EDF7F1",
 
