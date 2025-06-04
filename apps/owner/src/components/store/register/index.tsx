@@ -34,13 +34,17 @@ export default function StoreRegisterFormWizard() {
   };
 
   return (
-    <div className="flex flex-col gap-6 min-h-[600px]">
+    <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
       <Stepper step={step} />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col justify-between flex-1"
+        aria-label="매장 정보 입력"
+      >
         <div className="flex flex-col">
           {step === 1 && (
-            <div className="space-y-6">
+            <fieldset className="space-y-6" aria-label="기본 정보">
               <FormField label="매장명" name="name" {...register("name")} error={errors.name} />
               <FormField
                 label="사업자 등록번호"
@@ -65,11 +69,11 @@ export default function StoreRegisterFormWizard() {
                 isTextarea
                 className="h-40 resize-none"
               />
-            </div>
+            </fieldset>
           )}
 
           {step === 2 && (
-            <div className="space-y-6">
+            <fieldset className="space-y-6" aria-label="주소 및 카테고리 정보">
               <FormField
                 label="주소 검색"
                 name="addressSearch"
@@ -107,28 +111,38 @@ export default function StoreRegisterFormWizard() {
                 name="storeCategory"
                 {...register("storeCategory")}
               />
-            </div>
+            </fieldset>
           )}
         </div>
 
         {step === 3 && <BusinessHoursSection form={form} />}
         <div className="flex justify-center pt-4 gap-2">
           {step > 1 ? (
-            <Button type="button" onClick={prevStep} className="flex-1">
+            <Button
+              type="button"
+              onClick={prevStep}
+              className="flex-1"
+              aria-label="이전 단계로 이동"
+            >
               이전
             </Button>
           ) : null}
           {step < 3 ? (
-            <Button type="button" onClick={nextStep} className={step > 1 ? "flex-1" : "w-full"}>
+            <Button
+              type="button"
+              onClick={nextStep}
+              className={step > 1 ? "flex-1" : "w-full"}
+              aria-label="다음 단계로 이동"
+            >
               다음
             </Button>
           ) : (
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1" aria-label="매장 정보 등록">
               등록하기
             </Button>
           )}
         </div>
       </form>
-    </div>
+    </section>
   );
 }

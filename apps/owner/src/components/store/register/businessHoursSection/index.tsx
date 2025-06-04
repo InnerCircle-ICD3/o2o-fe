@@ -39,6 +39,8 @@ export function BusinessHoursSection({
                 const closeTime = businessHours.length > 0 ? businessHours[0].closeTime : "";
                 applyToAllDays(openTime, closeTime);
               }}
+              aria-label="전체 영업 시작 시간"
+              role="textbox"
             />
             <span>~</span>
             <Input
@@ -50,6 +52,8 @@ export function BusinessHoursSection({
                 const closeTime = e.target.value;
                 applyToAllDays(openTime, closeTime);
               }}
+              aria-label="전체 영업 종료 시간"
+              role="textbox"
             />
           </div>
           {WEEKDAYS.map((day) => (
@@ -61,6 +65,8 @@ export function BusinessHoursSection({
                 value={businessHours.find((h: BusinessHour) => h.dayOfWeek === day)?.openTime || ""}
                 onChange={(e) => handleBusinessHoursChange(day, "openTime", e.target.value)}
                 className="w-34"
+                aria-label={`${day}요일 영업 시작 시간`}
+                role="textbox"
               />
               <span>~</span>
               <Input
@@ -71,6 +77,8 @@ export function BusinessHoursSection({
                 }
                 onChange={(e) => handleBusinessHoursChange(day, "closeTime", e.target.value)}
                 className="w-34"
+                aria-label={`${day}요일 영업 종료 시간`}
+                role="textbox"
               />
             </div>
           ))}

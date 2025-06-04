@@ -16,7 +16,6 @@ export const useStoreAddress = (form: UseFormReturn<StoreFormData>) => {
   });
 
   // 주소 검색 API 연결 (다음 주소 API)
-  // ... existing code ...
   const openPostcode = useDaumPostcode((data) => {
     setValue("roadNameAddress", data.roadAddress);
     setValue("lotNumberAddress", data.jibunAddress);
