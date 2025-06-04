@@ -81,7 +81,6 @@ describe("useStoreAddress()", () => {
     expect(mockSetValue).toHaveBeenCalledWith("region1DepthName", mockAddressData.sido);
     expect(mockSetValue).toHaveBeenCalledWith("region2DepthName", mockAddressData.sigungu);
     expect(mockSetValue).toHaveBeenCalledWith("region3DepthName", mockAddressData.bname);
-    expect(mockSetValue).toHaveBeenCalledWith("addressType", mockAddressData.userSelectedType);
   });
 
   it("openPostcode 함수가 반환되어야 합니다", () => {

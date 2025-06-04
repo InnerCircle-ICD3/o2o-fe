@@ -2,7 +2,7 @@ import type { StoreFormData } from "@/types/store";
 import { act, renderHook } from "@testing-library/react";
 import type { UseFormReturn } from "use-form-light";
 import { vi } from "vitest";
-import { WEEKDAYS, useBusinessHours } from "./index";
+import { useBusinessHours } from "./index";
 
 describe("useBusinessHours()", () => {
   const mockForm = {
@@ -32,26 +32,26 @@ describe("useBusinessHours()", () => {
     const { result } = renderHook(() => useBusinessHours(mockForm));
 
     act(() => {
-      result.current.toggleDay("월");
+      result.current.toggleDay("MONDAY");
     });
 
     expect(mockForm.setValue).toHaveBeenCalledWith("businessHours", [
-      { dayOfWeek: "월", openTime: "", closeTime: "" },
+      { dayOfWeek: "MONDAY", openTime: "", closeTime: "" },
     ]);
   });
 
   it("영업시간을 변경할 수 있어야 합니다", () => {
     (mockForm.watch as ReturnType<typeof vi.fn>).mockReturnValue([
-      { dayOfWeek: "월", openTime: "", closeTime: "" },
+      { dayOfWeek: "MONDAY", openTime: "", closeTime: "" },
     ]);
     const { result } = renderHook(() => useBusinessHours(mockForm));
 
     act(() => {
-      result.current.handleBusinessHoursChange("월", "openTime", "09:00");
+      result.current.handleBusinessHoursChange("MONDAY", "openTime", "09:00");
     });
 
     expect(mockForm.setValue).toHaveBeenCalledWith("businessHours", [
-      { dayOfWeek: "월", openTime: "09:00:00", closeTime: "" },
+      { dayOfWeek: "MONDAY", openTime: "09:00:00", closeTime: "" },
     ]);
   });
 
@@ -63,7 +63,16 @@ describe("useBusinessHours()", () => {
       result.current.applyToAllDays("09:00", "18:00");
     });
 
-    const expectedBusinessHours = WEEKDAYS.map((day) => ({
+    const enWeekdays = [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY",
+      "SUNDAY",
+    ];
+    const expectedBusinessHours = enWeekdays.map((day) => ({
       dayOfWeek: day,
       openTime: "09:00:00",
       closeTime: "18:00:00",
@@ -77,11 +86,11 @@ describe("useBusinessHours()", () => {
     const { result } = renderHook(() => useBusinessHours(mockForm));
 
     act(() => {
-      result.current.handleBusinessHoursChange("월", "openTime", "09:00");
+      result.current.handleBusinessHoursChange("MONDAY", "openTime", "09:00");
     });
 
     expect(mockForm.setValue).toHaveBeenCalledWith("businessHours", [
-      { dayOfWeek: "월", openTime: "09:00:00", closeTime: "" },
+      { dayOfWeek: "MONDAY", openTime: "09:00:00", closeTime: "" },
     ]);
   });
 });

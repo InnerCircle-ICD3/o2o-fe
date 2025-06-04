@@ -7,10 +7,10 @@ import { BusinessHoursSection } from "./index";
 // Mock the useBusinessHours hook
 vi.mock("@/hooks/useBusinessHours", () => ({
   useBusinessHours: () => ({
-    selectedDays: ["월", "화"],
+    selectedDays: ["MONDAY", "TUESDAY"],
     businessHours: [
-      { dayOfWeek: "월", openTime: "09:00", closeTime: "18:00" },
-      { dayOfWeek: "화", openTime: "09:00", closeTime: "18:00" },
+      { dayOfWeek: "MONDAY", openTime: "09:00", closeTime: "18:00" },
+      { dayOfWeek: "TUESDAY", openTime: "09:00", closeTime: "18:00" },
     ],
     toggleDay: vi.fn(),
     handleBusinessHoursChange: vi.fn(),
@@ -22,13 +22,13 @@ describe("BusinessHoursSection", () => {
   const mockForm = {
     watch: vi.fn().mockReturnValue({
       businessHours: [
-        { dayOfWeek: "월", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "화", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "수", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "목", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "금", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "토", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "일", openTime: "09:00", closeTime: "18:00" },
+        { dayOfWeek: "MONDAY", openTime: "09:00", closeTime: "18:00" },
+        { dayOfWeek: "TUESDAY", openTime: "09:00", closeTime: "18:00" },
+        { dayOfWeek: "WEDNESDAY", openTime: "09:00", closeTime: "18:00" },
+        { dayOfWeek: "THURSDAY", openTime: "09:00", closeTime: "18:00" },
+        { dayOfWeek: "FRIDAY", openTime: "09:00", closeTime: "18:00" },
+        { dayOfWeek: "SATURDAY", openTime: "09:00", closeTime: "18:00" },
+        { dayOfWeek: "SUNDAY", openTime: "09:00", closeTime: "18:00" },
       ],
     }),
     setValue: vi.fn(),
@@ -62,9 +62,12 @@ describe("BusinessHoursSection", () => {
   it("요일별 시간 입력 필드가 렌더링되어야 합니다", () => {
     render(<BusinessHoursSection form={mockForm} />);
 
-    const mondayInputs = screen.getByText("월요일").parentElement?.querySelectorAll("input");
-    expect(mondayInputs?.[0]).toHaveValue("09:00");
-    expect(mondayInputs?.[1]).toHaveValue("18:00");
+    const mondayRow = screen.getByText("월요일").closest(".flex");
+    expect(mondayRow).not.toBeNull();
+    const inputs = mondayRow?.querySelectorAll("input");
+    expect(inputs?.length).toBe(2);
+    expect(inputs?.[0]).toHaveValue("09:00");
+    expect(inputs?.[1]).toHaveValue("18:00");
   });
 
   it("요일 버튼을 클릭하면 선택 상태가 토글되어야 합니다", () => {
