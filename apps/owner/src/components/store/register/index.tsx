@@ -4,8 +4,11 @@ import { postStore } from "@/apis/ssr/store";
 import { FormField } from "@/components/store/register/formField";
 import { Button } from "@/components/ui/button";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
+import { useZodValidationResolver } from "@/hooks/useZodValidationResolver";
+import type { UseFormOptions } from "@/types/form";
 import type { StoreFormData } from "@/types/store";
 import { initialStoreFormData } from "@/types/store";
+import { storeFormSchema } from "@/types/store";
 import { useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
@@ -15,22 +18,34 @@ export default function StoreRegisterFormWizard() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
 
+  const resolver = useZodValidationResolver(storeFormSchema);
+
   const form = useForm<StoreFormData>({
     defaultValues: initialStoreFormData,
-  });
+    resolver,
+    defaultOptions: {
+      transform: (value: string) => value.trim(),
+    },
+  } as UseFormOptions<StoreFormData>);
 
-  const { errors, validate, handleSubmit, register } = form;
-  const { openPostcode } = useStoreAddress(form);
+  const { errors, handleSubmit, register } = form;
+  const { openPostcode, addressType } = useStoreAddress(form);
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
   const onSubmit = async (data: StoreFormData) => {
-    const isValid = validate();
-    if (!isValid) return;
-    // storeOwnerId 필요
     const result = await postStore(1, data);
-    console.log(result);
+
+    if (result.success) {
+      console.log("매장 등록 성공:", result.data);
+      // TODO: 성공 시 리다이렉트 또는 성공 메시지 표시
+    } else {
+      console.error("매장 등록 실패:", {
+        errorCode: result.errorCode,
+        errorMessage: result.errorMessage,
+      });
+    }
   };
 
   return (
@@ -50,6 +65,7 @@ export default function StoreRegisterFormWizard() {
                 label="사업자 등록번호"
                 name="businessNumber"
                 {...register("businessNumber")}
+                error={errors.businessNumber}
               />
               <FormField
                 label="연락처"
@@ -80,7 +96,7 @@ export default function StoreRegisterFormWizard() {
                 placeholder="주소를 검색해주세요"
                 readOnly
                 value={
-                  form.watch("addressType") === "R"
+                  addressType === "R"
                     ? form.watch("roadNameAddress")
                     : form.watch("lotNumberAddress")
                 }
@@ -104,12 +120,18 @@ export default function StoreRegisterFormWizard() {
               <FormField
                 label="음식 카테고리 (쉼표로 구분)"
                 name="foodCategory"
-                {...register("foodCategory")}
+                isMultiple
+                value={form.watch("foodCategory")}
+                onChange={(value: string[]) => form.setValue("foodCategory", value)}
+                error={errors.foodCategory}
               />
               <FormField
                 label="매장 카테고리 (쉼표로 구분)"
                 name="storeCategory"
-                {...register("storeCategory")}
+                isMultiple
+                value={form.watch("storeCategory")}
+                onChange={(value: string[]) => form.setValue("storeCategory", value)}
+                error={errors.storeCategory}
               />
             </fieldset>
           )}

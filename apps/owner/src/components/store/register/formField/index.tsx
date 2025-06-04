@@ -2,25 +2,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import { TagInput } from "../tagInput";
 
 type BaseProps = {
   label: string;
   name: string;
   rightElement?: React.ReactNode;
   error?: string;
+  isTextarea?: boolean;
+  isMultiple?: boolean;
 };
 
 type InputProps = BaseProps &
   Omit<InputHTMLAttributes<HTMLInputElement>, "name"> & { isTextarea?: false };
 type TextareaProps = BaseProps &
   Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "name"> & { isTextarea: true };
+type TagInputProps = BaseProps & {
+  value: string[];
+  onChange: (value: string[]) => void;
+  isMultiple: true;
+};
 
-type FormFieldProps = InputProps | TextareaProps;
+type FormFieldProps = InputProps | TextareaProps | TagInputProps;
 
 export function FormField({
   label,
   name,
   isTextarea = false,
+  isMultiple = false,
   rightElement,
   error,
   ...props
@@ -32,12 +41,18 @@ export function FormField({
           {label}
         </Label>
         <div className="flex-1 flex gap-2">
-          {isTextarea ? (
+          {isMultiple ? (
+            <TagInput
+              label={label}
+              value={(props as TagInputProps).value}
+              onChange={(props as TagInputProps).onChange}
+              error={error}
+            />
+          ) : isTextarea ? (
             <Textarea
               id={name}
               name={name}
               aria-label={label}
-              role="textbox"
               {...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)}
             />
           ) : (

@@ -1,10 +1,19 @@
 import type { StoreFormData } from "@/types/store";
 import type { UseFormReturn } from "use-form-light";
 
-export const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"];
+export const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"] as const;
+export const WEEKDAY_MAP = {
+  월: "MONDAY",
+  화: "TUESDAY",
+  수: "WEDNESDAY",
+  목: "THURSDAY",
+  금: "FRIDAY",
+  토: "SATURDAY",
+  일: "SUNDAY",
+} as const;
 
 export type BusinessHour = {
-  dayOfWeek: string;
+  dayOfWeek: (typeof WEEKDAY_MAP)[keyof typeof WEEKDAY_MAP];
   openTime: string;
   closeTime: string;
 };
@@ -14,7 +23,7 @@ export const useBusinessHours = (form: UseFormReturn<StoreFormData>) => {
   const businessHours = watch("businessHours");
   const selectedDays = businessHours.map((hour) => hour.dayOfWeek);
 
-  const toggleDay = (day: string) => {
+  const toggleDay = (day: (typeof WEEKDAY_MAP)[keyof typeof WEEKDAY_MAP]) => {
     if (businessHours.some((hour) => hour.dayOfWeek === day)) {
       setValue(
         "businessHours",
@@ -29,7 +38,7 @@ export const useBusinessHours = (form: UseFormReturn<StoreFormData>) => {
   };
 
   const handleBusinessHoursChange = (
-    day: string,
+    day: (typeof WEEKDAY_MAP)[keyof typeof WEEKDAY_MAP],
     field: "openTime" | "closeTime",
     value: string,
   ) => {
@@ -55,7 +64,7 @@ export const useBusinessHours = (form: UseFormReturn<StoreFormData>) => {
     const formattedCloseTime = closeTime.length === 5 ? `${closeTime}:00` : closeTime;
 
     const newBusinessHours = WEEKDAYS.map((day) => ({
-      dayOfWeek: day,
+      dayOfWeek: WEEKDAY_MAP[day],
       openTime: formattedOpenTime,
       closeTime: formattedCloseTime,
     }));

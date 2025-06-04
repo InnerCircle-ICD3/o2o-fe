@@ -1,14 +1,16 @@
 import { useAddressToCoordinates } from "@/hooks/useAddressToCoordinates";
 import { useDaumPostcode } from "@/hooks/useDaumPostcode";
 import type { StoreFormData } from "@/types/store";
+import { useState } from "react";
 import type { UseFormReturn } from "use-form-light";
 
 export const useStoreAddress = (form: UseFormReturn<StoreFormData>) => {
   const { setValue, watch } = form;
+  const [addressType, setAddressType] = useState<"R" | "J" | "">("");
 
   // 도로명 주소 → 위도/경도 자동 입력
   useAddressToCoordinates({
-    address: watch("roadNameAddress"),
+    address: watch("roadNameAddress") || watch("lotNumberAddress") || "",
     onSuccess: ({ latitude, longitude }) => {
       setValue("latitude", Number.parseFloat(latitude).toFixed(6));
       setValue("longitude", Number.parseFloat(longitude).toFixed(6));
@@ -23,10 +25,11 @@ export const useStoreAddress = (form: UseFormReturn<StoreFormData>) => {
     setValue("region1DepthName", data.sido);
     setValue("region2DepthName", data.sigungu);
     setValue("region3DepthName", data.bname);
-    setValue("addressType", data.userSelectedType);
+    setAddressType(data.userSelectedType);
   });
 
   return {
     openPostcode,
+    addressType,
   };
 };

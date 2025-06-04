@@ -4,7 +4,16 @@ import { type BusinessHour, useBusinessHours } from "@/hooks/useBusinessHours";
 import type { StoreFormData } from "@/types/store";
 import type { useForm } from "use-form-light";
 
-const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"];
+const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"] as const;
+const WEEKDAY_MAP = {
+  월: "MONDAY",
+  화: "TUESDAY",
+  수: "WEDNESDAY",
+  목: "THURSDAY",
+  금: "FRIDAY",
+  토: "SATURDAY",
+  일: "SUNDAY",
+} as const;
 
 export function BusinessHoursSection({
   form,
@@ -20,8 +29,8 @@ export function BusinessHoursSection({
             <Button
               key={day}
               type="button"
-              variant={selectedDays.includes(day) ? "default" : "outline"}
-              onClick={() => toggleDay(day)}
+              variant={selectedDays.includes(WEEKDAY_MAP[day]) ? "default" : "outline"}
+              onClick={() => toggleDay(WEEKDAY_MAP[day])}
             >
               {day}
             </Button>
@@ -61,9 +70,14 @@ export function BusinessHoursSection({
               <span className="w-16">{day}요일</span>
               <Input
                 type="time"
-                disabled={!selectedDays.includes(day)}
-                value={businessHours.find((h: BusinessHour) => h.dayOfWeek === day)?.openTime || ""}
-                onChange={(e) => handleBusinessHoursChange(day, "openTime", e.target.value)}
+                disabled={!selectedDays.includes(WEEKDAY_MAP[day])}
+                value={
+                  businessHours.find((h: BusinessHour) => h.dayOfWeek === WEEKDAY_MAP[day])
+                    ?.openTime || ""
+                }
+                onChange={(e) =>
+                  handleBusinessHoursChange(WEEKDAY_MAP[day], "openTime", e.target.value)
+                }
                 className="w-34"
                 aria-label={`${day}요일 영업 시작 시간`}
                 role="textbox"
@@ -71,11 +85,14 @@ export function BusinessHoursSection({
               <span>~</span>
               <Input
                 type="time"
-                disabled={!selectedDays.includes(day)}
+                disabled={!selectedDays.includes(WEEKDAY_MAP[day])}
                 value={
-                  businessHours.find((h: BusinessHour) => h.dayOfWeek === day)?.closeTime || ""
+                  businessHours.find((h: BusinessHour) => h.dayOfWeek === WEEKDAY_MAP[day])
+                    ?.closeTime || ""
                 }
-                onChange={(e) => handleBusinessHoursChange(day, "closeTime", e.target.value)}
+                onChange={(e) =>
+                  handleBusinessHoursChange(WEEKDAY_MAP[day], "closeTime", e.target.value)
+                }
                 className="w-34"
                 aria-label={`${day}요일 영업 종료 시간`}
                 role="textbox"
