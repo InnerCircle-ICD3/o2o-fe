@@ -20,11 +20,11 @@ const useSelectedProducts = () => {
 
   const handleSelectProduct = (product: Product) => {
     setSelectedProducts((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => item.id === String(product.id));
 
       if (!existing) {
         const newProduct: SelectedProduct = {
-          id: product.id,
+          id: String(product.id),
           name: product.name,
           price: product.price,
           selectedCount: 1,
@@ -38,19 +38,19 @@ const useSelectedProducts = () => {
       const cappedCount = Math.min(nextCount, product.inventory.quantity);
 
       return prev.map((item) =>
-        item.id === product.id ? { ...item, selectedCount: cappedCount } : item,
+        item.id === String(product.id) ? { ...item, selectedCount: cappedCount } : item,
       );
     });
   };
 
   const handleDeleteProduct = (productId: number) => {
-    setSelectedProducts((prev) => prev.filter((product) => product.id !== productId));
+    setSelectedProducts((prev) => prev.filter((product) => product.id !== String(productId)));
   };
 
   const updateProductCount = (productId: number, delta: number) => {
     setSelectedProducts((prev) =>
       prev.map((product) => {
-        if (product.id !== productId) return product;
+        if (product.id !== String(productId)) return product;
 
         const updatedCount = product.selectedCount + delta;
 

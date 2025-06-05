@@ -4,9 +4,11 @@ import { useMutation } from "../utils/useMutation";
 
 interface OrderBody {
   storeId: number;
-  products: {
-    productId: number;
-    selectedCount: number;
+  orderItems: {
+    productId: string;
+    productName: string;
+    price: number;
+    quantity: number;
   }[];
 }
 
