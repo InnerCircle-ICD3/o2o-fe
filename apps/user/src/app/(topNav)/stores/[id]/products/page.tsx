@@ -1,6 +1,5 @@
 import { getStoresDetailProducts } from "@/apis/ssr/stores";
-import { BottomButton } from "@/components/ui/storesDetail/bottomButton";
-import ProductSelector from "@/components/ui/storesDetail/productSelector";
+import StoresProducts from "@/components/ui/storesDetail/storesProducts";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -22,12 +21,8 @@ const Page = async (props: PageProps) => {
 
   const { data: productsData } = productsResponse;
 
-  return (
-    <>
-      <ProductSelector storesProducts={productsData} />
-      <BottomButton buttonText="주문하기" />
-    </>
-  );
+  // todo : storeName
+  return <StoresProducts storeName={"냠냠"} storesProducts={productsData} />;
 };
 
 export default Page;

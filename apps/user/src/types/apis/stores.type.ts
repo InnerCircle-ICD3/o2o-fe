@@ -110,3 +110,8 @@ export interface StoreListResponse {
   pageNumber?: number;
   storeList: StoreList[];
 }
+
+export interface StoreProductsResponse {
+  storeName: string;
+  products: Product[];
+}

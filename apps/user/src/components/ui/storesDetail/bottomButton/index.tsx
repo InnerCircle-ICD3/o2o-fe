@@ -8,10 +8,20 @@ import * as style from "./bottomButton.css";
 export const BottomButton = ({
   buttonText,
   href,
-}: { buttonText?: React.ReactNode; href?: string }) => {
+  onClick = () => {},
+}: { buttonText?: React.ReactNode; href?: string; onClick?: () => void }) => {
   return (
     <ButtonWrapper href={href}>
-      <Button status={"primary"} type={"button"} onClick={(e) => e.stopPropagation()}>
+      <Button
+        status={"primary"}
+        type={"button"}
+        onClick={(e) => {
+          if (href) {
+            e.stopPropagation();
+          }
+          onClick();
+        }}
+      >
         {buttonText}
       </Button>
     </ButtonWrapper>
