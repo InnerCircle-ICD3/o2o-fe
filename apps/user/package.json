@@ -6,7 +6,7 @@
     "dev": "next dev",
     "dev:local": "dotenv -e .env.local -- next dev",
     "dev:dev": "mv .env.local .env.local.bak && mv .env.local .env.development.local.bak 2>/dev/null || true && dotenv -e .env.development -- next dev && mv .env.local.bak .env.local && mv .env.development.local.bak .env.local 2>/dev/null || true",
-    "dev:prod": "dotenv -e .env.production --next dev",
+    "dev:prod": "dotenv -e .env.production -- next dev",
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
