@@ -7,7 +7,7 @@ export interface OrderSummary {
 }
 
 export interface SelectedProduct {
-  id: number;
+  id: string;
   name: string;
   price: Price;
   quantity: number;

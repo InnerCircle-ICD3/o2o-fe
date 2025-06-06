@@ -1,26 +1,41 @@
+"use client";
+
 import Products from "@/components/common/products";
+import { BottomButton } from "@/components/ui/storesDetail/bottomButton";
+import ProductSelector from "@/components/ui/storesDetail/productSelector";
 import * as globalStyle from "@/styles/global.css";
-import type { Product, StoresDetail } from "@/types/apis/stores.type";
+import type { Product } from "@/types/apis/stores.type";
 import classNames from "classnames";
+import { useState } from "react";
 import * as style from "./storesProduct.css";
 
 interface StoresProductsProps {
-  storesDetail: StoresDetail;
+  storeName: string;
   storesProducts: Product[];
 }
 
 const StoresProducts = (props: StoresProductsProps) => {
-  const { storesDetail, storesProducts } = props;
+  const { storeName, storesProducts } = props;
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <article className={classNames(globalStyle.innerPadding, style.container)}>
-      <h2 className={style.productTitle}>
-        <span className={globalStyle.primaryColor}>{storesDetail.name}</span> 에서 지금
-        판매중이에요!
-      </h2>
+    <>
+      <article className={classNames(globalStyle.innerPadding, style.container)}>
+        <h2 className={style.productTitle}>
+          <span className={classNames(globalStyle.primaryColor, style.titleEmp)}>{storeName}</span>{" "}
+          에서 지금 판매중이에요!
+        </h2>
 
-      <Products products={storesProducts} />
-    </article>
+        <Products products={storesProducts} />
+      </article>
+
+      <ProductSelector
+        isShow={isOpen}
+        storesProducts={storesProducts}
+        onClose={() => setIsOpen(false)}
+      />
+      <BottomButton buttonText="주문하기" onClick={() => setIsOpen(true)} />
+    </>
   );
 };
 

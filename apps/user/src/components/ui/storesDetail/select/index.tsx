@@ -29,8 +29,8 @@ const Select = (props: SelectProps) => {
   return (
     <div className={style.container}>
       <button className={buttonStyle} type={"button"} onClick={handleToggle}>
-        럭키백 선택
-        <Image src={"/icons/dropdown_off.svg"} alt={""} width={20} height={20} />
+        럭키백을 선택해주세요
+        <Image src={"/icons/dropdown_off.svg"} alt="dropdown" width={20} height={20} />
       </button>
 
       {isOpen && (
@@ -38,6 +38,7 @@ const Select = (props: SelectProps) => {
           {storesProducts.map((product) => {
             const isSoldOut = product.inventory.quantity === 0;
             const itemStyle = isSoldOut ? style.item.soldOut : style.item.default;
+            const leftCount = product.inventory.quantity;
 
             return (
               <li key={product.id}>
@@ -51,7 +52,10 @@ const Select = (props: SelectProps) => {
                       handleSelectProduct(product);
                     }}
                   />
-                  <span>{product.name}</span>
+                  <span className={style.title}>{product.name}</span>
+                  <span className={style.quantity}>
+                    {isSoldOut ? "매진" : `${leftCount}개 남음`}
+                  </span>
                 </label>
               </li>
             );

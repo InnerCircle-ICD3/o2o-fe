@@ -38,7 +38,7 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
   };
 
   return (
-    <BottomSheet type={"shadow"} isShow={isShow} title={"럭키백 선택하기"} onClose={onClose}>
+    <BottomSheet type={"shadow"} isShow={isShow} title={"옵션 선택하기"} onClose={onClose}>
       <div className={style.container}>
         <Select
           storesProducts={storesProducts}

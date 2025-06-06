@@ -1,40 +1,68 @@
 import { baseUrl } from "@/mocks/utils";
-import type { StoreList } from "@/types/apis/stores.type";
 import { http, HttpResponse } from "msw";
-// Mock 데이터 생성
-const stores = Array.from(Array(1024).keys()).map(
-  (id): StoreList => ({
-    storeId: id,
-    storeName: `store ${id}`,
-    storeImage: "/images/thumb6.png",
-    category: ["김밥", "주먹밥", "가정식"],
-    distanceKm: 0.1,
-    open: true,
-    stock: 10,
-    roadAddress: {
-      addressName: "string",
-      zoneNo: "string",
-      buildingName: "string",
+
+// 새로운 형태의 Mock 데이터 생성
+const createMockStore = (id: number) => ({
+  storeId: id,
+  storeName: `Mock Store ${id}`,
+  storeImage: "https://eatngo-app.s3.ap-northeast-2.amazonaws.com/store/pu.png",
+  storeCategory: [["PIZZA", "BAKERY", "FRUIT", "BREAD", "RICECAKE", "KOREAN", "SALAD"][id % 7]],
+  foodCategory: ["호밀빵", "케이크"],
+  distanceKm: 0.1,
+  status: "OPEN",
+  roadNameAddress: "서울시 강남구 테헤란로 123",
+  coordinate: {
+    longitude: 127.001 + id * 0.00001,
+    latitude: 37.001 + id * 0.00001,
+  },
+  businessHours: [
+    {
+      first: "MONDAY",
+      second: "08:00:00",
+      third: "20:00:00",
     },
-    lotAddress: {
-      addressName: "string",
-      mainAddressNo: "string",
-      subAddressNo: "string",
+    {
+      first: "TUESDAY",
+      second: "08:00:00",
+      third: "20:00:00",
     },
-    addressType: "ROAD",
-    location: {
-      lat: 37.514575,
-      lng: 127.049555,
+    {
+      first: "WEDNESDAY",
+      second: "08:00:00",
+      third: "20:00:00",
     },
-    businessHours: {
-      openTime: "2025-05-21T11:00:46.191Z",
-      closeTime: "2025-05-21T19:00:46.191Z",
+    {
+      first: "THURSDAY",
+      second: "08:00:00",
+      third: "20:00:00",
     },
-    reviewCount: 1073741824,
-    reviewScore: 1.5,
-    isFavorite: true,
-  }),
-);
+    {
+      first: "FRIDAY",
+      second: "08:00:00",
+      third: "20:00:00",
+    },
+    {
+      first: "SATURDAY",
+      second: "11:00:00",
+      third: "14:00:00",
+    },
+    {
+      first: "SUNDAY",
+      second: "10:00:00",
+      third: "14:00:00",
+    },
+  ],
+  pickUpDay: "TODAY",
+  todayPickupStartTime: "08:00:00",
+  todayPickupEndTime: "20:00:00",
+  stock: 0,
+  ratingAverage: 3.0 + (id % 3) * 0.5, // 3.0, 3.5, 4.0 순환
+  ratingCount: 3 + (id % 10), // 3-12 순환
+  isFavorite: false,
+});
+
+// Mock 데이터 생성 (10개)
+const stores = Array.from({ length: 10 }, (_, index) => createMockStore(index + 1));
 
 const searchStoreHandlers = [
   http.get(`${baseUrl}/search/store`, async ({ request }) => {
@@ -51,7 +79,7 @@ const searchStoreHandlers = [
     return HttpResponse.json({
       success: true,
       data: {
-        contents: stores.slice(page * size, (page + 1) * size),
+        storeList: stores.slice(page * size, (page + 1) * size),
         pageNumber: page,
         pageSize: size,
         totalPages,

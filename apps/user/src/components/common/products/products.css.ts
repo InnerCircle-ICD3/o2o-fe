@@ -5,6 +5,7 @@ export const container = style({
   display: "flex",
   flexDirection: "column",
   gap: 10,
+  marginTop: 10,
 });
 
 export const wrapper = style({
