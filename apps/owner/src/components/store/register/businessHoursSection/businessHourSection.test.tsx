@@ -4,14 +4,18 @@ import type { useForm } from "use-form-light";
 import { describe, expect, it, vi } from "vitest";
 import { BusinessHoursSection } from "./index";
 
-// Mock the useBusinessHours hook
 vi.mock("@/hooks/useBusinessHours", () => ({
   useBusinessHours: () => ({
     selectedDays: ["MONDAY", "TUESDAY"],
-    businessHours: [
-      { dayOfWeek: "MONDAY", openTime: "09:00", closeTime: "18:00" },
-      { dayOfWeek: "TUESDAY", openTime: "09:00", closeTime: "18:00" },
-    ],
+    businessHours: {
+      MONDAY: { openTime: "09:00", closeTime: "18:00" },
+      TUESDAY: { openTime: "09:00", closeTime: "18:00" },
+      WEDNESDAY: { openTime: "09:00", closeTime: "18:00" },
+      THURSDAY: { openTime: "09:00", closeTime: "18:00" },
+      FRIDAY: { openTime: "09:00", closeTime: "18:00" },
+      SATURDAY: { openTime: "09:00", closeTime: "18:00" },
+      SUNDAY: { openTime: "09:00", closeTime: "18:00" },
+    },
     toggleDay: vi.fn(),
     handleBusinessHoursChange: vi.fn(),
     applyToAllDays: vi.fn(),
@@ -20,16 +24,19 @@ vi.mock("@/hooks/useBusinessHours", () => ({
 
 describe("BusinessHoursSection", () => {
   const mockForm = {
-    watch: vi.fn().mockReturnValue({
-      businessHours: [
-        { dayOfWeek: "MONDAY", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "TUESDAY", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "WEDNESDAY", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "THURSDAY", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "FRIDAY", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "SATURDAY", openTime: "09:00", closeTime: "18:00" },
-        { dayOfWeek: "SUNDAY", openTime: "09:00", closeTime: "18:00" },
-      ],
+    watch: vi.fn((key) => {
+      if (key === "businessHours") {
+        return [
+          { dayOfWeek: "MONDAY", openTime: "09:00", closeTime: "18:00" },
+          { dayOfWeek: "TUESDAY", openTime: "09:00", closeTime: "18:00" },
+          { dayOfWeek: "WEDNESDAY", openTime: "09:00", closeTime: "18:00" },
+          { dayOfWeek: "THURSDAY", openTime: "09:00", closeTime: "18:00" },
+          { dayOfWeek: "FRIDAY", openTime: "09:00", closeTime: "18:00" },
+          { dayOfWeek: "SATURDAY", openTime: "09:00", closeTime: "18:00" },
+          { dayOfWeek: "SUNDAY", openTime: "09:00", closeTime: "18:00" },
+        ];
+      }
+      return undefined;
     }),
     setValue: vi.fn(),
     errors: {},

@@ -69,6 +69,7 @@ export default function StoreRegisterFormWizard() {
           {step === 1 && (
             <fieldset className="space-y-6" aria-label="기본 정보">
               <FormField
+                type="input"
                 label="매장명"
                 name="name"
                 onBlur={handleBlur("name")}
@@ -77,6 +78,7 @@ export default function StoreRegisterFormWizard() {
                 error={errors.name}
               />
               <FormField
+                type="input"
                 label="사업자 등록번호"
                 name="businessNumber"
                 onBlur={handleBlur("businessNumber")}
@@ -85,6 +87,7 @@ export default function StoreRegisterFormWizard() {
                 error={errors.businessNumber}
               />
               <FormField
+                type="input"
                 label="연락처"
                 name="contact"
                 onBlur={handleBlur("contact")}
@@ -93,17 +96,18 @@ export default function StoreRegisterFormWizard() {
                 error={errors.contact}
               />
               <FormField
+                type="input"
                 label="대표 이미지 URL"
                 name="mainImageUrl"
                 {...register("mainImageUrl")}
               />
               <FormField
+                type="textarea"
                 label="설명"
                 name="description"
                 onBlur={handleBlur("description")}
                 value={watch("description")}
                 onChange={(e) => setValue("description", e.target.value)}
-                isTextarea
                 className="h-30 resize-none"
               />
             </fieldset>
@@ -112,6 +116,7 @@ export default function StoreRegisterFormWizard() {
           {step === 2 && (
             <fieldset className="space-y-6" aria-label="주소 및 카테고리 정보">
               <FormField
+                type="input"
                 label="주소 검색"
                 name="addressSearch"
                 placeholder="주소를 검색해주세요"
@@ -127,21 +132,32 @@ export default function StoreRegisterFormWizard() {
                   </div>
                 }
               />
-              <FormField label="우편번호" name="zipCode" {...register("zipCode")} readOnly />
-              <FormField label="건물명" name="buildingName" {...register("buildingName")} />
               <FormField
+                type="input"
+                label="우편번호"
+                name="zipCode"
+                {...register("zipCode")}
+                readOnly
+              />
+              <FormField
+                type="input"
+                label="건물명"
+                name="buildingName"
+                {...register("buildingName")}
+              />
+              <FormField
+                type="multiSelect"
                 label="매장 카테고리"
                 name="storeCategory"
-                isMultiSelect
                 value={watch("storeCategory")}
                 onChange={(value: string[]) => setValue("storeCategory", value)}
                 options={STORE_CATEGORIES}
               />
 
               <FormField
+                type="tagInput"
                 label="음식 카테고리 (Enter로 구분)"
                 name="foodCategory"
-                isMultiple
                 value={watch("foodCategory")}
                 onChange={(value: string[]) => setValue("foodCategory", value)}
                 error={errors.foodCategory}

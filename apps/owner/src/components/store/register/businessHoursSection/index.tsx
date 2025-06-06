@@ -1,98 +1,106 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { WEEKDAYS, WEEKDAY_MAP, type WeekdayEng } from "@/constants/store";
 import { useBusinessHours } from "@/hooks/useBusinessHours";
 import type { StoreFormData } from "@/types/store";
 import type { useForm } from "use-form-light";
 
-const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"] as const;
-const WEEKDAY_MAP = {
-  월: "MONDAY",
-  화: "TUESDAY",
-  수: "WEDNESDAY",
-  목: "THURSDAY",
-  금: "FRIDAY",
-  토: "SATURDAY",
-  일: "SUNDAY",
-} as const;
-
 export function BusinessHoursSection({
   form,
-}: { form: ReturnType<typeof useForm<StoreFormData>> }) {
+}: {
+  form: ReturnType<typeof useForm<StoreFormData>>;
+}) {
   const { selectedDays, businessHours, toggleDay, handleBusinessHoursChange, applyToAllDays } =
     useBusinessHours(form);
+
+  const getTime = (day: string, type: "openTime" | "closeTime") =>
+    businessHours[day as keyof typeof businessHours]?.[type] || "";
+
+  const handleTimeChange =
+    (day: WeekdayEng, type: "openTime" | "closeTime") =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      handleBusinessHoursChange(day, type, e.target.value);
+    };
+
+  const handleAllOpenTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const openTime = e.target.value;
+    const closeTime = businessHours.MONDAY?.closeTime || "";
+    applyToAllDays(openTime, closeTime);
+  };
+
+  const handleAllCloseTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const openTime = businessHours.MONDAY?.openTime || "";
+    const closeTime = e.target.value;
+    applyToAllDays(openTime, closeTime);
+  };
 
   return (
     <div className="space-y-6">
       <div className="space-y-6">
         <div className="flex gap-2 flex-wrap">
-          {WEEKDAYS.map((day) => (
-            <Button
-              key={day}
-              type="button"
-              variant={selectedDays.includes(WEEKDAY_MAP[day]) ? "default" : "outline"}
-              onClick={() => toggleDay(WEEKDAY_MAP[day])}
-            >
-              {day}
-            </Button>
-          ))}
+          {WEEKDAYS.map((day) => {
+            const dayKey = WEEKDAY_MAP[day];
+            return (
+              <Button
+                key={day}
+                type="button"
+                variant={selectedDays.includes(dayKey) ? "default" : "outline"}
+                onClick={() => toggleDay(dayKey)}
+              >
+                {day}
+              </Button>
+            );
+          })}
         </div>
+
         <div className="space-y-3">
+          {/* 전체 일괄 적용 */}
           <div className="flex items-center gap-2 mb-4">
             <span className="w-16">전체</span>
             <Input
               type="time"
               className="w-34"
-              value={businessHours.length > 0 ? businessHours[0].openTime?.slice(0, 5) || "" : ""}
-              onChange={(e) => {
-                const openTime = e.target.value;
-                const closeTime = businessHours.length > 0 ? businessHours[0].closeTime : "";
-                applyToAllDays(openTime, closeTime);
-              }}
+              value={getTime("MONDAY", "openTime").slice(0, 5)}
+              onChange={handleAllOpenTimeChange}
               aria-label="전체 영업 시작 시간"
-              role="textbox"
             />
             <span>~</span>
             <Input
               type="time"
               className="w-34"
-              value={businessHours.length > 0 ? businessHours[0].closeTime?.slice(0, 5) || "" : ""}
-              onChange={(e) => {
-                const openTime = businessHours.length > 0 ? businessHours[0].openTime : "";
-                const closeTime = e.target.value;
-                applyToAllDays(openTime, closeTime);
-              }}
+              value={getTime("MONDAY", "closeTime").slice(0, 5)}
+              onChange={handleAllCloseTimeChange}
               aria-label="전체 영업 종료 시간"
-              role="textbox"
             />
           </div>
-          {WEEKDAYS.map((day) => (
-            <div key={day} className="flex items-center gap-2">
-              <span className="w-16">{day}요일</span>
-              <Input
-                type="time"
-                disabled={!selectedDays.includes(WEEKDAY_MAP[day])}
-                value={businessHours.find((h) => h.dayOfWeek === WEEKDAY_MAP[day])?.openTime || ""}
-                onChange={(e) =>
-                  handleBusinessHoursChange(WEEKDAY_MAP[day], "openTime", e.target.value)
-                }
-                className="w-34"
-                aria-label={`${day}요일 영업 시작 시간`}
-                role="textbox"
-              />
-              <span>~</span>
-              <Input
-                type="time"
-                disabled={!selectedDays.includes(WEEKDAY_MAP[day])}
-                value={businessHours.find((h) => h.dayOfWeek === WEEKDAY_MAP[day])?.closeTime || ""}
-                onChange={(e) =>
-                  handleBusinessHoursChange(WEEKDAY_MAP[day], "closeTime", e.target.value)
-                }
-                className="w-34"
-                aria-label={`${day}요일 영업 종료 시간`}
-                role="textbox"
-              />
-            </div>
-          ))}
+
+          {/* 요일별 입력 */}
+          {WEEKDAYS.map((day) => {
+            const dayKey = WEEKDAY_MAP[day];
+            const isSelected = selectedDays.includes(dayKey);
+            return (
+              <div key={day} className="flex items-center gap-2">
+                <span className="w-16">{day}요일</span>
+                <Input
+                  type="time"
+                  className="w-34"
+                  disabled={!isSelected}
+                  value={getTime(dayKey, "openTime")}
+                  onChange={handleTimeChange(dayKey, "openTime")}
+                  aria-label={`${day}요일 영업 시작 시간`}
+                />
+                <span>~</span>
+                <Input
+                  type="time"
+                  className="w-34"
+                  disabled={!isSelected}
+                  value={getTime(dayKey, "closeTime")}
+                  onChange={handleTimeChange(dayKey, "closeTime")}
+                  aria-label={`${day}요일 영업 종료 시간`}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

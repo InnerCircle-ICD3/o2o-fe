@@ -4,7 +4,7 @@ import { FormField } from "./index";
 
 describe("FormField", () => {
   it("라벨과 입력 필드가 올바르게 렌더링되어야 합니다", () => {
-    render(<FormField label="테스트" name="test" id="test" />);
+    render(<FormField type="input" label="테스트" name="test" id="test" />);
 
     const label = screen.getByText("테스트");
     const input = label.parentElement?.querySelector("input");
@@ -14,7 +14,9 @@ describe("FormField", () => {
   });
 
   it("오류 메시지가 표시되어야 합니다", () => {
-    render(<FormField label="테스트" name="test" id="test" error="오류가 발생했습니다" />);
+    render(
+      <FormField type="input" label="테스트" name="test" id="test" error="오류가 발생했습니다" />,
+    );
 
     expect(screen.getByText("오류가 발생했습니다")).toBeInTheDocument();
   });
@@ -22,6 +24,7 @@ describe("FormField", () => {
   it("오른쪽 요소가 렌더링되어야 합니다", () => {
     render(
       <FormField
+        type="input"
         label="테스트"
         name="test"
         id="test"
@@ -33,7 +36,7 @@ describe("FormField", () => {
   });
 
   it("textarea로 렌더링되어야 합니다", () => {
-    render(<FormField label="테스트" name="test" id="test" isTextarea />);
+    render(<FormField type="textarea" label="테스트" name="test" id="test" />);
 
     const label = screen.getByText("테스트");
     const textarea = label.parentElement?.querySelector("textarea");
@@ -43,7 +46,7 @@ describe("FormField", () => {
   });
 
   it("입력값이 변경되어야 합니다", () => {
-    render(<FormField label="테스트" name="test" id="test" />);
+    render(<FormField type="input" label="테스트" name="test" id="test" />);
 
     const label = screen.getByText("테스트");
     const input = label.parentElement?.querySelector("input");

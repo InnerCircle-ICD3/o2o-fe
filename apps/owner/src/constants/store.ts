@@ -30,3 +30,24 @@ export const STORE_CATEGORIES: StoreCategory[] = [
   { value: "SALAD", label: "샐러드" },
   { value: "RICECAKE", label: "떡" },
 ];
+
+export const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"] as const;
+export type WeekdayKor = (typeof WEEKDAYS)[number];
+export type WeekdayEng =
+  | "MONDAY"
+  | "TUESDAY"
+  | "WEDNESDAY"
+  | "THURSDAY"
+  | "FRIDAY"
+  | "SATURDAY"
+  | "SUNDAY";
+
+export const WEEKDAY_MAP: Record<WeekdayKor, WeekdayEng> = {
+  월: "MONDAY",
+  화: "TUESDAY",
+  수: "WEDNESDAY",
+  목: "THURSDAY",
+  금: "FRIDAY",
+  토: "SATURDAY",
+  일: "SUNDAY",
+};

@@ -1,50 +1,52 @@
-import { MultiSelect } from "@/components/store/register/multipleSelect"; // 위치 맞게 수정
+import { MultiSelect } from "@/components/store/register/multipleSelect";
+// components/common/FormField.tsx
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { StoreCategory } from "@/types/store";
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type { ReactNode } from "react";
 import { TagInput } from "../tagInput";
 
 type BaseProps = {
   label: string;
   name: string;
-  rightElement?: React.ReactNode;
+  rightElement?: ReactNode;
   error?: string;
-  isTextarea?: boolean;
-  isMultiple?: boolean;
-  isMultiSelect?: boolean;
 };
 
-type InputProps = BaseProps &
-  Omit<InputHTMLAttributes<HTMLInputElement>, "name"> & { isTextarea?: false };
-type TextareaProps = BaseProps &
-  Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "name"> & { isTextarea: true };
-type TagInputProps = BaseProps & {
+type InputFieldProps = {
+  type: "input";
+} & BaseProps &
+  Omit<InputHTMLAttributes<HTMLInputElement>, "name">;
+
+type TextareaFieldProps = {
+  type: "textarea";
+} & BaseProps &
+  Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "name">;
+
+type TagInputFieldProps = {
+  type: "tagInput";
   value: string[];
   onChange: (value: string[]) => void;
-  isMultiple: true;
-};
+} & BaseProps;
 
-type MultiSelectProps = BaseProps & {
+type MultiSelectFieldProps = {
+  type: "multiSelect";
   value: string[];
   onChange: (value: string[]) => void;
   options: StoreCategory[];
-  isMultiSelect: true;
-};
+} & BaseProps;
 
-type FormFieldProps = InputProps | TextareaProps | TagInputProps | MultiSelectProps;
+type FormFieldProps =
+  | InputFieldProps
+  | TextareaFieldProps
+  | TagInputFieldProps
+  | MultiSelectFieldProps;
 
-export function FormField({
-  label,
-  name,
-  isTextarea = false,
-  isMultiple = false,
-  isMultiSelect = false,
-  rightElement,
-  error,
-  ...props
-}: FormFieldProps) {
+export function FormField(props: FormFieldProps) {
+  const { label, name, rightElement, error } = props;
+
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-4">
@@ -52,34 +54,19 @@ export function FormField({
           {label}
         </Label>
         <div className="flex-1 flex gap-2">
-          {isMultiSelect ? (
+          {props.type === "multiSelect" ? (
             <MultiSelect
-              options={(props as MultiSelectProps).options}
-              value={(props as MultiSelectProps).value}
-              onChange={(props as MultiSelectProps).onChange}
+              options={props.options}
+              value={props.value}
+              onChange={props.onChange}
               placeholder="카테고리를 선택하세요"
             />
-          ) : isMultiple ? (
-            <TagInput
-              label={label}
-              value={(props as TagInputProps).value}
-              onChange={(props as TagInputProps).onChange}
-              error={error}
-            />
-          ) : isTextarea ? (
-            <Textarea
-              id={name}
-              name={name}
-              aria-label={label}
-              {...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)}
-            />
+          ) : props.type === "tagInput" ? (
+            <TagInput label={label} value={props.value} onChange={props.onChange} error={error} />
+          ) : props.type === "textarea" ? (
+            <Textarea id={name} aria-label={label} {...props} />
           ) : (
-            <Input
-              id={name}
-              name={name}
-              aria-label={label}
-              {...(props as InputHTMLAttributes<HTMLInputElement>)}
-            />
+            <Input id={name} aria-label={label} {...props} />
           )}
           {rightElement}
         </div>
