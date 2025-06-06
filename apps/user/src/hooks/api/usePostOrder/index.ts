@@ -3,15 +3,15 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "../utils/useMutation";
 
 interface OrderBody {
-  storeId: number;
+  storeId: string;
   products: {
-    productId: number;
+    productId: string;
     selectedCount: number;
   }[];
 }
 
 interface OrderResponse {
-  orderId: number;
+  orderId: string;
 }
 
 const createOrder = (body: OrderBody) => {

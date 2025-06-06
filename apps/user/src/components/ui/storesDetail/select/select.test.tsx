@@ -7,7 +7,7 @@ import Select from ".";
 describe("Select Test", () => {
   const mockProducts: Product[] = [
     {
-      id: 1,
+      id: "1",
       name: "상품 1",
       imageUrl: "",
       description: "",
@@ -19,12 +19,13 @@ describe("Select Test", () => {
         finalPrice: 9000,
       },
       size: "S",
-      status: "OPEN",
-      storeId: 1,
+      status: "ACTIVE",
+      storeId: "1",
+      storeName: "테스트 상점",
       createdAt: "",
     },
     {
-      id: 2,
+      id: "2",
       name: "품절 상품",
       imageUrl: "",
       description: "",
@@ -36,8 +37,9 @@ describe("Select Test", () => {
         finalPrice: 8000,
       },
       size: "S",
-      status: "OPEN",
-      storeId: 1,
+      status: "ACTIVE",
+      storeId: "1",
+      storeName: "테스트 상점",
       createdAt: "",
     },
   ];
@@ -52,7 +54,7 @@ describe("Select Test", () => {
   it("리스트가 버튼 클릭 시 열리고 닫힘", () => {
     render(<Select storesProducts={mockProducts} selectedProducts={[]} onChange={mockOnChange} />);
 
-    const button = screen.getByRole("button", { name: /럭키백 선택/i });
+    const button = screen.getByRole("button", { name: "럭키백을 선택해주세요 dropdown" });
     expect(screen.queryByText("상품 1")).not.toBeInTheDocument();
 
     fireEvent.click(button);
@@ -81,7 +83,7 @@ describe("Select Test", () => {
   it("selectedProducts에 포함된 상품은 체크됨", () => {
     const selected: SelectedProduct[] = [
       {
-        id: 1,
+        id: "1",
         name: "상품 1",
         price: mockProducts[0].price,
         quantity: 3,

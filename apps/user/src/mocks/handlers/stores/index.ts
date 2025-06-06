@@ -103,410 +103,152 @@ const mockProduct = [
   },
 ];
 
-const storeList = [
-  {
-    id: 101,
-    name: "카페 도치",
-    mainImageUrl: "/images/thumb5.png",
-    contact: "02-1234-5678",
-    description: "신선한 재료로 만드는 건강한 빵과 샌드위치를 제공하는 베이커리입니다.",
-    businessNumber: "123-45-67890",
-    businessHours: [
-      { day: "MONDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "TUESDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "WEDNESDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "THURSDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "FRIDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "SATURDAY", openTime: "09:00", closeTime: "18:00" },
-      { day: "SUNDAY", openTime: "09:00", closeTime: "18:00" },
-    ],
-    address: {
-      roadAddress: "서울특별시 강남구 테헤란로 124",
-      detailAddress: "1층",
-      latitude: 37.566826,
-      longitude: 126.9786567,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "17:00:00",
-    todayPickupEndTime: "18:00:00",
-    status: "OPEN",
-    ratingAverage: 4.5,
-    ratingCount: 128,
-    foodCategory: ["빵", "샌드위치", "커피"],
-    storeCategory: ["BAKERY"],
+// StoreList 타입에 맞는 Store List 데이터 생성
+const createNewStoreData = (id: number) => ({
+  storeId: id,
+  storeName: `Mock Store ${id}`,
+  storeImage: "https://eatngo-app.s3.ap-northeast-2.amazonaws.com/store/pu.png",
+  category: ["호밀빵", "케이크"], // StoreList 타입의 category 필드
+  distanceKm: 0.1,
+  open: true, // StoreList 타입의 open 필드 (boolean)
+  stock: 10,
+  roadAddress: {
+    addressName: "서울시 강남구 테헤란로 123",
+    zoneNo: "06234",
+    buildingName: "테스트빌딩",
   },
-  {
-    id: 105,
-    name: "025BAKERY",
-    mainImageUrl: "/images/thumb.png",
-    contact: "02-2345-6789",
-    description: "프리미엄 브리오슈와 아메리칸 쿠키로 유명한 베이커리입니다.",
-    businessNumber: "234-56-78901",
-    businessHours: [
-      { day: "MONDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "TUESDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "WEDNESDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "THURSDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "FRIDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "SATURDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "SUNDAY", openTime: "08:00", closeTime: "20:00" },
-    ],
-    address: {
-      roadAddress: "서울 강남구 봉은사로 45",
-      detailAddress: "지하 1층",
-      latitude: 37.541199,
-      longitude: 127.051778,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "18:00:00",
-    todayPickupEndTime: "19:00:00",
-    status: "CLOSED",
-    ratingAverage: 4.8,
-    ratingCount: 256,
-    foodCategory: ["브리오슈", "쿠키", "치즈케이크"],
-    storeCategory: ["BAKERY"],
+  lotAddress: {
+    addressName: "서울시 강남구 역삼동 123-45",
+    mainAddressNo: "123",
+    subAddressNo: "45",
   },
-  {
-    id: 107,
-    name: "한양대 CAFE",
-    mainImageUrl: "/images/thumb6.png",
-    contact: "02-3456-7890",
-    description: "한양대학교 캠퍼스 내 위치한 프리미엄 카페입니다.",
-    businessNumber: "345-67-89012",
-    businessHours: [
-      { day: "MONDAY", openTime: "08:00", closeTime: "22:00" },
-      { day: "TUESDAY", openTime: "08:00", closeTime: "22:00" },
-      { day: "WEDNESDAY", openTime: "08:00", closeTime: "22:00" },
-      { day: "THURSDAY", openTime: "08:00", closeTime: "22:00" },
-      { day: "FRIDAY", openTime: "08:00", closeTime: "22:00" },
-      { day: "SATURDAY", openTime: "10:00", closeTime: "20:00" },
-      { day: "SUNDAY", openTime: "10:00", closeTime: "20:00" },
-    ],
-    address: {
-      roadAddress: "서울 강남구 봉은사로 45",
-      detailAddress: "2층",
-      latitude: 37.554915,
-      longitude: 127.044838,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "18:00:00",
-    todayPickupEndTime: "19:00:00",
-    status: "CLOSED",
-    ratingAverage: 4.3,
-    ratingCount: 189,
-    foodCategory: ["커피", "디저트", "브리오슈"],
-    storeCategory: ["CAFE"],
+  addressType: "ROAD",
+  location: {
+    lat: 37.001 + id * 0.00001,
+    lng: 127.001 + id * 0.00001,
   },
-  {
-    id: 108,
-    name: "뚝섬 CAFE",
-    mainImageUrl: "/images/thumb.png",
-    contact: "02-4567-8901",
-    description: "뚝섬역 근처의 아늑한 분위기의 카페입니다.",
-    businessNumber: "456-78-90123",
-    businessHours: [
-      { day: "MONDAY", openTime: "09:00", closeTime: "21:00" },
-      { day: "TUESDAY", openTime: "09:00", closeTime: "21:00" },
-      { day: "WEDNESDAY", openTime: "09:00", closeTime: "21:00" },
-      { day: "THURSDAY", openTime: "09:00", closeTime: "21:00" },
-      { day: "FRIDAY", openTime: "09:00", closeTime: "21:00" },
-      { day: "SATURDAY", openTime: "10:00", closeTime: "20:00" },
-      { day: "SUNDAY", openTime: "10:00", closeTime: "20:00" },
-    ],
-    address: {
-      roadAddress: "서울 강남구 봉은사로 45",
-      detailAddress: "1층",
-      latitude: 37.547976,
-      longitude: 127.04712,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "18:00:00",
-    todayPickupEndTime: "19:00:00",
-    status: "CLOSED",
-    ratingAverage: 4.6,
-    ratingCount: 215,
-    foodCategory: ["커피", "케이크", "쿠키"],
-    storeCategory: ["CAFE"],
+  businessHours: {
+    openTime: "08:00:00",
+    closeTime: "20:00:00",
   },
-  {
-    id: 109,
-    name: "카페 도치",
-    mainImageUrl: "/images/thumb.png",
-    contact: "02-5678-9012",
-    description: "신선한 재료로 만드는 건강한 빵과 샌드위치를 제공하는 베이커리입니다.",
-    businessNumber: "567-89-01234",
-    businessHours: [
-      { day: "MONDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "TUESDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "WEDNESDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "THURSDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "FRIDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "SATURDAY", openTime: "09:00", closeTime: "18:00" },
-      { day: "SUNDAY", openTime: "09:00", closeTime: "18:00" },
-    ],
-    address: {
-      roadAddress: "서울 강남구 봉은사로 45",
-      detailAddress: "1층",
-      latitude: 37.555918,
-      longitude: 127.058035,
+  reviewCount: 3 + (id % 10), // 3-12 순환
+  reviewScore: 3.0 + (id % 3) * 0.5, // 3.0, 3.5, 4.0 순환
+  isFavorite: false,
+});
+
+// StoreList 타입의 Store List 생성 (10개)
+const newStoreList = Array.from({ length: 10 }, (_, index) => createNewStoreData(index + 1));
+
+// StoresDetail 타입에 맞는 개별 Store 데이터 생성
+const createStoreDetailData = (id: number) => ({
+  id: id,
+  name: `Mock Store ${id}`,
+  mainImageUrl: "https://eatngo-app.s3.ap-northeast-2.amazonaws.com/store/pu.png",
+  contact: "02-1234-5678",
+  description: `Mock Store ${id}에서 제공하는 신선한 음식들입니다.`,
+  businessNumber: "123-45-67890",
+  businessHours: [
+    { dayOfWeek: "MONDAY", openTime: "08:00:00", closeTime: "20:00:00" },
+    { dayOfWeek: "TUESDAY", openTime: "08:00:00", closeTime: "20:00:00" },
+    { dayOfWeek: "WEDNESDAY", openTime: "08:00:00", closeTime: "20:00:00" },
+    { dayOfWeek: "THURSDAY", openTime: "08:00:00", closeTime: "20:00:00" },
+    { dayOfWeek: "FRIDAY", openTime: "08:00:00", closeTime: "20:00:00" },
+    { dayOfWeek: "SATURDAY", openTime: "11:00:00", closeTime: "14:00:00" },
+    { dayOfWeek: "SUNDAY", openTime: "10:00:00", closeTime: "14:00:00" },
+  ],
+  address: {
+    roadNameAddress: "서울시 강남구 테헤란로 123",
+    lotNumberAddress: "서울시 강남구 역삼동 123-45",
+    buildingName: "테스트빌딩",
+    zipCode: "06234",
+    region1DepthName: "서울특별시",
+    region2DepthName: "강남구",
+    region3DepthName: "역삼동",
+    coordinate: {
+      latitude: 37.001 + id * 0.00001,
+      longitude: 127.001 + id * 0.00001,
     },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "18:00:00",
-    todayPickupEndTime: "19:00:00",
-    status: "CLOSED",
-    ratingAverage: 4.7,
-    ratingCount: 198,
-    foodCategory: ["빵", "샌드위치", "커피"],
-    storeCategory: ["BAKERY"],
   },
-  {
-    id: 110,
-    name: "밀도 BAKERY",
-    mainImageUrl: "/images/thumb5.png",
-    contact: "02-6789-0123",
-    description: "전통적인 제빵 방식을 현대적으로 재해석한 프리미엄 베이커리입니다.",
-    businessNumber: "678-90-12345",
-    businessHours: [
-      { day: "MONDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "TUESDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "WEDNESDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "THURSDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "FRIDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "SATURDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "SUNDAY", openTime: "08:00", closeTime: "20:00" },
-    ],
-    address: {
-      roadAddress: "서울 성동구 아차산로 12길 17",
-      detailAddress: "1층",
-      latitude: 37.5432,
-      longitude: 127.0491,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "15:00:00",
-    todayPickupEndTime: "16:00:00",
-    status: "OPEN",
-    ratingAverage: 4.9,
-    ratingCount: 342,
-    foodCategory: ["소금빵", "초코번", "크림도넛"],
-    storeCategory: ["BAKERY"],
-  },
-  {
-    id: 111,
-    name: "빵집 오월",
-    mainImageUrl: "/images/thumb.png",
-    contact: "02-7890-1234",
-    description: "정성스럽게 구운 수제 빵과 커피를 제공하는 아늑한 베이커리입니다.",
-    businessNumber: "789-01-23456",
-    businessHours: [
-      { day: "MONDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "TUESDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "WEDNESDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "THURSDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "FRIDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "SATURDAY", openTime: "09:00", closeTime: "19:00" },
-      { day: "SUNDAY", openTime: "09:00", closeTime: "19:00" },
-    ],
-    address: {
-      roadAddress: "서울 성동구 뚝섬로 5길 20",
-      detailAddress: "1층",
-      latitude: 37.5467,
-      longitude: 127.0533,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "13:00:00",
-    todayPickupEndTime: "14:30:00",
-    status: "OPEN",
-    ratingAverage: 4.4,
-    ratingCount: 167,
-    foodCategory: ["앙버터", "깜빠뉴", "플랫화이트"],
-    storeCategory: ["BAKERY"],
-  },
-  {
-    id: 112,
-    name: "브레드 앤 커피",
-    mainImageUrl: "/images/thumb6.png",
-    contact: "02-8901-2345",
-    description: "신선한 빵과 커피를 함께 즐길 수 있는 베이커리 카페입니다.",
-    businessNumber: "890-12-34567",
-    businessHours: [
-      { day: "MONDAY", openTime: "07:30", closeTime: "21:30" },
-      { day: "TUESDAY", openTime: "07:30", closeTime: "21:30" },
-      { day: "WEDNESDAY", openTime: "07:30", closeTime: "21:30" },
-      { day: "THURSDAY", openTime: "07:30", closeTime: "21:30" },
-      { day: "FRIDAY", openTime: "07:30", closeTime: "21:30" },
-      { day: "SATURDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "SUNDAY", openTime: "08:00", closeTime: "20:00" },
-    ],
-    address: {
-      roadAddress: "서울 성동구 상원길 45",
-      detailAddress: "1층",
-      latitude: 37.5446,
-      longitude: 127.0571,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "17:00:00",
-    todayPickupEndTime: "18:30:00",
-    status: "CLOSED",
-    ratingAverage: 4.6,
-    ratingCount: 289,
-    foodCategory: ["아메리카노", "크루아상", "휘낭시에"],
-    storeCategory: ["BAKERY", "CAFE"],
-  },
-  {
-    id: 113,
-    name: "소금빵연구소",
-    mainImageUrl: "/images/thumb.png",
-    contact: "02-9012-3456",
-    description: "소금빵 전문점으로, 다양한 종류의 소금빵을 연구하고 개발합니다.",
-    businessNumber: "901-23-45678",
-    businessHours: [
-      { day: "MONDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "TUESDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "WEDNESDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "THURSDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "FRIDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "SATURDAY", openTime: "09:00", closeTime: "19:00" },
-      { day: "SUNDAY", openTime: "09:00", closeTime: "19:00" },
-    ],
-    address: {
-      roadAddress: "서울 성동구 연무장길 7",
-      detailAddress: "1층",
-      latitude: 37.5409,
-      longitude: 127.0502,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "12:30:00",
-    todayPickupEndTime: "13:30:00",
-    status: "OPEN",
-    ratingAverage: 4.8,
-    ratingCount: 312,
-    foodCategory: ["소금빵", "앙버터", "카스테라"],
-    storeCategory: ["BAKERY"],
-  },
-  {
-    id: 114,
-    name: "베이커리 도토루",
-    mainImageUrl: "/images/thumb5.png",
-    contact: "02-0123-4567",
-    description: "전통적인 제빵 방식을 현대적으로 재해석한 프리미엄 베이커리입니다.",
-    businessNumber: "012-34-56789",
-    businessHours: [
-      { day: "MONDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "TUESDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "WEDNESDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "THURSDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "FRIDAY", openTime: "07:00", closeTime: "21:00" },
-      { day: "SATURDAY", openTime: "08:00", closeTime: "20:00" },
-      { day: "SUNDAY", openTime: "08:00", closeTime: "20:00" },
-    ],
-    address: {
-      roadAddress: "서울 성동구 왕십리로 32",
-      detailAddress: "1층",
-      latitude: 37.5484,
-      longitude: 127.0568,
-    },
-    pickupDay: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: false,
-    },
-    todayPickupStartTime: "16:00:00",
-    todayPickupEndTime: "17:00:00",
-    status: "CLOSED",
-    ratingAverage: 4.7,
-    ratingCount: 278,
-    foodCategory: ["스콘", "프레첼", "크림빵"],
-    storeCategory: ["BAKERY"],
-  },
-];
+  pickupDay: "TODAY",
+  todayPickupStartTime: "08:00:00",
+  todayPickupEndTime: "20:00:00",
+  status: "OPEN",
+  ratingAverage: 3.0 + (id % 3) * 0.5,
+  ratingCount: 3 + (id % 10),
+  foodCategory: ["호밀빵", "케이크"],
+  storeCategory: [["PIZZA", "BAKERY", "FRUIT", "BREAD", "RICECAKE", "KOREAN", "SALAD"][id % 7]],
+});
 
 const handlers = [
-  http.get(`${baseUrl}/stores/:id`, ({ params }) => {
-    const { id } = params;
-    const store = storeList.find((store) => store.id === Number(id));
+  // Store List API 핸들러 추가
+  http.get(`${baseUrl}/store/list`, async ({ request }) => {
+    const url = new URL(request.url);
+    const size = Number(url.searchParams.get("size")) || 10;
+    const page = Number(url.searchParams.get("page")) || 0;
+
+    const totalCount = newStoreList.length;
+    const totalPages = Math.ceil(totalCount / size);
+
+    // 500ms 지연 시뮬레이션
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     return HttpResponse.json({
       success: true,
-      data: store,
+      data: {
+        storeList: newStoreList.slice(page * size, (page + 1) * size).map((store) => ({
+          ...store,
+          id: store.storeId, // 기존 코드 호환성을 위해 id 필드 추가
+        })),
+        pageNumber: page,
+        pageSize: size,
+        totalPages,
+        totalCount,
+        isLastPage: page === totalPages - 1,
+        isFirstPage: page === 0,
+      },
     });
   }),
 
-  http.get(`${baseUrl}/stores/:id/products`, () => {
+  // 개별 Store 조회 API (기존 경로 유지)
+  http.get(`${baseUrl}/stores/:id`, ({ params }) => {
+    const { id } = params;
+    const storeId = Number(id);
+
+    // storeId가 1-10 범위에 있는지 확인
+    if (storeId < 1 || storeId > 10) {
+      return HttpResponse.json(
+        {
+          success: false,
+          message: "Store not found",
+        },
+        { status: 404 },
+      );
+    }
+
+    const storeDetail = createStoreDetailData(storeId);
+
+    return HttpResponse.json({
+      success: true,
+      data: storeDetail,
+    });
+  }),
+
+  // Store별 Products 조회 API (기존 경로 유지)
+  http.get(`${baseUrl}/stores/:id/products`, ({ params }) => {
+    const { id } = params;
+    const storeId = Number(id);
+
+    // storeId가 1-10 범위에 있는지 확인
+    if (storeId < 1 || storeId > 10) {
+      return HttpResponse.json(
+        {
+          success: false,
+          message: "Store not found",
+        },
+        { status: 404 },
+      );
+    }
+
     return HttpResponse.json({
       success: true,
       data: mockProduct,

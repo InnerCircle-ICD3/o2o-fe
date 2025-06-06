@@ -1,5 +1,6 @@
 import type { OrderSummary } from "@/types/orders.type";
 import { formatCurrency } from "@/utils/format";
+import classNames from "classnames";
 import * as style from "./totalPrice.css";
 
 interface TotalPriceProps {
@@ -17,11 +18,13 @@ const TotalPrice = (props: TotalPriceProps) => {
       <div className={style.amountWrapper}>
         <div className={style.row}>
           <span className={style.label}>총 금액</span>
-          <strong className={style.price}>{formatCurrency(originalPrice)}</strong>
+          <span className={style.price}>{formatCurrency(originalPrice)}</span>
         </div>
         <div className={style.row}>
           <span className={style.label}>나의 할인가</span>
-          <strong className={style.price}>{formatCurrency(finalPrice)}</strong>
+          <span className={classNames(style.price, style.discount)}>
+            {formatCurrency(finalPrice)}
+          </span>
         </div>
       </div>
     </div>

@@ -7,8 +7,8 @@ import * as style from "./selectedItem.css";
 
 interface SelectedItemProps {
   product: SelectedProduct;
-  onDelete: (productId: number) => void;
-  onUpdateCount: (productId: number, delta: number) => void;
+  onDelete: (productId: string) => void;
+  onUpdateCount: (productId: string, delta: number) => void;
 }
 
 const SelectedItem = (props: SelectedItemProps) => {
