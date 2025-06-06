@@ -11,7 +11,7 @@ interface TagInputProps {
   error?: string;
 }
 
-export function TagInput({ value, onChange, name, error }: TagInputProps) {
+export function TagInput({ value, onChange, name, placeholder }: TagInputProps) {
   const [inputValue, setInputValue] = useState("");
   const [isComposing, setIsComposing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,13 +22,17 @@ export function TagInput({ value, onChange, name, error }: TagInputProps) {
     if ((e.key === "Enter" || e.key === ",") && inputValue.trim() !== "") {
       e.preventDefault();
 
-      const raw = inputValue;
-      setInputValue("");
+      const rawTags = inputValue.split(",");
+      const cleanedTags = rawTags
+        .map((tag) => tag.replace(/\s+/g, "")) // 공백 제거
+        .filter((tag) => tag !== "")
+        .filter((tag) => !value.includes(tag));
 
-      const cleaned = raw.trim().replace(/,+$/, "");
-      if (cleaned && !value.includes(cleaned)) {
-        onChange([...value, cleaned]);
+      if (cleanedTags.length > 0) {
+        onChange([...value, ...cleanedTags]);
       }
+
+      setInputValue("");
     } else if (e.key === "Backspace" && inputValue === "" && value.length > 0) {
       onChange(value.slice(0, -1));
     }
@@ -87,6 +91,7 @@ export function TagInput({ value, onChange, name, error }: TagInputProps) {
           ref={inputRef}
           name={name}
           value={inputValue}
+          placeholder={placeholder}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           onCompositionStart={() => setIsComposing(true)}
@@ -94,7 +99,6 @@ export function TagInput({ value, onChange, name, error }: TagInputProps) {
           className="flex-1 border-none focus:outline-none text-sm min-w-[100px] bg-transparent"
         />
       </div>
-      {error && <p className="text-sm text-destructive mt-1">{error}</p>}
     </div>
   );
 }

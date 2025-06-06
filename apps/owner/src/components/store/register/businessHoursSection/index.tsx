@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { type BusinessHour, useBusinessHours } from "@/hooks/useBusinessHours";
+import { useBusinessHours } from "@/hooks/useBusinessHours";
 import type { StoreFormData } from "@/types/store";
 import type { useForm } from "use-form-light";
 
@@ -71,10 +71,7 @@ export function BusinessHoursSection({
               <Input
                 type="time"
                 disabled={!selectedDays.includes(WEEKDAY_MAP[day])}
-                value={
-                  businessHours.find((h: BusinessHour) => h.dayOfWeek === WEEKDAY_MAP[day])
-                    ?.openTime || ""
-                }
+                value={businessHours.find((h) => h.dayOfWeek === WEEKDAY_MAP[day])?.openTime || ""}
                 onChange={(e) =>
                   handleBusinessHoursChange(WEEKDAY_MAP[day], "openTime", e.target.value)
                 }
@@ -86,10 +83,7 @@ export function BusinessHoursSection({
               <Input
                 type="time"
                 disabled={!selectedDays.includes(WEEKDAY_MAP[day])}
-                value={
-                  businessHours.find((h: BusinessHour) => h.dayOfWeek === WEEKDAY_MAP[day])
-                    ?.closeTime || ""
-                }
+                value={businessHours.find((h) => h.dayOfWeek === WEEKDAY_MAP[day])?.closeTime || ""}
                 onChange={(e) =>
                   handleBusinessHoursChange(WEEKDAY_MAP[day], "closeTime", e.target.value)
                 }

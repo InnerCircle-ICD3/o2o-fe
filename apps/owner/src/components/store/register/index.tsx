@@ -4,11 +4,9 @@ import { postStore } from "@/apis/ssr/store";
 import { FormField } from "@/components/store/register/formField";
 import { Button } from "@/components/ui/button";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
-import { useZodValidationResolver } from "@/hooks/useZodValidationResolver";
 import type { UseFormOptions } from "@/types/form";
 import type { StoreFormData } from "@/types/store";
-import { initialStoreFormData } from "@/types/store";
-import { storeFormSchema } from "@/types/store";
+import { initialStoreFormData, validationRules } from "@/types/store";
 import { useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
@@ -18,33 +16,44 @@ export default function StoreRegisterFormWizard() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
 
-  const resolver = useZodValidationResolver(storeFormSchema);
-
   const form = useForm<StoreFormData>({
     defaultValues: initialStoreFormData,
-    resolver,
+    validationRules,
     defaultOptions: {
       transform: (value: string) => value.trim(),
     },
   } as UseFormOptions<StoreFormData>);
 
-  const { errors, handleSubmit, register } = form;
+  const { errors, handleSubmit, register, watch, setValue } = form;
   const { openPostcode, addressType } = useStoreAddress(form);
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const onSubmit = async (data: StoreFormData) => {
-    const result = await postStore(1, data);
+  const validateSingleField = (name: keyof StoreFormData, value: string): string => {
+    const rule = validationRules?.[name];
+    if (!rule) return "";
+    return rule.pattern.test(value) ? "" : rule.message;
+  };
 
+  const handleBlur =
+    (field: keyof StoreFormData) =>
+    (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const value = e.target.value;
+      const error = validateSingleField(field, value);
+      setValue(field, value);
+      errors[field] = error;
+    };
+
+  const onSubmit = async (data: StoreFormData) => {
+    const isValid = await form.validate();
+    if (!isValid) return;
+
+    const result = await postStore(1, data);
     if (result.success) {
       console.log("매장 등록 성공:", result.data);
-      // TODO: 성공 시 리다이렉트 또는 성공 메시지 표시
     } else {
-      console.error("매장 등록 실패:", {
-        errorCode: result.errorCode,
-        errorMessage: result.errorMessage,
-      });
+      console.error("매장 등록 실패:", result);
     }
   };
 
@@ -52,25 +61,32 @@ export default function StoreRegisterFormWizard() {
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
       <Stepper step={step} />
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-between flex-1"
-        aria-label="매장 정보 입력"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
         <div className="flex flex-col">
           {step === 1 && (
             <fieldset className="space-y-6" aria-label="기본 정보">
-              <FormField label="매장명" name="name" {...register("name")} error={errors.name} />
+              <FormField
+                label="매장명"
+                name="name"
+                onBlur={handleBlur("name")}
+                value={watch("name")}
+                onChange={(e) => setValue("name", e.target.value)}
+                error={errors.name}
+              />
               <FormField
                 label="사업자 등록번호"
                 name="businessNumber"
-                {...register("businessNumber")}
+                onBlur={handleBlur("businessNumber")}
+                value={watch("businessNumber")}
+                onChange={(e) => setValue("businessNumber", e.target.value)}
                 error={errors.businessNumber}
               />
               <FormField
                 label="연락처"
                 name="contact"
-                {...register("contact")}
+                onBlur={handleBlur("contact")}
+                value={watch("contact")}
+                onChange={(e) => setValue("contact", e.target.value)}
                 error={errors.contact}
               />
               <FormField
@@ -81,9 +97,11 @@ export default function StoreRegisterFormWizard() {
               <FormField
                 label="설명"
                 name="description"
-                {...register("description")}
+                onBlur={handleBlur("description")}
+                value={watch("description")}
+                onChange={(e) => setValue("description", e.target.value)}
                 isTextarea
-                className="h-40 resize-none"
+                className="h-30 resize-none"
               />
             </fieldset>
           )}
@@ -95,18 +113,9 @@ export default function StoreRegisterFormWizard() {
                 name="addressSearch"
                 placeholder="주소를 검색해주세요"
                 readOnly
-                value={
-                  addressType === "R"
-                    ? form.watch("roadNameAddress")
-                    : form.watch("lotNumberAddress")
-                }
+                value={addressType === "R" ? watch("roadNameAddress") : watch("lotNumberAddress")}
+                onClick={() => openPostcode(addressSearch)}
                 onChange={(e) => setAddressSearch(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    openPostcode(addressSearch);
-                  }
-                }}
                 rightElement={
                   <div className="flex items-center gap-2">
                     <Button type="button" onClick={() => openPostcode(addressSearch)}>
@@ -115,22 +124,22 @@ export default function StoreRegisterFormWizard() {
                   </div>
                 }
               />
-              <FormField label="우편번호" name="zipCode" {...register("zipCode")} />
+              <FormField label="우편번호" name="zipCode" {...register("zipCode")} readOnly />
               <FormField label="건물명" name="buildingName" {...register("buildingName")} />
               <FormField
-                label="음식 카테고리 (쉼표로 구분)"
+                label="음식 카테고리 (Enter로 구분)"
                 name="foodCategory"
                 isMultiple
-                value={form.watch("foodCategory")}
-                onChange={(value: string[]) => form.setValue("foodCategory", value)}
+                value={watch("foodCategory")}
+                onChange={(value: string[]) => setValue("foodCategory", value)}
                 error={errors.foodCategory}
               />
               <FormField
-                label="매장 카테고리 (쉼표로 구분)"
+                label="매장 카테고리 (Enter로 구분)"
                 name="storeCategory"
                 isMultiple
-                value={form.watch("storeCategory")}
-                onChange={(value: string[]) => form.setValue("storeCategory", value)}
+                value={watch("storeCategory")}
+                onChange={(value: string[]) => setValue("storeCategory", value)}
                 error={errors.storeCategory}
               />
             </fieldset>
@@ -138,28 +147,19 @@ export default function StoreRegisterFormWizard() {
         </div>
 
         {step === 3 && <BusinessHoursSection form={form} />}
+
         <div className="flex justify-center pt-4 gap-2">
-          {step > 1 ? (
-            <Button
-              type="button"
-              onClick={prevStep}
-              className="flex-1"
-              aria-label="이전 단계로 이동"
-            >
+          {step > 1 && (
+            <Button type="button" onClick={prevStep} className="flex-1">
               이전
             </Button>
-          ) : null}
+          )}
           {step < 3 ? (
-            <Button
-              type="button"
-              onClick={nextStep}
-              className={step > 1 ? "flex-1" : "w-full"}
-              aria-label="다음 단계로 이동"
-            >
+            <Button type="button" onClick={nextStep} className={step > 1 ? "flex-1" : "w-full"}>
               다음
             </Button>
           ) : (
-            <Button type="submit" className="flex-1" aria-label="매장 정보 등록">
+            <Button type="submit" className="flex-1">
               등록하기
             </Button>
           )}
