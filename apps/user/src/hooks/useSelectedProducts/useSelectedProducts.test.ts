@@ -43,7 +43,7 @@ describe("useSelectedProducts Test", () => {
 
     expect(result.current.selectedProducts.length).toBe(1);
     expect(result.current.selectedProducts[0]).toMatchObject({
-      id: 1,
+      id: "1",
       name: "샌드위치",
       selectedCount: 1,
     });
