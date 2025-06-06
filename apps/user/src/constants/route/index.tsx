@@ -165,6 +165,10 @@ const ROUTE = {
       name: "설정",
       path: "/mypage/setting",
     },
+    completeProfile: {
+      name: "나의 정보 수정",
+      path: "/mypage/complete-profile",
+    },
   },
 };
 

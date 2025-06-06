@@ -5,8 +5,8 @@ interface Customer {
   nickname: string;
 }
 
-export const getCustomer = async (customerId: number, nickname: string) => {
+export const patchCustomer = async (customerId: number, nickname: string) => {
   return await toSafeResult(() =>
-    apiClient.patch<Customer>(`customers/${customerId}`, { nickname }),
+    apiClient.patch<Customer>(`customers/modify?customerId=${customerId}`, { nickname }),
   );
 };
