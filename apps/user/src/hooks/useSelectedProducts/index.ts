@@ -43,11 +43,11 @@ const useSelectedProducts = () => {
     });
   };
 
-  const handleDeleteProduct = (productId: number) => {
+  const handleDeleteProduct = (productId: string) => {
     setSelectedProducts((prev) => prev.filter((product) => product.id !== productId));
   };
 
-  const updateProductCount = (productId: number, delta: number) => {
+  const updateProductCount = (productId: string, delta: number) => {
     setSelectedProducts((prev) =>
       prev.map((product) => {
         if (product.id !== productId) return product;
