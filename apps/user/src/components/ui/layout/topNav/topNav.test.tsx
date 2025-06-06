@@ -9,6 +9,7 @@ vi.mock("next/navigation", () => ({
     back: mockBack,
   }),
   useSelectedLayoutSegment: () => "mypage",
+  usePathname: () => "/mypage",
 }));
 
 // ROUTE 상수 모킹
@@ -16,7 +17,7 @@ vi.mock("@/constants/route", () => ({
   default: {
     topNav: {
       mypage: {
-        path: ["mypage"],
+        path: ["/mypage"],
         name: "마이페이지",
       },
     },

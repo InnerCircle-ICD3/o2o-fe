@@ -11,7 +11,7 @@ const TopNav = (props: PropsWithChildren) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const route = Object.values(ROUTE.topNav).find((item) => pathname === item.path);
+  const route = Object.values(ROUTE.topNav).find((item) => pathname.startsWith(item.path));
 
   if (!route) {
     throw new Error("Route not found");
