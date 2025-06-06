@@ -51,6 +51,11 @@ export interface StoresDetail {
   storeCategory: string[]; // (예: ["BREAD"])
 }
 
+export interface Inventory {
+  quantity: number;
+  stock: number;
+}
+
 export interface Price {
   originalPrice: number;
   discountRate: number;
@@ -58,16 +63,14 @@ export interface Price {
 }
 
 export interface Product {
-  id: number;
+  id: string;
   createdAt: string;
   description: string;
   foodType: string[];
   imageUrl: string;
-  inventory: {
-    quantity: number;
-    stock: number;
-  };
-  storeId: number;
+  inventory: Inventory;
+  storeId: string;
+  storeName: string;
   name: string;
   price: Price;
   size: "S" | "M" | "L";

@@ -10,21 +10,25 @@ vi.mock("@/hooks/api/usePostOrder", () => ({
 
 const mockProducts: Product[] = [
   {
-    id: 1,
-    name: "샌드위치",
-    imageUrl: "",
-    description: "맛있음",
-    foodType: ["샌드위치"],
-    inventory: { quantity: 5, stock: 5 },
-    price: {
-      originalPrice: 5000,
-      discountRate: 0,
-      finalPrice: 5000,
+    id: "1L",
+    createdAt: "2025-05-06T10:15:30Z",
+    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 럭키백입니다.",
+    foodType: ["크림빵", "야채빵"],
+    imageUrl: "https://example.com/images/luckybags/1L.jpg",
+    inventory: {
+      quantity: 10,
+      stock: 10,
     },
-    size: "S",
-    status: "OPEN",
-    storeId: 101,
-    createdAt: "",
+    storeId: "1L",
+    storeName: "상점1",
+    name: "오늘의 서프라이즈 럭키백",
+    price: {
+      originalPrice: 20000,
+      discountRate: 0.5,
+      finalPrice: 10000,
+    },
+    size: "M",
+    status: "ACTIVE",
   },
 ];
 
@@ -41,7 +45,7 @@ describe("ProductBottomSheet Test", () => {
       </>,
     );
 
-    expect(screen.getByText("럭키백 선택하기")).toBeInTheDocument();
+    expect(screen.getByText("옵션 선택하기")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "주문하기" })).toBeInTheDocument();
   });
 
@@ -60,8 +64,8 @@ describe("ProductBottomSheet Test", () => {
     fireEvent.click(orderButton);
 
     expect(mockSubmit).toHaveBeenCalledWith({
-      storeId: 101,
-      products: [{ productId: 1, selectedCount: 1 }],
+      storeId: "1L",
+      products: [{ productId: "1L", inventory: { quantity: 10, stock: 10 } }],
     });
   });
 });
