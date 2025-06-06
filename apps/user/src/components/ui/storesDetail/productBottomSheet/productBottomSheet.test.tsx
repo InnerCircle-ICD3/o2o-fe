@@ -57,15 +57,18 @@ describe("ProductBottomSheet Test", () => {
       </>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "럭키백 선택" }));
-    fireEvent.click(screen.getByText("샌드위치"));
+    // 럭키백 선택 드롭다운 열기
+    fireEvent.click(screen.getByRole("button", { name: "럭키백을 선택해주세요 dropdown" }));
+
+    // 실제 상품명으로 선택
+    fireEvent.click(screen.getByText("오늘의 서프라이즈 럭키백"));
 
     const orderButton = screen.getByRole("button", { name: "주문하기" });
     fireEvent.click(orderButton);
 
     expect(mockSubmit).toHaveBeenCalledWith({
       storeId: "1L",
-      products: [{ productId: "1L", inventory: { quantity: 10, stock: 10 } }],
+      products: [{ productId: "1L", selectedCount: 1 }],
     });
   });
 });
