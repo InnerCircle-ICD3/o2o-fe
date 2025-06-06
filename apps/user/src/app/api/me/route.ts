@@ -19,6 +19,7 @@ export async function GET() {
 
   try {
     const payload = verifyToken(token);
+    console.log("payload", payload);
     return NextResponse.json({
       success: true,
       data: {
