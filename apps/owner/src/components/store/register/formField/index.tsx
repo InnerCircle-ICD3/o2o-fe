@@ -1,6 +1,8 @@
+import { MultiSelect } from "@/components/store/register/mutipleSelect"; // 위치 맞게 수정
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import type { StoreCategory } from "@/types/store";
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { TagInput } from "../tagInput";
 
@@ -11,6 +13,7 @@ type BaseProps = {
   error?: string;
   isTextarea?: boolean;
   isMultiple?: boolean;
+  isMultiSelect?: boolean;
 };
 
 type InputProps = BaseProps &
@@ -23,13 +26,21 @@ type TagInputProps = BaseProps & {
   isMultiple: true;
 };
 
-type FormFieldProps = InputProps | TextareaProps | TagInputProps;
+type MultiSelectProps = BaseProps & {
+  value: string[];
+  onChange: (value: string[]) => void;
+  options: StoreCategory[];
+  isMultiSelect: true;
+};
+
+type FormFieldProps = InputProps | TextareaProps | TagInputProps | MultiSelectProps;
 
 export function FormField({
   label,
   name,
   isTextarea = false,
   isMultiple = false,
+  isMultiSelect = false,
   rightElement,
   error,
   ...props
@@ -41,7 +52,14 @@ export function FormField({
           {label}
         </Label>
         <div className="flex-1 flex gap-2">
-          {isMultiple ? (
+          {isMultiSelect ? (
+            <MultiSelect
+              options={(props as MultiSelectProps).options}
+              value={(props as MultiSelectProps).value}
+              onChange={(props as MultiSelectProps).onChange}
+              placeholder="카테고리를 선택하세요"
+            />
+          ) : isMultiple ? (
             <TagInput
               label={label}
               value={(props as TagInputProps).value}

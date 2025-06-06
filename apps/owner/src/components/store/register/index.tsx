@@ -3,10 +3,12 @@
 import { postStore } from "@/apis/ssr/store";
 import { FormField } from "@/components/store/register/formField";
 import { Button } from "@/components/ui/button";
+import { STORE_CATEGORIES, VALIDATION_RULES } from "@/constants/store";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
 import type { UseFormOptions } from "@/types/form";
 import type { StoreFormData } from "@/types/store";
-import { initialStoreFormData, validationRules } from "@/types/store";
+import { initialStoreFormData } from "@/types/store";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
@@ -15,10 +17,11 @@ import { Stepper } from "./stepper";
 export default function StoreRegisterFormWizard() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
+  const router = useRouter();
 
   const form = useForm<StoreFormData>({
     defaultValues: initialStoreFormData,
-    validationRules,
+    validationRules: VALIDATION_RULES,
     defaultOptions: {
       transform: (value: string) => value.trim(),
     },
@@ -31,7 +34,7 @@ export default function StoreRegisterFormWizard() {
   const prevStep = () => setStep((prev) => prev - 1);
 
   const validateSingleField = (name: keyof StoreFormData, value: string): string => {
-    const rule = validationRules?.[name];
+    const rule = VALIDATION_RULES[name];
     if (!rule) return "";
     return rule.pattern.test(value) ? "" : rule.message;
   };
@@ -51,7 +54,7 @@ export default function StoreRegisterFormWizard() {
 
     const result = await postStore(1, data);
     if (result.success) {
-      console.log("매장 등록 성공:", result.data);
+      router.push("/");
     } else {
       console.error("매장 등록 실패:", result);
     }
@@ -127,20 +130,21 @@ export default function StoreRegisterFormWizard() {
               <FormField label="우편번호" name="zipCode" {...register("zipCode")} readOnly />
               <FormField label="건물명" name="buildingName" {...register("buildingName")} />
               <FormField
+                label="매장 카테고리"
+                name="storeCategory"
+                isMultiSelect
+                value={watch("storeCategory")}
+                onChange={(value: string[]) => setValue("storeCategory", value)}
+                options={STORE_CATEGORIES}
+              />
+
+              <FormField
                 label="음식 카테고리 (Enter로 구분)"
                 name="foodCategory"
                 isMultiple
                 value={watch("foodCategory")}
                 onChange={(value: string[]) => setValue("foodCategory", value)}
                 error={errors.foodCategory}
-              />
-              <FormField
-                label="매장 카테고리 (Enter로 구분)"
-                name="storeCategory"
-                isMultiple
-                value={watch("storeCategory")}
-                onChange={(value: string[]) => setValue("storeCategory", value)}
-                error={errors.storeCategory}
               />
             </fieldset>
           )}
