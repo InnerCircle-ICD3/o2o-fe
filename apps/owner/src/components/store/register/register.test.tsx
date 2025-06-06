@@ -10,6 +10,17 @@ vi.mock("@/hooks/useStoreAddress", () => ({
   }),
 }));
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
+
 describe("StoreRegisterFormWizard", () => {
   it("첫 번째 스텝에서 기본 필드들이 렌더링되어야 합니다", () => {
     render(<StoreRegisterFormWizard />);
@@ -30,8 +41,8 @@ describe("StoreRegisterFormWizard", () => {
     expect(screen.getByText("주소 검색")).toBeInTheDocument();
     expect(screen.getByText("우편번호")).toBeInTheDocument();
     expect(screen.getByText("건물명")).toBeInTheDocument();
-    expect(screen.getByText("음식 카테고리 (쉼표로 구분)")).toBeInTheDocument();
-    expect(screen.getByText("매장 카테고리 (쉼표로 구분)")).toBeInTheDocument();
+    expect(screen.getByText("음식 카테고리 (Enter로 구분)")).toBeInTheDocument();
+    expect(screen.getByText("매장 카테고리")).toBeInTheDocument();
   });
 
   it("이전 버튼을 클릭하면 첫 번째 스텝으로 돌아가야 합니다", () => {

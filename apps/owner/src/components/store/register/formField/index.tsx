@@ -1,4 +1,4 @@
-import { MultiSelect } from "@/components/store/register/mutipleSelect"; // 위치 맞게 수정
+import { MultiSelect } from "@/components/store/register/multipleSelect"; // 위치 맞게 수정
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
