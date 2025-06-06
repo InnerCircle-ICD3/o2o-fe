@@ -29,7 +29,7 @@ export type StoreFormData = {
   mainImageUrl?: string;
   storeCategory: string[];
   foodCategory: string[];
-  pickUpDay: "TODAY" | "TOMORROW";
+  pickupDay: "TODAY" | "TOMORROW";
   businessHours: {
     dayOfWeek: string;
     openTime: string;
@@ -49,7 +49,7 @@ export const initialStoreFormData: StoreFormData = {
   region3DepthName: "",
   latitude: "",
   longitude: "",
-  pickUpDay: "TODAY",
+  pickupDay: "TODAY",
   businessHours: [],
   contact: "",
   description: "",
