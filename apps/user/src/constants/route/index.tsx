@@ -161,10 +161,6 @@ const ROUTE = {
       name: "이용 약관",
       path: "/mypage/terms",
     },
-    setting: {
-      name: "설정",
-      path: "/mypage/setting",
-    },
   },
 };
 
