@@ -45,15 +45,20 @@ const Page = async () => {
                 이용 약관
               </Link>
 
-              <Link href={"/mypage/setting"} className={style.menuItem}>
-                설정
-              </Link>
-
               <p>현재 버전 1.0.0</p>
             </div>
           </>
         )}
       </section>
+      <div className={style.bottomButtons}>
+        <button className={style.bottomButton} type={"button"}>
+          로그아웃
+        </button>
+        |
+        <button className={style.bottomButton} type={"button"}>
+          회원탈퇴
+        </button>
+      </div>
     </div>
   );
 };
