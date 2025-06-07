@@ -11,8 +11,11 @@ const successUserInfo = {
 
 const failureUserInfo = {
   success: false,
-  errorCode: "NOT_LOGGED_IN",
-  errorMessage: "로그인이 필요합니다.",
+  code: "NOT_LOGGED_IN",
+  name: "로그인 안내",
+  message: "로그인이 필요합니다.",
+  statusCode: 401,
+  timestamp: new Date(),
 } as const;
 
 describe("LoginLink Test", () => {
