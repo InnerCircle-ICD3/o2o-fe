@@ -1,5 +1,6 @@
 "use client";
 
+import ErrorUi from "@/components/common/errorUi";
 import OrderItem from "@/components/ui/my-orders/orderItem";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import useGetMyOrder from "@/hooks/api/useGetMyOrder";
@@ -7,15 +8,10 @@ import type { OrderDetail } from "@/types/apis/order.type";
 import * as style from "./myOrders.css";
 
 const Page = () => {
-  const { data: orderDetails, error, isError, isLoading } = useGetMyOrder(1);
+  const { data: orderDetails, isError, isLoading } = useGetMyOrder(1);
 
   if (isError) {
-    return (
-      <div>
-        <p>주문 내역을 불러오는 데 실패했습니다.</p>
-        {<p>{error?.message}</p>}
-      </div>
-    );
+    return <ErrorUi message={"오류 "} />;
   }
 
   return (
