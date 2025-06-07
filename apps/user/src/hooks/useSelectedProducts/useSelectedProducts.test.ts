@@ -5,7 +5,7 @@ import useSelectedProducts from "../useSelectedProducts";
 
 const mockProduct: Product = {
   id: "1",
-  storeName: "테스트 매장",
+  storeName: "블루문",
   name: "샌드위치",
   imageUrl: "",
   description: "",
@@ -19,7 +19,6 @@ const mockProduct: Product = {
   size: "S",
   status: "OPEN",
   storeId: "1",
-  storeName: "블루문",
   createdAt: "",
 };
 
