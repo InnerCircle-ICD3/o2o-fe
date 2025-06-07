@@ -8,6 +8,13 @@ export function UserInfoProvider() {
   const clearUser = useUserStore((state) => state.clearUser);
 
   useEffect(() => {
+    const token = document.cookie.split("; ").find((row) => row.startsWith("access_token="));
+
+    if (!token) {
+      clearUser();
+      return;
+    }
+
     fetch("/api/me", { credentials: "include" })
       .then((res) => res.json())
       .then((res) => {
