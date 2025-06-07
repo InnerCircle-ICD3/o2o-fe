@@ -8,10 +8,10 @@ import type { OrderDetail } from "@/types/apis/order.type";
 import * as style from "./myOrders.css";
 
 const Page = () => {
-  const { data: orderDetails, isError, isLoading } = useGetMyOrder(1);
+  const { data: orderDetails, error, isError, isLoading } = useGetMyOrder(1);
 
   if (isError) {
-    return <ErrorUi message={"오류 "} />;
+    return <ErrorUi message={error?.message} />;
   }
 
   return (
