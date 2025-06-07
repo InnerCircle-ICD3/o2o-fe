@@ -1,5 +1,5 @@
 const Page = () => {
-  return <></>;
+  return <>Terms</>;
 };
 
 export default Page;
