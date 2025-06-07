@@ -79,3 +79,12 @@ export const item = styleVariants({
     },
   ],
 });
+
+export const title = style({
+  flex: 1,
+});
+
+export const quantity = style({
+  color: globalTheme.color.label.endSoon.color,
+  fontSize: 12,
+});

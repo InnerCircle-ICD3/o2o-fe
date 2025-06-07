@@ -9,7 +9,7 @@ describe("SelectedItem Test", () => {
   });
 
   const product: SelectedProduct = {
-    id: 1,
+    id: "1",
     name: "테스트 상품",
     selectedCount: 2,
     quantity: 5,
