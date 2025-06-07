@@ -143,7 +143,7 @@ const ROUTE = {
     },
     myLocation: {
       name: "내 동네 인증",
-      path: "locations/my-location",
+      path: "/locations/my-location",
     },
     login: {
       name: "로그인",
@@ -160,10 +160,6 @@ const ROUTE = {
     terms: {
       name: "이용 약관",
       path: "/mypage/terms",
-    },
-    setting: {
-      name: "설정",
-      path: "/mypage/setting",
     },
   },
 };
