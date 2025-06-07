@@ -11,7 +11,7 @@ describe("Products Component", () => {
   it("상품 목록이 올바르게 렌더링된다", () => {
     const mockProducts: Product[] = [
       {
-        id: 2,
+        id: "2",
         createdAt: "2025-05-06T10:15:30Z",
         name: "럭키백 S",
         description: "소형 럭키백입니다",
@@ -21,7 +21,7 @@ describe("Products Component", () => {
           quantity: 5,
           stock: 10,
         },
-        storeId: 1,
+        storeId: "1",
         price: {
           originalPrice: 24000,
           discountRate: 0.5,
@@ -29,6 +29,7 @@ describe("Products Component", () => {
         },
         size: "M",
         status: "ACTIVE",
+        storeName: "블르문",
       },
     ];
 
@@ -47,7 +48,7 @@ describe("Products Component", () => {
   it("마감 상품에는 상태 라벨과 그림자 레이블이 표시된다", () => {
     const mockProducts: Product[] = [
       {
-        id: 3,
+        id: "3",
         createdAt: "2025-05-06T10:15:30Z",
         name: "럭키백 L",
         description: "대형 럭키백입니다",
@@ -57,7 +58,7 @@ describe("Products Component", () => {
           quantity: 0,
           stock: 10,
         },
-        storeId: 1,
+        storeId: "1",
         price: {
           originalPrice: 10000,
           discountRate: 0.5,
@@ -65,6 +66,7 @@ describe("Products Component", () => {
         },
         size: "L",
         status: "ACTIVE",
+        storeName: "블루문",
       },
     ];
 
