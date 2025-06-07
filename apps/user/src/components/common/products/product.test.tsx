@@ -12,7 +12,7 @@ describe("Products Component", () => {
     const mockProducts: Product[] = [
       {
         id: "2",
-        storeName: "테스트 매장",
+        storeName: "블루문",
         createdAt: "2025-05-06T10:15:30Z",
         name: "럭키백 S",
         description: "소형 럭키백입니다",
@@ -49,7 +49,7 @@ describe("Products Component", () => {
     const mockProducts: Product[] = [
       {
         id: "3",
-        storeName: "테스트 매장",
+        storeName: "블르문",
         createdAt: "2025-05-06T10:15:30Z",
         name: "럭키백 L",
         description: "대형 럭키백입니다",
