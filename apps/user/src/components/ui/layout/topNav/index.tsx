@@ -2,17 +2,19 @@
 
 import ROUTE from "@/constants/route";
 import Image from "next/image";
-import { useRouter, useSelectedLayoutSegment } from "next/navigation";
+import { useRouter, useSelectedLayoutSegments } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import * as style from "./topNav.css";
 
 const TopNav = (props: PropsWithChildren) => {
   const { children } = props;
-  const segment = useSelectedLayoutSegment();
+  const segments = useSelectedLayoutSegments();
   const router = useRouter();
 
   const route = Object.values(ROUTE.topNav).find((item) => {
-    return item.path.includes(segment ?? "");
+    const lastSegment = segments.at(-1);
+
+    return item.path.includes(lastSegment ?? "");
   });
 
   if (!route) {
