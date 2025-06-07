@@ -27,7 +27,7 @@ interface Address {
 }
 
 // 픽업 가능일을 나타내는 리터럴 타입
-type PickupDay = "TODAY" | "TOMORROW" | "YESTERDAY";
+type PickupDay = "TODAY" | "TOMORROW";
 
 // 가게 상태를 나타내는 리터럴 타입
 type StoreStatus = "OPEN" | "CLOSED";
