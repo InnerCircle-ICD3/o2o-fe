@@ -25,5 +25,7 @@ export const title = style({
   fontWeight: 500,
 
   borderBottom: `1px solid ${globalTheme.color.line}`,
+  borderLeft: `1px solid ${globalTheme.color.line}`,
+  borderRight: `1px solid ${globalTheme.color.line}`,
   backgroundColor: globalTheme.color.white,
 });
