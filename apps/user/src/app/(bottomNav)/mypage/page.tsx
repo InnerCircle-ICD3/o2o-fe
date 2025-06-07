@@ -50,15 +50,17 @@ const Page = async () => {
           </>
         )}
       </section>
-      <div className={style.bottomButtons}>
-        <button className={style.bottomButton} type={"button"}>
-          로그아웃
-        </button>
-        |
-        <button className={style.bottomButton} type={"button"}>
-          회원탈퇴
-        </button>
-      </div>
+      {isLogin && (
+        <div className={style.bottomButtons}>
+          <button className={style.bottomButton} type={"button"}>
+            로그아웃
+          </button>
+          |
+          <button className={style.bottomButton} type={"button"}>
+            회원탈퇴
+          </button>
+        </div>
+      )}
     </div>
   );
 };
