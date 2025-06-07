@@ -31,7 +31,13 @@ function createErrorResult(code: ErrorCode): Result<never> {
 export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T>> => {
   try {
     const data = await fn();
-    return { success: true, data };
+    if (data && typeof data === "object" && "success" in data) {
+      return data as unknown as ResultSuccess<T>;
+    }
+    return {
+      success: true,
+      data,
+    };
   } catch (error) {
     if (error instanceof HTTPError) {
       try {
