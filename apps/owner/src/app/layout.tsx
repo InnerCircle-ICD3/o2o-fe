@@ -32,6 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
           <LayoutContent>{children}</LayoutContent>

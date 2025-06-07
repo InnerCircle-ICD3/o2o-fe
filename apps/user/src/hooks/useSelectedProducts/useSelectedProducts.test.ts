@@ -4,7 +4,8 @@ import { it } from "vitest";
 import useSelectedProducts from "../useSelectedProducts";
 
 const mockProduct: Product = {
-  id: 1,
+  id: "1",
+  storeName: "블루문",
   name: "샌드위치",
   imageUrl: "",
   description: "",
@@ -17,7 +18,7 @@ const mockProduct: Product = {
   },
   size: "S",
   status: "OPEN",
-  storeId: 1,
+  storeId: "1",
   createdAt: "",
 };
 
@@ -42,7 +43,7 @@ describe("useSelectedProducts Test", () => {
 
     expect(result.current.selectedProducts.length).toBe(1);
     expect(result.current.selectedProducts[0]).toMatchObject({
-      id: 1,
+      id: "1",
       name: "샌드위치",
       selectedCount: 1,
     });
@@ -83,8 +84,8 @@ describe("useSelectedProducts Test", () => {
 
     act(() => {
       result.current.handleSelectProduct(mockProduct);
-      result.current.updateProductCount(1, 2); // +2 → 3
-      result.current.updateProductCount(1, -1); // -1 → 2
+      result.current.updateProductCount("1", 2); // +2 → 3
+      result.current.updateProductCount("1", -1); // -1 → 2
     });
 
     expect(result.current.selectedProducts[0].selectedCount).toBe(2);
@@ -96,7 +97,7 @@ describe("useSelectedProducts Test", () => {
 
     act(() => {
       result.current.handleSelectProduct(mockProduct);
-      result.current.updateProductCount(1, -5);
+      result.current.updateProductCount("1", -5);
     });
 
     expect(result.current.selectedProducts[0].selectedCount).toBe(1); // 최소값
@@ -107,7 +108,7 @@ describe("useSelectedProducts Test", () => {
 
     act(() => {
       result.current.handleSelectProduct(mockProduct);
-      result.current.handleDeleteProduct(1);
+      result.current.handleDeleteProduct("1");
     });
 
     expect(result.current.selectedProducts).toEqual([]);
