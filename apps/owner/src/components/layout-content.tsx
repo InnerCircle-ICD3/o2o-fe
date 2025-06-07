@@ -4,11 +4,13 @@ import { Header } from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 import { usePathname } from "next/navigation";
 
+const PUBLIC_PATHS = ["/store/login", "/store/signup"];
+
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAuthPage = pathname === "/login";
+  const isPublicPage = PUBLIC_PATHS.some((path) => pathname.startsWith(path));
 
-  if (isAuthPage) {
+  if (isPublicPage) {
     return children;
   }
 
