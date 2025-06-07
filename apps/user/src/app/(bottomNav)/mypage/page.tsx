@@ -1,76 +1,76 @@
 "use client";
 
-// import { getCustomer } from "@/apis/ssr/customers";
-// import type { Result } from "@/apis/types";
-// import LoginLink from "@/components/ui/mypage/loginLink";
-// import { useUserStore } from "@/stores/userInfoStore";
-// import type { Customer } from "@/types/apis/accounts.type";
+import { getCustomer } from "@/apis/ssr/customers";
+import type { Result } from "@/apis/types";
+import LoginLink from "@/components/ui/mypage/loginLink";
+import { useUserStore } from "@/stores/userInfoStore";
+import type { Customer } from "@/types/apis/accounts.type";
 import Image from "next/image";
 import Link from "next/link";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as style from "./mypage.css";
 
 const Page = () => {
-  // const { user } = useUserStore();
-  // const isLogin = !!user;
+  const { user } = useUserStore();
+  const isLogin = !!user;
 
-  // const [userInfo, setUserInfo] = useState<Result<Customer> | null>(null);
+  const [userInfo, setUserInfo] = useState<Result<Customer> | null>(null);
 
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     const result = await getCustomer(user?.customerId ?? 0);
-  //     if (result.success) {
-  //       setUserInfo(result);
-  //     }
-  //   };
-  //   fetchUserInfo();
-  // }, [user?.customerId]);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const result = await getCustomer(user?.customerId ?? 0);
+      if (result.success) {
+        setUserInfo(result);
+      }
+    };
+    fetchUserInfo();
+  }, [user?.customerId]);
 
   return (
     <div className={style.container}>
       <h2 className={style.title}>마이페이지</h2>
 
       <section className={style.wrapper}>
-        {/* <LoginLink userInfo={userInfo} />
+        <LoginLink userInfo={userInfo} />
 
-        {isLogin && ( */}
-        <>
-          <div className={style.shortcuts}>
-            <Link href="/subscribes" className={style.shortcutItem}>
-              <Image src={"/icons/subscribe.svg"} alt="" width={24} height={24} />
-              <span>찜 목록</span>
-            </Link>
-            <Link href="/my-orders" className={style.shortcutItem}>
-              <Image src={"/icons/order.svg"} alt="" width={24} height={24} />
-              <span>주문 내역</span>
-            </Link>
-            <Link href="/locations/my-location" className={style.shortcutItem}>
-              <Image src={"/icons/location.svg"} alt="" width={24} height={24} />
-              <span>지역 인증</span>
-            </Link>
-          </div>
+        {isLogin && (
+          <>
+            <div className={style.shortcuts}>
+              <Link href="/subscribes" className={style.shortcutItem}>
+                <Image src={"/icons/subscribe.svg"} alt="" width={24} height={24} />
+                <span>찜 목록</span>
+              </Link>
+              <Link href="/my-orders" className={style.shortcutItem}>
+                <Image src={"/icons/order.svg"} alt="" width={24} height={24} />
+                <span>주문 내역</span>
+              </Link>
+              <Link href="/locations/my-location" className={style.shortcutItem}>
+                <Image src={"/icons/location.svg"} alt="" width={24} height={24} />
+                <span>지역 인증</span>
+              </Link>
+            </div>
 
-          <div className={style.menus}>
-            <Link href={"/mypage/notice"} className={style.menuItem}>
-              공지사항
-            </Link>
+            <div className={style.menus}>
+              <Link href={"/mypage/notice"} className={style.menuItem}>
+                공지사항
+              </Link>
 
-            <Link href={"/mypage/faq"} className={style.menuItem}>
-              자주 묻는 질문
-            </Link>
+              <Link href={"/mypage/faq"} className={style.menuItem}>
+                자주 묻는 질문
+              </Link>
 
-            <Link href={"/mypage/terms"} className={style.menuItem}>
-              이용 약관
-            </Link>
+              <Link href={"/mypage/terms"} className={style.menuItem}>
+                이용 약관
+              </Link>
 
-            <Link href={"/mypage/setting"} className={style.menuItem}>
-              설정
-            </Link>
+              <Link href={"/mypage/setting"} className={style.menuItem}>
+                설정
+              </Link>
 
-            <p>현재 버전 1.0.0</p>
-          </div>
-        </>
-        {/* )} */}
+              <p>현재 버전 1.0.0</p>
+            </div>
+          </>
+        )}
       </section>
     </div>
   );
