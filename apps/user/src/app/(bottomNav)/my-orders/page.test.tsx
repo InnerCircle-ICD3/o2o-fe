@@ -2,15 +2,19 @@ import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import Page from "./page";
 
-// useGetMyOrder 훅 모킹
 const mockUseGetMyOrder = vi.fn();
 vi.mock("@/hooks/api/useGetMyOrder", () => ({
   default: () => mockUseGetMyOrder(),
 }));
 
-// OrderItem 컴포넌트 모킹
 vi.mock("@/components/ui/my-orders/orderItem", () => ({
   default: ({ order }: { order: { orderId: number } }) => <div>OrderItem - {order.orderId}</div>,
+}));
+
+vi.mock("@/stores/userInfoStore", () => ({
+  useUserStore: vi.fn(() => ({
+    user: { id: 1, nickname: "재완", customerId: 1 },
+  })),
 }));
 
 describe("My Orders Page", () => {

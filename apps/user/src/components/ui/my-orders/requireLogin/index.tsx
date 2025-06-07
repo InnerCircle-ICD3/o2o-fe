@@ -1,12 +1,13 @@
-// import Button from "@/components/common/button";
+"use client";
+
 import { useUserStore } from "@/stores/userInfoStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import * as style from "./requireLogin.css";
 
 export default function RequireLogin({ text }: { text: string }) {
-  const { user } = useUserStore();
   const router = useRouter();
+  const { user } = useUserStore();
 
   const isLoggedIn = !!user;
 

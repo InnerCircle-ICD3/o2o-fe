@@ -1,4 +1,4 @@
-import { getAuthMe } from "@/apis/ssr/account";
+import { useUserStore } from "@/stores/userInfoStore";
 import { render } from "@testing-library/react";
 import { vi } from "vitest";
 import * as style from "./mypage.css";
@@ -8,19 +8,17 @@ vi.mock("@/apis/ssr/account", () => ({
   getAuthMe: vi.fn(),
 }));
 
+vi.mock("@/stores/userInfoStore", () => ({
+  useUserStore: vi.fn(),
+}));
+
 describe("Mypage Test", () => {
-  it("로그인 정보가 있다면 shortcut, menus 메뉴가 나타난다.", async () => {
-    (getAuthMe as jest.Mock).mockResolvedValue({
-      success: true,
-      data: {
-        id: 1,
-        name: "재완",
-        email: "jaewan@test.com",
-      },
+  it("로그인 정보가 있다면 shortcut, menus 메뉴가 나타난다.", () => {
+    vi.mocked(useUserStore).mockReturnValue({
+      user: { id: 1, nickname: "재완", customerId: 1 },
     });
 
-    const { container } = render(await Page());
-
+    const { container } = render(<Page />);
     const shortcuts = container.querySelector(`.${style.shortcuts}`);
     expect(shortcuts).toBeInTheDocument();
 
@@ -28,14 +26,12 @@ describe("Mypage Test", () => {
     expect(menus).toBeInTheDocument();
   });
 
-  it("로그인 정보가 없다면 shortcut, menus 메뉴가 나타나지 않는다.", async () => {
-    (getAuthMe as jest.Mock).mockResolvedValue({
-      success: false,
-      data: null,
+  it("로그인 정보가 없다면 shortcut, menus 메뉴가 나타나지 않는다.", () => {
+    vi.mocked(useUserStore).mockReturnValue({
+      user: null,
     });
 
-    const { container } = render(await Page());
-
+    const { container } = render(<Page />);
     const shortcuts = container.querySelector(`.${style.shortcuts}`);
     expect(shortcuts).not.toBeInTheDocument();
 

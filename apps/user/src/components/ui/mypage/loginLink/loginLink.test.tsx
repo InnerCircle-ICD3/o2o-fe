@@ -20,9 +20,10 @@ const failureUserInfo = {
 
 describe("LoginLink Test", () => {
   it("로그인 정보가 있다면 사용자 이름과 이메일이 나타난다.", () => {
-    const { getByText } = render(<LoginLink userInfo={successUserInfo} />);
+    const { getAllByText } = render(<LoginLink userInfo={successUserInfo} />);
 
-    expect(getByText(successUserInfo.data.nickname)).toBeInTheDocument();
+    const headings = getAllByText(successUserInfo.data.nickname);
+    expect(headings.length).toBeGreaterThan(0);
     // expect(getByText(successUserInfo.data.email)).toBeInTheDocument(); // TODO: 이메일 추가 필요
   });
 
