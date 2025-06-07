@@ -19,6 +19,7 @@ const mockProduct: Product = {
   size: "S",
   status: "OPEN",
   storeId: "1",
+  storeName: "블루문",
   createdAt: "",
 };
 

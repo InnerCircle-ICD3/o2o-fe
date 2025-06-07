@@ -30,6 +30,7 @@ describe("Products Component", () => {
         },
         size: "M",
         status: "ACTIVE",
+        storeName: "블르문",
       },
     ];
 
@@ -67,6 +68,7 @@ describe("Products Component", () => {
         },
         size: "L",
         status: "ACTIVE",
+        storeName: "블루문",
       },
     ];
 
