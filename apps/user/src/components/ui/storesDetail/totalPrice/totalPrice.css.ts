@@ -48,3 +48,7 @@ export const label = style({
 export const price = style({
   fontSize: 20,
 });
+
+export const discount = style({
+  color: globalTheme.color.primary,
+});
