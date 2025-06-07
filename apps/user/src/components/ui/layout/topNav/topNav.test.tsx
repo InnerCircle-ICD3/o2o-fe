@@ -8,7 +8,6 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({
     back: mockBack,
   }),
-  useSelectedLayoutSegment: () => "mypage",
   usePathname: () => "/mypage",
 }));
 

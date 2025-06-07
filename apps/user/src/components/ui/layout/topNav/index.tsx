@@ -8,10 +8,11 @@ import * as style from "./topNav.css";
 
 const TopNav = (props: PropsWithChildren) => {
   const { children } = props;
-  const pathname = usePathname();
   const router = useRouter();
+  const pathname = usePathname();
 
-  const route = Object.values(ROUTE.topNav).find((item) => pathname.startsWith(item.path));
+  const sortedNav = Object.values(ROUTE.topNav).sort((a, b) => b.path.length - a.path.length);
+  const route = sortedNav.find((item) => pathname.startsWith(item.path));
 
   if (!route) {
     throw new Error("Route not found");

@@ -1,6 +1,4 @@
-import * as globalStyle from "@/styles/global.css";
-import Image from "next/image";
-import * as style from "./noticeDetail.css";
+import InfoDetail from "@/components/ui/mypage/infoDetail";
 
 const mockDetail = [
   {
@@ -36,23 +34,7 @@ const Page = async (props: PageProps) => {
 
   const notice = mockDetail.find((item) => item.id === Number(id));
 
-  if (!notice) {
-    return (
-      <div className={style.errorWrapper}>
-        <Image src="/images/character2.png" alt="loading" width={120} height={120} />
-
-        <h2>공지사항을 찾을 수 없습니다.</h2>
-      </div>
-    );
-  }
-
-  return (
-    <div className={globalStyle.innerPadding}>
-      <h2 className={style.title}>{notice.title}</h2>
-      <p className={style.date}>{new Date(notice.createdAt).toLocaleDateString()}</p>
-      <p className={style.content}>{notice.content}</p>
-    </div>
-  );
+  return <InfoDetail infoDetail={notice} />;
 };
 
 export default Page;
