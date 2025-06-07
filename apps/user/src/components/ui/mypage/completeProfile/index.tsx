@@ -1,12 +1,18 @@
 "use client";
 
-import { patchCustomer } from "@/apis/ssr/customers";
+import { patchCustomer as defaultPatchCustomer } from "@/apis/ssr/customers";
 import Button from "@/components/common/button";
-import { useUserStore } from "@/stores/userInfoStore";
+import { useUserStore as defaultUseUserStore } from "@/stores/userInfoStore";
 import { useState } from "react";
 import * as styles from "./completeProfile.css";
 
-export default function CompleteProfile() {
+export default function CompleteProfile({
+  useUserStore = defaultUseUserStore,
+  patchCustomer = defaultPatchCustomer,
+}: {
+  useUserStore?: typeof defaultUseUserStore;
+  patchCustomer?: typeof defaultPatchCustomer;
+} = {}) {
   const { user } = useUserStore();
   const [nickname, setNickname] = useState("");
 

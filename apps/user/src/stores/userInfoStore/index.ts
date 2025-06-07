@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface UserState {
+export interface UserState {
   user: {
     userId: string;
     roles: string[];
