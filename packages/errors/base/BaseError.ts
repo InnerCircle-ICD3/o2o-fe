@@ -1,3 +1,11 @@
+export interface ErrorJson {
+  name: string;
+  code: string;
+  message: string;
+  statusCode: number;
+  timestamp: Date;
+}
+
 export abstract class BaseError extends Error {
   public readonly code: string;
   public readonly statusCode: number;
@@ -12,7 +20,7 @@ export abstract class BaseError extends Error {
   }
 
   // biome-ignore lint/style/useNamingConvention: <explanation>
-  public toJSON() {
+  public toJSON(): ErrorJson {
     return {
       name: this.name,
       code: this.code,

@@ -8,6 +8,8 @@ export enum CommonErrorCode {
   ENTITY_ALREADY_EXISTS = "CEC006",
   VALIDATION_FAILED = "CEC007",
   IMAGE_URL_CONVERSION_FAILED = "CEC008",
+
+  UNKNOWN_ERROR = "CEC999", // 예외 처리되지 않은 오류
 }
 
 export class CommonError extends BaseError {
@@ -19,6 +21,7 @@ export class CommonError extends BaseError {
     [CommonErrorCode.ENTITY_ALREADY_EXISTS]: "엔티티가 이미 존재합니다.",
     [CommonErrorCode.VALIDATION_FAILED]: "유효성 검증에 실패했습니다.",
     [CommonErrorCode.IMAGE_URL_CONVERSION_FAILED]: "이미지 URL 변환에 실패했습니다.",
+    [CommonErrorCode.UNKNOWN_ERROR]: "알 수 없는 오류가 발생했습니다.",
   };
 
   constructor(code: CommonErrorCode, statusCode = 500) {
@@ -51,5 +54,9 @@ export class CommonError extends BaseError {
 
   static imageUrlConversionFailed(): CommonError {
     return new CommonError(CommonErrorCode.IMAGE_URL_CONVERSION_FAILED, 500);
+  }
+
+  static unknownError(): CommonError {
+    return new CommonError(CommonErrorCode.UNKNOWN_ERROR, 500);
   }
 }
