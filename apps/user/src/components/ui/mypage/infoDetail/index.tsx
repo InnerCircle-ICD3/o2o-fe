@@ -15,7 +15,7 @@ const InfoDetail = async (props: InfoDetailProps) => {
       <div className={style.errorWrapper}>
         <Image src="/images/character2.png" alt="loading" width={120} height={120} />
 
-        <h2>공지사항을 찾을 수 없습니다.</h2>
+        <h2>관련 내용을 찾을 수 없습니다.</h2>
       </div>
     );
   }
