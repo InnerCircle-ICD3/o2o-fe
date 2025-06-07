@@ -1,4 +1,4 @@
-import type { Notice } from "@/types/apis/notice.type";
+import type { Notice } from "@/types/apis/mypage.type";
 import { render, screen } from "@testing-library/react";
 import NoticeItem from "./index";
 
