@@ -3,3 +3,10 @@ export interface Info {
   title: string;
   createdAt: string;
 }
+
+export interface InfoDetail {
+  id: number;
+  title: string;
+  content: string;
+  createdAt: string;
+}
