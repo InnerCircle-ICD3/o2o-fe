@@ -4,14 +4,14 @@ import OrderItem from "@/components/ui/my-orders/orderItem";
 import RequireLogin from "@/components/ui/my-orders/requireLogin";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import useGetMyOrder from "@/hooks/api/useGetMyOrder";
-import { useUserStore } from "@/stores/userInfoStore";
+import { userInfoStore } from "@/stores/userInfoStore";
 import type { OrderDetail } from "@/types/apis/order.type";
 import * as style from "./myOrders.css";
 
 const Page = () => {
   const { data: orderDetails, error, isError, isLoading } = useGetMyOrder(1);
 
-  const { user } = useUserStore();
+  const { user } = userInfoStore();
   const isLogin = !!user;
 
   if (!isLogin) {

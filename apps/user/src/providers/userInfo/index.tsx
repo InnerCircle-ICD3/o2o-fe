@@ -1,11 +1,11 @@
 "use client";
 
-import { useUserStore } from "@/stores/userInfoStore";
+import { userInfoStore } from "@/stores/userInfoStore";
 import { useEffect } from "react";
 
 export function UserInfoProvider() {
-  const setUser = useUserStore((state) => state.setUser);
-  const clearUser = useUserStore((state) => state.clearUser);
+  const setUser = userInfoStore((state) => state.setUser);
+  const clearUser = userInfoStore((state) => state.clearUser);
 
   useEffect(() => {
     const token = document.cookie.split("; ").find((row) => row.startsWith("access_token="));

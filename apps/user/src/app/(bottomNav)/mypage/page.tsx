@@ -3,7 +3,7 @@
 import { getCustomer } from "@/apis/ssr/customers";
 import type { Result } from "@/apis/types";
 import LoginLink from "@/components/ui/mypage/loginLink";
-import { useUserStore } from "@/stores/userInfoStore";
+import { userInfoStore } from "@/stores/userInfoStore";
 import type { Customer } from "@/types/apis/accounts.type";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import * as style from "./mypage.css";
 
 const Page = () => {
-  const { user } = useUserStore();
+  const { user } = userInfoStore();
   const isLogin = !!user;
 
   const [userInfo, setUserInfo] = useState<Result<Customer> | null>(null);

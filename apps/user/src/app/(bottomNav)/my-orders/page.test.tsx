@@ -12,7 +12,7 @@ vi.mock("@/components/ui/my-orders/orderItem", () => ({
 }));
 
 vi.mock("@/stores/userInfoStore", () => ({
-  useUserStore: vi.fn(() => ({
+  userInfoStore: vi.fn(() => ({
     user: { id: 1, nickname: "재완", customerId: 1 },
   })),
 }));

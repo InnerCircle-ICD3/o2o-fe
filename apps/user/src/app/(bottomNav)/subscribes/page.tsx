@@ -1,10 +1,10 @@
 "use client";
 
 import RequireLogin from "@/components/ui/my-orders/requireLogin";
-import { useUserStore } from "@/stores/userInfoStore";
+import { userInfoStore } from "@/stores/userInfoStore";
 
 export default function Subscribes() {
-  const { user } = useUserStore();
+  const { user } = userInfoStore();
   const isLogin = !!user;
 
   if (!isLogin) {

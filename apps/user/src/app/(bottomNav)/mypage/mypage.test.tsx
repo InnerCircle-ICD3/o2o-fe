@@ -1,4 +1,4 @@
-import { useUserStore } from "@/stores/userInfoStore";
+import { userInfoStore } from "@/stores/userInfoStore";
 import { render } from "@testing-library/react";
 import { vi } from "vitest";
 import * as style from "./mypage.css";
@@ -9,12 +9,12 @@ vi.mock("@/apis/ssr/account", () => ({
 }));
 
 vi.mock("@/stores/userInfoStore", () => ({
-  useUserStore: vi.fn(),
+  userInfoStore: vi.fn(),
 }));
 
 describe("Mypage Test", () => {
   it("로그인 정보가 있다면 shortcut, menus 메뉴가 나타난다.", () => {
-    vi.mocked(useUserStore).mockReturnValue({
+    vi.mocked(userInfoStore).mockReturnValue({
       user: { id: 1, nickname: "재완", customerId: 1 },
     });
 
@@ -27,7 +27,7 @@ describe("Mypage Test", () => {
   });
 
   it("로그인 정보가 없다면 shortcut, menus 메뉴가 나타나지 않는다.", () => {
-    vi.mocked(useUserStore).mockReturnValue({
+    vi.mocked(userInfoStore).mockReturnValue({
       user: null,
     });
 
