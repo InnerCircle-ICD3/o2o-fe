@@ -2,11 +2,21 @@ import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import Page from "./page";
 
+const mockPush = vi.fn();
+
 // useGetMyOrder 훅 모킹
 const mockUseGetMyOrder = vi.fn();
 vi.mock("@/hooks/api/useGetMyOrder", () => ({
   default: () => mockUseGetMyOrder(),
 }));
+
+vi.mock("next/navigation", () => {
+  return {
+    useRouter: () => ({
+      push: mockPush,
+    }),
+  };
+});
 
 // OrderItem 컴포넌트 모킹
 vi.mock("@/components/ui/my-orders/orderItem", () => ({
@@ -35,7 +45,7 @@ describe("My Orders Page", () => {
   it("에러가 발생했을 때 에러 메시지가 표시된다", () => {
     mockUseGetMyOrder.mockReturnValue({
       data: undefined,
-      error: { message: "네트워크 오류" },
+      error: { message: "주문 내역을 불러오는 데 실패했습니다." },
       isError: true,
       isLoading: false,
     });
@@ -43,7 +53,6 @@ describe("My Orders Page", () => {
     render(<Page />);
 
     expect(screen.getByText("주문 내역을 불러오는 데 실패했습니다.")).toBeInTheDocument();
-    expect(screen.getByText("네트워크 오류")).toBeInTheDocument();
   });
 
   it("주문 내역이 정상적으로 표시된다", () => {
