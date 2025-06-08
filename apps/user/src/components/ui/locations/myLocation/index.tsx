@@ -1,5 +1,6 @@
 "use client";
 
+// import { getCustomerAddress } from "@/apis/ssr/customer";
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
@@ -10,20 +11,32 @@ import {
   createUserMarker,
   getRegionByCoords,
   renderMyLocationCircle,
+  // searchAddress,
 } from "@/utils/locations/locationUtils";
+// import { useQuery } from "@tanstack/react-query";
+// import { AsyncCallbackSet } from "next/dist/server/lib/async-callback-set";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as styles from "./myLocation.css";
 
 type RangeOption = (typeof RANGE_OPTIONS)[number]["value"];
 
 export default function MyLocation() {
+  const [range, setRange] = useState<RangeOption>(500);
+  // const [query, setQuery] = useState("");
+  // const [searchResults, setSearchResults] = useState<string[]>([]);
+  // const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const location = useGeolocation();
   const isLoaded = useKakaoLoader();
-  const [range, setRange] = useState<RangeOption>(500);
   const selectedIndex = RANGE_OPTIONS.findIndex((option) => option.value === range);
   const markerRef = useRef<kakao.maps.Marker | null>(null);
   const circleRef = useRef<kakao.maps.Circle | null>(null);
+
+  // const { data: customerAddress, isLoading: isCustomerAddressLoading } = useQuery({
+  //   queryKey: ["customerAddress"],
+  //   queryFn: () => getCustomerAddress({ customerId: 5 }),
+  // });
 
   // 지도 초기화
   const handleMapReady = useCallback((map: kakao.maps.Map) => {
@@ -43,11 +56,21 @@ export default function MyLocation() {
     circleRef.current = renderMyLocationCircle(mapRef.current, location, range);
   }, [location, range]);
 
+  // 카카오 주소 검색
+  // useEffect(() => {
+  //   const timer = setTimeout(async () => {
+  //     const results = await searchAddress(query);
+  //     setSearchResults(results);
+  //   }, 300);
+  //   return () => clearTimeout(timer);
+  // }, [query]);
+
   const handleGetRegion = async () => {
     if (!location) return;
 
     try {
       const region = await getRegionByCoords(location.lat, location.lng);
+      console.log(region, range);
       if (region) {
         console.log(region, range);
       }
@@ -55,6 +78,22 @@ export default function MyLocation() {
       console.error("지역 정보를 가져오는 데 실패했습니다:", error);
     }
   };
+
+  // const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>, index: number) => {
+  //   const newRegions = [...selectedRegions];
+  //   newRegions[index] = e.target.value;
+  //   setSelectedRegions(newRegions);
+  // };
+
+  // const handleRemoveRegion = (index: number) => {
+  //   const newRegions = [...selectedRegions];
+  //   newRegions.splice(index, 1);
+  //   setSelectedRegions(newRegions);
+  // };
+
+  // const handleAddRegion = () => {
+  //   setSelectedRegions([...selectedRegions, ""]);
+  // };
 
   if (!location || !isLoaded) return <LoadingMap />;
 
@@ -67,39 +106,47 @@ export default function MyLocation() {
           <h3 className={styles.bottomSheetTitle}>내 동네</h3>
         </div>
         <div className={styles.bottomSheetContent}>
-          <div className={styles.trackWrapper}>
-            <div className={styles.trackBg} />
-            <div
-              className={styles.trackProgress}
-              style={{ width: `${(selectedIndex / (RANGE_OPTIONS.length - 1)) * 100}%` }}
-            />
+          <div className={styles.buttonWrapper}>
+            <Button status="primary" onClick={handleGetRegion}>
+              설정하기
+            </Button>
+            <Button onClick={handleGetRegion}>
+              <p className={styles.buttonText}>+</p>
+            </Button>
           </div>
-          {RANGE_OPTIONS.map(({ value, label }, index) => {
-            const isSelected = range === value;
-            const isPassed = index < selectedIndex;
 
-            return (
-              <label key={value} className={styles.option}>
-                <input
-                  type="radio"
-                  name="distance"
-                  value={value}
-                  checked={isSelected}
-                  onChange={() => setRange(value as RangeOption)}
-                  className={styles.input}
-                />
-                <span
-                  className={`${styles.circle} ${isSelected ? styles.circleSelected : isPassed ? styles.circlePassed : styles.circleInactive}`}
-                />
-                {label && <span className={styles.label}>{label}</span>}
-              </label>
-            );
-          })}
-        </div>
-        <div className={styles.bottomSheetFooter}>
-          <Button status="primary" onClick={handleGetRegion}>
-            <span className={styles.buttonText}>설정하기</span>
-          </Button>
+          <div className={styles.searchWrapper}>
+            <div className={styles.trackWrapper}>
+              <div className={styles.trackBg} />
+              <div
+                className={styles.trackProgress}
+                style={{ width: `${(selectedIndex / (RANGE_OPTIONS.length - 1)) * 100}%` }}
+              />
+            </div>
+            <div className={styles.rangeWrapper}>
+              {RANGE_OPTIONS.map(({ value, label }, index) => {
+                const isSelected = range === value;
+                const isPassed = index < selectedIndex;
+
+                return (
+                  <label key={value} className={styles.option}>
+                    <input
+                      type="radio"
+                      name="distance"
+                      value={value}
+                      checked={isSelected}
+                      onChange={() => setRange(value as RangeOption)}
+                      className={styles.input}
+                    />
+                    <span
+                      className={`${styles.circle} ${isSelected ? styles.circleSelected : isPassed ? styles.circlePassed : styles.circleInactive}`}
+                    />
+                    {label && <span className={styles.label}>{label}</span>}
+                  </label>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>

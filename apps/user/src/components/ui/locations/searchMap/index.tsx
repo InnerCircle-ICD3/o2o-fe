@@ -30,6 +30,7 @@ export default function SearchMap() {
 
   const isLoaded = useKakaoLoader();
   const location = useGeolocation();
+  console.log(location);
 
   const [shouldShowRefetch, setShouldShowRefetch] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);

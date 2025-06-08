@@ -151,3 +151,17 @@ export const getRegionByCoords = (lat: number, lng: number): Promise<string | nu
     });
   });
 };
+
+export async function searchAddress(query: string): Promise<string[]> {
+  const res = await fetch(
+    `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(query)}`,
+    {
+      headers: {
+        /* biome-ignore lint/style/useNamingConvention: false */
+        Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
+      },
+    },
+  );
+  const data = await res.json();
+  return data.documents.map((doc: { address: { addressName: string } }) => doc.address.addressName);
+}
