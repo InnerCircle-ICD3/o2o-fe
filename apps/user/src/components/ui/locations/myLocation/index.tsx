@@ -1,5 +1,6 @@
 "use client";
 
+import { postCustomerAddress } from "@/apis/ssr/locations";
 // import { getCustomerAddress } from "@/apis/ssr/customer";
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
@@ -9,12 +10,11 @@ import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import {
   createUserMarker,
-  getRegionByCoords,
+  getFullAddressByCoords,
   renderMyLocationCircle,
-  // searchAddress,
 } from "@/utils/locations/locationUtils";
 // import { useQuery } from "@tanstack/react-query";
-// import { AsyncCallbackSet } from "next/dist/server/lib/async-callback-set";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as styles from "./myLocation.css";
 
@@ -22,9 +22,8 @@ type RangeOption = (typeof RANGE_OPTIONS)[number]["value"];
 
 export default function MyLocation() {
   const [range, setRange] = useState<RangeOption>(500);
-  // const [query, setQuery] = useState("");
-  // const [searchResults, setSearchResults] = useState<string[]>([]);
-  // const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+
+  const router = useRouter();
 
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const location = useGeolocation();
@@ -56,44 +55,21 @@ export default function MyLocation() {
     circleRef.current = renderMyLocationCircle(mapRef.current, location, range);
   }, [location, range]);
 
-  // 카카오 주소 검색
-  // useEffect(() => {
-  //   const timer = setTimeout(async () => {
-  //     const results = await searchAddress(query);
-  //     setSearchResults(results);
-  //   }, 300);
-  //   return () => clearTimeout(timer);
-  // }, [query]);
-
   const handleGetRegion = async () => {
     if (!location) return;
 
     try {
-      const region = await getRegionByCoords(location.lat, location.lng);
-      console.log(region, range);
-      if (region) {
-        console.log(region, range);
+      const address = await getFullAddressByCoords(location.lat, location.lng);
+
+      console.log(address);
+      if (address) {
+        const result = await postCustomerAddress({ customerId: 5, address });
+        console.log(result);
       }
     } catch (error) {
       console.error("지역 정보를 가져오는 데 실패했습니다:", error);
     }
   };
-
-  // const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>, index: number) => {
-  //   const newRegions = [...selectedRegions];
-  //   newRegions[index] = e.target.value;
-  //   setSelectedRegions(newRegions);
-  // };
-
-  // const handleRemoveRegion = (index: number) => {
-  //   const newRegions = [...selectedRegions];
-  //   newRegions.splice(index, 1);
-  //   setSelectedRegions(newRegions);
-  // };
-
-  // const handleAddRegion = () => {
-  //   setSelectedRegions([...selectedRegions, ""]);
-  // };
 
   if (!location || !isLoaded) return <LoadingMap />;
 
@@ -110,7 +86,7 @@ export default function MyLocation() {
             <Button status="primary" onClick={handleGetRegion}>
               설정하기
             </Button>
-            <Button onClick={handleGetRegion}>
+            <Button onClick={() => router.push("/locations/address-search")}>
               <p className={styles.buttonText}>+</p>
             </Button>
           </div>

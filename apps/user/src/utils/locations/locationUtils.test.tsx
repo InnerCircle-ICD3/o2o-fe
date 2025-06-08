@@ -1,4 +1,4 @@
-import type { MapStore } from "@/types/searchMap.type";
+import type { MapStore } from "@/types/locations.type";
 import { vi } from "vitest";
 import {
   calculateMovedDistance,

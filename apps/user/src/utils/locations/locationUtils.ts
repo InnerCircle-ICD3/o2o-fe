@@ -1,4 +1,4 @@
-import type { MapStore } from "@/types/searchMap.type";
+import type { CustomerAddress, MapStore, SearchAddressResult } from "@/types/locations.type";
 
 export const createStoreMarker = (
   store: MapStore,
@@ -130,7 +130,10 @@ export const renderMyLocationPolygon = (
   return polygon;
 };
 
-export const getRegionByCoords = (lat: number, lng: number): Promise<string | null> => {
+export const getFullAddressByCoords = (
+  lat: number,
+  lng: number,
+): Promise<CustomerAddress | null> => {
   return new Promise((resolve, reject) => {
     if (!window.kakao?.maps) {
       reject(new Error("카카오맵 API가 로드되지 않았습니다."));
@@ -138,13 +141,31 @@ export const getRegionByCoords = (lat: number, lng: number): Promise<string | nu
     }
 
     const geocoder = new kakao.maps.services.Geocoder();
-
     const coord = new kakao.maps.LatLng(lat, lng);
 
-    geocoder.coord2RegionCode(coord.getLng(), coord.getLat(), (result, status) => {
+    geocoder.coord2Address(coord.getLng(), coord.getLat(), (result, status) => {
       if (status === "OK" && result.length > 0) {
-        const regionInfo = result.find((r) => r.region_type === "H");
-        resolve(regionInfo?.address_name || null);
+        const r = result[0];
+
+        const customerAddress: CustomerAddress = {
+          address: {
+            roadNameAddress: r.road_address?.address_name ?? "",
+            lotNumberAddress: r.address?.address_name ?? "",
+            buildingName: r.road_address?.building_name ?? "",
+            zipCode: r.road_address?.zone_no ?? "",
+            region1DepthName: r.address?.region_1depth_name ?? "",
+            region2DepthName: r.address?.region_2depth_name ?? "",
+            region3DepthName: r.address?.region_3depth_name ?? "",
+            coordinate: {
+              latitude: lat,
+              longitude: lng,
+            },
+          },
+          customerAddressType: "HOME", // 필요 시 인자로 받을 수 있음
+          description: "", // 추가 설명은 별도로 입력받거나 비워둠
+        };
+
+        resolve(customerAddress);
       } else {
         resolve(null);
       }
@@ -152,9 +173,9 @@ export const getRegionByCoords = (lat: number, lng: number): Promise<string | nu
   });
 };
 
-export async function searchAddress(query: string): Promise<string[]> {
+export async function searchAddress(query: string): Promise<SearchAddressResult[]> {
   const res = await fetch(
-    `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(query)}`,
+    `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}`,
     {
       headers: {
         /* biome-ignore lint/style/useNamingConvention: false */
@@ -163,5 +184,11 @@ export async function searchAddress(query: string): Promise<string[]> {
     },
   );
   const data = await res.json();
-  return data.documents.map((doc: { address: { addressName: string } }) => doc.address.addressName);
+
+  /* biome-ignore lint/style/useNamingConvention: false */
+  return data.documents.map((doc: { address_name: string; y: string; x: string }) => ({
+    address: doc.address_name,
+    lat: Number.parseFloat(doc.y),
+    lng: Number.parseFloat(doc.x),
+  }));
 }

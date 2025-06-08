@@ -9,27 +9,54 @@ declare namespace kakao {
     namespace services {
       class Geocoder {
         constructor();
-        coord2RegionCode(
+        coord2Address(
           lng: number,
           lat: number,
-          callback: (result: RegionCode[], status: Status) => void,
+          callback: (result: AddressResult[], status: Status) => void,
         ): void;
       }
 
       type Status = "OK" | "ERROR" | "ZERO_RESULT" | "NOT_FOUND" | "INVALID_REQUEST";
-
-      interface RegionCode {
+      interface AddressResult {
+        address: {
+          /* biome-ignore lint/style/useNamingConvention: false */
+          address_name: string; // 지번 주소
+          /* biome-ignore lint/style/useNamingConvention: false */
+          region_1depth_name: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          region_2depth_name: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          region_3depth_name: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          mountain_yn: "Y" | "N";
+          /* biome-ignore lint/style/useNamingConvention: false */
+          main_address_no: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          sub_address_no: string;
+        };
         /* biome-ignore lint/style/useNamingConvention: false */
-        region_type: string;
-        /* biome-ignore lint/style/useNamingConvention: false */
-        address_name: string;
-        code: string;
-        /* biome-ignore lint/style/useNamingConvention: false */
-        region_1depth_name: string;
-        /* biome-ignore lint/style/useNamingConvention: false */
-        region_2depth_name: string;
-        /* biome-ignore lint/style/useNamingConvention: false */
-        region_3depth_name: string;
+        road_address?: {
+          /* biome-ignore lint/style/useNamingConvention: false */
+          address_name: string; // 도로명 주소
+          /* biome-ignore lint/style/useNamingConvention: false */
+          region_1depth_name: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          region_2depth_name: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          region_3depth_name: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          road_name: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          underground_yn: "Y" | "N";
+          /* biome-ignore lint/style/useNamingConvention: false */
+          main_building_no: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          sub_building_no: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          building_name: string;
+          /* biome-ignore lint/style/useNamingConvention: false */
+          zone_no: string; // 우편번호
+        };
       }
     }
 

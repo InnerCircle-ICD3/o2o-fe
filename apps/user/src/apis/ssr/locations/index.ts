@@ -1,30 +1,12 @@
 import { apiClient } from "@/apis/client";
 import type { Result } from "@/apis/types";
 import { toSafeResult } from "@/apis/utils/result";
-import type { StoreResponseData } from "@/types/searchMap.type";
+import type { CustomerAddress, StoreResponseData } from "@/types/locations.type";
 
 type ViewPoint = {
   latitude: number;
   longitude: number;
 };
-
-interface CustomerAddress {
-  address: {
-    roadNameAddress: string;
-    lotNumberAddress: string;
-    buildingName: string;
-    zipCode: string;
-    region1DepthName: string;
-    region2DepthName: string;
-    region3DepthName: string;
-    coordinate: {
-      latitude: number;
-      longitude: number;
-    };
-  };
-  customerAddressType: string;
-  description: string;
-}
 
 export const getStoresByCenter = async (
   center: kakao.maps.LatLng,
@@ -41,8 +23,11 @@ export const getStoresByCenter = async (
   );
 };
 
-export const postCustomerAddress = async (customerId: string, body: CustomerAddress) => {
+export const postCustomerAddress = async ({
+  customerId,
+  address,
+}: { customerId: number; address: CustomerAddress }) => {
   return await toSafeResult(() =>
-    apiClient.post(`customers/address?customerId=${customerId}`, body),
+    apiClient.post(`customers/address?customerId=${customerId}`, address),
   );
 };

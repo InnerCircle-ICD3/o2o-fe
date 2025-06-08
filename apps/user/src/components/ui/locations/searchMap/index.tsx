@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import * as styles from "./searchMap.css";
 
-import type { MapStore } from "@/types/searchMap.type";
+import type { MapStore } from "@/types/locations.type";
 
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";

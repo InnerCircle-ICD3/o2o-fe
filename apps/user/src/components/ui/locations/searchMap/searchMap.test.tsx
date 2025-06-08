@@ -1,7 +1,7 @@
 import { getStoresByCenter } from "@/apis/ssr/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import type { MapStore } from "@/types/searchMap.type";
+import type { MapStore } from "@/types/locations.type";
 import { calculateMovedDistance } from "@/utils/locations/locationUtils";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { type Mock, vi } from "vitest";
