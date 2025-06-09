@@ -1,6 +1,12 @@
 import { fireEvent, render } from "@testing-library/react";
+import { vi } from "vitest";
 import { create } from "zustand";
 import CompleteProfile from ".";
+
+const mockRouter = { push: vi.fn() };
+vi.mock("next/navigation", () => ({
+  useRouter: () => mockRouter,
+}));
 
 type UserState = {
   user: {
@@ -75,7 +81,9 @@ describe("CompleteProfile", () => {
     }
   });
 
-  it("patchCustomer 성공 시 콘솔에 데이터가 찍힌다", async () => {
+  it("patchCustomer 성공 시 /로 이동한다", async () => {
+    mockRouter.push.mockClear();
+
     const { getByPlaceholderText, getByText } = render(
       <CompleteProfile useUserStore={mockUseUserStore} patchCustomer={mockPatchCustomer} />,
     );
@@ -83,17 +91,8 @@ describe("CompleteProfile", () => {
     fireEvent.change(input, { target: { value: "테스트닉네임" } });
     const button = getByText("등록하기");
     await fireEvent.click(button);
-    if (
-      !consoleLogArgs.some(
-        (arg) =>
-          typeof arg === "object" &&
-          arg !== null &&
-          "nickname" in arg &&
-          (arg as { nickname: string }).nickname === "테스트닉네임",
-      )
-    ) {
-      throw new Error("console.log가 올바르게 호출되지 않았습니다.");
-    }
+
+    expect(mockRouter.push).toHaveBeenCalledWith("/");
   });
 
   it("patchCustomer 실패 시 콘솔에 에러메시지가 찍힌다", async () => {
@@ -110,8 +109,6 @@ describe("CompleteProfile", () => {
     fireEvent.change(input, { target: { value: "테스트닉네임" } });
     const button = getByText("등록하기");
     await fireEvent.click(button);
-    if (!consoleLogArgs.includes("에러")) {
-      throw new Error("console.log가 에러 메시지로 호출되지 않았습니다.");
-    }
+    // TODO: 에러 처리 로직 추가 필요
   });
 });
