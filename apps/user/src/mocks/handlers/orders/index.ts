@@ -1,7 +1,7 @@
 import { baseUrl } from "@/mocks/utils";
 import { http, HttpResponse } from "msw";
 
-const mockOrder = {
+const firstMockOrder = {
   contents: [
     {
       id: 1,
@@ -62,7 +62,7 @@ const mockOrder = {
       orderNumber: 123459,
       customerId: 1,
       storeId: 1004,
-      status: "PENDING",
+      status: "COMPLETED",
       orderItems: [
         {
           id: 4,
@@ -116,7 +116,7 @@ const mockOrder = {
       orderNumber: 123462,
       customerId: 1,
       storeId: 1007,
-      status: "PENDING",
+      status: "COMPLETED",
       orderItems: [
         {
           id: 7,
@@ -170,7 +170,7 @@ const mockOrder = {
       orderNumber: 123465,
       customerId: 1,
       storeId: 1010,
-      status: "PENDING",
+      status: "COMPLETED",
       orderItems: [
         {
           id: 10,
@@ -187,13 +187,114 @@ const mockOrder = {
   lastId: 1,
 };
 
+const secondMockOrder = {
+  contents: [
+    {
+      id: 11,
+      orderNumber: 123466,
+      customerId: 1,
+      storeId: 1011,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 11,
+          productId: 11,
+          productName: "럭키백 얼티밋",
+          price: 60000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-16T20:05:30Z",
+      updatedAt: "2025-05-16T20:05:30Z",
+    },
+    {
+      id: 12,
+      orderNumber: 123467,
+      customerId: 1,
+      storeId: 1012,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 12,
+          productId: 12,
+          productName: "럭키백 프리미엄 스페셜",
+          price: 70000,
+          quantity: 2,
+        },
+      ],
+      createdAt: "2025-05-17T21:10:30Z",
+      updatedAt: "2025-05-17T21:10:30Z",
+    },
+    {
+      id: 13,
+      orderNumber: 123468,
+      customerId: 1,
+      storeId: 1013,
+      status: "CANCELLED",
+      orderItems: [
+        {
+          id: 13,
+          productId: 13,
+          productName: "럭키백 클래식 스페셜",
+          price: 80000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-18T22:15:30Z",
+      updatedAt: "2025-05-18T22:15:30Z",
+    },
+    {
+      id: 14,
+      orderNumber: 123469,
+      customerId: 1,
+      storeId: 1014,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 14,
+          productId: 14,
+          productName: "럭키백 슈퍼 프리미엄",
+          price: 90000,
+          quantity: 3,
+        },
+      ],
+      createdAt: "2025-05-19T23:20:30Z",
+      updatedAt: "2025-05-19T23:20:30Z",
+    },
+    {
+      id: 15,
+      orderNumber: 123470,
+      customerId: 1,
+      storeId: 1015,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 15,
+          productId: 15,
+          productName: "럭키백 얼티밋 프리미엄 스페셜 에디션",
+          price: 100000,
+          quantity: 2,
+        },
+      ],
+      createdAt: "2025-05-20T00:25:30Z",
+      updatedAt: "2025-05-20T00:25:30Z",
+    },
+  ],
+  lastId: 15,
+};
+
 const handlers = [
   http.post(`${baseUrl}/orders`, () => {
     return HttpResponse.json({ success: true, data: { orderId: 1 } });
   }),
 
-  http.get(`${baseUrl}/customers/orders`, () => {
-    return HttpResponse.json({ success: true, data: mockOrder });
+  http.get(`${baseUrl}/customers/orders`, ({ request }) => {
+    const url = new URL(request.url);
+    const lastId = url.searchParams.get("lastId");
+
+    const orders = lastId === "1" ? secondMockOrder : firstMockOrder;
+
+    return HttpResponse.json({ success: true, data: orders });
   }),
 
   http.get(`${baseUrl}/orders/:id`, ({ params }) => {
@@ -201,7 +302,7 @@ const handlers = [
 
     return HttpResponse.json({
       success: true,
-      data: mockOrder.contents.find((order) => order.id === id),
+      data: firstMockOrder.contents.find((order) => order.id === id),
     });
   }),
 ];

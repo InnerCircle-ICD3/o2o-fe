@@ -8,7 +8,7 @@ import useGetMyOrder from "@/hooks/api/useGetMyOrder";
 import * as style from "./myOrders.css";
 
 const Page = () => {
-  const { data: orderDetails, error, isError, isLoading } = useGetMyOrder(1);
+  const { data: orderDetails, error, isError, isLoading, fetchNextPage } = useGetMyOrder(1);
 
   if (isError) {
     return (
@@ -26,6 +26,7 @@ const Page = () => {
         <SkeletonStoreCard imagePosition="right" />
       ) : (
         <VirtualScroll
+          overscan={3}
           heights={{
             "order-item": {
               aspectRatio: 388 / 171,
@@ -34,6 +35,7 @@ const Page = () => {
               aspectRatio: 388 / 241,
             },
           }}
+          onScrollEnd={fetchNextPage}
         >
           {orderDetails?.pages.map((page) =>
             page.success
@@ -43,7 +45,7 @@ const Page = () => {
                     name={
                       ORDER_STATUS[order.status] === ORDER_STATUS.COMPLETED
                         ? "order-item"
-                        : "order-item"
+                        : "order-item-completed"
                     }
                   >
                     <OrderItem order={order} />

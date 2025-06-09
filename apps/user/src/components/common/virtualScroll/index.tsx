@@ -55,7 +55,7 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
   }, []);
 
   useEffect(() => {
-    if (!observerRef.current) return;
+    if (!observerRef.current || totalHeight !== 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -71,7 +71,9 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
     observer.observe(observerRef.current);
 
     return () => observer.disconnect();
-  }, [onScrollEnd]);
+  }, [onScrollEnd, totalHeight]);
+
+  console.log(totalHeight);
 
   return (
     <div ref={containerRef} className={containerStyle}>

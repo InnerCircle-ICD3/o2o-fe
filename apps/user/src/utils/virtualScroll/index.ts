@@ -91,6 +91,7 @@ export const renderVirtualContent = ({
     overscan,
     itemHeights,
   });
+  console.log(renderStart);
   const translateY = getTranslateY(itemHeights, renderStart);
 
   return {
