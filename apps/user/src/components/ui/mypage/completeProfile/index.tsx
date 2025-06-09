@@ -2,7 +2,7 @@
 
 import { patchCustomer as defaultPatchCustomer } from "@/apis/ssr/customers";
 import Button from "@/components/common/button";
-import { useUserStore as defaultUseUserStore } from "@/stores/userInfoStore";
+import { userInfoStore as defaultUseUserStore } from "@/stores/userInfoStore";
 import { useState } from "react";
 import * as styles from "./completeProfile.css";
 
