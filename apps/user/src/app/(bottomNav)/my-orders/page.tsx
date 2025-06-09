@@ -44,8 +44,8 @@ const Page = () => {
                     key={order.id}
                     name={
                       ORDER_STATUS[order.status] === ORDER_STATUS.COMPLETED
-                        ? "order-item"
-                        : "order-item-completed"
+                        ? "order-item-completed"
+                        : "order-item"
                     }
                   >
                     <OrderItem order={order} />
