@@ -6,8 +6,3 @@ export const getCustomerInfo = async ({ customerId }: { customerId: number }) =>
   return await toSafeResult(() => apiClient.get<UserInfo>(`customers/me?customerId=${customerId}`));
 };
 
-export const getCustomerAddress = async ({ customerId }: { customerId: number }) => {
-  return await toSafeResult(() =>
-    apiClient.get<UserInfo>(`customers/address?customerId=${customerId}`),
-  );
-};

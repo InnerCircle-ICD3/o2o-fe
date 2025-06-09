@@ -1,24 +1,26 @@
 "use client";
 
-import { postCustomerAddress } from "@/apis/ssr/locations";
-// import { getCustomerAddress } from "@/apis/ssr/customer";
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { RANGE_OPTIONS } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import {
-  createUserMarker,
-  getFullAddressByCoords,
-  renderMyLocationCircle,
-} from "@/utils/locations/locationUtils";
+import { createUserMarker, renderMyLocationCircle } from "@/utils/locations/locationUtils";
 // import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as styles from "./myLocation.css";
+import Image from "next/image";
+import { getCustomerAddress } from "@/apis/ssr/locations";
+import { useQuery } from "@tanstack/react-query";
+import type { Result } from "@/apis/types";
 
 type RangeOption = (typeof RANGE_OPTIONS)[number]["value"];
+
+type CustomerAddress = {
+  data: { buildingName?: string }[];
+};
 
 export default function MyLocation() {
   const [range, setRange] = useState<RangeOption>(500);
@@ -32,10 +34,10 @@ export default function MyLocation() {
   const markerRef = useRef<kakao.maps.Marker | null>(null);
   const circleRef = useRef<kakao.maps.Circle | null>(null);
 
-  // const { data: customerAddress, isLoading: isCustomerAddressLoading } = useQuery({
-  //   queryKey: ["customerAddress"],
-  //   queryFn: () => getCustomerAddress({ customerId: 5 }),
-  // });
+  const { data: customerAddress, isLoading: isCustomerAddressLoading } = useQuery<CustomerAddress>({
+    queryKey: ["customerAddress"],
+    queryFn: () => getCustomerAddress({ customerId: 5 }),
+  });
 
   // 지도 초기화
   const handleMapReady = useCallback((map: kakao.maps.Map) => {
@@ -55,27 +57,15 @@ export default function MyLocation() {
     circleRef.current = renderMyLocationCircle(mapRef.current, location, range);
   }, [location, range]);
 
-  const handleGetRegion = async () => {
-    if (!location) return;
-
-    try {
-      const address = await getFullAddressByCoords(location.lat, location.lng);
-
-      console.log(address);
-      if (address) {
-        const result = await postCustomerAddress({ customerId: 5, address });
-        console.log(result);
-      }
-    } catch (error) {
-      console.error("지역 정보를 가져오는 데 실패했습니다:", error);
-    }
-  };
-
-  if (!location || !isLoaded) return <LoadingMap />;
+  if (!location || !isLoaded || !isCustomerAddressLoading) return <LoadingMap />;
 
   return (
     <div className={styles.container}>
-      <KakaoMap lat={location.lat} lng={location.lng} onMapReady={handleMapReady} />
+      <KakaoMap
+        lat={location.lat}
+        lng={location.lng}
+        onMapReady={handleMapReady}
+      />
 
       <div className={styles.bottomSheetContainer}>
         <div className={styles.bottomSheetHeader}>
@@ -83,12 +73,40 @@ export default function MyLocation() {
         </div>
         <div className={styles.bottomSheetContent}>
           <div className={styles.buttonWrapper}>
-            <Button status="primary" onClick={handleGetRegion}>
-              설정하기
-            </Button>
-            <Button onClick={() => router.push("/locations/address-search")}>
-              <p className={styles.buttonText}>+</p>
-            </Button>
+            {customerAddress && customerAddress.data.length > 0 ? (
+              <>
+                {customerAddress.data.slice(0, 2).map((addr, idx) => (
+                  <Button
+                    key={idx}
+                    status="primary"
+                  >
+                    <div className={styles.buttonContent}>
+                      {addr.buildingName || "설정하기"}
+                      <Image
+                        src="/icons/btn_close_white.svg"
+                        alt="close"
+                        width={14}
+                        height={14}
+                      />
+                    </div>
+                  </Button>
+                ))}
+                {customerAddress.length < 2 && (
+                  <Button onClick={() => router.push("/locations/address-search")}>
+                    <p className={styles.buttonText}>+</p>
+                  </Button>
+                )}
+              </>
+            ) : (
+              <>
+                <Button onClick={() => router.push("/locations/address-search")}>
+                  <p className={styles.buttonText}>+</p>
+                </Button>
+                <Button onClick={() => router.push("/locations/address-search")}>
+                  <p className={styles.buttonText}>+</p>
+                </Button>
+              </>
+            )}
           </div>
 
           <div className={styles.searchWrapper}>
@@ -105,7 +123,10 @@ export default function MyLocation() {
                 const isPassed = index < selectedIndex;
 
                 return (
-                  <label key={value} className={styles.option}>
+                  <label
+                    key={value}
+                    className={styles.option}
+                  >
                     <input
                       type="radio"
                       name="distance"
@@ -115,7 +136,9 @@ export default function MyLocation() {
                       className={styles.input}
                     />
                     <span
-                      className={`${styles.circle} ${isSelected ? styles.circleSelected : isPassed ? styles.circlePassed : styles.circleInactive}`}
+                      className={`${styles.circle} ${
+                        isSelected ? styles.circleSelected : isPassed ? styles.circlePassed : styles.circleInactive
+                      }`}
                     />
                     {label && <span className={styles.label}>{label}</span>}
                   </label>

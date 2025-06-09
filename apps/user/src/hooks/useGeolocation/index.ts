@@ -20,7 +20,7 @@ function isValidCoordinates(coords: Coordinates | undefined | null): coords is C
   );
 }
 
-export const useGeolocation = (): Coordinates | null => {
+export const useGeolocation = (): Coordinates => {
   const { updateLocations, getLocations } = useUserLocation();
 
   useEffect(() => {

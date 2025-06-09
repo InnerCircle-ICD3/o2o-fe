@@ -29,3 +29,16 @@ export const resultItem = style({
     },
   },
 });
+
+export const noResultItem = style({
+  padding: "1rem",
+  color: "#888",
+  textAlign: "center",
+});
+
+export const buttonContent = style({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "5px",
+});

@@ -34,7 +34,7 @@ export interface StoreApiErrorResponse {
 export type StoreApiResponse = StoreApiSuccessResponse | StoreApiErrorResponse;
 
 // 고객 주소 타입
-export interface CustomerAddress {
+export interface CustomerAddressRequest {
   address: {
     roadNameAddress: string;
     lotNumberAddress: string;
@@ -52,8 +52,28 @@ export interface CustomerAddress {
   description: string;
 }
 
+export interface CustomerAddressResponse {
+  id: number;
+  customerId: number;
+  roadNameAddress: string;
+  lotNumberAddress: string;
+  buildingName: string;
+  zipCode: string;
+  region1DepthName: string;
+  region2DepthName: string;
+  region3DepthName: string;
+  latitude: number;
+  longitude: number;
+  customerAddressType: string;
+  description: string;
+}
+
 export interface SearchAddressResult {
   address: string;
+  location: Coordinates;
+}
+
+export interface Coordinates {
   lat: number;
   lng: number;
 }

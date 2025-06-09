@@ -142,3 +142,10 @@ export const rangeWrapper = style({
   width: "100%",
   padding: "10px 0",
 });
+
+export const buttonContent = style({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "5px",
+});

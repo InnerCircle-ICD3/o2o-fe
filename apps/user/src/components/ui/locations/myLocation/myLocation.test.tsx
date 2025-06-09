@@ -43,7 +43,23 @@ describe("MyLocation", () => {
     (useGeolocation as Mock).mockReturnValue(mockLocation);
     (useKakaoLoader as Mock).mockReturnValue(true);
 
-    vi.spyOn(locationUtils, "getRegionByCoords").mockResolvedValue("제주특별자치도 제주시 아라동");
+    vi.spyOn(locationUtils, "getFullAddressByCoords").mockResolvedValue({
+        address: {
+          roadNameAddress: "",
+          lotNumberAddress: "",
+          buildingName: "",
+          zipCode: "",
+          region1DepthName: "",
+          region2DepthName: "",
+          region3DepthName: "",
+          coordinate: {
+            latitude: 0,
+            longitude: 0,
+          },
+        },
+        customerAddressType: "",
+        description: "",
+    });
   });
 
   it("useKakaoLoader나 useGeolocation이 로드되지 않으면 LoadingMap을 보여준다", () => {
@@ -81,7 +97,7 @@ describe("MyLocation", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(locationUtils.getRegionByCoords).toHaveBeenCalledWith(
+      expect(locationUtils.getFullAddressByCoords).toHaveBeenCalledWith(
         mockLocation.lat,
         mockLocation.lng,
       );

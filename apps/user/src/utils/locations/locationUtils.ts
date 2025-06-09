@@ -173,9 +173,19 @@ export const getFullAddressByCoords = (
   });
 };
 
+/**
+ * 정규식: 주소처럼 보이면 true
+ * 예: 00동 12-3, 강남대로 132, 논현로 100
+ */
+const isLikelyAddress = (query: string) => {
+  return /[가-힣]+(로|길|동|면|읍|구|시|도)\s*\d+(-\d+)?/.test(query);
+};
+
 export async function searchAddress(query: string): Promise<SearchAddressResult[]> {
+  const endpoint = isLikelyAddress(query) ? "address" : "keyword";
+  
   const res = await fetch(
-    `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}`,
+    `https://dapi.kakao.com/v2/local/search/${endpoint}.json?query=${encodeURIComponent(query)}`,
     {
       headers: {
         /* biome-ignore lint/style/useNamingConvention: false */
@@ -188,7 +198,9 @@ export async function searchAddress(query: string): Promise<SearchAddressResult[
   /* biome-ignore lint/style/useNamingConvention: false */
   return data.documents.map((doc: { address_name: string; y: string; x: string }) => ({
     address: doc.address_name,
-    lat: Number.parseFloat(doc.y),
-    lng: Number.parseFloat(doc.x),
+    location: {
+      lat: parseFloat(Number.parseFloat(doc.y).toFixed(6)),
+      lng: parseFloat(Number.parseFloat(doc.x).toFixed(6)),
+    }
   }));
 }

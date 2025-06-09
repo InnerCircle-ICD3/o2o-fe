@@ -1,21 +1,27 @@
 "use client";
 
-import type { SearchAddressResult } from "@/types/locations.type";
-import { searchAddress } from "@/utils/locations/locationUtils";
+import type { Coordinates, SearchAddressResult } from "@/types/locations.type";
+import { getFullAddressByCoords, searchAddress } from "@/utils/locations/locationUtils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as styles from "./addressSearch.css";
+import Button from "@/components/common/button";
+import Image from "next/image";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import { postCustomerAddress } from "@/apis/ssr/locations";
+import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 
 export default function LocationSearchPage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchAddressResult[]>([]);
+  const location = useGeolocation();
+  const isLoaded = useKakaoLoader();
   const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (query) {
         const res = await searchAddress(query);
-        console.log(res);
         setResults(res);
       } else {
         setResults([]);
@@ -25,14 +31,22 @@ export default function LocationSearchPage() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const handleSelect = (selected: SearchAddressResult) => {
-    // 예시: 쿼리 문자열로 주소만 전달
-    router.push(`/locations/my-location?selectedRegion=${encodeURIComponent(selected.address)}`);
+  const handleSelect = async (location: Coordinates) => {
+    if (!location || !isLoaded) return;
+    
+    try {
+      const address = await getFullAddressByCoords(location.lat, location.lng);
 
-    // 또는 sessionStorage/zustand 등에 selected 저장 가능
-    // sessionStorage.setItem("selectedRegion", JSON.stringify(selected));
-  };
-
+      if (address) {
+        const result = await postCustomerAddress({ customerId: 5, address });
+        console.log(result)
+        router.push("/locations/my-location");
+      }
+    } catch (error) {
+      console.error("지역 정보를 가져오는 데 실패했습니다:", error);
+    }
+  }
+  
   return (
     <div className={styles.container}>
       <input
@@ -43,18 +57,28 @@ export default function LocationSearchPage() {
       />
 
       <ul className={styles.resultList}>
+        <Button status="primary" onClick={() => handleSelect(location)} style={{ height: "40px" }}>
+          <div className={styles.buttonContent}>
+            <Image src="/icons/my_location_white.svg" alt="" width={24} height={24} />
+            현재 위치로 등록
+          </div>
+        </Button>
         {results.map((item, index) => (
           <li
             key={`${item.address}-${index}`}
             className={styles.resultItem}
-            onClick={() => handleSelect(item)}
+            onClick={() => handleSelect(item.location)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") handleSelect(item);
+              if (e.key === "Enter") handleSelect(item.location);
             }}
           >
             {item.address}
           </li>
         ))}
+
+        {query && results.length === 0 && (
+          <li className={styles.noResultItem}>검색 결과가 없습니다</li>
+        )}
       </ul>
     </div>
   );

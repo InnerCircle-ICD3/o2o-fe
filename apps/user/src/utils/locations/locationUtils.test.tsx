@@ -4,7 +4,7 @@ import {
   calculateMovedDistance,
   createStoreMarker,
   createUserMarker,
-  getRegionByCoords,
+  getFullAddressByCoords,
   renderMyLocationPolygon,
 } from "./locationUtils";
 
@@ -185,9 +185,9 @@ describe("locationUtils", () => {
     });
   });
 
-  describe("getRegionByCoords()", () => {
+  describe("getFullAddressByCoords()", () => {
     it("정상 응답이 오면 해당 지역명을 반환해야 합니다.", async () => {
-      const result = await getRegionByCoords(33.450705, 126.570677);
+      const result = await getFullAddressByCoords(33.450705, 126.570677);
       expect(result).toBe("제주특별자치도 제주시 아라동");
     });
 
@@ -207,7 +207,7 @@ describe("locationUtils", () => {
         },
       }));
 
-      const result = await getRegionByCoords(33.450705, 126.570677);
+      const result = await getFullAddressByCoords(33.450705, 126.570677);
       expect(result).toBeNull();
     });
 
@@ -226,7 +226,7 @@ describe("locationUtils", () => {
         },
       }));
 
-      const result = await getRegionByCoords(33.450705, 126.570677);
+      const result = await getFullAddressByCoords(33.450705, 126.570677);
       expect(result).toBeNull();
     });
   });
