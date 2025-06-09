@@ -1,17 +1,17 @@
 "use client";
 
-import { userInfoStore } from "@/stores/userInfoStore";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
 import { useEffect } from "react";
 
-export function UserInfoProvider() {
-  const setUser = userInfoStore((state) => state.setUser);
-  const clearUser = userInfoStore((state) => state.clearUser);
+export function OwnerInfoProvider() {
+  const setOwner = useOwnerStore((state) => state.setOwner);
+  const clearOwner = useOwnerStore((state) => state.clearOwner);
 
   useEffect(() => {
     const token = document.cookie.split("; ").find((row) => row.startsWith("access_token="));
 
     if (!token) {
-      clearUser();
+      clearOwner();
       return;
     }
 
@@ -19,15 +19,15 @@ export function UserInfoProvider() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          setUser(res.data);
+          setOwner(res.data);
         } else {
-          clearUser();
+          clearOwner();
         }
       })
       .catch(() => {
-        clearUser();
+        clearOwner();
       });
-  }, [clearUser, setUser]);
+  }, [clearOwner, setOwner]);
 
   return null;
 }

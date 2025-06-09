@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export interface UserState {
+interface UserState {
   user: {
     userId: string;
     roles: string[];
@@ -11,7 +11,7 @@ export interface UserState {
   clearUser: () => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
+export const userInfoStore = create<UserState>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
   clearUser: () => set({ user: null }),
