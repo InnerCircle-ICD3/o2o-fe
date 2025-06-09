@@ -63,7 +63,7 @@ const OrderItem = (props: OrderItemProps) => {
         </div>
       </Link>
 
-      {isCompleted && <Button status={"primary"}>리뷰 작성하기</Button>}
+      {isCompleted && <Button status={"primary"}>리뷰 작성하기 | 확인하기</Button>}
     </div>
   );
 };
