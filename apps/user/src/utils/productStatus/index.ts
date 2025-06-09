@@ -35,8 +35,8 @@ const generateProductStatus = (
   status: ProductStatus,
   inventory: Inventory,
 ): GenerateProductStatusResult => {
-  const statusLabel = getLabelOfStatus(inventory.quantity)(status);
-  const quantityLabel = getLabelOfQuantity(inventory.quantity);
+  const statusLabel = getLabelOfStatus(inventory.stock)(status);
+  const quantityLabel = getLabelOfQuantity(inventory.stock);
 
   return { status: statusLabel, label: quantityLabel };
 };
