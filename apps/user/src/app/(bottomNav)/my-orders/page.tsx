@@ -3,7 +3,6 @@
 import OrderItem from "@/components/ui/my-orders/orderItem";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import useGetMyOrder from "@/hooks/api/useGetMyOrder";
-import type { OrderDetail } from "@/types/apis/order.type";
 import * as style from "./myOrders.css";
 
 const Page = () => {
@@ -25,7 +24,16 @@ const Page = () => {
         {isLoading ? (
           <SkeletonStoreCard imagePosition="right" />
         ) : (
-          orderDetails?.map((order: OrderDetail) => <OrderItem key={order.orderId} order={order} />)
+          orderDetails?.pages.map((page) =>
+            page.success
+              ? page.data.contents.map((order) => (
+                  <OrderItem
+                    key={order.id}
+                    //   order={order}
+                  />
+                ))
+              : null,
+          )
         )}
       </ul>
     </div>
