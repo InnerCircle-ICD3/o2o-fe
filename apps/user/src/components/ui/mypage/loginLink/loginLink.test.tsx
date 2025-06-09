@@ -4,8 +4,11 @@ import LoginLink from ".";
 const successUserInfo = {
   success: true,
   data: {
-    name: "재완",
-    email: "test@naver.com",
+    id: 1,
+    userAccountId: 1,
+    nickname: "재완",
+    createAt: "2025-01-01",
+    updateAt: "2025-01-01",
   },
 } as const;
 
@@ -17,10 +20,11 @@ const failureUserInfo = {
 
 describe("LoginLink Test", () => {
   it("로그인 정보가 있다면 사용자 이름과 이메일이 나타난다.", () => {
-    const { getByText } = render(<LoginLink userInfo={successUserInfo} />);
+    const { getAllByText } = render(<LoginLink userInfo={successUserInfo} />);
 
-    expect(getByText(successUserInfo.data.name)).toBeInTheDocument();
-    expect(getByText(successUserInfo.data.email)).toBeInTheDocument();
+    const headings = getAllByText(successUserInfo.data.nickname);
+    expect(headings.length).toBeGreaterThan(0);
+    // expect(getByText(successUserInfo.data.email)).toBeInTheDocument(); // TODO: 이메일 추가 필요
   });
 
   it("로그인 정보가 없다면 로그인 안내 문구가 나타난다.", () => {

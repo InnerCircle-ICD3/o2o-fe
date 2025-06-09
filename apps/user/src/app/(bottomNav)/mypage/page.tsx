@@ -1,19 +1,37 @@
-import { getAuthMe } from "@/apis/ssr/account";
+"use client";
+
+import { getCustomer } from "@/apis/ssr/customers";
+import type { Result } from "@/apis/types";
 import LoginLink from "@/components/ui/mypage/loginLink";
+import { userInfoStore } from "@/stores/userInfoStore";
+import type { Customer } from "@/types/apis/accounts.type";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import * as style from "./mypage.css";
 
-const Page = async () => {
-  const response = await getAuthMe();
-  const isLogin = response.success;
+const Page = () => {
+  const { user } = userInfoStore();
+  const isLogin = !!user;
+
+  const [userInfo, setUserInfo] = useState<Result<Customer> | null>(null);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const result = await getCustomer(user?.customerId ?? 0);
+      if (result.success) {
+        setUserInfo(result);
+      }
+    };
+    fetchUserInfo();
+  }, [user?.customerId]);
 
   return (
     <div className={style.container}>
       <h2 className={style.title}>마이페이지</h2>
 
       <section className={style.wrapper}>
-        <LoginLink userInfo={response} />
+        <LoginLink userInfo={userInfo} />
 
         {isLogin && (
           <>
