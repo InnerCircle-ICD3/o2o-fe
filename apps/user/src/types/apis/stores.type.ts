@@ -63,7 +63,7 @@ export interface Price {
 }
 
 type ProductSize = "S" | "M" | "L";
-type ProductStatus = "ACTIVE" | "INACTIVE" | "SOLD_OUT";
+export type ProductStatus = "ACTIVE" | "INACTIVE" | "SOLD_OUT";
 
 export interface Product {
   id: string;
