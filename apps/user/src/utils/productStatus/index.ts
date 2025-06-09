@@ -1,3 +1,4 @@
+import type { Inventory, ProductStatus } from "@/types/apis/stores.type";
 import type { StatusLabelType } from "@/types/statusLabel.type";
 
 interface GenerateProductStatusResult {
@@ -5,13 +6,39 @@ interface GenerateProductStatusResult {
   label: string;
 }
 
-const generateProductStatus = (length: number): GenerateProductStatusResult => {
-  if (length === 0) {
-    return { status: "soldOut", label: "마감" };
+const getLabelOfStatus = (quantity: number) => (status: ProductStatus) => {
+  if (status === "INACTIVE") {
+    return "pending";
   }
 
-  const status = length === 1 ? "endSoon" : "sales";
-  return { status, label: `${length}개 남음` };
+  if (status === "SOLD_OUT") {
+    return "soldOut";
+  }
+
+  if (quantity === 1) return "endSoon";
+  return "sales";
+};
+
+const getLabelOfQuantity = (quantity: number) => {
+  if (quantity === 0) {
+    return "마감";
+  }
+
+  if (quantity < 10) {
+    return `${quantity}개 남음`;
+  }
+
+  return "+10개 남음";
+};
+
+const generateProductStatus = (
+  status: ProductStatus,
+  inventory: Inventory,
+): GenerateProductStatusResult => {
+  const statusLabel = getLabelOfStatus(inventory.quantity)(status);
+  const quantityLabel = getLabelOfQuantity(inventory.quantity);
+
+  return { status: statusLabel, label: quantityLabel };
 };
 
 export default generateProductStatus;

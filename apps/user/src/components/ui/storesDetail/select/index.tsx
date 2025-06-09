@@ -36,9 +36,9 @@ const Select = (props: SelectProps) => {
       {isOpen && (
         <ul className={style.list}>
           {storesProducts.map((product) => {
-            const isSoldOut = product.inventory.quantity === 0;
+            const isSoldOut = product.status === "SOLD_OUT";
             const itemStyle = isSoldOut ? style.item.soldOut : style.item.default;
-            const leftCount = product.inventory.quantity;
+            const leftCount = product.inventory.quantity > 10 ? "+10" : product.inventory.quantity;
 
             return (
               <li key={product.id}>
