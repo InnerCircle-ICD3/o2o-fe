@@ -37,19 +37,8 @@ const mockPatchCustomer = async (customerId: number, nickname: string) => {
   return { success: true as const, data: { nickname } };
 };
 
-let consoleLogArgs: (object | string)[] = [];
-const originalConsoleLog = console.log;
-beforeAll(() => {
-  console.log = (...args) => {
-    consoleLogArgs.push(args.length === 1 ? args[0] : args);
-  };
-});
-afterAll(() => {
-  console.log = originalConsoleLog;
-});
 beforeEach(() => {
   patchCustomerCalledWith = [];
-  consoleLogArgs = [];
 });
 
 describe("CompleteProfile", () => {
