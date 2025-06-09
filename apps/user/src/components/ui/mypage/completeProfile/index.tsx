@@ -3,6 +3,7 @@
 import { patchCustomer as defaultPatchCustomer } from "@/apis/ssr/customers";
 import Button from "@/components/common/button";
 import { userInfoStore as defaultUseUserStore } from "@/stores/userInfoStore";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as styles from "./completeProfile.css";
 
@@ -16,14 +17,14 @@ export default function CompleteProfile({
   const { user } = useUserStore();
   const [nickname, setNickname] = useState("");
 
+  const router = useRouter();
+
   const handleCompleteProfile = async () => {
     if (!user?.customerId) return;
     const result = await patchCustomer(user.customerId, nickname);
 
     if (result.success) {
-      console.log(result.data);
-    } else {
-      console.log(result.errorMessage);
+      router.push("/");
     }
   };
 
