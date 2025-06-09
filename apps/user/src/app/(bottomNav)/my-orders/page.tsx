@@ -2,13 +2,23 @@
 
 import VirtualScroll, { VirtualItem } from "@/components/common/virtualScroll";
 import OrderItem from "@/components/ui/my-orders/orderItem";
+import RequireLogin from "@/components/ui/my-orders/requireLogin";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import { ORDER_STATUS } from "@/constants/my-orders";
 import useGetMyOrder from "@/hooks/api/useGetMyOrder";
+import { userInfoStore } from "@/stores/userInfoStore";
+import type { OrderDetail } from "@/types/apis/order.type";
 import * as style from "./myOrders.css";
 
 const Page = () => {
   const { data: orderDetails, error, isError, isLoading, fetchNextPage } = useGetMyOrder(1);
+
+  const { user } = userInfoStore();
+  const isLogin = !!user;
+
+  if (!isLogin) {
+    return <RequireLogin text="주문 내역" />;
+  }
 
   if (isError) {
     return (
