@@ -18,48 +18,44 @@ export const wrapper = style({
   padding: "10px 0",
 });
 
-export const info = style({
+export const titleBox = style({
   display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
+  alignItems: "center",
+  justifyContent: "space-between",
+});
+
+export const title = style({
+  fontSize: 18,
+  fontWeight: "bold",
+});
+
+export const infoBox = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
   gap: 5,
-});
-
-export const dates = style({
-  fontSize: 12,
-});
-
-export const thumbnail = style({
-  position: "relative",
-
-  width: 130,
-  height: 130,
-
-  borderRadius: 12,
-  overflow: "hidden",
 });
 
 export const image = style({
   objectFit: "cover",
+  borderRadius: 10,
 });
 
-export const label = style({
-  position: "absolute",
-  top: 4,
-  right: 4,
-
-  zIndex: 2,
+export const info = style({
+  flex: 1,
 });
 
-export const cover = style({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  zIndex: 1,
+export const storeTitle = style({
+  fontSize: 14,
+  fontWeight: 600,
+});
 
-  width: "100%",
-  height: "100%",
+export const productTitle = style({
+  marginTop: 4,
+  fontSize: 12,
+});
 
-  backgroundColor: globalTheme.color.black,
-  opacity: 0.5,
+export const time = style({
+  marginTop: 2,
+  fontSize: 12,
 });
