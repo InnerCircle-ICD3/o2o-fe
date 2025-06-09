@@ -2,17 +2,18 @@ import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
-  borderBottom: `1px solid ${globalTheme.color.line}`,
+  boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
+  borderLeft: `0.5px solid ${globalTheme.color.line}`,
+  borderRight: `0.5px solid ${globalTheme.color.line}`,
+  borderRadius: 10,
 
-  selectors: {
-    "&:last-child": {
-      borderBottom: "none",
-    },
-  },
+  marginTop: 15,
+  padding: "10px 15px",
 });
 
 export const wrapper = style({
   display: "flex",
+  flexDirection: "column",
   justifyContent: "space-between",
 
   padding: "10px 0",
@@ -22,6 +23,8 @@ export const titleBox = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+
+  marginBottom: 10,
 });
 
 export const title = style({
@@ -33,7 +36,7 @@ export const infoBox = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-start",
-  gap: 5,
+  gap: 15,
 });
 
 export const image = style({
@@ -51,8 +54,25 @@ export const storeTitle = style({
 });
 
 export const productTitle = style({
-  marginTop: 4,
+  marginTop: 8,
   fontSize: 12,
+});
+
+export const prices = style({
+  display: "flex",
+  justifyContent: "space-between",
+
+  marginTop: 8,
+});
+
+export const discount = style({
+  textDecoration: "line-through",
+  color: globalTheme.color.gray.base,
+});
+
+export const original = style({
+  fontSize: 18,
+  fontWeight: "bold",
 });
 
 export const time = style({

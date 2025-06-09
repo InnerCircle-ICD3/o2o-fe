@@ -1,7 +1,9 @@
 "use client";
 
+import VirtualScroll, { VirtualItem } from "@/components/common/virtualScroll";
 import OrderItem from "@/components/ui/my-orders/orderItem";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
+import { ORDER_STATUS } from "@/constants/my-orders";
 import useGetMyOrder from "@/hooks/api/useGetMyOrder";
 import * as style from "./myOrders.css";
 
@@ -20,22 +22,37 @@ const Page = () => {
   return (
     <div className={style.container}>
       <h2 className={style.title}>나의 주문 내역</h2>
-      <ul>
-        {isLoading ? (
-          <SkeletonStoreCard imagePosition="right" />
-        ) : (
-          orderDetails?.pages.map((page) =>
+      {isLoading ? (
+        <SkeletonStoreCard imagePosition="right" />
+      ) : (
+        <VirtualScroll
+          heights={{
+            "order-item": {
+              aspectRatio: 388 / 171,
+            },
+            "order-item-completed": {
+              aspectRatio: 388 / 241,
+            },
+          }}
+        >
+          {orderDetails?.pages.map((page) =>
             page.success
               ? page.data.contents.map((order) => (
-                  <OrderItem
+                  <VirtualItem
                     key={order.id}
-                    //   order={order}
-                  />
+                    name={
+                      ORDER_STATUS[order.status] === ORDER_STATUS.COMPLETED
+                        ? "order-item"
+                        : "order-item"
+                    }
+                  >
+                    <OrderItem order={order} />
+                  </VirtualItem>
                 ))
               : null,
-          )
-        )}
-      </ul>
+          )}
+        </VirtualScroll>
+      )}
     </div>
   );
 };

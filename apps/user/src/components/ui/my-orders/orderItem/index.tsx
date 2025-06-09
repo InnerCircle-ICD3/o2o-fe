@@ -1,8 +1,10 @@
 import Button from "@/components/common/button";
 import StatusLabel from "@/components/common/statusLabel";
 import { ORDER_STATUS } from "@/constants/my-orders";
+import * as globalStyle from "@/styles/global.css";
 import type { OrderDetail } from "@/types/apis/order.type";
 import { formatCurrency, formatLocalizedDate } from "@/utils/format";
+import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import * as style from "./orderItem.css";
@@ -21,7 +23,7 @@ const OrderItem = (props: OrderItemProps) => {
   const { order } = props;
 
   const orderStatus = ORDER_STATUS[order.status];
-  const isCompleted = orderStatus !== ORDER_STATUS.COMPLETED;
+  const isCompleted = orderStatus === ORDER_STATUS.COMPLETED;
 
   const [totalLength, totalPrice] = order.orderItems.reduce(
     (acc, item) => [acc[0] + item.quantity, acc[1] + item.price],
@@ -29,7 +31,7 @@ const OrderItem = (props: OrderItemProps) => {
   );
 
   return (
-    <li className={style.container}>
+    <div className={style.container}>
       <Link href={`/my-orders/${order.id}`} className={style.wrapper}>
         <div className={style.titleBox}>
           <h3 className={style.title}>잇고백 {totalLength}개 예약</h3>
@@ -37,7 +39,13 @@ const OrderItem = (props: OrderItemProps) => {
           <StatusLabel status={orderStatus}>{ORDER_STATUS_INFO[orderStatus]}</StatusLabel>
         </div>
         <div className={style.infoBox}>
-          <Image className={style.image} src={"#"} alt={""} width={50} height={50} />
+          <Image
+            className={style.image}
+            src={"/images/thumb.png"}
+            alt={""}
+            width={90}
+            height={90}
+          />
           <div className={style.info}>
             <p className={style.storeTitle}>가게 이름</p>
             <p className={style.productTitle}>
@@ -45,16 +53,18 @@ const OrderItem = (props: OrderItemProps) => {
               {order.orderItems.length > 1 && ` 외 ${order.orderItems.length - 1}개`}
             </p>
             <p className={style.time}>주문일: {formatLocalizedDate("2024-01-12")}</p>
-            <div>
-              <p>{formatCurrency(totalPrice)}</p>
-              <p>{formatCurrency(totalPrice)}</p>
+            <div className={style.prices}>
+              <p className={style.discount}>{formatCurrency(totalPrice)}</p>
+              <p className={classNames(style.original, globalStyle.primaryColor)}>
+                {formatCurrency(totalPrice)}
+              </p>
             </div>
           </div>
         </div>
       </Link>
 
-      {isCompleted && <Button>리뷰 작성하기</Button>}
-    </li>
+      {isCompleted && <Button status={"primary"}>리뷰 작성하기</Button>}
+    </div>
   );
 };
 
