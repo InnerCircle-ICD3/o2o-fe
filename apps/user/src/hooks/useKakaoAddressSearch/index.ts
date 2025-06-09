@@ -7,7 +7,7 @@ export function useKakaoAddressSearch(query: string) {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (query) {
-        searchAddress(query).then(results => setResults(results.map(r => r.address)));
+        searchAddress(query).then((results) => setResults(results.map((r) => r.address)));
       }
     }, 300);
     return () => clearTimeout(timer);

@@ -48,6 +48,7 @@ export interface CustomerAddressRequest {
       longitude: number;
     };
   };
+  distanceInKilometers: number;
   customerAddressType: string;
   description: string;
 }

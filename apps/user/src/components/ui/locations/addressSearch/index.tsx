@@ -1,15 +1,15 @@
 "use client";
 
+import { postCustomerAddress } from "@/apis/ssr/locations";
+import Button from "@/components/common/button";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import type { Coordinates, SearchAddressResult } from "@/types/locations.type";
 import { getFullAddressByCoords, searchAddress } from "@/utils/locations/locationUtils";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as styles from "./addressSearch.css";
-import Button from "@/components/common/button";
-import Image from "next/image";
-import { useGeolocation } from "@/hooks/useGeolocation";
-import { postCustomerAddress } from "@/apis/ssr/locations";
-import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 
 export default function LocationSearchPage() {
   const [query, setQuery] = useState("");
@@ -33,20 +33,21 @@ export default function LocationSearchPage() {
 
   const handleSelect = async (location: Coordinates) => {
     if (!location || !isLoaded) return;
-    
+
     try {
       const address = await getFullAddressByCoords(location.lat, location.lng);
 
       if (address) {
         const result = await postCustomerAddress({ customerId: 5, address });
-        console.log(result)
-        router.push("/locations/my-location");
+        if (result.success) {
+          router.push("/locations/my-location");
+        }
       }
     } catch (error) {
       console.error("지역 정보를 가져오는 데 실패했습니다:", error);
     }
-  }
-  
+  };
+
   return (
     <div className={styles.container}>
       <input

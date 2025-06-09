@@ -1,4 +1,4 @@
-import type { CustomerAddress, MapStore, SearchAddressResult } from "@/types/locations.type";
+import type { CustomerAddressRequest, MapStore, SearchAddressResult } from "@/types/locations.type";
 
 export const createStoreMarker = (
   store: MapStore,
@@ -133,7 +133,7 @@ export const renderMyLocationPolygon = (
 export const getFullAddressByCoords = (
   lat: number,
   lng: number,
-): Promise<CustomerAddress | null> => {
+): Promise<CustomerAddressRequest | null> => {
   return new Promise((resolve, reject) => {
     if (!window.kakao?.maps) {
       reject(new Error("카카오맵 API가 로드되지 않았습니다."));
@@ -147,7 +147,7 @@ export const getFullAddressByCoords = (
       if (status === "OK" && result.length > 0) {
         const r = result[0];
 
-        const customerAddress: CustomerAddress = {
+        const customerAddress: CustomerAddressRequest = {
           address: {
             roadNameAddress: r.road_address?.address_name ?? "",
             lotNumberAddress: r.address?.address_name ?? "",
@@ -161,6 +161,7 @@ export const getFullAddressByCoords = (
               longitude: lng,
             },
           },
+          distanceInKilometers: 0.5,
           customerAddressType: "HOME", // 필요 시 인자로 받을 수 있음
           description: "", // 추가 설명은 별도로 입력받거나 비워둠
         };
@@ -183,7 +184,7 @@ const isLikelyAddress = (query: string) => {
 
 export async function searchAddress(query: string): Promise<SearchAddressResult[]> {
   const endpoint = isLikelyAddress(query) ? "address" : "keyword";
-  
+
   const res = await fetch(
     `https://dapi.kakao.com/v2/local/search/${endpoint}.json?query=${encodeURIComponent(query)}`,
     {
@@ -199,8 +200,8 @@ export async function searchAddress(query: string): Promise<SearchAddressResult[
   return data.documents.map((doc: { address_name: string; y: string; x: string }) => ({
     address: doc.address_name,
     location: {
-      lat: parseFloat(Number.parseFloat(doc.y).toFixed(6)),
-      lng: parseFloat(Number.parseFloat(doc.x).toFixed(6)),
-    }
+      lat: Number(Number.parseFloat(doc.y).toFixed(6)),
+      lng: Number(Number.parseFloat(doc.x).toFixed(6)),
+    },
   }));
 }

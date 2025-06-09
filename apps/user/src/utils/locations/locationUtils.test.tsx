@@ -56,15 +56,36 @@ describe("locationUtils", () => {
         services: {
           // biome-ignore lint/style/useNamingConvention: false
           Geocoder: vi.fn().mockImplementation(() => ({
-            coord2RegionCode: vi.fn((lng, lat, callback) => {
+            coord2Address: vi.fn((lng, lat, callback) => {
               if (lng === 126.570677 && lat === 33.450705) {
                 callback(
                   [
                     {
                       // biome-ignore lint/style/useNamingConvention: false
-                      region_type: "H",
-                      // biome-ignore lint/style/useNamingConvention: false
-                      address_name: "제주특별자치도 제주시 아라동",
+                      road_address: {
+                        // biome-ignore lint/style/useNamingConvention: false
+                        address_name: "제주특별자치도 제주시 아라동",
+                        // biome-ignore lint/style/useNamingConvention: false
+                        building_name: "빌딩명",
+                        // biome-ignore lint/style/useNamingConvention: false
+                        zone_no: "12345",
+                        // biome-ignore lint/style/useNamingConvention: false
+                        region_1depth_name: "제주특별자치도",
+                        // biome-ignore lint/style/useNamingConvention: false
+                        region_2depth_name: "제주시",
+                        // biome-ignore lint/style/useNamingConvention: false
+                        region_3depth_name: "아라동",
+                      },
+                      address: {
+                        // biome-ignore lint/style/useNamingConvention: false
+                        address_name: "제주특별자치도 제주시 아라동",
+                        // biome-ignore lint/style/useNamingConvention: false
+                        region_1depth_name: "제주특별자치도",
+                        // biome-ignore lint/style/useNamingConvention: false
+                        region_2depth_name: "제주시",
+                        // biome-ignore lint/style/useNamingConvention: false
+                        region_3depth_name: "아라동",
+                      },
                     },
                   ],
                   "OK",
@@ -186,47 +207,13 @@ describe("locationUtils", () => {
   });
 
   describe("getFullAddressByCoords()", () => {
-    it("정상 응답이 오면 해당 지역명을 반환해야 합니다.", async () => {
+    it("정상 응답이 오면 CustomerAddressRequest 객체를 반환해야 한다.", async () => {
       const result = await getFullAddressByCoords(33.450705, 126.570677);
-      expect(result).toBe("제주특별자치도 제주시 아라동");
+      expect(result?.address.lotNumberAddress).toBe("제주특별자치도 제주시 아라동");
     });
 
-    it("region_type이 'H'가 없으면 null을 반환해야 합니다.", async () => {
-      globalThis.kakao.maps.services.Geocoder = vi.fn().mockImplementation(() => ({
-        coord2RegionCode: (
-          _lng: number,
-          _lat: number,
-          callback: (
-            // biome-ignore lint/style/useNamingConvention: false
-            result: Array<{ region_type: string; address_name: string }>,
-            status: string,
-          ) => void,
-        ) => {
-          // biome-ignore lint/style/useNamingConvention: false
-          callback([{ region_type: "B", address_name: "다른 주소" }], "OK");
-        },
-      }));
-
-      const result = await getFullAddressByCoords(33.450705, 126.570677);
-      expect(result).toBeNull();
-    });
-
-    it("status가 OK가 아니면 null을 반환해야 합니다.", async () => {
-      globalThis.kakao.maps.services.Geocoder = vi.fn().mockImplementation(() => ({
-        coord2RegionCode: (
-          _lng: number,
-          _lat: number,
-          callback: (
-            // biome-ignore lint/style/useNamingConvention: false
-            result: Array<{ region_type: string; address_name: string }>,
-            status: string,
-          ) => void,
-        ) => {
-          callback([], "ZERO_RESULT");
-        },
-      }));
-
-      const result = await getFullAddressByCoords(33.450705, 126.570677);
+    it("응답이 없으면 null을 반환해야 한다.", async () => {
+      const result = await getFullAddressByCoords(0, 0);
       expect(result).toBeNull();
     });
   });

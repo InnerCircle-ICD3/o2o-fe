@@ -1,26 +1,21 @@
 "use client";
 
+import { deleteCustomerAddress } from "@/apis/ssr/locations";
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { RANGE_OPTIONS } from "@/constants/locations";
+import useGetCustomerAddress from "@/hooks/api/useGetCustomerAddress";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { createUserMarker, renderMyLocationCircle } from "@/utils/locations/locationUtils";
-// import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as styles from "./myLocation.css";
-import Image from "next/image";
-import { getCustomerAddress } from "@/apis/ssr/locations";
-import { useQuery } from "@tanstack/react-query";
-import type { Result } from "@/apis/types";
 
 type RangeOption = (typeof RANGE_OPTIONS)[number]["value"];
-
-type CustomerAddress = {
-  data: { buildingName?: string }[];
-};
 
 export default function MyLocation() {
   const [range, setRange] = useState<RangeOption>(500);
@@ -34,9 +29,21 @@ export default function MyLocation() {
   const markerRef = useRef<kakao.maps.Marker | null>(null);
   const circleRef = useRef<kakao.maps.Circle | null>(null);
 
-  const { data: customerAddress, isLoading: isCustomerAddressLoading } = useQuery<CustomerAddress>({
-    queryKey: ["customerAddress"],
-    queryFn: () => getCustomerAddress({ customerId: 5 }),
+  const queryClient = useQueryClient();
+
+  const { data: customerAddress, isLoading: customerAddressLoading } = useGetCustomerAddress(5);
+
+  const { mutate: deleteCustomerAddressMutate } = useMutation({
+    mutationFn: ({ customerId, addressId }: { customerId: number; addressId: number }) =>
+      deleteCustomerAddress({ customerId, addressId }),
+    onSuccess: () => {
+      // 삭제 성공 시 캐시 무효화 → 데이터 재요청
+      queryClient.invalidateQueries({ queryKey: ["customerAddress"] });
+    },
+    onError: (error) => {
+      console.error("삭제 실패", error);
+      // 필요시 토스트 알림 등 추가
+    },
   });
 
   // 지도 초기화
@@ -57,15 +64,11 @@ export default function MyLocation() {
     circleRef.current = renderMyLocationCircle(mapRef.current, location, range);
   }, [location, range]);
 
-  if (!location || !isLoaded || !isCustomerAddressLoading) return <LoadingMap />;
+  if (!location || !isLoaded || customerAddressLoading) return <LoadingMap />;
 
   return (
     <div className={styles.container}>
-      <KakaoMap
-        lat={location.lat}
-        lng={location.lng}
-        onMapReady={handleMapReady}
-      />
+      <KakaoMap lat={location.lat} lng={location.lng} onMapReady={handleMapReady} />
 
       <div className={styles.bottomSheetContainer}>
         <div className={styles.bottomSheetHeader}>
@@ -73,40 +76,33 @@ export default function MyLocation() {
         </div>
         <div className={styles.bottomSheetContent}>
           <div className={styles.buttonWrapper}>
-            {customerAddress && customerAddress.data.length > 0 ? (
-              <>
-                {customerAddress.data.slice(0, 2).map((addr, idx) => (
-                  <Button
-                    key={idx}
-                    status="primary"
-                  >
-                    <div className={styles.buttonContent}>
-                      {addr.buildingName || "설정하기"}
-                      <Image
-                        src="/icons/btn_close_white.svg"
-                        alt="close"
-                        width={14}
-                        height={14}
-                      />
-                    </div>
-                  </Button>
-                ))}
-                {customerAddress.length < 2 && (
-                  <Button onClick={() => router.push("/locations/address-search")}>
-                    <p className={styles.buttonText}>+</p>
-                  </Button>
-                )}
-              </>
-            ) : (
-              <>
-                <Button onClick={() => router.push("/locations/address-search")}>
+            {[0, 1].map((idx) => {
+              const addr = customerAddress?.[idx];
+
+              return addr ? (
+                <Button key={idx} status="primary">
+                  <div className={styles.buttonContent}>
+                    {addr.region1DepthName} {addr.region2DepthName} {addr.region3DepthName}
+                    <Image
+                      src="/icons/btn_close_white.svg"
+                      alt="close"
+                      width={14}
+                      height={14}
+                      onClick={() =>
+                        deleteCustomerAddressMutate({
+                          customerId: addr.customerId,
+                          addressId: addr.id,
+                        })
+                      }
+                    />
+                  </div>
+                </Button>
+              ) : (
+                <Button key={idx} onClick={() => router.push("/locations/address-search")}>
                   <p className={styles.buttonText}>+</p>
                 </Button>
-                <Button onClick={() => router.push("/locations/address-search")}>
-                  <p className={styles.buttonText}>+</p>
-                </Button>
-              </>
-            )}
+              );
+            })}
           </div>
 
           <div className={styles.searchWrapper}>
@@ -123,10 +119,7 @@ export default function MyLocation() {
                 const isPassed = index < selectedIndex;
 
                 return (
-                  <label
-                    key={value}
-                    className={styles.option}
-                  >
+                  <label key={value} className={styles.option}>
                     <input
                       type="radio"
                       name="distance"
@@ -137,7 +130,11 @@ export default function MyLocation() {
                     />
                     <span
                       className={`${styles.circle} ${
-                        isSelected ? styles.circleSelected : isPassed ? styles.circlePassed : styles.circleInactive
+                        isSelected
+                          ? styles.circleSelected
+                          : isPassed
+                            ? styles.circlePassed
+                            : styles.circleInactive
                       }`}
                     />
                     {label && <span className={styles.label}>{label}</span>}

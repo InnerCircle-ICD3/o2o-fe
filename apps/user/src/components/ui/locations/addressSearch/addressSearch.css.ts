@@ -37,8 +37,8 @@ export const noResultItem = style({
 });
 
 export const buttonContent = style({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "5px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "5px",
 });

@@ -1,7 +1,11 @@
 import { apiClient } from "@/apis/client";
 import type { Result } from "@/apis/types";
 import { toSafeResult } from "@/apis/utils/result";
-import type { CustomerAddressRequest, CustomerAddressResponse, StoreResponseData } from "@/types/locations.type";
+import type {
+  CustomerAddressRequest,
+  CustomerAddressResponse,
+  StoreResponseData,
+} from "@/types/locations.type";
 
 type ViewPoint = {
   latitude: number;
@@ -34,6 +38,15 @@ export const postCustomerAddress = async ({
 
 export const getCustomerAddress = async ({ customerId }: { customerId: number }) => {
   return await toSafeResult(() =>
-    apiClient.get<CustomerAddressResponse>(`customers/address?customerId=${customerId}`),
+    apiClient.get<CustomerAddressResponse[]>(`customers/address?customerId=${customerId}`),
+  );
+};
+
+export const deleteCustomerAddress = async ({
+  customerId,
+  addressId,
+}: { customerId: number; addressId: number }) => {
+  return await toSafeResult(() =>
+    apiClient.delete(`customers/address/${addressId}?customerId=${customerId}`),
   );
 };
