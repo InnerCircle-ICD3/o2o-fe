@@ -2,6 +2,7 @@
 
 import ErrorUi from "@/components/common/errorUi";
 import VirtualScroll, { VirtualItem } from "@/components/common/virtualScroll";
+import RequireLogin from "@/components/ui/my-orders/requireLogin";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import SubscribeItem from "@/components/ui/subscribe/subscribeItem";
 import useSubscribeList from "@/hooks/api/useSubscribeList";
@@ -17,11 +18,11 @@ const Page = () => {
     isError,
     isLoading,
     fetchNextPage,
-  } = useSubscribeList(1, !isLogin);
+  } = useSubscribeList(1, isLogin);
 
-  // if (!isLogin) {
-  //   return <RequireLogin text="찜" />;
-  // }
+  if (!isLogin) {
+    return <RequireLogin text="찜" />;
+  }
 
   if (isError) {
     return <ErrorUi message={error?.message} />;
