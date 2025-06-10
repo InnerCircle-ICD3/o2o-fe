@@ -24,7 +24,9 @@ const useGetMyOrder = (id: number) => {
         return getMyOrder(queryParams.toString());
       },
       getNextPageParam: (lastPage) => {
-        return lastPage.success && lastPage.data.contents.length > 0
+        return lastPage.success &&
+          lastPage.data.contents.length > 0 &&
+          lastPage.data.lastId !== lastPage.data.contents.at(-1)?.id
           ? lastPage.data.lastId
           : undefined;
       },
