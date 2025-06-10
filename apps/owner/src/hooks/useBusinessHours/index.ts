@@ -1,10 +1,10 @@
 import { WEEKDAYS, WEEKDAY_MAP, type WeekdayEng } from "@/constants/store";
-import type { StoreFormData } from "@/types/store";
+import type { CreateStoreRequest } from "@/types/store";
 import type { UseFormReturn } from "use-form-light";
 
 export type BusinessHours = Record<WeekdayEng, { openTime: string; closeTime: string } | undefined>;
 
-export const useBusinessHours = (form: UseFormReturn<StoreFormData>) => {
+export const useBusinessHours = (form: UseFormReturn<CreateStoreRequest>) => {
   const { setValue, watch } = form;
 
   const rawHours = watch("businessHours");

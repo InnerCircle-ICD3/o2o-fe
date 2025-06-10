@@ -1,4 +1,4 @@
-import type { StoreFormData } from "@/types/store";
+import type { CreateStoreRequest } from "@/types/store";
 import { renderHook } from "@testing-library/react";
 import type { UseFormReturn } from "use-form-light";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -18,10 +18,10 @@ vi.mock("../useDaumPostcode", () => ({
 describe("useStoreAddress()", () => {
   const mockSetValue = vi.fn();
   const mockWatch = vi.fn();
-  const mockForm: UseFormReturn<StoreFormData> = {
+  const mockForm: UseFormReturn<CreateStoreRequest> = {
     setValue: mockSetValue,
     watch: mockWatch,
-  } as unknown as UseFormReturn<StoreFormData>;
+  } as unknown as UseFormReturn<CreateStoreRequest>;
 
   const mockOpenPostcode = vi.fn();
   const mockDaumPostcodeCallback = vi.fn();

@@ -1,6 +1,6 @@
-import type { StoreCategory, StoreFormData, ValidationRules } from "@/types/store";
+import type { StoreCategory, CreateStoreRequest, ValidationRules } from "@/types/store";
 
-export const VALIDATION_RULES: ValidationRules<StoreFormData> = {
+export const VALIDATION_RULES: ValidationRules<CreateStoreRequest> = {
   name: {
     pattern: /^\S.{0,49}$/,
     message: "1~50자 사이의 공백 없는 이름을 입력해주세요.",

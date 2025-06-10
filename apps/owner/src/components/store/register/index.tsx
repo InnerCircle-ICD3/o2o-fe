@@ -7,7 +7,7 @@ import { STORE_CATEGORIES, VALIDATION_RULES } from "@/constants/store";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
-import type { StoreFormData } from "@/types/store";
+import type { CreateStoreRequest } from "@/types/store";
 import { initialStoreFormData } from "@/types/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -23,13 +23,13 @@ export default function StoreRegisterForm() {
   const { owner } = useOwnerStore();
   const router = useRouter();
 
-  const form = useForm<StoreFormData>({
+  const form = useForm<CreateStoreRequest>({
     defaultValues: initialStoreFormData,
     validationRules: VALIDATION_RULES,
     defaultOptions: {
       transform: (value: string) => value.trim(),
     },
-  } as UseFormOptions<StoreFormData>);
+  } as UseFormOptions<CreateStoreRequest>);
 
   const { errors, handleSubmit, register, watch, setValue } = form;
   const { openPostcode, addressType } = useStoreAddress(form);
@@ -37,14 +37,14 @@ export default function StoreRegisterForm() {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const validateSingleField = (name: keyof StoreFormData, value: string): string => {
+  const validateSingleField = (name: keyof CreateStoreRequest, value: string): string => {
     const rule = VALIDATION_RULES[name];
     if (!rule) return "";
     return rule.pattern.test(value) ? "" : rule.message;
   };
 
   const handleBlur =
-    (field: keyof StoreFormData) =>
+    (field: keyof CreateStoreRequest) =>
     (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
       const error = validateSingleField(field, value);
@@ -52,7 +52,7 @@ export default function StoreRegisterForm() {
       errors[field] = error;
     };
 
-  const onSubmit = async (data: StoreFormData) => {
+  const onSubmit = async (data: CreateStoreRequest) => {
     const storeOwnerId = owner?.storeOwnerId;
     const isValid = await form.validate();
     if (!isValid || !storeOwnerId) return;

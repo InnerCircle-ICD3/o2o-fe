@@ -1,10 +1,10 @@
 import { useAddressToCoordinates } from "@/hooks/useAddressToCoordinates";
 import { useDaumPostcode } from "@/hooks/useDaumPostcode";
-import type { StoreFormData } from "@/types/store";
+import type { CreateStoreRequest } from "@/types/store";
 import { useState } from "react";
 import type { UseFormReturn } from "use-form-light";
 
-export const useStoreAddress = (form: UseFormReturn<StoreFormData>) => {
+export const useStoreAddress = (form: UseFormReturn<CreateStoreRequest>) => {
   const { setValue, watch } = form;
   const [addressType, setAddressType] = useState<"R" | "J" | "">("");
 
