@@ -30,7 +30,7 @@ interface Address {
 type PickupDay = "TODAY" | "TOMORROW";
 
 // 가게 상태를 나타내는 리터럴 타입
-type StoreStatus = "OPEN" | "CLOSED";
+export type StoreStatus = "OPEN" | "CLOSED";
 
 export interface StoresDetail {
   id: number;
