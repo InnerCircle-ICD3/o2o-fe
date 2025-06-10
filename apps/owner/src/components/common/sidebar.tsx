@@ -47,7 +47,7 @@ const menuConfig: Record<string, MenuItem> = {
     submenu: [
       {
         title: "상품 등록",
-        href: "/products/new",
+        href: "/product-management/new",
         icon: Plus,
       },
       {
