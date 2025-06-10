@@ -1,8 +1,5 @@
-import NoticeItem from "@/components/ui/notice/noticeItem";
-import * as globalStyle from "@/styles/global.css";
-import type { Notice } from "@/types/apis/notice.type";
-import classNames from "classnames";
-import * as style from "./notice.css";
+import InfoList from "@/components/ui/mypage/infoList";
+import type { Info } from "@/types/apis/mypage.type";
 
 const mockList = [
   {
@@ -20,18 +17,10 @@ const mockList = [
     title: "서비스 이용 약관 변경 안내",
     createdAt: "2025-05-25T10:00:00Z",
   },
-] as Notice[];
+] as Info[];
 
 const Page = () => {
-  return (
-    <section className={classNames(globalStyle.innerPadding, style.container)}>
-      <ul>
-        {mockList.map((notice) => (
-          <NoticeItem key={notice.id} notice={notice} />
-        ))}
-      </ul>
-    </section>
-  );
+  return <InfoList infos={mockList} basePath={"notice"} />;
 };
 
 export default Page;

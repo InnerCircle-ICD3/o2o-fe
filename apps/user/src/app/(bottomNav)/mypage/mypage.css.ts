@@ -2,6 +2,9 @@ import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
+  display: "flex",
+  flexDirection: "column",
+
   width: "100%",
   height: "100%",
 
@@ -9,6 +12,8 @@ export const container = style({
 });
 
 export const wrapper = style({
+  flex: 1,
+
   paddingTop: 30,
 });
 
@@ -83,4 +88,19 @@ export const menus = style({
 export const menuItem = style({
   fontSize: 18,
   fontWeight: 600,
+});
+
+export const bottomButtons = style({
+  display: "flex",
+  justifyContent: "center",
+  gap: 8,
+
+  textAlign: "center",
+  color: globalTheme.color.gray.base,
+});
+
+export const bottomButton = style({
+  fontSize: 16,
+  fontWeight: 600,
+  color: globalTheme.color.gray.base,
 });
