@@ -2,64 +2,80 @@ import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
-  borderBottom: `1px solid ${globalTheme.color.line}`,
+  boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
+  borderLeft: `0.5px solid ${globalTheme.color.line}`,
+  borderRight: `0.5px solid ${globalTheme.color.line}`,
+  borderRadius: 10,
 
-  selectors: {
-    "&:last-child": {
-      borderBottom: "none",
-    },
-  },
+  marginTop: 15,
+  padding: "10px 15px",
 });
 
 export const wrapper = style({
   display: "flex",
+  flexDirection: "column",
   justifyContent: "space-between",
 
   padding: "10px 0",
 });
 
-export const info = style({
+export const titleBox = style({
   display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  gap: 5,
+  alignItems: "center",
+  justifyContent: "space-between",
+
+  marginBottom: 10,
 });
 
-export const dates = style({
-  fontSize: 12,
+export const title = style({
+  fontSize: 18,
+  fontWeight: "bold",
 });
 
-export const thumbnail = style({
-  position: "relative",
-
-  width: 130,
-  height: 130,
-
-  borderRadius: 12,
-  overflow: "hidden",
+export const infoBox = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  gap: 15,
 });
 
 export const image = style({
   objectFit: "cover",
+  borderRadius: 10,
 });
 
-export const label = style({
-  position: "absolute",
-  top: 4,
-  right: 4,
-
-  zIndex: 2,
+export const info = style({
+  flex: 1,
 });
 
-export const cover = style({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  zIndex: 1,
+export const storeTitle = style({
+  fontSize: 14,
+  fontWeight: 600,
+});
 
-  width: "100%",
-  height: "100%",
+export const productTitle = style({
+  marginTop: 8,
+  fontSize: 12,
+});
 
-  backgroundColor: globalTheme.color.black,
-  opacity: 0.5,
+export const prices = style({
+  display: "flex",
+  justifyContent: "space-between",
+
+  marginTop: 8,
+});
+
+export const discount = style({
+  textDecoration: "line-through",
+  color: globalTheme.color.gray.base,
+});
+
+export const original = style({
+  fontSize: 18,
+  fontWeight: "bold",
+});
+
+export const time = style({
+  marginTop: 2,
+  fontSize: 12,
 });
