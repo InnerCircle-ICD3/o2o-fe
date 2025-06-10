@@ -29,8 +29,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/types/*.d.ts",
-    "src/app/(not-used)/common-ui/page.tsx",
-    "src/components/ui/mypage/completeProfile/completeProfile.test.tsxx"
+    "src/app/(not-used)/common-ui/page.tsx"
   ],
   "exclude": ["node_modules"]
 }
