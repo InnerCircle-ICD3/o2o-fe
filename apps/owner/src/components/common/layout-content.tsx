@@ -1,10 +1,10 @@
 "use client";
 
-import { Header } from "@/components/header";
-import { Sidebar } from "@/components/sidebar";
+import { Header } from "@/components/common/header";
+import { Sidebar } from "@/components/common/sidebar";
 import { usePathname } from "next/navigation";
 
-const PUBLIC_PATHS = ["/store/login", "/store/signup"];
+const PUBLIC_PATHS = ["/store/login", "/store/register"];
 
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

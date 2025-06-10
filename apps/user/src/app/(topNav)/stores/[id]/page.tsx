@@ -25,7 +25,7 @@ const Page = async (props: PageProps) => {
   return (
     <>
       <StoresInfo storesDetail={storesData} />
-      <BottomButton buttonText="럭키밀 상세보기" href={`/stores/${storesData.id}/products`} />
+      <BottomButton buttonText="잇고백 상세보기" href={`/stores/${storesData.id}/products`} />
     </>
   );
 };

@@ -24,7 +24,7 @@ describe("OrderItem Test", () => {
         {
           id: 2,
           productId: 2,
-          productName: "스페셜 럭키백",
+          productName: "스페셜 잇고백",
           price: 15000,
           quantity: 2,
         },
@@ -42,7 +42,7 @@ describe("OrderItem Test", () => {
         {
           id: 1,
           productId: 1,
-          productName: "빅사이즈 럭키백",
+          productName: "빅사이즈 잇고백",
           price: 10000,
           quantity: 1,
         },
@@ -60,7 +60,7 @@ describe("OrderItem Test", () => {
         {
           id: 3,
           productId: 3,
-          productName: "럭키백 세트",
+          productName: "잇고백 세트",
           price: 20000,
           quantity: 1,
         },
