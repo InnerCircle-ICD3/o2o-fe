@@ -6,7 +6,7 @@ import {
   createUserMarker,
   getFullAddressByCoords,
   renderMyLocationPolygon,
-} from "./locationUtils";
+} from ".";
 
 vi.mock("@/hooks/useGeolocation");
 vi.mock("@/hooks/useKakaoLoader");

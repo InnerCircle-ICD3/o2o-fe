@@ -46,7 +46,7 @@ export const buttonText = style({
 
 export const trackWrapper = style({
   position: "absolute",
-  bottom: "53px",
+  bottom: "133px",
   left: "calc(12.5%)",
   width: "75%",
   height: "4px",
@@ -146,6 +146,6 @@ export const rangeWrapper = style({
 export const buttonContent = style({
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
+  justifyContent: "space-around",
   gap: "5px",
 });

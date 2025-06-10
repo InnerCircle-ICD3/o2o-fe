@@ -1,4 +1,9 @@
-import type { CustomerAddressRequest, MapStore, SearchAddressResult } from "@/types/locations.type";
+import type {
+  CustomerAddressRequest,
+  CustomerAddressResponse,
+  MapStore,
+  SearchAddressResult,
+} from "@/types/locations.type";
 
 export const createStoreMarker = (
   store: MapStore,
@@ -44,8 +49,8 @@ export const calculateMovedDistance = (
 };
 
 const getZoomLevelByRadius = (radius: number): number => {
-  if (radius <= 800) return 4;
-  if (radius <= 1500) return 5;
+  if (radius <= 0.8) return 4;
+  if (radius <= 1.5) return 5;
   return 6;
 };
 
@@ -83,7 +88,7 @@ export const renderMyLocationCircle = (
 ) => {
   const circle = new window.kakao.maps.Circle({
     center: new window.kakao.maps.LatLng(location.lat, location.lng),
-    radius: radius,
+    radius: radius * 1000,
     strokeWeight: 2,
     strokeColor: "#35A865",
     strokeOpacity: 1,
@@ -104,7 +109,7 @@ export const renderMyLocationPolygon = (
   basePolygonPath: kakao.maps.LatLng[],
   radius: number,
 ) => {
-  const scale = radius / 500;
+  const scale = (radius * 1000) / 500;
   const scaledPath = scalePolygon(basePolygonPath, scale);
 
   const polygon = new window.kakao.maps.Polygon({
@@ -161,8 +166,8 @@ export const getFullAddressByCoords = (
               longitude: lng,
             },
           },
-          distanceInKilometers: 0.5,
-          customerAddressType: "HOME", // 필요 시 인자로 받을 수 있음
+          radiusInKilometers: 0.5,
+          customerAddressType: "HOME",
           description: "", // 추가 설명은 별도로 입력받거나 비워둠
         };
 
@@ -204,4 +209,21 @@ export async function searchAddress(query: string): Promise<SearchAddressResult[
       lng: Number(Number.parseFloat(doc.x).toFixed(6)),
     },
   }));
+}
+
+export function getLocationAndRangeFromAddress(
+  customerAddress: CustomerAddressResponse[] | undefined,
+  selectedAddrIndex: number,
+): { location: { lat: number; lng: number } | null; range: number } {
+  if (customerAddress && customerAddress.length > 0) {
+    const selected = customerAddress[selectedAddrIndex] ?? customerAddress[0];
+    return {
+      location: {
+        lat: selected.latitude,
+        lng: selected.longitude,
+      },
+      range: selected.radiusInKilometers,
+    };
+  }
+  return { location: null, range: 0.5 };
 }

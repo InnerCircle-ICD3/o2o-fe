@@ -16,11 +16,7 @@ import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
 import { CLUSTERER_STYLE } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import {
-  calculateMovedDistance,
-  createStoreMarker,
-  createUserMarker,
-} from "@/utils/locations/locationUtils";
+import { calculateMovedDistance, createStoreMarker, createUserMarker } from "@/utils/locations";
 
 export default function SearchMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);

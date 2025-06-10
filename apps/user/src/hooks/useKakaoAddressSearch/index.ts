@@ -1,4 +1,4 @@
-import { searchAddress } from "@/utils/locations/locationUtils";
+import { searchAddress } from "@/utils/locations";
 import { useEffect, useState } from "react";
 
 export function useKakaoAddressSearch(query: string) {

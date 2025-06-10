@@ -1,7 +1,7 @@
 import useGetCustomerAddress from "@/hooks/api/useGetCustomerAddress";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import * as locationUtils from "@/utils/locations/locationUtils";
+import * as locationUtils from "@/utils/locations";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { type Mock, beforeEach, describe, expect, it, vi } from "vitest";

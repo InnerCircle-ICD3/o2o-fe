@@ -1,15 +1,22 @@
 "use client";
 
-import { deleteCustomerAddress } from "@/apis/ssr/locations";
+import { postCustomerAddress } from "@/apis/ssr/locations";
 import Button from "@/components/common/button";
+import ErrorUi from "@/components/common/errorUi";
 import { KakaoMap } from "@/components/common/kakaoMap";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { RANGE_OPTIONS } from "@/constants/locations";
+import useDeleteCustomerAddress from "@/hooks/api/useDeleteCustomerAddress";
 import useGetCustomerAddress from "@/hooks/api/useGetCustomerAddress";
-import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import { createUserMarker, renderMyLocationCircle } from "@/utils/locations/locationUtils";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSelectedAddressStore } from "@/stores/selectedAddressStore";
+import { userInfoStore } from "@/stores/userInfoStore";
+import type { AddressType } from "@/types/locations.type";
+import {
+  createUserMarker,
+  getLocationAndRangeFromAddress,
+  renderMyLocationCircle,
+} from "@/utils/locations";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -18,53 +25,79 @@ import * as styles from "./myLocation.css";
 type RangeOption = (typeof RANGE_OPTIONS)[number]["value"];
 
 export default function MyLocation() {
-  const [range, setRange] = useState<RangeOption>(500);
+  const { user } = userInfoStore();
+  const isLoggedIn = !!user?.customerId;
+
+  const [range, setRange] = useState<RangeOption>(0.5);
+  const selectedAddress = useSelectedAddressStore((state) => state.selectedAddress);
+  const clearSelectedAddress = useSelectedAddressStore((state) => state.clearSelectedAddress);
 
   const router = useRouter();
 
   const mapRef = useRef<kakao.maps.Map | null>(null);
-  const location = useGeolocation();
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [selectedAddrIndex, setSelectedAddrIndex] = useState(0);
   const isLoaded = useKakaoLoader();
   const selectedIndex = RANGE_OPTIONS.findIndex((option) => option.value === range);
   const markerRef = useRef<kakao.maps.Marker | null>(null);
   const circleRef = useRef<kakao.maps.Circle | null>(null);
 
-  const queryClient = useQueryClient();
+  const {
+    data: customerAddress,
+    isLoading: customerAddressLoading,
+    isError: isCustomerAddressError,
+    error: customerAddressError,
+  } = useGetCustomerAddress(user?.customerId);
 
-  const { data: customerAddress, isLoading: customerAddressLoading } = useGetCustomerAddress(5);
+  const {
+    deleteCustomerAddress,
+    isPending: deleteCustomerAddressLoading,
+    isError: isDeleteCustomerAddressError,
+    error: deleteCustomerAddressError,
+  } = useDeleteCustomerAddress();
 
-  const { mutate: deleteCustomerAddressMutate } = useMutation({
-    mutationFn: ({ customerId, addressId }: { customerId: number; addressId: number }) =>
-      deleteCustomerAddress({ customerId, addressId }),
-    onSuccess: () => {
-      // 삭제 성공 시 캐시 무효화 → 데이터 재요청
-      queryClient.invalidateQueries({ queryKey: ["customerAddress"] });
-    },
-    onError: (error) => {
-      console.error("삭제 실패", error);
-      // 필요시 토스트 알림 등 추가
-    },
-  });
-
-  // 지도 초기화
   const handleMapReady = useCallback((map: kakao.maps.Map) => {
     mapRef.current = map;
   }, []);
 
-  // 위치나 범위가 변경될 때 마커와 원 업데이트
   useEffect(() => {
-    if (!mapRef.current || !location) return;
+    const { location: addrLocation, range: addrRange } = getLocationAndRangeFromAddress(
+      customerAddress,
+      selectedAddrIndex,
+    );
+    if (addrLocation) {
+      setLocation(addrLocation);
+      setRange(addrRange as RangeOption);
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setRange(0.5 as RangeOption);
+      });
+    }
+  }, [customerAddress, selectedAddrIndex]);
 
-    // 기존 마커와 원 제거
+  useEffect(() => {
+    if (!isLoaded || !mapRef.current || !location) return;
     if (markerRef.current) markerRef.current.setMap(null);
     if (circleRef.current) circleRef.current.setMap(null);
-
-    // 새로운 마커와 원 생성
     markerRef.current = createUserMarker(location, mapRef.current);
     circleRef.current = renderMyLocationCircle(mapRef.current, location, range);
-  }, [location, range]);
+  }, [isLoaded, location, range]);
 
-  if (!location || !isLoaded || customerAddressLoading) return <LoadingMap />;
+  const addressTypes: AddressType[] = ["HOME", "WORK"];
+
+  if (!isLoggedIn) {
+    router.push("/login");
+  }
+
+  if (isCustomerAddressError || isDeleteCustomerAddressError) {
+    return (
+      <ErrorUi message={customerAddressError?.message || deleteCustomerAddressError?.message} />
+    );
+  }
+
+  if (!location || !isLoaded || customerAddressLoading || deleteCustomerAddressLoading)
+    return <LoadingMap />;
 
   return (
     <div className={styles.container}>
@@ -76,29 +109,59 @@ export default function MyLocation() {
         </div>
         <div className={styles.bottomSheetContent}>
           <div className={styles.buttonWrapper}>
-            {[0, 1].map((idx) => {
-              const addr = customerAddress?.[idx];
-
+            {addressTypes.map((type, idx) => {
+              const tempAddr = selectedAddress[type];
+              const addr = tempAddr || customerAddress?.[idx];
+              const isSelected = selectedAddrIndex === idx;
+              let region2 = "";
+              let region3 = "";
+              let customerId: number | undefined = undefined;
+              let addressId: number | undefined = undefined;
+              if (addr) {
+                if ("address" in addr) {
+                  region2 = addr.address.region2DepthName;
+                  region3 = addr.address.region3DepthName;
+                } else {
+                  region2 = addr.region2DepthName;
+                  region3 = addr.region3DepthName;
+                  customerId = addr.customerId;
+                  addressId = addr.id;
+                }
+              }
               return addr ? (
-                <Button key={idx} status="primary">
+                <Button
+                  key={type}
+                  status={isSelected ? "primary" : "common"}
+                  onClick={() => {
+                    setSelectedAddrIndex(idx);
+                  }}
+                >
                   <div className={styles.buttonContent}>
-                    {addr.region1DepthName} {addr.region2DepthName} {addr.region3DepthName}
+                    {region2} {region3}
                     <Image
                       src="/icons/btn_close_white.svg"
                       alt="close"
                       width={14}
                       height={14}
-                      onClick={() =>
-                        deleteCustomerAddressMutate({
-                          customerId: addr.customerId,
-                          addressId: addr.id,
-                        })
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (tempAddr) {
+                          clearSelectedAddress(type);
+                        } else {
+                          deleteCustomerAddress({
+                            customerId,
+                            addressId,
+                          });
+                        }
+                      }}
                     />
                   </div>
                 </Button>
               ) : (
-                <Button key={idx} onClick={() => router.push("/locations/address-search")}>
+                <Button
+                  key={type}
+                  onClick={() => router.push(`/locations/address-search?address_type=${type}`)}
+                >
                   <p className={styles.buttonText}>+</p>
                 </Button>
               );
@@ -142,6 +205,32 @@ export default function MyLocation() {
                 );
               })}
             </div>
+          </div>
+
+          <div className={styles.buttonWrapper}>
+            <Button
+              status="primary"
+              onClick={async () => {
+                const type = addressTypes[selectedAddrIndex];
+                const tempAddr = selectedAddress[type];
+                if (!user?.customerId || !tempAddr) return;
+                const addressWithRange = {
+                  ...tempAddr,
+                  radiusInKilometers: range,
+                };
+                const result = await postCustomerAddress({
+                  customerId: user.customerId,
+                  address: addressWithRange,
+                });
+                if (result.success) {
+                  clearSelectedAddress(type);
+                  router.push("/mypage");
+                }
+              }}
+              disabled={!selectedAddress[addressTypes[selectedAddrIndex]]}
+            >
+              <p className={styles.buttonText}>등록하기</p>
+            </Button>
           </div>
         </div>
       </div>
