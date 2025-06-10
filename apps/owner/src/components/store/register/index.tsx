@@ -5,6 +5,7 @@ import { FormField } from "@/components/store/register/formField";
 import { Button } from "@/components/ui/button";
 import { STORE_CATEGORIES, VALIDATION_RULES } from "@/constants/store";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
 import type { StoreFormData } from "@/types/store";
 import { initialStoreFormData } from "@/types/store";
@@ -17,6 +18,7 @@ import { Stepper } from "./stepper";
 export default function StoreRegisterFormWizard() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
+  const { owner } = useOwnerStore();
   const router = useRouter();
 
   const form = useForm<StoreFormData>({
@@ -49,10 +51,11 @@ export default function StoreRegisterFormWizard() {
     };
 
   const onSubmit = async (data: StoreFormData) => {
+    const storeOwnerId = owner?.storeOwnerId;
     const isValid = await form.validate();
-    if (!isValid) return;
+    if (!isValid || !storeOwnerId) return;
 
-    const result = await postStore(1, data);
+    const result = await postStore(storeOwnerId, data);
     if (result.success) {
       router.push("/");
     } else {

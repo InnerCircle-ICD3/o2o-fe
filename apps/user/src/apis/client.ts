@@ -26,4 +26,8 @@ export const apiClient = {
   delete: async <T>(url: string, options = {}) => {
     return toResult<T>(() => api.delete(url, options).json());
   },
+
+  patch: async <T>(url: string, data: unknown, options = {}) => {
+    return toResult<T>(() => api.patch(url, { json: data, ...options }).json());
+  },
 };

@@ -2,7 +2,8 @@ import Providers from "@/providers";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { LayoutContent } from "@/components/common/layout-content";
+import { LayoutContent } from "@/components/layout-content";
+import { OwnerInfoProvider } from "@/providers/ownerInfo";
 
 if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "development") {
   const { worker } = await import("../mocks/server");
@@ -37,6 +38,7 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
+          <OwnerInfoProvider />
           <LayoutContent>{children}</LayoutContent>
         </Providers>
       </body>
