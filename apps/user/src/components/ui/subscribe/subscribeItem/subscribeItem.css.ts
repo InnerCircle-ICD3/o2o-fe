@@ -16,7 +16,7 @@ export const wrapper = style({
   flexDirection: "column",
   justifyContent: "space-between",
 
-  paddingBottom: "10px",
+  padding: "10px 0",
 });
 
 export const titleBox = style({
@@ -48,15 +48,23 @@ export const info = style({
   flex: 1,
 });
 
-export const storeTitle = style({
-  fontSize: 16,
-  fontWeight: 600,
+export const category = style({
+  fontSize: 12,
+  color: globalTheme.color.gray.base,
+
+  marginBottom: 8,
 });
 
-export const productTitle = style({
-  marginTop: 2,
+export const description = style({
   fontSize: 14,
   fontWeight: 500,
+  marginBottom: 8,
+  display: "-webkit-box",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  WebkitLineClamp: 3,
+  WebkitBoxOrient: "vertical",
+  height: 48,
 });
 
 export const prices = style({
@@ -73,11 +81,5 @@ export const discount = style({
 
 export const original = style({
   textDecoration: "line-through",
-  color: globalTheme.color.gray.base,
-});
-
-export const time = style({
-  marginTop: 2,
-  fontSize: 12,
   color: globalTheme.color.gray.base,
 });
