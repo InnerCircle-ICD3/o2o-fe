@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 interface OwnerState {
   owner: {
-    storeOwnerId: string;
+    storeOwnerId: number;
     roles: string[];
     nickname: string;
     customerId: number;

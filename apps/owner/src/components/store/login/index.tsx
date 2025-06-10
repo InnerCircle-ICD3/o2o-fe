@@ -22,12 +22,12 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm flex flex-col items-center space-y-6">
-        {/* <Image src="/images/character3.png" alt="캐릭터" width={172} height={136} />
-        <Image src="/images/logoTitle.png" alt="로고" width={147} height={62} /> */}
+        <Image src="/images/character3.png" alt="캐릭터" width={172} height={136} />
+        <Image src="/images/logoTitle.png" alt="로고" width={147} height={62} />
         {Object.entries(SOCIAL_PROVIDERS).map(([provider, { label, iconSrc }]) => (
           <Button
             key={provider}
-            // className="bg-[#FEE500] text-[#191600] hover:bg-[#FEE500]/90 justify-center w-full h-[60px]"
+            className="bg-[#FEE500] text-[#191600] hover:bg-[#FEE500]/90 justify-center w-full h-[60px]"
             variant="ghost"
             onClick={() => handleSocialLogin(provider as Provider)}
           >

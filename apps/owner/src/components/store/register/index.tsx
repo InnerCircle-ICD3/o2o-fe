@@ -2,6 +2,7 @@
 
 import { postStore } from "@/apis/ssr/store";
 import { FormField } from "@/components/commmon/formField";
+import { Stepper } from "@/components/commmon/stepper";
 import { Button } from "@/components/ui/button";
 import { STORE_CATEGORIES, VALIDATION_RULES } from "@/constants/store";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
@@ -9,12 +10,11 @@ import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
 import type { CreateStoreRequest } from "@/types/store";
 import { initialStoreFormData } from "@/types/store";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
-import { Stepper } from "@/components/commmon/stepper";
-import { useMutation } from "@tanstack/react-query";
 
 const STEP_LABELS = ["가게 등록", "상세 설정", "픽업 설정"];
 

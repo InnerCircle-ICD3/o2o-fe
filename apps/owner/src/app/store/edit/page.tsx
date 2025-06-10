@@ -1,5 +1,5 @@
-import StoreEdit from "@/components/store/edit";
+import StoreEditForm from "@/components/store/edit";
 
 export default function Page() {
-  return <StoreEdit />;
+  return <StoreEditForm />;
 }

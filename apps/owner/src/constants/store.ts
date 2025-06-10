@@ -1,4 +1,4 @@
-import type { StoreCategory, CreateStoreRequest, ValidationRules } from "@/types/store";
+import type { CreateStoreRequest, StoreCategory, ValidationRules } from "@/types/store";
 
 export const VALIDATION_RULES: ValidationRules<CreateStoreRequest> = {
   name: {

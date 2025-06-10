@@ -1,7 +1,7 @@
 export interface ValidationRule {
   pattern: RegExp;
   message: string;
-};
+}
 
 export type ValidationRules<T> = {
   [K in keyof T]?: ValidationRule;
@@ -10,7 +10,7 @@ export type ValidationRules<T> = {
 export interface StoreCategory {
   value: string;
   label: string;
-};
+}
 
 export interface CreateStoreRequest {
   name: string;
@@ -35,7 +35,7 @@ export interface CreateStoreRequest {
     openTime: string;
     closeTime: string;
   }[];
-};
+}
 
 export interface StoreResponse {
   id: string;
