@@ -4,7 +4,6 @@ import Page from "./page";
 
 const mockPush = vi.fn();
 
-// useGetMyOrder 훅 모킹
 const mockUseGetMyOrder = vi.fn();
 vi.mock("@/hooks/api/useGetMyOrder", () => ({
   default: () => mockUseGetMyOrder(),
@@ -17,10 +16,15 @@ vi.mock("next/navigation", () => {
     }),
   };
 });
-
-// OrderItem 컴포넌트 모킹
+  
 vi.mock("@/components/ui/my-orders/orderItem", () => ({
   default: ({ order }: { order: { orderId: number } }) => <div>OrderItem - {order.orderId}</div>,
+}));
+
+vi.mock("@/stores/userInfoStore", () => ({
+  userInfoStore: vi.fn(() => ({
+    user: { id: 1, nickname: "재완", customerId: 1 },
+  })),
 }));
 
 describe("My Orders Page", () => {
