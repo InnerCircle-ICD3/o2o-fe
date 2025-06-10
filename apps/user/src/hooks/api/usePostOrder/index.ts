@@ -16,8 +16,9 @@ interface OrderResponse {
   orderId: string;
 }
 
-const createOrder = (body: OrderBody) => {
-  return apiClient.post<OrderResponse>("orders", body);
+const createOrder = (body: OrderBody, customerId = 1) => {
+  // todo customerId = 유저 정보에서 받아와야 함 (로그인 기능 완료되면 붙일 수 있을듯)
+  return apiClient.post<OrderResponse>(`orders?customerId=${customerId}`, body);
 };
 
 const usePostOrder = () => {
