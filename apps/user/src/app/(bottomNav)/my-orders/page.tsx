@@ -1,5 +1,6 @@
 "use client";
 
+import ErrorUi from "@/components/common/errorUi";
 import OrderItem from "@/components/ui/my-orders/orderItem";
 import RequireLogin from "@/components/ui/my-orders/requireLogin";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
@@ -19,12 +20,7 @@ const Page = () => {
   }
 
   if (isError) {
-    return (
-      <div>
-        <p>주문 내역을 불러오는 데 실패했습니다.</p>
-        {<p>{error?.message}</p>}
-      </div>
-    );
+    return <ErrorUi message={error?.message} />;
   }
 
   return (
