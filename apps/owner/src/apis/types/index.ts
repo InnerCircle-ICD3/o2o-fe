@@ -1,7 +1,7 @@
-export type ResultError = {
+import type { ErrorJson } from "o2o/errors";
+
+export type ResultError = ErrorJson & {
   success: false;
-  errorCode: string;
-  errorMessage: string;
 };
 
 export type ResultSuccess<T> = {
