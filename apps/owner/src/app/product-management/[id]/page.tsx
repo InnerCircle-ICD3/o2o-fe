@@ -141,7 +141,7 @@ export default function LuckyBagDetail() {
           {/* Left Form */}
           <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">럭키백 상세</h2>
+              <h2 className="text-2xl font-bold">잇고백 상세</h2>
               {!isEditing ? (
                 <Button type="button" onClick={handleEdit}>
                   수정하기
@@ -206,7 +206,7 @@ export default function LuckyBagDetail() {
             </div>
 
             <div className="space-y-2">
-              <Label>럭키백 종류</Label>
+              <Label>잇고백 종류</Label>
               <ToggleGroup
                 type="single"
                 value={watch("size")}

@@ -42,16 +42,16 @@ const menuConfig: Record<string, MenuItem> = {
     ],
   },
   products: {
-    title: "상품 관리",
+    title: "잇고백 관리",
     icon: Package,
     submenu: [
       {
-        title: "상품 등록",
+        title: "잇고백 등록",
         href: "/product-management/new",
         icon: Plus,
       },
       {
-        title: "상품 목록",
+        title: "잇고백 목록",
         href: "/product-management",
         icon: List,
       },
