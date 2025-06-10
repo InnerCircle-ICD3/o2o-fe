@@ -16,7 +16,7 @@ vi.mock("next/navigation", () => {
     }),
   };
 });
-  
+
 vi.mock("@/components/ui/my-orders/orderItem", () => ({
   default: ({ order }: { order: { orderId: number } }) => <div>OrderItem - {order.orderId}</div>,
 }));
