@@ -14,8 +14,8 @@ describe("Products Component", () => {
         id: "2",
         storeName: "블루문",
         createdAt: "2025-05-06T10:15:30Z",
-        name: "럭키백 S",
-        description: "소형 럭키백입니다",
+        name: "잇고백 S",
+        description: "소형 잇고백입니다",
         foodType: ["과자", "음료"],
         imageUrl: "/images/thumb.png",
         inventory: {
@@ -35,9 +35,9 @@ describe("Products Component", () => {
 
     render(<Products products={mockProducts} />);
 
-    expect(screen.getByText("럭키백 S")).toBeInTheDocument();
+    expect(screen.getByText("잇고백 S")).toBeInTheDocument();
 
-    expect(screen.getByText("소형 럭키백입니다")).toBeInTheDocument();
+    expect(screen.getByText("소형 잇고백입니다")).toBeInTheDocument();
 
     expect(screen.getByText("24,000₩")).toBeInTheDocument();
     expect(screen.getByText("12,000₩")).toBeInTheDocument();
@@ -51,8 +51,8 @@ describe("Products Component", () => {
         id: "3",
         storeName: "블르문",
         createdAt: "2025-05-06T10:15:30Z",
-        name: "럭키백 L",
-        description: "대형 럭키백입니다",
+        name: "잇고백 L",
+        description: "대형 잇고백입니다",
         foodType: ["간식", "과일"],
         imageUrl: "/images/thumb.png",
         inventory: {
