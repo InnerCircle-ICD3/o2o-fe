@@ -1,4 +1,4 @@
-import { MultiSelect } from "@/components/store/register/multipleSelect";
+import { MultiSelect } from "@/components/commmon/multipleSelect";
 // components/common/FormField.tsx
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import StoreRegisterFormWizard from "./index";
+import StoreRegisterForm from "./index";
 
 const mockOpenPostcode = vi.fn();
 
@@ -21,9 +21,9 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-describe("StoreRegisterFormWizard", () => {
+describe("StoreRegisterForm", () => {
   it("첫 번째 스텝에서 기본 필드들이 렌더링되어야 합니다", () => {
-    render(<StoreRegisterFormWizard />);
+    render(<StoreRegisterForm />);
 
     expect(screen.getByText("매장명")).toBeInTheDocument();
     expect(screen.getByText("사업자 등록번호")).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe("StoreRegisterFormWizard", () => {
   });
 
   it("다음 버튼을 클릭하면 두 번째 스텝으로 이동해야 합니다", () => {
-    render(<StoreRegisterFormWizard />);
+    render(<StoreRegisterForm />);
 
     const nextButton = screen.getByText("다음");
     fireEvent.click(nextButton);
@@ -46,7 +46,7 @@ describe("StoreRegisterFormWizard", () => {
   });
 
   it("이전 버튼을 클릭하면 첫 번째 스텝으로 돌아가야 합니다", () => {
-    render(<StoreRegisterFormWizard />);
+    render(<StoreRegisterForm />);
 
     // 두 번째 스텝으로 이동
     const nextButton = screen.getByText("다음");
@@ -61,7 +61,7 @@ describe("StoreRegisterFormWizard", () => {
   });
 
   it("세 번째 스텝에서는 영업시간 섹션이 보여야 합니다", () => {
-    render(<StoreRegisterFormWizard />);
+    render(<StoreRegisterForm />);
 
     // 두 번째 스텝으로 이동
     const nextButton = screen.getByText("다음");
@@ -75,7 +75,7 @@ describe("StoreRegisterFormWizard", () => {
   });
 
   it("주소 검색 버튼을 클릭하면 openPostcode가 호출되어야 합니다", () => {
-    render(<StoreRegisterFormWizard />);
+    render(<StoreRegisterForm />);
 
     // 두 번째 스텝으로 이동
     const nextButton = screen.getByText("다음");

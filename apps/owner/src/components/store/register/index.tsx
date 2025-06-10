@@ -1,7 +1,7 @@
 "use client";
 
 import { postStore } from "@/apis/ssr/store";
-import { FormField } from "@/components/store/register/formField";
+import { FormField } from "@/components/commmon/formField";
 import { Button } from "@/components/ui/button";
 import { STORE_CATEGORIES, VALIDATION_RULES } from "@/constants/store";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
@@ -13,9 +13,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
-import { Stepper } from "./stepper";
+import { Stepper } from "@/components/commmon/stepper";
 
-export default function StoreRegisterFormWizard() {
+const STEP_LABELS = ["가게 등록", "상세 설정", "픽업 설정"];
+
+export default function StoreRegisterForm() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
   const { owner } = useOwnerStore();
@@ -65,7 +67,7 @@ export default function StoreRegisterFormWizard() {
 
   return (
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
-      <Stepper step={step} />
+      <Stepper step={step} labels={STEP_LABELS} />
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
         <div className="flex flex-col">
