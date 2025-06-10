@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
 import { Stepper } from "@/components/commmon/stepper";
+import { useMutation } from "@tanstack/react-query";
 
 const STEP_LABELS = ["가게 등록", "상세 설정", "픽업 설정"];
 
@@ -52,17 +53,24 @@ export default function StoreRegisterForm() {
       errors[field] = error;
     };
 
-  const onSubmit = async (data: CreateStoreRequest) => {
-    const storeOwnerId = owner?.storeOwnerId;
-    const isValid = await form.validate();
-    if (!isValid || !storeOwnerId) return;
-
-    const result = await postStore(storeOwnerId, data);
-    if (result.success) {
+  const createStoreMutation = useMutation({
+    mutationFn: (data: CreateStoreRequest) => {
+      if (!owner?.storeOwnerId) throw new Error("사용자 정보가 없습니다");
+      return postStore(owner.storeOwnerId, data);
+    },
+    onSuccess: () => {
       router.push("/");
-    } else {
-      console.error("매장 등록 실패:", result);
-    }
+    },
+    onError: (error) => {
+      console.error("매장 등록 실패:", error);
+    },
+  });
+
+  const onSubmit = async (data: CreateStoreRequest) => {
+    const isValid = await form.validate();
+    if (!isValid || !owner?.storeOwnerId) return;
+
+    createStoreMutation.mutate(data);
   };
 
   return (
