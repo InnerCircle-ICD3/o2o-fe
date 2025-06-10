@@ -15,7 +15,6 @@ interface VirtualScrollProps extends PropsWithChildren {
 
 const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: VirtualScrollProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerSize, setContainerSize] = useState({
     width: 0,
@@ -55,22 +54,22 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
   }, []);
 
   useEffect(() => {
-    if (!observerRef.current) return;
+    const el = containerRef.current;
+    if (!el) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting && onScrollEnd) {
-            onScrollEnd();
-          }
-        }
-      },
-      { threshold: 1.0 },
-    );
+    const onScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
 
-    observer.observe(observerRef.current);
+      setScrollTop(scrollTop);
 
-    return () => observer.disconnect();
+      // 스크롤이 바닥에 도달한 경우
+      if (onScrollEnd && scrollTop + clientHeight >= scrollHeight - 1) {
+        onScrollEnd();
+      }
+    };
+
+    el.addEventListener("scroll", onScroll);
+    return () => el.removeEventListener("scroll", onScroll);
   }, [onScrollEnd]);
 
   return (
@@ -80,8 +79,6 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
           <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
         )}
       </div>
-
-      {onScrollEnd && <div ref={observerRef} />}
     </div>
   );
 };

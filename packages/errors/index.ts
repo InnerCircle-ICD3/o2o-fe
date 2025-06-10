@@ -1,5 +1,5 @@
 // Base Error
-export { BaseError } from "./base/BaseError";
+export { BaseError, type ErrorJson } from "./base/BaseError";
 
 // Common Errors
 export { CommonError, CommonErrorCode } from "./common/CommonError";
@@ -15,6 +15,9 @@ export { StoreError, StoreErrorCode } from "./store/StoreError";
 
 // Customer Errors
 export { CustomerError, CustomerErrorCode } from "./customer/CustomerError";
+
+// Error Registry
+export { default as errorRegistry } from "./utils/errorRegistry";
 
 // Error Types
 import type { CommonError, CommonErrorCode } from "./common/CommonError";

@@ -98,14 +98,14 @@ export default function SearchMap() {
       const markers: kakao.maps.Marker[] = [];
 
       for (const store of storeListRef.current) {
-        const marker = createStoreMarker(
-          store,
-          map,
-          (storeId) => {
-            setSelectedStoreId((prev) => (prev === storeId ? null : storeId));
-          },
-          false,
-        );
+        if (!store.coordinates) {
+          console.warn("store.coordinates is null", store);
+          continue;
+        }
+
+        const marker = createStoreMarker(store, map, (storeId) => {
+          setSelectedStoreId((prev) => (prev === storeId ? null : storeId));
+        });
 
         storeMarkerMap.current.set(store.storeId, marker);
         markers.push(marker);

@@ -1,326 +1,300 @@
 import { baseUrl } from "@/mocks/utils";
 import { http, HttpResponse } from "msw";
 
-const mockOrder = [
-  {
-    orderId: 1,
-    store: {
+const firstMockOrder = {
+  contents: [
+    {
+      id: 1,
+      orderNumber: 123456,
+      customerId: 1,
       storeId: 1001,
-      name: "냠냠 샌드위치",
-      roadAddress: {
-        addressName: "서울 강남구 테헤란로 123",
-        zoneNo: "06232",
-        buildingName: "카카오뱅크",
-      },
-      lotAddress: {
-        addressName: "서울 강남구 역삼동 123-45",
-        mainAddressNo: "123",
-        subAddressNo: "45",
-      },
-      addressType: "ROAD",
-      location: {
-        lat: 37.12345,
-        lng: 127.12345,
-      },
-      businessNumber: "123-45-67890",
-      openTime: "09:00",
-      closeTime: "21:00",
-      contact: "02-123-4567",
-      description: "정성 가득 김밥집",
-      mainImageUrl: "/images/thumb.png",
-      status: "OPEN",
+      status: "PENDING",
+      orderItems: [
+        {
+          id: 1,
+          productId: 1,
+          productName: "빅사이즈 럭키백",
+          price: 10000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-06T10:15:30Z",
+      updatedAt: "2025-05-06T10:15:30Z",
     },
-    products: [
-      {
-        id: 1,
-        createdAt: "2025-05-06T10:15:30Z",
-        description: "신선한 제철 과일 및 계절 채소로 구성된 특별 럭키백입니다.",
-        foodType: ["크림빵", "야채빵"],
-        imageUrl: "/images/thumb.png",
-        inventory: {
-          quantity: 1,
-          stock: 10,
+    {
+      id: 2,
+      orderNumber: 123457,
+      customerId: 1,
+      storeId: 1002,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 2,
+          productId: 2,
+          productName: "스페셜 럭키백",
+          price: 15000,
+          quantity: 2,
         },
-        storeId: 1,
-        name: "빅사이즈 럭키백",
-        price: {
-          originalPrice: 20000,
-          discountRate: 0.5,
-          finalPrice: 10000,
-        },
-        size: "L",
-        status: "ACTIVE",
-      },
-    ],
-    totalPrice: 20000,
-    status: "PENDING",
-    createdAt: "2025-05-06T10:15:30Z",
-    orderDate: "2025-05-06T10:15:30Z",
-  },
-  {
-    orderId: 2,
-    store: {
-      storeId: 1001,
-      name: "냠냠 치킨",
-      roadAddress: {
-        addressName: "서울 강남구 테헤란로 123",
-        zoneNo: "06232",
-        buildingName: "카카오뱅크",
-      },
-      lotAddress: {
-        addressName: "서울 강남구 역삼동 123-45",
-        mainAddressNo: "123",
-        subAddressNo: "45",
-      },
-      addressType: "ROAD",
-      location: {
-        lat: 37.12345,
-        lng: 127.12345,
-      },
-      businessNumber: "123-45-67890",
-      openTime: "09:00",
-      closeTime: "21:00",
-      contact: "02-123-4567",
-      description: "정성 가득 김밥집",
-      mainImageUrl: "/images/thumb2.png",
-      status: "OPEN",
+      ],
+      createdAt: "2025-05-07T11:20:30Z",
+      updatedAt: "2025-05-07T11:20:30Z",
     },
-    products: [
-      {
-        id: 1,
-        createdAt: "2025-05-06T10:15:30Z",
-        description: "갓 튀긴 바삭한 치킨과 달달한 소스가 어우러진 특별 럭키백입니다.",
-        foodType: ["후라이드 치킨", "양념 치킨"],
-        imageUrl: "/images/thumb.png",
-        inventory: {
+    {
+      id: 3,
+      orderNumber: 123458,
+      customerId: 1,
+      storeId: 1003,
+      status: "CANCELLED",
+      orderItems: [
+        {
+          id: 3,
+          productId: 3,
+          productName: "럭키백 세트",
+          price: 20000,
           quantity: 1,
-          stock: 10,
         },
-        storeId: 1,
-        name: "빅사이즈 럭키백",
-        price: {
-          originalPrice: 20000,
-          discountRate: 0.5,
-          finalPrice: 10000,
-        },
-        size: "L",
-        status: "ACTIVE",
-      },
-      {
-        id: 2,
-        createdAt: "2025-05-06T10:15:30Z",
-        description: "갓 튀긴 바삭한 치킨과 달달한 소스가 어우러진 특별 럭키백입니다.",
-        foodType: ["후라이드 치킨", "양념 치킨"],
-        imageUrl: "/images/thumb.png",
-        inventory: {
-          quantity: 1,
-          stock: 10,
-        },
-        storeId: 1,
-        name: "작은 사이즈 럭키백",
-        price: {
-          originalPrice: 20000,
-          discountRate: 0.5,
-          finalPrice: 10000,
-        },
-        size: "S",
-        status: "ACTIVE",
-      },
-    ],
-    totalPrice: 26000,
-    status: "COMPLETED",
-    createdAt: "2025-05-06T10:15:30Z",
-    orderDate: "2025-05-06T10:15:30Z",
-    pickupDate: "2025-05-06T12:15:30Z",
-  },
-  {
-    orderId: 3,
-    store: {
-      storeId: 1001,
-      name: "냠냠 디저트",
-      roadAddress: {
-        addressName: "서울 강남구 테헤란로 123",
-        zoneNo: "06232",
-        buildingName: "카카오뱅크",
-      },
-      lotAddress: {
-        addressName: "서울 강남구 역삼동 123-45",
-        mainAddressNo: "123",
-        subAddressNo: "45",
-      },
-      addressType: "ROAD",
-      location: {
-        lat: 37.12345,
-        lng: 127.12345,
-      },
-      businessNumber: "123-45-67890",
-      openTime: "09:00",
-      closeTime: "21:00",
-      contact: "02-123-4567",
-      description: "정성 가득 김밥집",
-      mainImageUrl: "/images/thumb3.png",
-      status: "OPEN",
+      ],
+      createdAt: "2025-05-08T12:25:30Z",
+      updatedAt: "2025-05-08T12:25:30Z",
     },
-    products: [
-      {
-        id: 1,
-        createdAt: "2025-05-06T10:15:30Z",
-        description: "달달한 크림과 신선한 과일이 어우러진 특별 럭키백입니다.",
-        foodType: ["과일 푸딩", "크림 케이크"],
-        imageUrl: "/images/thumb.png",
-        inventory: {
-          quantity: 1,
-          stock: 10,
+    {
+      id: 4,
+      orderNumber: 123459,
+      customerId: 1,
+      storeId: 1004,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 4,
+          productId: 4,
+          productName: "럭키백 프리미엄",
+          price: 25000,
+          quantity: 3,
         },
-        storeId: 1,
-        name: "중간 사이즈 럭키백",
-        price: {
-          originalPrice: 20000,
-          discountRate: 0.5,
-          finalPrice: 10000,
-        },
-        size: "M",
-        status: "ACTIVE",
-      },
-      {
-        id: 2,
-        createdAt: "2025-05-06T10:15:30Z",
-        description: "달달한 크림과 신선한 과일이 어우러진 특별 럭키백입니다.",
-        foodType: ["과일 푸딩", "크림 케이크"],
-        imageUrl: "/images/thumb.png",
-        inventory: {
-          quantity: 1,
-          stock: 10,
-        },
-        storeId: 1,
-        name: "작은 사이즈 럭키백",
-        price: {
-          originalPrice: 20000,
-          discountRate: 0.5,
-          finalPrice: 10000,
-        },
-        size: "S",
-        status: "ACTIVE",
-      },
-    ],
-    totalPrice: 19000,
-    status: "CANCELLED",
-    createdAt: "2025-05-06T10:15:30Z",
-    orderDate: "2025-05-06T10:15:30Z",
-    cancelDate: "2025-05-06T13:15:30Z",
-  },
-  {
-    orderId: 4,
-    store: {
-      storeId: 1001,
-      name: "냠냠 떡볶이",
-      roadAddress: {
-        addressName: "서울 강남구 테헤란로 123",
-        zoneNo: "06232",
-        buildingName: "카카오뱅크",
-      },
-      lotAddress: {
-        addressName: "서울 강남구 역삼동 123-45",
-        mainAddressNo: "123",
-        subAddressNo: "45",
-      },
-      addressType: "ROAD",
-      location: {
-        lat: 37.12345,
-        lng: 127.12345,
-      },
-      businessNumber: "123-45-67890",
-      openTime: "09:00",
-      closeTime: "21:00",
-      contact: "02-123-4567",
-      description: "정성 가득 김밥집",
-      mainImageUrl: "/images/thumb4.png",
-      status: "OPEN",
+      ],
+      createdAt: "2025-05-09T13:30:30Z",
+      updatedAt: "2025-05-09T13:30:30Z",
     },
+    {
+      id: 5,
+      orderNumber: 123460,
+      customerId: 1,
+      storeId: 1005,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 5,
+          productId: 5,
+          productName: "럭키백 베스트",
+          price: 30000,
+          quantity: 2,
+        },
+      ],
+      createdAt: "2025-05-10T14:35:30Z",
+      updatedAt: "2025-05-10T14:35:30Z",
+    },
+    {
+      id: 6,
+      orderNumber: 123461,
+      customerId: 1,
+      storeId: 1006,
+      status: "CANCELLED",
+      orderItems: [
+        {
+          id: 6,
+          productId: 6,
+          productName: "럭키백 클래식",
+          price: 12000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-11T15:40:30Z",
+      updatedAt: "2025-05-11T15:40:30Z",
+    },
+    {
+      id: 7,
+      orderNumber: 123462,
+      customerId: 1,
+      storeId: 1007,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 7,
+          productId: 7,
+          productName: "럭키백 스페셜",
+          price: 18000,
+          quantity: 2,
+        },
+      ],
+      createdAt: "2025-05-12T16:45:30Z",
+      updatedAt: "2025-05-12T16:45:30Z",
+    },
+    {
+      id: 8,
+      orderNumber: 123463,
+      customerId: 1,
+      storeId: 1008,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 8,
+          productId: 8,
+          productName: "럭키백 프리미엄 플러스",
+          price: 35000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-13T17:50:30Z",
+      updatedAt: "2025-05-13T17:50:30Z",
+    },
+    {
+      id: 9,
+      orderNumber: 123464,
+      customerId: 1,
+      storeId: 1009,
+      status: "CANCELLED",
+      orderItems: [
+        {
+          id: 9,
+          productId: 9,
+          productName: "럭키백 베스트 셀렉션",
+          price: 40000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-14T18:55:30Z",
+      updatedAt: "2025-05-14T18:55:30Z",
+    },
+    {
+      id: 10,
+      orderNumber: 123465,
+      customerId: 1,
+      storeId: 1010,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 10,
+          productId: 10,
+          productName: "럭키백 슈퍼 스페셜",
+          price: 50000,
+          quantity: 2,
+        },
+      ],
+      createdAt: "2025-05-15T19:00:30Z",
+      updatedAt: "2025-05-15T19:00:30Z",
+    },
+  ],
+  lastId: 1,
+};
 
-    status: "COMPLETED",
-    createdAt: "2024-05-02T10:15:30Z",
-    orderDate: "2024-05-02T10:15:30Z",
-    pickupDate: "2024-05-02T12:15:30Z",
-    totalPrice: 21000,
-  },
-  {
-    orderId: 5,
-    store: {
-      storeId: 1001,
-      name: "냠냠 장어덮밥",
-      roadAddress: {
-        addressName: "서울 강남구 테헤란로 123",
-        zoneNo: "06232",
-        buildingName: "카카오뱅크",
-      },
-      lotAddress: {
-        addressName: "서울 강남구 역삼동 123-45",
-        mainAddressNo: "123",
-        subAddressNo: "45",
-      },
-      addressType: "ROAD",
-      location: {
-        lat: 37.12345,
-        lng: 127.12345,
-      },
-      businessNumber: "123-45-67890",
-      openTime: "09:00",
-      closeTime: "21:00",
-      contact: "02-123-4567",
-      description: "정성 가득 김밥집",
-      mainImageUrl: "/images/thumb5.png",
-      status: "OPEN",
+const secondMockOrder = {
+  contents: [
+    {
+      id: 11,
+      orderNumber: 123466,
+      customerId: 1,
+      storeId: 1011,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 11,
+          productId: 11,
+          productName: "럭키백 얼티밋",
+          price: 60000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-16T20:05:30Z",
+      updatedAt: "2025-05-16T20:05:30Z",
     },
-    status: "COMPLETED",
-    createdAt: "2024-04-06T10:15:30Z",
-    orderDate: "2024-04-12T10:15:30Z",
-    pickupDate: "2024-04-12T12:15:30Z",
-    totalPrice: 31000,
-  },
-  {
-    orderId: 6,
-    store: {
-      storeId: 1001,
-      name: "냠냠 비빔밥",
-      roadAddress: {
-        addressName: "서울 강남구 테헤란로 123",
-        zoneNo: "06232",
-        buildingName: "카카오뱅크",
-      },
-      lotAddress: {
-        addressName: "서울 강남구 역삼동 123-45",
-        mainAddressNo: "123",
-        subAddressNo: "45",
-      },
-      addressType: "ROAD",
-      location: {
-        lat: 37.12345,
-        lng: 127.12345,
-      },
-      businessNumber: "123-45-67890",
-      openTime: "09:00",
-      closeTime: "21:00",
-      contact: "02-123-4567",
-      description: "정성 가득 김밥집",
-      mainImageUrl: "/images/thumb6.png",
-      status: "OPEN",
+    {
+      id: 12,
+      orderNumber: 123467,
+      customerId: 1,
+      storeId: 1012,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 12,
+          productId: 12,
+          productName: "럭키백 프리미엄 스페셜",
+          price: 70000,
+          quantity: 2,
+        },
+      ],
+      createdAt: "2025-05-17T21:10:30Z",
+      updatedAt: "2025-05-17T21:10:30Z",
     },
-    status: "COMPLETED",
-    createdAt: "2024-03-06T10:15:30Z",
-    orderDate: "2024-03-06T10:15:30Z",
-    pickupDate: "2024-03-06T12:15:30Z",
-    totalPrice: 12000,
-  },
-];
+    {
+      id: 13,
+      orderNumber: 123468,
+      customerId: 1,
+      storeId: 1013,
+      status: "CANCELLED",
+      orderItems: [
+        {
+          id: 13,
+          productId: 13,
+          productName: "럭키백 클래식 스페셜",
+          price: 80000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-18T22:15:30Z",
+      updatedAt: "2025-05-18T22:15:30Z",
+    },
+    {
+      id: 14,
+      orderNumber: 123469,
+      customerId: 1,
+      storeId: 1014,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 14,
+          productId: 14,
+          productName: "럭키백 슈퍼 프리미엄",
+          price: 90000,
+          quantity: 3,
+        },
+      ],
+      createdAt: "2025-05-19T23:20:30Z",
+      updatedAt: "2025-05-19T23:20:30Z",
+    },
+    {
+      id: 15,
+      orderNumber: 123470,
+      customerId: 1,
+      storeId: 1015,
+      status: "COMPLETED",
+      orderItems: [
+        {
+          id: 15,
+          productId: 15,
+          productName: "럭키백 얼티밋 프리미엄 스페셜 에디션",
+          price: 100000,
+          quantity: 2,
+        },
+      ],
+      createdAt: "2025-05-20T00:25:30Z",
+      updatedAt: "2025-05-20T00:25:30Z",
+    },
+  ],
+  lastId: 15,
+};
 
 const handlers = [
   http.post(`${baseUrl}/orders`, () => {
     return HttpResponse.json({ success: true, data: { orderId: 1 } });
   }),
 
-  http.get(`${baseUrl}/customer/:id/orders`, () => {
-    return HttpResponse.json({ success: true, data: mockOrder });
+  http.get(`${baseUrl}/customers/orders`, ({ request }) => {
+    const url = new URL(request.url);
+    const lastId = url.searchParams.get("lastId");
+
+    const orders = lastId === "1" ? secondMockOrder : firstMockOrder;
+
+    return HttpResponse.json({ success: true, data: orders });
   }),
 
   http.get(`${baseUrl}/orders/:id`, ({ params }) => {
@@ -328,7 +302,7 @@ const handlers = [
 
     return HttpResponse.json({
       success: true,
-      data: mockOrder.find((order) => order.orderId === id),
+      data: firstMockOrder.contents.find((order) => order.id === id),
     });
   }),
 ];
