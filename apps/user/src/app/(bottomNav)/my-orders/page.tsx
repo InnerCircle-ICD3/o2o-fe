@@ -3,6 +3,7 @@
 import ErrorUi from "@/components/common/errorUi";
 import VirtualScroll, { VirtualItem } from "@/components/common/virtualScroll";
 import OrderItem from "@/components/ui/my-orders/orderItem";
+import RequireLogin from "@/components/ui/my-orders/requireLogin";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import { ORDER_STATUS } from "@/constants/my-orders";
 import useGetMyOrder from "@/hooks/api/useGetMyOrder";
@@ -14,9 +15,9 @@ const Page = () => {
   const isLogin = !!user;
   const { data: orders, error, isError, isLoading, fetchNextPage } = useGetMyOrder(1, !isLogin);
 
-  // if (!isLogin) {
-  //   return <RequireLogin text="주문 내역" />;
-  // }
+  if (!isLogin) {
+    return <RequireLogin text="주문 내역" />;
+  }
 
   if (isError) {
     return <ErrorUi message={error?.message} />;
