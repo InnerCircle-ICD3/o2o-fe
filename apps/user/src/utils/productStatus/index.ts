@@ -10,7 +10,7 @@ const generateProductStatus = (length: number): GenerateProductStatusResult => {
     return { status: "soldOut", label: "마감" };
   }
 
-  const status = length === 1 ? "endSoon" : "sales";
+  const status = length < 5 ? "endSoon" : "sales";
   return { status, label: `${length}개 남음` };
 };
 
