@@ -1,3 +1,4 @@
+import type { Result } from "@/apis/types";
 import { fireEvent, render } from "@testing-library/react";
 import { vi } from "vitest";
 import { create } from "zustand";
@@ -85,11 +86,16 @@ describe("CompleteProfile", () => {
   });
 
   it("patchCustomer 실패 시 콘솔에 에러메시지가 찍힌다", async () => {
-    // 실패용 mock
-    const failPatchCustomer = async () => ({
+    const failPatchCustomer = async (
+      _customerId: number,
+      _nickname: string,
+    ): Promise<Result<unknown>> => ({
       success: false as const,
-      errorCode: "ERROR",
-      errorMessage: "에러",
+      name: "Error",
+      code: "ERROR",
+      message: "에러",
+      statusCode: 400,
+      timestamp: new Date(),
     });
     const { getByPlaceholderText, getByText } = render(
       <CompleteProfile useUserStore={mockUseUserStore} patchCustomer={failPatchCustomer} />,
