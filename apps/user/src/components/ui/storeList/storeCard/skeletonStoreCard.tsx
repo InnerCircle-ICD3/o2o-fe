@@ -10,7 +10,7 @@ const SkeletonStoreCard = ({
   hasImage?: boolean;
   hasText?: boolean;
   hasPrice?: boolean;
-  imagePosition?: "top" | "right";
+  imagePosition?: "top" | "right" | "left";
   textLength?: number;
 }) => {
   return (
@@ -22,6 +22,7 @@ const SkeletonStoreCard = ({
           })}
         />
       )}
+
       <div className={textGroupStyle}>
         {hasText &&
           Array.from({ length: textLength }).map((_, index) => (
@@ -32,6 +33,13 @@ const SkeletonStoreCard = ({
           ))}
         {hasPrice && <div className={skeleton({ size: "price" })} />}
       </div>
+      {hasImage && imagePosition === "left" && (
+        <div
+          className={skeleton({
+            size: "imageRight",
+          })}
+        />
+      )}
       {hasImage && imagePosition === "right" && (
         <div
           className={skeleton({

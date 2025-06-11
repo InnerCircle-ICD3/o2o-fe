@@ -5,18 +5,24 @@ import { useRouter } from "next/navigation";
 import Button from "../button";
 import * as style from "./errorUi.css";
 
+const imageTypes = {
+  error: "/images/character4.png",
+  subscribe: "/images/character4.png",
+};
+
 interface ErrorUiProps {
   message?: string;
+  type?: keyof typeof imageTypes;
 }
 
 const ErrorUi = (props: ErrorUiProps) => {
-  const { message = "" } = props;
+  const { type = "error", message = "" } = props;
   const router = useRouter();
 
   return (
     <div className={style.container}>
       <div className={style.message}>
-        <Image src="/images/character4.png" alt="캐릭터" width={240} height={240} />
+        <Image src={imageTypes[type]} alt="" width={240} height={240} />
         {message}
       </div>
 
