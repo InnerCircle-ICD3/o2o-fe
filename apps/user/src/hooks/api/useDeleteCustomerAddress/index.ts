@@ -22,7 +22,7 @@ const useDeleteCustomerAddress = () => {
 
   // 커스텀 훅에서 사용할 값과 함수 반환
   return {
-    deleteCustomerAddress: mutate,
+    mutate,
     isPending,
     isError,
     error,

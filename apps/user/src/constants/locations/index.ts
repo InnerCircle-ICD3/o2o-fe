@@ -5,6 +5,8 @@ export const RANGE_OPTIONS = [
   { value: 2, label: "멀어요" },
 ] as const;
 
+export const ADDRESS_TYPES = ["HOME", "WORK"] as const;
+
 export const CLUSTERER_STYLE = {
   width: "40px",
   height: "40px",

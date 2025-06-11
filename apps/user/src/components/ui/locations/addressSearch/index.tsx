@@ -42,7 +42,7 @@ export default function LocationSearchPage() {
 
       if (address) {
         setSelectedAddress(address, addressType);
-        router.push("/locations/my-location");
+        router.push(`/locations/my-location?address_type=${addressType}`);
       }
     } catch (error) {
       console.error("지역 정보를 가져오는 데 실패했습니다:", error);
