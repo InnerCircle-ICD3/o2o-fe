@@ -12,12 +12,14 @@ import * as style from "./storeListContainer.css";
 const StoreListContainer = () => {
   const locations = useGeolocation();
   const { stores, isLoading, fetchNextPage, isError, error } = useStoreList(
-    //     {
-    //     lat: 37.572859,
-    //     lng: 126.976991
-    // }
+    // {
+    //   lat: 37.572859,
+    //   lng: 126.976991,
+    // },
     locations,
   );
+
+  console.log(error);
 
   if (isError) {
     return <ErrorUi message={error?.message} />;

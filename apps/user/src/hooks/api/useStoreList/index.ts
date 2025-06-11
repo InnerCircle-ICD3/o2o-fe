@@ -30,7 +30,7 @@ export const useStoreList = (locations: Coordinates | null) => {
         size: SIZE,
         latitude: locations?.lat,
         longitude: locations?.lng,
-        search: "",
+        searchText: "",
       } as Record<string, string | number>;
       if (pageParam !== undefined) params.lastId = pageParam as string;
 
