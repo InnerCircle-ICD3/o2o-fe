@@ -5,6 +5,7 @@ import {
   createStoreMarker,
   createUserMarker,
   getFullAddressByCoords,
+  renderMyLocationCircle,
   renderMyLocationPolygon,
 } from ".";
 
@@ -215,6 +216,27 @@ describe("locationUtils", () => {
     it("응답이 없으면 null을 반환해야 한다.", async () => {
       const result = await getFullAddressByCoords(0, 0);
       expect(result).toBeNull();
+    });
+  });
+
+  describe("renderMyLocationCircle()", () => {
+    it("원을 지도에 렌더링하고 줌 레벨을 조정해야 한다", () => {
+      const setMapMock = vi.fn();
+      const setLevelMock = vi.fn();
+
+      globalThis.kakao.maps.Circle = vi.fn().mockImplementation(() => ({
+        setMap: setMapMock,
+      }));
+
+      const map = { setLevel: setLevelMock } as unknown as kakao.maps.Map;
+      const location = { lat: 37.5665, lng: 126.978 };
+      const radius = 0.5;
+
+      const circle = renderMyLocationCircle(map, location, radius);
+
+      expect(circle).toBeDefined();
+      expect(setMapMock).toHaveBeenCalledWith(map);
+      expect(setLevelMock).toHaveBeenCalledWith(expect.any(Number));
     });
   });
 });

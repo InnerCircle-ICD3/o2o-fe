@@ -26,7 +26,6 @@ export default function SearchMap() {
 
   const isLoaded = useKakaoLoader();
   const location = useGeolocation();
-  console.log(location);
 
   const [shouldShowRefetch, setShouldShowRefetch] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
@@ -68,7 +67,7 @@ export default function SearchMap() {
       const center = map.getCenter();
       const movedDistance = calculateMovedDistance(center, location);
 
-      setShouldShowRefetch(movedDistance > 0.01);
+      setShouldShowRefetch(movedDistance > 0.02);
     },
     [location],
   );

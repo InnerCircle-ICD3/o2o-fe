@@ -1,9 +1,4 @@
-import type {
-  CustomerAddressRequest,
-  CustomerAddressResponse,
-  MapStore,
-  SearchAddressResult,
-} from "@/types/locations.type";
+import type { CustomerAddressRequest, MapStore, SearchAddressResult } from "@/types/locations.type";
 
 export const createStoreMarker = (
   store: MapStore,
@@ -209,21 +204,4 @@ export async function searchAddress(query: string): Promise<SearchAddressResult[
       lng: Number(Number.parseFloat(doc.x).toFixed(6)),
     },
   }));
-}
-
-export function getLocationAndRangeFromAddress(
-  customerAddress: CustomerAddressResponse[] | undefined,
-  selectedAddrIndex: number,
-): { location: { lat: number; lng: number } | null; range: number } {
-  if (customerAddress && customerAddress.length > 0) {
-    const selected = customerAddress[selectedAddrIndex] ?? customerAddress[0];
-    return {
-      location: {
-        lat: selected.latitude,
-        lng: selected.longitude,
-      },
-      range: selected.radiusInKilometers,
-    };
-  }
-  return { location: null, range: 0.5 };
 }

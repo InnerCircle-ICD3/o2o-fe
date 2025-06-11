@@ -1,5 +1,6 @@
 import Button from "@/components/common/button";
 import * as styles from "@/components/ui/locations/myLocation/myLocation.css";
+import { ADDRESS_TYPES } from "@/constants/locations";
 import type {
   AddressType,
   CustomerAddressRequest,
@@ -17,8 +18,6 @@ interface AddressSelectorProps {
   clearSelectedAddress: (type: AddressType) => void;
 }
 
-const addressTypes: AddressType[] = ["HOME", "WORK"];
-
 export default function AddressSelector({
   selectedIndex,
   setSelectedIndex,
@@ -35,7 +34,7 @@ export default function AddressSelector({
 
   return (
     <div className={styles.buttonWrapper}>
-      {addressTypes.map((type, idx) => {
+      {ADDRESS_TYPES.map((type, idx) => {
         const tempAddr = selectedAddress[type];
         const addr = tempAddr || addressMap[type];
         const isSelected = selectedIndex === idx;
