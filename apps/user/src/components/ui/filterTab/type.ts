@@ -5,11 +5,11 @@ export type HourType = number & { __brand: "Hour" };
 export type MinuteType = number & { __brand: "Minute" };
 
 export type PickupTime = {
-  day: DayType;
-  hour: HourType;
-  minute: MinuteType;
+  day?: DayType;
+  hour?: HourType;
+  minute?: MinuteType;
 };
 
-export type FoodType = (typeof foodTypeList)[number];
+export type FoodType = (typeof foodTypeList)[number]["value"];
 
 export type TabKey = "reservation" | "foodType" | "pickupTime";

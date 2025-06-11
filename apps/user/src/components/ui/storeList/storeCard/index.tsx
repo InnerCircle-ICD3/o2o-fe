@@ -1,10 +1,12 @@
 "use client";
 
+import StatusLabel from "@/components/common/statusLabel";
 import StoreInfo from "@/components/common/storeInfo";
 import type { StoreList } from "@/types/apis/stores.type";
+import generateProductStatus from "@/utils/productStatus";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import * as styles from "./storeCard.css";
+import * as style from "./storeCard.css";
 
 interface StoreCardProps {
   storesDetail: StoreList;
@@ -12,38 +14,34 @@ interface StoreCardProps {
 
 export const StoreCard: React.FC<StoreCardProps> = ({ storesDetail }: StoreCardProps) => {
   const router = useRouter();
-
-  const { storeId, storeImage, storeName } = storesDetail;
-
+  const { status, label } = generateProductStatus(storesDetail.totalStockCount);
   const handleClick = () => {
-    router.push(`/stores/${storeId}`);
+    router.push(`/stores/${storesDetail.storeId}`);
   };
   return (
     <div
-      className={styles.card}
+      className={style.card}
       onClick={handleClick}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
-          router.push(`/stores/${storeId}`);
+          router.push(`/stores/${storesDetail.storeId}`);
         }
       }}
     >
       <Image
-        src={storeImage}
-        alt={storeName}
-        className={styles.image}
+        src={storesDetail.storeImage || "/images/thumb.png"}
+        alt={""}
+        className={style.image}
         width={240}
         height={140}
         priority={false}
       />
-      <div className={styles.priceSectionWrapper}>
-        <div className={styles.content}>
-          <StoreInfo storesDetail={storesDetail} />
-        </div>
-        <div className={styles.priceRightSection}>
-          <p className={styles.originalPriceText}>10,000₩</p>
-          <p className={styles.salePriceText}>5,000₩</p>
-        </div>
+      <div className={style.priceSectionWrapper}>
+        <StoreInfo storesDetail={storesDetail} />
+      </div>
+
+      <div className={style.label}>
+        <StatusLabel status={status}>{label}</StatusLabel>
       </div>
     </div>
   );
