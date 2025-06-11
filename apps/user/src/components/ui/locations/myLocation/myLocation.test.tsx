@@ -77,7 +77,7 @@ describe("MyLocation", () => {
           longitude: 0,
         },
       },
-      distanceInKilometers: 0.5,
+      radiusInKilometers: 0.5,
       customerAddressType: "",
       description: "",
     });
