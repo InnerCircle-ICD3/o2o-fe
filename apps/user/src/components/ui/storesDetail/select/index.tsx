@@ -29,7 +29,7 @@ const Select = (props: SelectProps) => {
   return (
     <div className={style.container}>
       <button className={buttonStyle} type={"button"} onClick={handleToggle}>
-        럭키백을 선택해주세요
+        잇고백을 선택해주세요
         <Image src={"/icons/dropdown_off.svg"} alt="dropdown" width={20} height={20} />
       </button>
 
