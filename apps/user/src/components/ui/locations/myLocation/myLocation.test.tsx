@@ -64,6 +64,12 @@ vi.mock("next/navigation", () => ({
     forward: vi.fn(),
     refresh: vi.fn(),
   }),
+  useSearchParams: () => ({
+    get: (key: string) => {
+      if (key === "address_type") return "HOME";
+      return null;
+    },
+  }),
 }));
 
 const queryClient = new QueryClient();
