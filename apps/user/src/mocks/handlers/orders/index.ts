@@ -13,7 +13,7 @@ const firstMockOrder = {
         {
           id: 1,
           productId: 1,
-          productName: "빅사이즈 럭키백",
+          productName: "빅사이즈 잇고백",
           price: 10000,
           quantity: 1,
         },
@@ -31,7 +31,7 @@ const firstMockOrder = {
         {
           id: 2,
           productId: 2,
-          productName: "스페셜 럭키백",
+          productName: "스페셜 잇고백",
           price: 15000,
           quantity: 2,
         },
@@ -49,7 +49,7 @@ const firstMockOrder = {
         {
           id: 3,
           productId: 3,
-          productName: "럭키백 세트",
+          productName: "잇고백 세트",
           price: 20000,
           quantity: 1,
         },
@@ -67,7 +67,7 @@ const firstMockOrder = {
         {
           id: 4,
           productId: 4,
-          productName: "럭키백 프리미엄",
+          productName: "잇고백 프리미엄",
           price: 25000,
           quantity: 3,
         },
@@ -85,7 +85,7 @@ const firstMockOrder = {
         {
           id: 5,
           productId: 5,
-          productName: "럭키백 베스트",
+          productName: "잇고백 베스트",
           price: 30000,
           quantity: 2,
         },
@@ -103,7 +103,7 @@ const firstMockOrder = {
         {
           id: 6,
           productId: 6,
-          productName: "럭키백 클래식",
+          productName: "잇고백 클래식",
           price: 12000,
           quantity: 1,
         },
@@ -121,7 +121,7 @@ const firstMockOrder = {
         {
           id: 7,
           productId: 7,
-          productName: "럭키백 스페셜",
+          productName: "잇고백 스페셜",
           price: 18000,
           quantity: 2,
         },
@@ -139,7 +139,7 @@ const firstMockOrder = {
         {
           id: 8,
           productId: 8,
-          productName: "럭키백 프리미엄 플러스",
+          productName: "잇고백 프리미엄 플러스",
           price: 35000,
           quantity: 1,
         },
@@ -157,7 +157,7 @@ const firstMockOrder = {
         {
           id: 9,
           productId: 9,
-          productName: "럭키백 베스트 셀렉션",
+          productName: "잇고백 베스트 셀렉션",
           price: 40000,
           quantity: 1,
         },
@@ -175,7 +175,7 @@ const firstMockOrder = {
         {
           id: 10,
           productId: 10,
-          productName: "럭키백 슈퍼 스페셜",
+          productName: "잇고백 슈퍼 스페셜",
           price: 50000,
           quantity: 2,
         },
@@ -199,7 +199,7 @@ const secondMockOrder = {
         {
           id: 11,
           productId: 11,
-          productName: "럭키백 얼티밋",
+          productName: "잇고백 얼티밋",
           price: 60000,
           quantity: 1,
         },
@@ -217,7 +217,7 @@ const secondMockOrder = {
         {
           id: 12,
           productId: 12,
-          productName: "럭키백 프리미엄 스페셜",
+          productName: "잇고백 프리미엄 스페셜",
           price: 70000,
           quantity: 2,
         },
@@ -235,7 +235,7 @@ const secondMockOrder = {
         {
           id: 13,
           productId: 13,
-          productName: "럭키백 클래식 스페셜",
+          productName: "잇고백 클래식 스페셜",
           price: 80000,
           quantity: 1,
         },
@@ -253,7 +253,7 @@ const secondMockOrder = {
         {
           id: 14,
           productId: 14,
-          productName: "럭키백 슈퍼 프리미엄",
+          productName: "잇고백 슈퍼 프리미엄",
           price: 90000,
           quantity: 3,
         },
@@ -271,7 +271,7 @@ const secondMockOrder = {
         {
           id: 15,
           productId: 15,
-          productName: "럭키백 얼티밋 프리미엄 스페셜 에디션",
+          productName: "잇고백 얼티밋 프리미엄 스페셜 에디션",
           price: 100000,
           quantity: 2,
         },
