@@ -1,4 +1,5 @@
-import { getStore } from "@/apis/ssr/store";
+import { getStore } from "@/apis/ssr/stores";
+import { PICKUP_DAY } from "@/constants/store";
 import { useQuery } from "@/hooks/api/utils/useQuery";
 import type { StoreResponse } from "@/types/store";
 
@@ -31,7 +32,7 @@ const storeData = {
         latitude: 37.497942,
       },
     },
-    pickupDay: "TODAY 또는 TOMORROW",
+    pickupDay: PICKUP_DAY.TOMORROW,
     todayPickupStartTime: "10:00:00",
     todayPickupEndTime: "20:00:00",
     status: "OPEN",

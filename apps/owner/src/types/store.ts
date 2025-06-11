@@ -38,18 +38,10 @@ export interface CreateStoreRequest {
 }
 
 export interface StoreResponse {
-  id: string;
+  id: number;
   name: string;
   businessNumber: string;
-  roadNameAddress?: string;
-  lotNumberAddress?: string;
-  buildingName?: string;
-  zipCode?: string;
-  region1DepthName?: string;
-  region2DepthName?: string;
-  region3DepthName?: string;
-  latitude?: string;
-  longitude?: string;
+  address: StoreAddress;
   contact: string;
   description?: string;
   mainImageUrl?: string;
@@ -63,6 +55,19 @@ export interface StoreResponse {
   }[];
 }
 
+export interface StoreAddress {
+  roadNameAddress?: string;
+  lotNumberAddress?: string;
+  buildingName?: string;
+  zipCode?: string;
+  region1DepthName?: string;
+  region2DepthName?: string;
+  region3DepthName?: string;
+  coordinate: {
+    longitude: number;
+    latitude: number;
+  };
+}
 export interface UpdateStoreRequest {
   name?: string;
   businessNumber?: string;

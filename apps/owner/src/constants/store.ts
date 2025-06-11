@@ -52,6 +52,11 @@ export const WEEKDAY_MAP: Record<WeekdayKor, WeekdayEng> = {
   일: "SUNDAY",
 };
 
+export const PICKUP_DAY = {
+  TODAY: "TODAY",
+  TOMORROW: "TOMORROW",
+} as const;
+
 export const STORE_STATUS_OPTIONS = [
   { value: "OPEN", label: "영업중" },
   { value: "CLOSED", label: "영업종료" },

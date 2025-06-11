@@ -1,13 +1,14 @@
 "use client";
 
-import { putStore } from "@/apis/ssr/store";
+import { putStore } from "@/apis/ssr/stores";
 import { FormField } from "@/components/common/formField";
 import { Button } from "@/components/ui/button";
-import { STORE_CATEGORIES, STORE_STATUS_OPTIONS } from "@/constants/store";
+import { STORE_CATEGORIES } from "@/constants/store";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
+import { getDefaultStoreFormValues } from "@/utils/stores";
 import { useMutation } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { useForm } from "use-form-light";
@@ -21,24 +22,7 @@ export default function StoreEdit() {
   const [isOpen, setIsOpen] = useState(true); // true: 영업중, false: 영업종료
 
   const form = useForm<UpdateStoreRequest>({
-    defaultValues: useMemo(() => {
-      if (!storeData?.success) return { storeCategory: [], foodCategory: [] } as UpdateStoreRequest;
-      const store = storeData.data;
-      const { latitude, longitude } = store.address.coordinate;
-      return {
-        ...store,
-        businessNumber: store.businessNumber ?? "",
-        storeCategory: store.storeCategory ?? [],
-        foodCategory: store.foodCategory ?? [],
-        latitude: latitude ? Number(latitude) : undefined,
-        longitude: longitude ? Number(longitude) : undefined,
-        pickupDay: store.pickupDay as "TODAY" | "TOMORROW",
-        roadNameAddress: store.address.roadNameAddress ?? "",
-        lotNumberAddress: store.address.lotNumberAddress ?? "",
-        zipCode: store.address.zipCode ?? "",
-        buildingName: store.address.buildingName ?? "",
-      };
-    }, [storeData]),
+    defaultValues: useMemo(() => getDefaultStoreFormValues(storeData), [storeData]),
   });
 
   const { errors, handleSubmit, watch, setValue } = form;
@@ -59,11 +43,6 @@ export default function StoreEdit() {
     updateStoreMutation.mutate(data);
   };
 
-  // 상태 옵션에서 label만 추출
-  const openLabel = STORE_STATUS_OPTIONS.find((opt) => opt.value === "OPEN")?.label ?? "영업중";
-  const closedLabel =
-    STORE_STATUS_OPTIONS.find((opt) => opt.value === "CLOSED")?.label ?? "영업종료";
-
   if (!owner?.userId) return <div>유저 정보가 없습니다.</div>;
   if (isLoading) return <div>Loading...</div>;
 
@@ -79,7 +58,7 @@ export default function StoreEdit() {
               patchStoreStatusMutation.mutate({ status: isOpen ? "CLOSED" : "OPEN" });
             }}
           />
-          {isOpen ? openLabel : closedLabel}
+          {isOpen ? "영업중" : "영업종료"}
         </label>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row gap-8 w-full">

@@ -1,17 +1,15 @@
 "use client";
 
-import { postStore } from "@/apis/ssr/store";
-import { FormField } from "@/components/commmon/formField";
-import { Stepper } from "@/components/commmon/stepper";
+import { FormField } from "@/components/common/formField";
+import { Stepper } from "@/components/common/stepper";
 import { Button } from "@/components/ui/button";
 import { STORE_CATEGORIES, VALIDATION_RULES } from "@/constants/store";
+import usePostOwnerStore from "@/hooks/api/usePostOwnerStore";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
 import type { CreateStoreRequest } from "@/types/store";
 import { initialStoreFormData } from "@/types/store";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
@@ -22,7 +20,6 @@ export default function StoreRegisterForm() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
   const { owner } = useOwnerStore();
-  const router = useRouter();
 
   const form = useForm<CreateStoreRequest>({
     defaultValues: initialStoreFormData,
@@ -53,22 +50,11 @@ export default function StoreRegisterForm() {
       errors[field] = error;
     };
 
-  const createStoreMutation = useMutation({
-    mutationFn: (data: CreateStoreRequest) => {
-      if (!owner?.storeOwnerId) throw new Error("사용자 정보가 없습니다");
-      return postStore(owner.storeOwnerId, data);
-    },
-    onSuccess: () => {
-      router.push("/");
-    },
-    onError: (error) => {
-      console.error("매장 등록 실패:", error);
-    },
-  });
+  const createStoreMutation = usePostOwnerStore(owner?.userId);
 
   const onSubmit = async (data: CreateStoreRequest) => {
     const isValid = await form.validate();
-    if (!isValid || !owner?.storeOwnerId) return;
+    if (!isValid) return;
 
     createStoreMutation.mutate(data);
   };

@@ -1,4 +1,4 @@
-import { patchStoreStatus } from "@/apis/ssr/store";
+import { patchStoreStatus } from "@/apis/ssr/stores";
 import type { StoreStatus } from "@/types/store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
