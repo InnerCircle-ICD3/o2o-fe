@@ -62,9 +62,12 @@ export const description = style({
   display: "-webkit-box",
   overflow: "hidden",
   textOverflow: "ellipsis",
+  /* biome-ignore lint/style/useNamingConvention: false */
   WebkitLineClamp: 3,
+  /* biome-ignore lint/style/useNamingConvention: false */
   WebkitBoxOrient: "vertical",
   height: 48,
+  lineHeight: 1.5,
 });
 
 export const prices = style({
