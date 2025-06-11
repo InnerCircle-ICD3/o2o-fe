@@ -1,7 +1,7 @@
 "use client";
 
 import { getStore, putStore } from "@/apis/ssr/store";
-import { FormField } from "@/components/commmon/formField";
+import { FormField } from "@/components/common/formField";
 import { Button } from "@/components/ui/button";
 import { STORE_CATEGORIES } from "@/constants/store";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
