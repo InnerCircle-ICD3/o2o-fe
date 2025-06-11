@@ -22,25 +22,34 @@ export const useStoreList = (locations: Coordinates | null) => {
     isFetchingNextPage,
     isLoading,
     error,
+    isError,
   } = useInfiniteQuery<Result<StoreListResponse>, Error, InfiniteQueryResponse<StoreListResponse>>({
     queryKey: ["stores", "locations"],
-    queryFn: ({ pageParam = 0 }) => {
-      setAllQueryParams({
+    queryFn: ({ pageParam }) => {
+      const params = {
         size: SIZE,
-        page: pageParam as number,
         latitude: locations?.lat,
         longitude: locations?.lng,
-      });
+        search: "",
+      } as Record<string, string | number>;
+      if (pageParam !== undefined) params.lastId = pageParam as string;
+
+      setAllQueryParams(params);
       return getStoreList(queryParams.toString());
     },
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.success && lastPage.data.storeList.length > 0 ? allPages.length : undefined;
+    getNextPageParam: (lastPage) => {
+      return lastPage.success &&
+        lastPage.data.storeList.length > 0 &&
+        lastPage.data.lastId !== lastPage.data.storeList.at(-1)?.storeId.toString()
+        ? lastPage.data.lastId
+        : undefined;
     },
-    initialPageParam: 0,
+    initialPageParam: undefined,
   });
 
   return {
     stores,
+    isError,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,

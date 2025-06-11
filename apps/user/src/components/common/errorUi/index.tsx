@@ -13,11 +13,12 @@ const imageTypes = {
 
 interface ErrorUiProps {
   message?: string;
+  isButton?: boolean;
   type?: keyof typeof imageTypes;
 }
 
 const ErrorUi = (props: ErrorUiProps) => {
-  const { type = "error", message = "" } = props;
+  const { type = "error", message = "", isButton = true } = props;
   const router = useRouter();
 
   return (
@@ -27,14 +28,16 @@ const ErrorUi = (props: ErrorUiProps) => {
         {message}
       </div>
 
-      <div className={style.buttons}>
-        <Button type={"button"} status={"common"} onClick={router.back}>
-          돌아가기
-        </Button>
-        <Button type={"button"} status={"primary"} onClick={() => router.push("/")}>
-          홈으로
-        </Button>
-      </div>
+      {isButton && (
+        <div className={style.buttons}>
+          <Button type={"button"} status={"common"} onClick={router.back}>
+            돌아가기
+          </Button>
+          <Button type={"button"} status={"primary"} onClick={() => router.push("/")}>
+            홈으로
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

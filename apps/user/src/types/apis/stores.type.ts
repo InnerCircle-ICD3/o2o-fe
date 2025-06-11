@@ -110,7 +110,7 @@ export interface StoreList {
 }
 
 export interface StoreListResponse {
-  pageNumber?: number;
+  lastId: string;
   storeList: StoreList[];
 }
 

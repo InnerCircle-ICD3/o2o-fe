@@ -29,9 +29,9 @@ export default function MainHeader() {
           </h1>
         </button>
         <div className={styles.mainHeaderRight}>
-          <button type="button">
+          {/* <button type="button">
             <Image src="/icons/notice.svg" alt="notice" width={24} height={24} />
-          </button>
+          </button> */}
           <button type="button">
             <Image src="/icons/bookmark.svg" alt="bookmark" width={24} height={24} />
           </button>

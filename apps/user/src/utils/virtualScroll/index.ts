@@ -30,12 +30,7 @@ export const getVirtualRange = ({
   height,
   overscan,
   itemHeights,
-}: {
-  scrollTop: number;
-  height: number;
-  overscan: number;
-  itemHeights: number[];
-}) => {
+}: { scrollTop: number; height: number; overscan: number; itemHeights: number[] }) => {
   let startIdx = 0;
   let offset = 0;
 
