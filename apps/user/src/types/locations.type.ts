@@ -20,9 +20,9 @@ export type AddressType = "HOME" | "WORK";
 // 고객 주소 타입
 export interface CustomerAddressRequest {
   address: {
-    roadNameAddress: string;
+    roadNameAddress: string | null;
     lotNumberAddress: string;
-    buildingName: string;
+    buildingName: string | null;
     zipCode: string;
     region1DepthName: string;
     region2DepthName: string;
