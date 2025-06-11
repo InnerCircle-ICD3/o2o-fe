@@ -1,38 +1,42 @@
 "use client";
 
-import { getStore, putStore } from "@/apis/ssr/store";
+import { putStore } from "@/apis/ssr/store";
 import { FormField } from "@/components/common/formField";
 import { Button } from "@/components/ui/button";
-import { STORE_CATEGORIES } from "@/constants/store";
+import { STORE_CATEGORIES, STORE_STATUS_OPTIONS } from "@/constants/store";
+import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
+import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "../register/businessHoursSection";
 
 export default function StoreEdit() {
   const { owner } = useOwnerStore();
 
-  const { data: storeData, isLoading } = useQuery({
-    queryKey: ["store", owner?.storeOwnerId],
-    queryFn: () => {
-      if (!owner?.storeOwnerId) throw new Error("사용자 정보가 없습니다");
-      return getStore(owner.storeOwnerId);
-    },
-    enabled: !!owner?.storeOwnerId,
-  });
+  const { data: storeData, isLoading } = useGetOwnerStore(owner?.userId);
 
-  // storeData가 있을 때만 form을 생성
+  const [isOpen, setIsOpen] = useState(true); // true: 영업중, false: 영업종료
+
   const form = useForm<UpdateStoreRequest>({
     defaultValues: useMemo(() => {
-      if (!storeData?.success) return {} as UpdateStoreRequest;
+      if (!storeData?.success) return { storeCategory: [], foodCategory: [] } as UpdateStoreRequest;
       const store = storeData.data;
-      // StoreResponse -> UpdateStoreRequest 변환 (필요시 타입 변환)
+      const { latitude, longitude } = store.address.coordinate;
       return {
         ...store,
-        latitude: store.latitude ? Number(store.latitude) : undefined,
-        longitude: store.longitude ? Number(store.longitude) : undefined,
+        businessNumber: store.businessNumber ?? "",
+        storeCategory: store.storeCategory ?? [],
+        foodCategory: store.foodCategory ?? [],
+        latitude: latitude ? Number(latitude) : undefined,
+        longitude: longitude ? Number(longitude) : undefined,
+        pickupDay: store.pickupDay as "TODAY" | "TOMORROW",
+        roadNameAddress: store.address.roadNameAddress ?? "",
+        lotNumberAddress: store.address.lotNumberAddress ?? "",
+        zipCode: store.address.zipCode ?? "",
+        buildingName: store.address.buildingName ?? "",
       };
     }, [storeData]),
   });
@@ -41,21 +45,43 @@ export default function StoreEdit() {
 
   const updateStoreMutation = useMutation({
     mutationFn: (data: UpdateStoreRequest) => {
-      if (!owner?.storeOwnerId) throw new Error("사용자 정보가 없습니다");
-      return putStore(owner.storeOwnerId, data);
+      if (!owner?.userId) throw new Error("사용자 정보가 없습니다");
+      if (!storeData?.data.id) throw new Error("매장 정보가 없습니다");
+      return putStore(Number(owner.userId), Number(storeData.data.id), data);
     },
   });
 
+  const patchStoreStatusMutation = usePatchOwnerStoreStatus(owner?.userId, storeData?.data.id);
+
   const onSubmit = async (data: UpdateStoreRequest) => {
     const isValid = await form.validate();
-    if (!isValid || !owner?.storeOwnerId) return;
+    if (!isValid) return;
     updateStoreMutation.mutate(data);
   };
 
-  if (isLoading || !storeData?.success) return <div>Loading...</div>;
+  // 상태 옵션에서 label만 추출
+  const openLabel = STORE_STATUS_OPTIONS.find((opt) => opt.value === "OPEN")?.label ?? "영업중";
+  const closedLabel =
+    STORE_STATUS_OPTIONS.find((opt) => opt.value === "CLOSED")?.label ?? "영업종료";
+
+  if (!owner?.userId) return <div>유저 정보가 없습니다.</div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 수정 폼">
+      <div className="flex flex-col gap-4 w-full">
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={isOpen}
+            onChange={() => {
+              setIsOpen((prev) => !prev);
+              patchStoreStatusMutation.mutate({ status: isOpen ? "CLOSED" : "OPEN" });
+            }}
+          />
+          {isOpen ? openLabel : closedLabel}
+        </label>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row gap-8 w-full">
         <div className="flex flex-col gap-4 w-1/2">
           <FormField
@@ -65,6 +91,15 @@ export default function StoreEdit() {
             value={watch("name")}
             onChange={(e) => setValue("name", e.target.value)}
             error={errors.name}
+          />
+          <FormField
+            type="input"
+            label="사업자 번호"
+            name="businessNumber"
+            value={watch("businessNumber")}
+            onChange={(e) => setValue("businessNumber", e.target.value)}
+            error={errors.businessNumber}
+            readOnly
           />
           <FormField
             type="input"
@@ -96,6 +131,7 @@ export default function StoreEdit() {
             name="roadNameAddress"
             value={watch("roadNameAddress")}
             onChange={(e) => setValue("roadNameAddress", e.target.value)}
+            readOnly
           />
           <FormField
             type="input"
@@ -103,6 +139,7 @@ export default function StoreEdit() {
             name="lotNumberAddress"
             value={watch("lotNumberAddress")}
             onChange={(e) => setValue("lotNumberAddress", e.target.value)}
+            readOnly
           />
           <FormField
             type="input"
@@ -110,6 +147,7 @@ export default function StoreEdit() {
             name="zipCode"
             value={watch("zipCode")}
             onChange={(e) => setValue("zipCode", e.target.value)}
+            readOnly
           />
           <FormField
             type="input"
@@ -117,17 +155,15 @@ export default function StoreEdit() {
             name="buildingName"
             value={watch("buildingName")}
             onChange={(e) => setValue("buildingName", e.target.value)}
+            readOnly
           />
-        </div>
-
-        <div className="flex flex-col gap-4 w-1/2">
           <FormField
             type="multiSelect"
             label="매장 카테고리"
             name="storeCategory"
-            value={watch("storeCategory")}
+            value={watch("storeCategory") || []}
             onChange={(value: string[]) => setValue("storeCategory", value)}
-            options={STORE_CATEGORIES}
+            options={STORE_CATEGORIES || []}
           />
           <FormField
             type="tagInput"
@@ -137,8 +173,10 @@ export default function StoreEdit() {
             onChange={(value: string[]) => setValue("foodCategory", value)}
             error={errors.foodCategory}
           />
+        </div>
 
-          <BusinessHoursSection form={form} />
+        <div className="flex flex-col gap-4 w-1/2">
+          <BusinessHoursSection<UpdateStoreRequest> form={form} />
 
           <Button type="submit" className="w-full mt-4">
             수정하기

@@ -16,11 +16,16 @@ interface MultiSelectProps {
   visibleLimit?: number;
 }
 
-export function MultiSelect({ options, value, onChange, visibleLimit = 2 }: MultiSelectProps) {
+export function MultiSelect({
+  options = [],
+  value = [],
+  onChange,
+  visibleLimit = 2,
+}: MultiSelectProps) {
   const [open, setOpen] = useState(false);
 
   const allValues = options.map((o) => o.value);
-  const isAllSelected = allValues.length > 0 && value.length === allValues.length;
+  const isAllSelected = allValues?.length > 0 && value?.length === allValues?.length;
 
   const toggleOption = (optionValue: string) => {
     if (optionValue === "__ALL__") {
@@ -36,7 +41,7 @@ export function MultiSelect({ options, value, onChange, visibleLimit = 2 }: Mult
   };
 
   const selectedOptions = useMemo(
-    () => options.filter((opt) => value.includes(opt.value)),
+    () => options?.filter((opt) => value?.includes(opt.value)),
     [options, value],
   );
 

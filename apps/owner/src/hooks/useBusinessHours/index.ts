@@ -1,13 +1,20 @@
 import { WEEKDAYS, WEEKDAY_MAP, type WeekdayEng } from "@/constants/store";
-import type { CreateStoreRequest } from "@/types/store";
 import type { UseFormReturn } from "use-form-light";
+
+interface WithBusinessHours {
+  businessHours?: {
+    dayOfWeek: string;
+    openTime: string;
+    closeTime: string;
+  }[];
+}
 
 export type BusinessHours = Record<WeekdayEng, { openTime: string; closeTime: string } | undefined>;
 
-export const useBusinessHours = (form: UseFormReturn<CreateStoreRequest>) => {
+export const useBusinessHours = <T extends WithBusinessHours>(form: UseFormReturn<T>) => {
   const { setValue, watch } = form;
 
-  const rawHours = watch("businessHours");
+  const rawHours = watch("businessHours") || [];
 
   const businessHours: BusinessHours = rawHours.reduce((acc, cur) => {
     acc[cur.dayOfWeek as WeekdayEng] = {

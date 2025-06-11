@@ -1,6 +1,11 @@
 import { apiClient } from "@/apis/client";
 import { toSafeResult } from "@/apis/utils/result";
-import type { CreateStoreRequest, StoreResponse, UpdateStoreRequest } from "@/types/store";
+import type {
+  CreateStoreRequest,
+  StoreResponse,
+  StoreStatus,
+  UpdateStoreRequest,
+} from "@/types/store";
 
 export const postStore = async (storeOwnerId: number, data: CreateStoreRequest) => {
   return await toSafeResult(() =>
@@ -14,6 +19,18 @@ export const getStore = async (storeOwnerId: number) => {
   );
 };
 
-export const putStore = async (storeOwnerId: number, data: UpdateStoreRequest) => {
-  return await toSafeResult(() => apiClient.put(`stores?storeOwnerId=${storeOwnerId}`, data));
+export const putStore = async (storeOwnerId: number, storeId: number, data: UpdateStoreRequest) => {
+  return await toSafeResult(() =>
+    apiClient.put(`stores/${storeId}?storeOwnerId=${storeOwnerId}`, data),
+  );
+};
+
+export const patchStoreStatus = async (
+  storeOwnerId: number,
+  storeId: number,
+  data: StoreStatus,
+) => {
+  return await toSafeResult(() =>
+    apiClient.patch(`stores/${storeId}/status?storeOwnerId=${storeOwnerId}`, data),
+  );
 };

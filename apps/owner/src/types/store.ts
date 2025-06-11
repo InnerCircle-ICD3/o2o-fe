@@ -65,6 +65,7 @@ export interface StoreResponse {
 
 export interface UpdateStoreRequest {
   name?: string;
+  businessNumber?: string;
   roadNameAddress?: string;
   lotNumberAddress?: string;
   buildingName?: string;
@@ -85,6 +86,10 @@ export interface UpdateStoreRequest {
   mainImageUrl?: string;
   storeCategory: string[];
   foodCategory: string[];
+}
+
+export interface StoreStatus {
+  status: "OPEN" | "CLOSED";
 }
 
 export const initialStoreFormData: CreateStoreRequest = {

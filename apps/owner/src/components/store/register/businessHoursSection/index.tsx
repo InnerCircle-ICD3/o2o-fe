@@ -2,13 +2,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { WEEKDAYS, WEEKDAY_MAP, type WeekdayEng } from "@/constants/store";
 import { useBusinessHours } from "@/hooks/useBusinessHours";
-import type { CreateStoreRequest } from "@/types/store";
 import type { useForm } from "use-form-light";
 
-export function BusinessHoursSection({
+interface WithBusinessHours {
+  businessHours?: {
+    dayOfWeek: string;
+    openTime: string;
+    closeTime: string;
+  }[];
+}
+
+export function BusinessHoursSection<T extends WithBusinessHours>({
   form,
 }: {
-  form: ReturnType<typeof useForm<CreateStoreRequest>>;
+  form: ReturnType<typeof useForm<T>>;
 }) {
   const { selectedDays, businessHours, toggleDay, handleBusinessHoursChange, applyToAllDays } =
     useBusinessHours(form);
