@@ -65,7 +65,7 @@ export default function AddressSelector({
             <div className={styles.buttonContent}>
               {region2} {region3}
               <Image
-                src="/icons/btn_close_white.svg"
+                src={isSelected ? "/icons/btn_close_white.svg" : "/icons/btn_close.svg"}
                 alt="close"
                 width={14}
                 height={14}

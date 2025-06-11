@@ -12,7 +12,7 @@ import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { useSelectedAddressStore } from "@/stores/selectedAddressStore";
 import { userInfoStore } from "@/stores/userInfoStore";
 import { createUserMarker, renderMyLocationCircle } from "@/utils/locations";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AddressSelector from "../addressSelector";
 import RangeSelector from "../rangeSelector";
@@ -46,6 +46,12 @@ export default function MyLocation() {
     }),
     [customerAddress],
   );
+
+  const searchParams = useSearchParams();
+  const addressType = (searchParams.get("address_type") || "HOME") as "HOME" | "WORK";
+  useEffect(() => {
+    setSelectedIndex(addressType === "WORK" ? 1 : 0);
+  }, [addressType]);
 
   useEffect(() => {
     if (
