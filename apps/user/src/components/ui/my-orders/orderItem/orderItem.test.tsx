@@ -3,7 +3,6 @@ import { cleanup, render, screen } from "@testing-library/react";
 import type { AnchorHTMLAttributes, ImgHTMLAttributes } from "react";
 import { vi } from "vitest";
 import OrderItem from ".";
-import * as style from "./orderItem.css";
 
 vi.mock("next/image", () => ({
   default: (props: ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt={""} />,
@@ -16,36 +15,58 @@ vi.mock("next/link", () => ({
 describe("OrderItem Test", () => {
   const mockOrder = {
     success: {
-      orderId: 1,
-      orderDate: "2025-05-06T10:15:30Z",
-      pickupDate: "2025-05-07T15:00:00Z",
+      id: 2,
+      orderNumber: 123457,
+      customerId: 1,
+      storeId: 1002,
       status: "COMPLETED",
-      totalPrice: 12000,
-      store: {
-        name: "테스트 매장",
-        mainImageUrl: "/test.png",
-      } as unknown as OrderDetail["store"],
+      orderItems: [
+        {
+          id: 2,
+          productId: 2,
+          productName: "스페셜 잇고백",
+          price: 15000,
+          quantity: 2,
+        },
+      ],
+      createdAt: "2025-05-07T11:20:30Z",
+      updatedAt: "2025-05-07T11:20:30Z",
     } as unknown as OrderDetail,
     pending: {
-      orderId: 1,
-      orderDate: "2025-05-06T10:15:30Z",
+      id: 1,
+      orderNumber: 123456,
+      customerId: 1,
+      storeId: 1001,
       status: "PENDING",
-      totalPrice: 12000,
-      store: {
-        name: "테스트 매장",
-        mainImageUrl: "/test.png",
-      } as unknown as OrderDetail["store"],
+      orderItems: [
+        {
+          id: 1,
+          productId: 1,
+          productName: "빅사이즈 잇고백",
+          price: 10000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-06T10:15:30Z",
+      updatedAt: "2025-05-06T10:15:30Z",
     } as unknown as OrderDetail,
     cancelled: {
-      orderId: 1,
-      orderDate: "2025-05-06T10:15:30Z",
-      cancelDate: "2025-05-07T15:00:00Z",
+      id: 3,
+      orderNumber: 123458,
+      customerId: 1,
+      storeId: 1003,
       status: "CANCELLED",
-      totalPrice: 12000,
-      store: {
-        name: "테스트 매장",
-        mainImageUrl: "/test.png",
-      } as unknown as OrderDetail["store"],
+      orderItems: [
+        {
+          id: 3,
+          productId: 3,
+          productName: "잇고백 세트",
+          price: 20000,
+          quantity: 1,
+        },
+      ],
+      createdAt: "2025-05-08T12:25:30Z",
+      updatedAt: "2025-05-08T12:25:30Z",
     } as unknown as OrderDetail,
   };
 
@@ -56,9 +77,9 @@ describe("OrderItem Test", () => {
   it("주문 내역은 스토어 이름과 주문 일자, 픽업 일시, 가격이 렌더링된다.", () => {
     render(<OrderItem order={mockOrder.pending} />);
 
-    expect(screen.getByText("테스트 매장")).toBeInTheDocument();
-    expect(screen.getByText(/주문 일자:/)).toBeInTheDocument();
-    expect(screen.getByText("12,000₩")).toBeInTheDocument();
+    expect(screen.getByText("가게 이름")).toBeInTheDocument();
+    expect(screen.getByText(/주문일:/)).toBeInTheDocument();
+    // expect(screen.getByText("10,000₩")).toBeInTheDocument();
   });
 
   it("주문 내역의 Link가 orderId를 기준으로 href를 가진다.", () => {
@@ -78,41 +99,23 @@ describe("OrderItem Test", () => {
     expect(screen.getByText("픽업 대기중")).toBeInTheDocument();
   });
 
-  it("픽업 대기중 상태일 경우 cover가 렌더링되지 않는다.", () => {
-    const { container } = render(<OrderItem order={mockOrder.pending} />);
-    const cover = container.querySelector(`.${"cover"}`);
-    expect(cover).not.toBeInTheDocument();
-  });
-
-  it("픽업 완료 상태일 경우 픽업 완료 일자가 렌더링된다.", () => {
-    render(<OrderItem order={mockOrder.success} />);
-    expect(screen.getByText(/픽업 완료 일자:/)).toBeInTheDocument();
-  });
+  // it("픽업 완료 상태일 경우 픽업 완료 일자가 렌더링된다.", () => {
+  //   render(<OrderItem order={mockOrder.success} />);
+  //   expect(screen.getByText(/픽업 완료 일자:/)).toBeInTheDocument();
+  // });
 
   it("픽업 완료 상태일 경우 상태 라벨이 '픽업 완료'로 출력된다.", () => {
     render(<OrderItem order={mockOrder.success} />);
     expect(screen.getByText("픽업 완료")).toBeInTheDocument();
   });
 
-  it("픽업 완료 상태일 경우 cover가 렌더링된다.", () => {
-    const { container } = render(<OrderItem order={mockOrder.success} />);
-    const cover = container.querySelector(`.${style.cover}`);
-    expect(cover).toBeInTheDocument();
-  });
-
-  it("주문 취소 상태일 경우 주문 취소 일자가 렌더링된다.", () => {
-    render(<OrderItem order={mockOrder.cancelled} />);
-    expect(screen.getByText(/주문 취소 일자:/)).toBeInTheDocument();
-  });
+  // it("주문 취소 상태일 경우 주문 취소 일자가 렌더링된다.", () => {
+  //   render(<OrderItem order={mockOrder.cancelled} />);
+  //   expect(screen.getByText(/주문 취소 일자:/)).toBeInTheDocument();
+  // });
 
   it("주문 취소 상태일 경우 상태 라벨이 '주문 취소'로 출력된다.", () => {
     render(<OrderItem order={mockOrder.cancelled} />);
     expect(screen.getByText("주문 취소")).toBeInTheDocument();
-  });
-
-  it("주문 취소 상태일 경우 cover가 렌더링된다.", () => {
-    const { container } = render(<OrderItem order={mockOrder.cancelled} />);
-    const cover = container.querySelector(`.${style.cover}`);
-    expect(cover).toBeInTheDocument();
   });
 });

@@ -44,7 +44,7 @@ const mockProduct = [
   {
     id: 1,
     createdAt: "2025-05-06T10:15:30Z",
-    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 럭키백입니다.",
+    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 잇고백입니다.",
     foodType: ["크림빵", "야채빵"],
     imageUrl: "/images/thumb.png",
     inventory: {
@@ -52,7 +52,7 @@ const mockProduct = [
       stock: 10,
     },
     storeId: 1,
-    name: "빅사이즈 럭키백",
+    name: "빅사이즈 잇고백",
     price: {
       originalPrice: 20000,
       discountRate: 0.5,
@@ -64,7 +64,7 @@ const mockProduct = [
   {
     id: 2,
     createdAt: "2025-05-06T10:15:30Z",
-    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 럭키백입니다.",
+    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 잇고백입니다.",
     foodType: ["크림빵", "야채빵"],
     imageUrl: "/images/thumb.png",
     inventory: {
@@ -72,7 +72,7 @@ const mockProduct = [
       stock: 10,
     },
     storeId: 1,
-    name: "중간 사이즈 럭키백",
+    name: "중간 사이즈 잇고백",
     price: {
       originalPrice: 20000,
       discountRate: 0.5,
@@ -84,7 +84,7 @@ const mockProduct = [
   {
     id: 3,
     createdAt: "2025-05-06T10:15:30Z",
-    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 럭키백입니다.",
+    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 잇고백입니다.",
     foodType: ["크림빵", "야채빵"],
     imageUrl: "/images/thumb.png",
     inventory: {
@@ -92,7 +92,7 @@ const mockProduct = [
       stock: 10,
     },
     storeId: 1,
-    name: "작은 사이즈 럭키백",
+    name: "작은 사이즈 잇고백",
     price: {
       originalPrice: 20000,
       discountRate: 0.5,

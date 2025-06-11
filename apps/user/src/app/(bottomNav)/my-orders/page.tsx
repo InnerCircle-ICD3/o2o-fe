@@ -1,15 +1,17 @@
 "use client";
 
+import ErrorUi from "@/components/common/errorUi";
+import VirtualScroll, { VirtualItem } from "@/components/common/virtualScroll";
 import OrderItem from "@/components/ui/my-orders/orderItem";
 import RequireLogin from "@/components/ui/my-orders/requireLogin";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
+import { ORDER_STATUS } from "@/constants/my-orders";
 import useGetMyOrder from "@/hooks/api/useGetMyOrder";
 import { userInfoStore } from "@/stores/userInfoStore";
-import type { OrderDetail } from "@/types/apis/order.type";
 import * as style from "./myOrders.css";
 
 const Page = () => {
-  const { data: orderDetails, error, isError, isLoading } = useGetMyOrder(1);
+  const { data: orderDetails, error, isError, isLoading, fetchNextPage } = useGetMyOrder(1);
 
   const { user } = userInfoStore();
   const isLogin = !!user;
@@ -19,24 +21,45 @@ const Page = () => {
   }
 
   if (isError) {
-    return (
-      <div>
-        <p>주문 내역을 불러오는 데 실패했습니다.</p>
-        {<p>{error?.message}</p>}
-      </div>
-    );
+    return <ErrorUi message={error?.message} />;
   }
 
   return (
     <div className={style.container}>
       <h2 className={style.title}>나의 주문 내역</h2>
-      <ul>
-        {isLoading ? (
-          <SkeletonStoreCard imagePosition="right" />
-        ) : (
-          orderDetails?.map((order: OrderDetail) => <OrderItem key={order.orderId} order={order} />)
-        )}
-      </ul>
+      {isLoading ? (
+        <SkeletonStoreCard imagePosition="right" />
+      ) : (
+        <VirtualScroll
+          overscan={3}
+          heights={{
+            "order-item": {
+              aspectRatio: 388 / 171,
+            },
+            "order-item-completed": {
+              aspectRatio: 388 / 241,
+            },
+          }}
+          onScrollEnd={fetchNextPage}
+        >
+          {orderDetails?.pages.map((page) =>
+            page.success
+              ? page.data.contents.map((order) => (
+                  <VirtualItem
+                    key={order.id}
+                    name={
+                      ORDER_STATUS[order.status] === ORDER_STATUS.COMPLETED
+                        ? "order-item-completed"
+                        : "order-item"
+                    }
+                  >
+                    <OrderItem order={order} />
+                  </VirtualItem>
+                ))
+              : null,
+          )}
+        </VirtualScroll>
+      )}
     </div>
   );
 };
