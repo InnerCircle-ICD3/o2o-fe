@@ -1,8 +1,7 @@
-import { verifyToken } from "@/lib/jwt";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const config = {
-  matcher: ["/orders/:path*"],
+  matcher: ["/orders/:path*", "/locations/my-location"],
 };
 
 export function middleware(request: NextRequest) {
@@ -16,12 +15,5 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  try {
-    verifyToken(token);
-    return NextResponse.next();
-  } catch {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(loginUrl);
-  }
+  return NextResponse.next();
 }

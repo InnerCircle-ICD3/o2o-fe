@@ -85,7 +85,7 @@ describe("CompleteProfile", () => {
     expect(mockRouter.push).toHaveBeenCalledWith("/");
   });
 
-  it("patchCustomer 실패 시 콘솔에 에러메시지가 찍힌다", async () => {
+  it("patchCustomer 실패 시 ErrorUi가 화면에 나타난다", async () => {
     const failPatchCustomer = async (
       _customerId: number,
       _nickname: string,
@@ -97,13 +97,15 @@ describe("CompleteProfile", () => {
       statusCode: 400,
       timestamp: new Date(),
     });
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText, findByText } = render(
       <CompleteProfile useUserStore={mockUseUserStore} patchCustomer={failPatchCustomer} />,
     );
     const input = getByPlaceholderText("닉네임을 입력하세요");
     fireEvent.change(input, { target: { value: "테스트닉네임" } });
     const button = getByText("등록하기");
     await fireEvent.click(button);
-    // TODO: 에러 처리 로직 추가 필요
+
+    // ErrorUi에 "에러" 메시지가 나타나는지 확인
+    expect(await findByText("에러")).toBeInTheDocument();
   });
 });

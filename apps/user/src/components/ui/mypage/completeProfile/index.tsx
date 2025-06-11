@@ -2,6 +2,7 @@
 
 import { patchCustomer as defaultPatchCustomer } from "@/apis/ssr/customers";
 import Button from "@/components/common/button";
+import ErrorUi from "@/components/common/errorUi";
 import { userInfoStore as defaultUseUserStore } from "@/stores/userInfoStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,6 +17,7 @@ export default function CompleteProfile({
 } = {}) {
   const { user } = useUserStore();
   const [nickname, setNickname] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -25,8 +27,12 @@ export default function CompleteProfile({
 
     if (result.success) {
       router.push("/");
+    } else {
+      setError(result.message);
     }
   };
+
+  if (error) return <ErrorUi message={error} />;
 
   return (
     <div className={styles.completeProfileContainer}>
