@@ -101,8 +101,8 @@ describe("StoreEdit", () => {
       mutate: patchMutate,
     });
     renderWithClient(<StoreEdit />);
-    const checkbox = screen.getByRole("checkbox");
-    fireEvent.click(checkbox);
+    const switchButton = screen.getByRole("switch");
+    fireEvent.click(switchButton);
     expect(patchMutate).toHaveBeenCalled();
   });
 });
