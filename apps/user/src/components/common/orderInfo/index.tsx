@@ -8,9 +8,9 @@ import Image from "next/image";
 import * as style from "./orderInfo.css";
 
 const paymentLabel = {
-  [ORDER_STATUS.PENDING]: "결제 예정 금액",
-  [ORDER_STATUS.COMPLETED]: "결제 금액",
-  [ORDER_STATUS.CANCELLED]: "결제 취소 금액",
+  [ORDER_STATUS.READY]: "결제 예정 금액",
+  [ORDER_STATUS.DONE]: "결제 금액",
+  [ORDER_STATUS.CANCELED]: "결제 취소 금액",
 };
 
 interface OrderInfoProps {

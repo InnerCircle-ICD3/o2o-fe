@@ -6,7 +6,21 @@ interface Coordinates {
   lng: number;
 }
 
-export const useGeolocation = (): Coordinates | null => {
+const FALLBACK_COORDINATES: Readonly<Coordinates> = {
+  lat: 37.566535,
+  lng: 126.977969,
+};
+
+function isValidCoordinates(coords: Coordinates | undefined | null): coords is Coordinates {
+  return (
+    !!coords &&
+    typeof coords.lat === "number" &&
+    typeof coords.lng === "number" &&
+    !(coords.lat === 0 && coords.lng === 0)
+  );
+}
+
+export const useGeolocation = (): Coordinates => {
   const { updateLocations, getLocations } = useUserLocation();
 
   useEffect(() => {
@@ -27,5 +41,6 @@ export const useGeolocation = (): Coordinates | null => {
   }, [updateLocations]);
 
   const location = getLocations();
-  return location || { lat: 33.450705, lng: 126.570677 };
+
+  return isValidCoordinates(location) ? location : FALLBACK_COORDINATES;
 };

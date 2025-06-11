@@ -12,7 +12,7 @@ const baseOrder: OrderDetail = {
       addressName: "서울시 강남구",
     },
   },
-  status: ORDER_STATUS.PENDING,
+  status: ORDER_STATUS.READY,
 } as unknown as OrderDetail;
 
 describe("ActionButtons Test", () => {
@@ -21,14 +21,14 @@ describe("ActionButtons Test", () => {
   });
 
   it("status가 pending이면 버튼 2개가 보여야 한다", () => {
-    render(<ActionButtons orderDetail={{ ...baseOrder, status: "PENDING" }} />);
+    render(<ActionButtons orderDetail={{ ...baseOrder, status: "READY" }} />);
 
     expect(screen.getByRole("button", { name: "주문 취소" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "픽업 완료" })).toBeInTheDocument();
   });
 
   it("status가 pending이 아니면 아무것도 렌더링되지 않아야 한다", () => {
-    render(<ActionButtons orderDetail={{ ...baseOrder, status: "COMPLETED" }} />);
+    render(<ActionButtons orderDetail={{ ...baseOrder, status: "DONE" }} />);
 
     expect(screen.queryByRole("button", { name: "주문 취소" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "픽업 완료" })).not.toBeInTheDocument();

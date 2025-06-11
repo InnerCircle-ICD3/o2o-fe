@@ -108,7 +108,7 @@ const CommonUi = () => {
           <StatusLabel status={"endSoon"}>마감임박</StatusLabel>
           <StatusLabel status={"pending"}>픽업대기중</StatusLabel>
           <StatusLabel status={"completed"}>픽업완료</StatusLabel>
-          <StatusLabel status={"cancelled"}>주문취소</StatusLabel>
+          <StatusLabel status={"canceled"}>주문취소</StatusLabel>
         </div>
       </div>
 

@@ -43,7 +43,7 @@ export const globalTheme = createThemeContract({
         background: null,
         color: null,
       },
-      cancelled: {
+      canceled: {
         background: null,
         color: null,
       },
@@ -92,7 +92,7 @@ export const theme = createGlobalTheme(":root", globalTheme, {
         background: "#D8F4E4",
         color: "#35A865",
       },
-      cancelled: {
+      canceled: {
         background: "#F3F3F3",
         color: "#666666",
       },
