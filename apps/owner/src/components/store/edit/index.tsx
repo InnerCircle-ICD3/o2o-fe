@@ -1,62 +1,58 @@
 "use client";
 
 import { getStore, putStore } from "@/apis/ssr/store";
-import type { Result } from "@/apis/types";
 import { FormField } from "@/components/commmon/formField";
 import { Button } from "@/components/ui/button";
 import { STORE_CATEGORIES } from "@/constants/store";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
-import { type StoreResponse, type UpdateStoreRequest, initialStoreFormData } from "@/types/store";
+import type { UpdateStoreRequest } from "@/types/store";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "../register/businessHoursSection";
 
 export default function StoreEdit() {
   const { owner } = useOwnerStore();
 
-  const form = useForm<UpdateStoreRequest>({
-    defaultValues: initialStoreFormData,
-  });
-
-  const { errors, handleSubmit, watch, setValue } = form;
-
-  const { isLoading } = useQuery({
+  const { data: storeData, isLoading } = useQuery({
     queryKey: ["store", owner?.storeOwnerId],
     queryFn: () => {
       if (!owner?.storeOwnerId) throw new Error("사용자 정보가 없습니다");
       return getStore(owner.storeOwnerId);
     },
     enabled: !!owner?.storeOwnerId,
-    onSuccess: (result: Result<StoreResponse>) => {
-      if (result.success) {
-        const store = result.data;
-        for (const [key, value] of Object.entries(store)) {
-          if (key in form.values) setValue(key as keyof UpdateStoreRequest, value);
-        }
-      }
-    },
   });
+
+  // storeData가 있을 때만 form을 생성
+  const form = useForm<UpdateStoreRequest>({
+    defaultValues: useMemo(() => {
+      if (!storeData?.success) return {} as UpdateStoreRequest;
+      const store = storeData.data;
+      // StoreResponse -> UpdateStoreRequest 변환 (필요시 타입 변환)
+      return {
+        ...store,
+        latitude: store.latitude ? Number(store.latitude) : undefined,
+        longitude: store.longitude ? Number(store.longitude) : undefined,
+      };
+    }, [storeData]),
+  });
+
+  const { errors, handleSubmit, watch, setValue } = form;
 
   const updateStoreMutation = useMutation({
     mutationFn: (data: UpdateStoreRequest) => {
       if (!owner?.storeOwnerId) throw new Error("사용자 정보가 없습니다");
       return putStore(owner.storeOwnerId, data);
     },
-    onSuccess: () => {
-      console.log("매장 수정 성공");
-    },
-    onError: (err) => {
-      console.error("매장 수정 실패:", err);
-    },
   });
 
-  const onSubmit = async (data: CreateStoreRequest) => {
+  const onSubmit = async (data: UpdateStoreRequest) => {
     const isValid = await form.validate();
     if (!isValid || !owner?.storeOwnerId) return;
     updateStoreMutation.mutate(data);
   };
 
-  if (!isLoading) return <div>Loading...</div>;
+  if (isLoading || !storeData?.success) return <div>Loading...</div>;
 
   return (
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 수정 폼">
@@ -69,14 +65,6 @@ export default function StoreEdit() {
             value={watch("name")}
             onChange={(e) => setValue("name", e.target.value)}
             error={errors.name}
-          />
-          <FormField
-            type="input"
-            label="사업자 등록번호"
-            name="businessNumber"
-            value={watch("businessNumber")}
-            onChange={(e) => setValue("businessNumber", e.target.value)}
-            error={errors.businessNumber}
           />
           <FormField
             type="input"
