@@ -149,7 +149,7 @@ export default function LuckyBagRegister() {
         <form onSubmit={handleSubmit(onSubmit)} className="contents">
           {/* Left Form */}
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold">럭키백 등록</h2>
+            <h2 className="text-2xl font-bold">잇고백 등록</h2>
 
             <div className="space-y-2">
               <Label htmlFor="name">이름</Label>
@@ -175,7 +175,7 @@ export default function LuckyBagRegister() {
             </div>
 
             <div className="space-y-2">
-              <Label>럭키백 종류</Label>
+              <Label>잇고백 종류</Label>
               <ToggleGroup
                 type="single"
                 value={watch("size")}
@@ -217,7 +217,7 @@ export default function LuckyBagRegister() {
                 id="description"
                 {...register("description")}
                 className="min-h-[100px]"
-                placeholder="럭키백에 대한 설명을 입력해주세요"
+                placeholder="잇고백에 대한 설명을 입력해주세요"
               />
             </div>
 
