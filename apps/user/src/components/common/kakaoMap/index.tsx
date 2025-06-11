@@ -47,10 +47,10 @@ export const KakaoMap = memo(({ lat, lng, onMapIdle, onMapReady }: KakaoMapProps
     const center = new kakaoMaps.LatLng(lat, lng);
     const map = new kakaoMaps.Map(mapRef.current, {
       center,
-      level: 4,
+      level: 3,
     });
 
-    map.setMinLevel(3);
+    map.setMinLevel(1);
     map.setMaxLevel(6);
 
     mapInstance.current = map;

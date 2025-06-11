@@ -1,4 +1,4 @@
-import type { MapStore } from "@/types/searchMap.type";
+import type { CustomerAddressRequest, MapStore, SearchAddressResult } from "@/types/locations.type";
 
 export const createStoreMarker = (
   store: MapStore,
@@ -44,8 +44,8 @@ export const calculateMovedDistance = (
 };
 
 const getZoomLevelByRadius = (radius: number): number => {
-  if (radius <= 800) return 4;
-  if (radius <= 1500) return 5;
+  if (radius <= 0.8) return 4;
+  if (radius <= 1.5) return 5;
   return 6;
 };
 
@@ -83,7 +83,7 @@ export const renderMyLocationCircle = (
 ) => {
   const circle = new window.kakao.maps.Circle({
     center: new window.kakao.maps.LatLng(location.lat, location.lng),
-    radius: radius,
+    radius: radius * 1000,
     strokeWeight: 2,
     strokeColor: "#35A865",
     strokeOpacity: 1,
@@ -104,7 +104,7 @@ export const renderMyLocationPolygon = (
   basePolygonPath: kakao.maps.LatLng[],
   radius: number,
 ) => {
-  const scale = radius / 500;
+  const scale = (radius * 1000) / 500;
   const scaledPath = scalePolygon(basePolygonPath, scale);
 
   const polygon = new window.kakao.maps.Polygon({
@@ -130,7 +130,10 @@ export const renderMyLocationPolygon = (
   return polygon;
 };
 
-export const getRegionByCoords = (lat: number, lng: number): Promise<string | null> => {
+export const getFullAddressByCoords = (
+  lat: number,
+  lng: number,
+): Promise<CustomerAddressRequest | null> => {
   return new Promise((resolve, reject) => {
     if (!window.kakao?.maps) {
       reject(new Error("카카오맵 API가 로드되지 않았습니다."));
@@ -138,16 +141,67 @@ export const getRegionByCoords = (lat: number, lng: number): Promise<string | nu
     }
 
     const geocoder = new kakao.maps.services.Geocoder();
-
     const coord = new kakao.maps.LatLng(lat, lng);
 
-    geocoder.coord2RegionCode(coord.getLng(), coord.getLat(), (result, status) => {
+    geocoder.coord2Address(coord.getLng(), coord.getLat(), (result, status) => {
       if (status === "OK" && result.length > 0) {
-        const regionInfo = result.find((r) => r.region_type === "H");
-        resolve(regionInfo?.address_name || null);
+        const r = result[0];
+
+        const customerAddress: CustomerAddressRequest = {
+          address: {
+            roadNameAddress: r.road_address?.address_name ?? null,
+            lotNumberAddress: r.address?.address_name ?? "",
+            buildingName: r.road_address?.building_name ?? null,
+            zipCode: r.road_address?.zone_no ?? "",
+            region1DepthName: r.address?.region_1depth_name ?? "",
+            region2DepthName: r.address?.region_2depth_name ?? "",
+            region3DepthName: r.address?.region_3depth_name ?? "",
+            coordinate: {
+              latitude: lat,
+              longitude: lng,
+            },
+          },
+          radiusInKilometers: 0.5,
+          customerAddressType: "HOME",
+          description: "", // 추가 설명은 별도로 입력받거나 비워둠
+        };
+
+        resolve(customerAddress);
       } else {
         resolve(null);
       }
     });
   });
 };
+
+/**
+ * 정규식: 주소처럼 보이면 true
+ * 예: 00동 12-3, 강남대로 132, 논현로 100
+ */
+const isLikelyAddress = (query: string) => {
+  return /[가-힣]+(로|길|동|면|읍|구|시|도)\s*\d+(-\d+)?/.test(query);
+};
+
+export async function searchAddress(query: string): Promise<SearchAddressResult[]> {
+  const endpoint = isLikelyAddress(query) ? "address" : "keyword";
+
+  const res = await fetch(
+    `https://dapi.kakao.com/v2/local/search/${endpoint}.json?query=${encodeURIComponent(query)}`,
+    {
+      headers: {
+        /* biome-ignore lint/style/useNamingConvention: false */
+        Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
+      },
+    },
+  );
+  const data = await res.json();
+
+  /* biome-ignore lint/style/useNamingConvention: false */
+  return data.documents.map((doc: { address_name: string; y: string; x: string }) => ({
+    address: doc.address_name,
+    location: {
+      lat: Number(Number.parseFloat(doc.y).toFixed(6)),
+      lng: Number(Number.parseFloat(doc.x).toFixed(6)),
+    },
+  }));
+}
