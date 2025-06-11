@@ -16,7 +16,7 @@ export const wrapper = style({
   flexDirection: "column",
   justifyContent: "space-between",
 
-  padding: "10px 0",
+  paddingBottom: "10px",
 });
 
 export const titleBox = style({
@@ -49,13 +49,14 @@ export const info = style({
 });
 
 export const storeTitle = style({
-  fontSize: 14,
+  fontSize: 16,
   fontWeight: 600,
 });
 
 export const productTitle = style({
-  marginTop: 8,
-  fontSize: 12,
+  marginTop: 2,
+  fontSize: 14,
+  fontWeight: 500,
 });
 
 export const prices = style({
@@ -78,4 +79,5 @@ export const original = style({
 export const time = style({
   marginTop: 2,
   fontSize: 12,
+  color: globalTheme.color.gray.base,
 });

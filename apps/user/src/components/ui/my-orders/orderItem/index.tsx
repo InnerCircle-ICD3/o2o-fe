@@ -3,7 +3,7 @@ import StatusLabel from "@/components/common/statusLabel";
 import { ORDER_STATUS } from "@/constants/my-orders";
 import * as globalStyle from "@/styles/global.css";
 import type { OrderDetail } from "@/types/apis/order.type";
-import { formatCurrency, formatLocalizedDate } from "@/utils/format";
+import { formatCurrency } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,20 +14,20 @@ interface OrderItemProps {
 }
 
 const ORDER_STATUS_INFO = {
-  [ORDER_STATUS.PENDING]: "픽업 대기중",
-  [ORDER_STATUS.COMPLETED]: "픽업 완료",
-  [ORDER_STATUS.CANCELLED]: "주문 취소",
+  [ORDER_STATUS.READY]: "픽업 대기중",
+  [ORDER_STATUS.DONE]: "픽업 완료",
+  [ORDER_STATUS.CANCELED]: "주문 취소",
 };
 
 const OrderItem = (props: OrderItemProps) => {
   const { order } = props;
 
   const orderStatus = ORDER_STATUS[order.status];
-  const isCompleted = orderStatus === ORDER_STATUS.COMPLETED;
+  const isCompleted = orderStatus === ORDER_STATUS.DONE;
 
-  const [totalLength, totalPrice] = order.orderItems.reduce(
-    (acc, item) => [acc[0] + item.quantity, acc[1] + item.price],
-    [0, 0],
+  const [totalLength, totalPrice, originTotalPrice] = order.orderItems.reduce(
+    (acc, item) => [acc[0] + item.quantity, acc[1] + item.finalPrice, acc[2] + item.originPrice],
+    [0, 0, 0],
   );
 
   return (
@@ -47,15 +47,15 @@ const OrderItem = (props: OrderItemProps) => {
             height={90}
           />
           <div className={style.info}>
-            <p className={style.storeTitle}>가게 이름</p>
+            <p className={style.storeTitle}>{order.storeName}</p>
             <p className={style.productTitle}>
               {order.orderItems[0].productName}
               {order.orderItems.length > 1 && ` 외 ${order.orderItems.length - 1}개`}
             </p>
-            <p className={style.time}>주문일: {formatLocalizedDate("2024-01-12")}</p>
+
             <div className={style.prices}>
-              <p className={style.discount}>{formatCurrency(totalPrice)}</p>
-              <p className={classNames(style.original, globalStyle.primaryColor)}>
+              <p className={style.original}>{formatCurrency(originTotalPrice)}</p>
+              <p className={classNames(style.discount, globalStyle.primaryColor)}>
                 {formatCurrency(totalPrice)}
               </p>
             </div>
@@ -63,7 +63,9 @@ const OrderItem = (props: OrderItemProps) => {
         </div>
       </Link>
 
-      {isCompleted && <Button status={"primary"}>리뷰 작성하기 | 확인하기</Button>}
+      {isCompleted && (
+        <Button status={"primary"}>리뷰 {order.hasReview ? "확인하기" : "작성하기"}</Button>
+      )}
     </div>
   );
 };

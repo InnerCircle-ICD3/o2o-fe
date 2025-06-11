@@ -10,14 +10,14 @@ const getMyOrder = (params: string) => {
 
 const MY_ORDER_QUERY_KEY = "myOrder";
 
-const useGetMyOrder = (id: number) => {
+const useGetMyOrder = (id: number, isLogin: boolean) => {
   const { queryParams, setAllQueryParams } = useQueryParams();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } =
     useInfiniteQuery<Result<OrderList>, Error, InfiniteQueryResponse<OrderList>>({
       queryKey: [MY_ORDER_QUERY_KEY, id],
       queryFn: ({ pageParam }) => {
-        const params = { custromerId: id.toString() } as Record<string, string | number>;
+        const params = { customerId: id.toString() } as Record<string, string | number>;
         if (pageParam !== undefined) params.lastId = pageParam as number;
 
         setAllQueryParams(params);
@@ -31,6 +31,7 @@ const useGetMyOrder = (id: number) => {
           : undefined;
       },
       initialPageParam: undefined,
+      enabled: isLogin,
     });
 
   return {

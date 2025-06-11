@@ -8,6 +8,7 @@ import * as style from "./errorUi.css";
 const imageTypes = {
   error: "/images/character4.png",
   subscribe: "/images/character4.png",
+  order: "/images/character4.png",
 };
 
 interface ErrorUiProps {

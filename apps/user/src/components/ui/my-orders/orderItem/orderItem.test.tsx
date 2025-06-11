@@ -19,13 +19,15 @@ describe("OrderItem Test", () => {
       orderNumber: 123457,
       customerId: 1,
       storeId: 1002,
-      status: "COMPLETED",
+      status: "DONE",
+      storeName: "가게 이름",
       orderItems: [
         {
           id: 2,
           productId: 2,
-          productName: "스페셜 잇고백",
-          price: 15000,
+          productName: "스페셜 럭키백",
+          originPrice: 20000,
+          finalPrice: 10000,
           quantity: 2,
         },
       ],
@@ -37,13 +39,15 @@ describe("OrderItem Test", () => {
       orderNumber: 123456,
       customerId: 1,
       storeId: 1001,
-      status: "PENDING",
+      status: "READY",
+      storeName: "가게 이름",
       orderItems: [
         {
           id: 1,
           productId: 1,
-          productName: "빅사이즈 잇고백",
-          price: 10000,
+          productName: "빅사이즈 럭키백",
+          originPrice: 20000,
+          finalPrice: 10000,
           quantity: 1,
         },
       ],
@@ -55,13 +59,15 @@ describe("OrderItem Test", () => {
       orderNumber: 123458,
       customerId: 1,
       storeId: 1003,
-      status: "CANCELLED",
+      status: "CANCELED",
+      storeName: "가게 이름",
       orderItems: [
         {
           id: 3,
           productId: 3,
-          productName: "잇고백 세트",
-          price: 20000,
+          productName: "럭키백 세트",
+          originPrice: 20000,
+          finalPrice: 10000,
           quantity: 1,
         },
       ],
@@ -74,12 +80,11 @@ describe("OrderItem Test", () => {
     cleanup();
   });
 
-  it("주문 내역은 스토어 이름과 주문 일자, 픽업 일시, 가격이 렌더링된다.", () => {
+  it("주문 내역은 스토어 이름과 가격이 렌더링된다.", () => {
     render(<OrderItem order={mockOrder.pending} />);
 
     expect(screen.getByText("가게 이름")).toBeInTheDocument();
-    expect(screen.getByText(/주문일:/)).toBeInTheDocument();
-    // expect(screen.getByText("10,000₩")).toBeInTheDocument();
+    expect(screen.getByText("10,000₩")).toBeInTheDocument();
   });
 
   it("주문 내역의 Link가 orderId를 기준으로 href를 가진다.", () => {
@@ -88,31 +93,15 @@ describe("OrderItem Test", () => {
     expect(link.getAttribute("href")).toBe("/my-orders/1");
   });
 
-  it("픽업 대기중 상태일 경우 픽업 완료 일자와 주문 취소 일자가가 렌더링되지 않는다.", () => {
-    render(<OrderItem order={mockOrder.pending} />);
-    expect(screen.queryByText(/픽업 완료 일자:/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/픽업 취소 일자:/)).not.toBeInTheDocument();
-  });
-
   it("픽업 대기중 상태일 경우 픽업 대기중 라벨이 렌더링된다.", () => {
     render(<OrderItem order={mockOrder.pending} />);
     expect(screen.getByText("픽업 대기중")).toBeInTheDocument();
   });
 
-  // it("픽업 완료 상태일 경우 픽업 완료 일자가 렌더링된다.", () => {
-  //   render(<OrderItem order={mockOrder.success} />);
-  //   expect(screen.getByText(/픽업 완료 일자:/)).toBeInTheDocument();
-  // });
-
   it("픽업 완료 상태일 경우 상태 라벨이 '픽업 완료'로 출력된다.", () => {
     render(<OrderItem order={mockOrder.success} />);
     expect(screen.getByText("픽업 완료")).toBeInTheDocument();
   });
-
-  // it("주문 취소 상태일 경우 주문 취소 일자가 렌더링된다.", () => {
-  //   render(<OrderItem order={mockOrder.cancelled} />);
-  //   expect(screen.getByText(/주문 취소 일자:/)).toBeInTheDocument();
-  // });
 
   it("주문 취소 상태일 경우 상태 라벨이 '주문 취소'로 출력된다.", () => {
     render(<OrderItem order={mockOrder.cancelled} />);
