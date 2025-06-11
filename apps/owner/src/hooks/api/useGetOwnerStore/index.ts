@@ -54,6 +54,7 @@ const useGetOwnerStore = (userId?: number) => {
       return result;
     },
     enabled: !!userId,
+    retry: false,
   });
 
   return { data: storeData, isLoading, isError, error };

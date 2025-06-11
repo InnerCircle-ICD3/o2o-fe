@@ -3,6 +3,7 @@
 import { putStore } from "@/apis/ssr/stores";
 import { FormField } from "@/components/common/formField";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { STORE_CATEGORIES } from "@/constants/store";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
@@ -48,21 +49,23 @@ export default function StoreEdit() {
 
   return (
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 수정 폼">
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-row justify-end items-center w-full">
         <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
+          <span className="ml-2 text-base font-medium select-none">
+            {isOpen ? "영업중" : "영업종료"}
+          </span>
+          <Switch
             checked={isOpen}
-            onChange={() => {
-              setIsOpen((prev) => !prev);
-              patchStoreStatusMutation.mutate({ status: isOpen ? "CLOSED" : "OPEN" });
+            onCheckedChange={(checked) => {
+              setIsOpen(checked);
+              patchStoreStatusMutation.mutate({ status: checked ? "OPEN" : "CLOSED" });
             }}
+            aria-label="영업 상태 스위치"
           />
-          {isOpen ? "영업중" : "영업종료"}
         </label>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row gap-8 w-full">
-        <div className="flex flex-col gap-4 w-1/2">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex md:flex-row flex-col gap-8 w-full">
+        <div className="flex flex-col gap-4 w-full md:w-1/2">
           <FormField
             type="input"
             label="매장명"
@@ -154,8 +157,16 @@ export default function StoreEdit() {
           />
         </div>
 
-        <div className="flex flex-col gap-4 w-1/2">
+        <div className="flex flex-col gap-4 w-full md:w-1/2">
           <BusinessHoursSection<UpdateStoreRequest> form={form} />
+
+          <FormField
+            type="image"
+            label="대표 이미지"
+            name="mainImageUrl"
+            value={watch("mainImageUrl") || ""}
+            onChange={(value: string) => setValue("mainImageUrl", value)}
+          />
 
           <Button type="submit" className="w-full mt-4">
             수정하기

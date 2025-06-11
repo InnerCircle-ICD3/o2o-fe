@@ -101,6 +101,13 @@ export default function StoreRegisterForm() {
                 {...register("mainImageUrl")}
               />
               <FormField
+                type="image"
+                label="대표 이미지 업로드"
+                name="mainImageUrl"
+                value={watch("mainImageUrl") || ""}
+                onChange={(value: string) => setValue("mainImageUrl", value)}
+              />
+              <FormField
                 type="textarea"
                 label="설명"
                 name="description"
