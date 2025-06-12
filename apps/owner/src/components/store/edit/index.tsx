@@ -56,7 +56,7 @@ export default function StoreEdit() {
           </span>
           <Switch
             checked={isOpen}
-            onCheckedChange={(checked) => {
+            onCheckedChange={(checked: boolean) => {
               setIsOpen(checked);
               patchStoreStatusMutation.mutate({ status: checked ? "OPEN" : "CLOSED" });
             }}
