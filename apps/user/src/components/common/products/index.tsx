@@ -3,7 +3,7 @@ import Image from "next/image";
 import * as style from "./products.css";
 
 import StatusLabel from "@/components/common/statusLabel";
-import type { Product } from "@/types/apis/stores.type";
+import type { Product, ProductStatus } from "@/types/apis/stores.type";
 import { formatCurrency } from "@/utils/format";
 import generateProductStatus from "@/utils/productStatus";
 import classNames from "classnames";
@@ -26,18 +26,21 @@ const Products = (props: ProductsProps) => {
       {products
         .filter((product) => product.status !== "INACTIVE")
         .map((product) => {
-          const { status, label } = generateProductStatus(product.status, product.inventory);
+          const { uiStatus, label } = generateProductStatus<ProductStatus>(
+            product.status,
+            product.inventory,
+          );
           return (
             <li key={product.id} className={style.wrapper}>
               <div className={style.thumbnail}>
                 <Image src={PRODUCTS_IMAGE[product.size]} alt={""} width={88} height={105} />
 
-                {(status === "soldOut" || product.inventory.quantity === 0) && (
+                {(uiStatus === "soldOut" || product.inventory.quantity === 0) && (
                   <div className={style.shadowLabel} />
                 )}
 
                 <div className={style.productLabel}>
-                  <StatusLabel status={status}>{label}</StatusLabel>
+                  <StatusLabel status={uiStatus}>{label}</StatusLabel>
                 </div>
               </div>
 
