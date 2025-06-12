@@ -1,5 +1,6 @@
 import { getStoresDetailProducts } from "@/apis/ssr/stores";
 import StoresProducts from "@/components/ui/storesDetail/storesProducts";
+import { Suspense } from "react";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -11,18 +12,21 @@ const Page = async (props: PageProps) => {
 
   const productsResponse = await getStoresDetailProducts(id);
 
-  if (!productsResponse.success) {
-    return (
-      <div>
-        <h2>상품 정보를 불러오는 데 실패했습니다.</h2>
-      </div>
-    );
-  }
+  const isError = !productsResponse.success;
+  const productsData = isError ? [] : productsResponse.data;
 
-  const { data: productsData } = productsResponse;
-
-  // todo : storeName
-  return <StoresProducts storeName={"냠냠"} storesProducts={productsData} />;
+  return (
+    <Suspense fallback={<div>로딩 중...</div>}>
+      {isError ? (
+        <div>
+          <h2>상품 정보를 불러오는데 실패했습니다.</h2>
+          <p>잠시 후 다시 시도해 주세요.</p>
+        </div>
+      ) : (
+        <StoresProducts storesProducts={productsData} />
+      )}
+    </Suspense>
+  );
 };
 
 export default Page;

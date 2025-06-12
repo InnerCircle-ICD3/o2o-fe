@@ -1,5 +1,6 @@
 import * as commonStyle from "@/styles/common.css";
 import type { StoreList } from "@/types/apis/stores.type";
+import { formatDistance } from "@/utils/format";
 import Image from "next/image";
 import * as styles from "./storeInfo.css";
 
@@ -35,7 +36,7 @@ export default function StoreInfo({
           <Image src={"/icons/review.svg"} alt={""} width={16} height={16} />
           {showDistance && (
             <span>
-              <strong>{reviewScore ?? 0}</strong> ({reviewCount ?? 0}) {distanceKm ?? 0}km
+              <strong>{reviewScore ?? 0}</strong> ({reviewCount ?? 0}) {formatDistance(distanceKm)}
             </span>
           )}
         </div>

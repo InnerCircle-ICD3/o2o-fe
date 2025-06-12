@@ -1,20 +1,19 @@
 "use client";
 
 import StoreListContainer from "@/components/ui/storeList/storeListContainer";
-import { productTitle } from "@/styles/common.css";
-import * as styles from "./page.css";
-import FilterTab from "./ui/filterTab";
-import MainHeader from "./ui/mainHeader";
+import FilterTab from "../../components/ui/filterTab";
+import MainHeader from "../../components/ui/mainHeader";
+import * as style from "./page.css";
 
 export default function Home() {
   return (
-    <>
-      <MainHeader />
-      <FilterTab />
-      <div className={styles.mainStyle}>
-        <h2 className={productTitle}>우리동네에서 지금 할인중이에요!</h2>
-        <StoreListContainer />
+    <div className={style.container}>
+      <div className={style.header}>
+        <MainHeader />
+        <FilterTab />
       </div>
-    </>
+
+      <StoreListContainer />
+    </div>
   );
 }
