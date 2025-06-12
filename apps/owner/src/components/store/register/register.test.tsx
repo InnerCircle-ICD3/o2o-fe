@@ -35,8 +35,7 @@ describe("StoreRegisterForm", () => {
     expect(screen.getByText("매장명")).toBeInTheDocument();
     expect(screen.getByText("사업자 등록번호")).toBeInTheDocument();
     expect(screen.getByText("연락처")).toBeInTheDocument();
-    expect(screen.getByText("대표 이미지 URL")).toBeInTheDocument();
-    expect(screen.getByText("설명")).toBeInTheDocument();
+    expect(screen.getByText("대표 이미지 업로드")).toBeInTheDocument();
   });
 
   it("다음 버튼을 클릭하면 두 번째 스텝으로 이동해야 합니다", () => {
@@ -50,6 +49,7 @@ describe("StoreRegisterForm", () => {
     expect(screen.getByText("건물명")).toBeInTheDocument();
     expect(screen.getByText("음식 카테고리 (Enter로 구분)")).toBeInTheDocument();
     expect(screen.getByText("매장 카테고리")).toBeInTheDocument();
+    expect(screen.getByText("설명")).toBeInTheDocument();
   });
 
   it("이전 버튼을 클릭하면 첫 번째 스텝으로 돌아가야 합니다", () => {

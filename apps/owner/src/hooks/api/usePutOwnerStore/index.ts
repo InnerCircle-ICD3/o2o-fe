@@ -1,7 +1,7 @@
-import { UpdateStoreRequest } from "@/types/store";
-import { useMutation } from "../utils/useMutation";
 import { putStore } from "@/apis/ssr/stores";
+import type { UpdateStoreRequest } from "@/types/store";
 import { useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "../utils/useMutation";
 
 const usePutOwnerStore = (ownerId?: number, storeId?: number) => {
   const queryClient = useQueryClient();
@@ -20,6 +20,6 @@ const usePutOwnerStore = (ownerId?: number, storeId?: number) => {
   });
 
   return { mutate, isPending, isError, error };
-}
+};
 
 export default usePutOwnerStore;
