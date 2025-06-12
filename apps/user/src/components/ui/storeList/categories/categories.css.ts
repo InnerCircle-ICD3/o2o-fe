@@ -6,7 +6,7 @@ export const container = style({
   gridTemplateColumns: "repeat(5, 1fr)",
   gap: 20,
 
-  marginBottom: 15,
+  marginTop: 15,
 
   width: "100%",
 });

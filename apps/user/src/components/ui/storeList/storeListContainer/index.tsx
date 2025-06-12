@@ -10,11 +10,6 @@ import type { StoreList } from "@/types/apis/stores.type";
 import Categories from "../categories";
 import * as style from "./storeListContainer.css";
 
-// {
-//   lat: 37.572859,
-//   lng: 126.976991,
-// },
-
 const StoreListContainer = () => {
   const locations = useGeolocation();
   const { stores, isLoading, fetchNextPage, isError, error } = useStoreList(locations);
@@ -54,11 +49,11 @@ const StoreListContainer = () => {
           }}
           onScrollEnd={fetchNextPage}
         >
-          <VirtualItem name={"store-title"}>
-            <h2 className={style.title}>우리동네에서 지금 할인중이에요!</h2>
-          </VirtualItem>
           <VirtualItem name={"store-category"}>
             <Categories />
+          </VirtualItem>
+          <VirtualItem name={"store-title"}>
+            <h2 className={style.title}>우리동네에서 지금 할인중이에요!</h2>
           </VirtualItem>
           {list.map((store: StoreList) => (
             <VirtualItem key={store.storeId} name={"store-item"}>
