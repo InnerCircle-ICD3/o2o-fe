@@ -1,5 +1,5 @@
 import { baseUrl } from "@/mocks/utils";
-import type { MapStore } from "@/types/searchMap.type";
+import type { MapStore } from "@/types/locations.type";
 import { http, HttpResponse } from "msw";
 
 const storeList: MapStore[] = [

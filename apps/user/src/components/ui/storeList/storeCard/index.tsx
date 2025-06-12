@@ -12,7 +12,7 @@ interface StoreCardProps {
   storesDetail: StoreList;
 }
 
-export const StoreCard: React.FC<StoreCardProps> = ({ storesDetail }: StoreCardProps) => {
+export const StoreCard = ({ storesDetail }: StoreCardProps) => {
   const router = useRouter();
   const { status, label } = generateProductStatus(storesDetail.totalStockCount);
   const handleClick = () => {
