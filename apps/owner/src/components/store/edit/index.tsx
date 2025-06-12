@@ -34,6 +34,7 @@ export default function StoreEdit() {
   
       (Object.keys(defaultValues) as (keyof UpdateStoreRequest)[]).forEach((key) => {
         setValue(key, defaultValues[key]);
+        setIsOpen(defaultValues.status === "OPEN");
       });
     }
   }, [storeData]);

@@ -25,6 +25,7 @@ export function getDefaultStoreFormValues(storeData: StoreResponse) {
     mainImageUrl: storeData.mainImageUrl,
     storeCategory: storeData.storeCategory,
     foodCategory: storeData.foodCategory,
+    status: storeData.status,
   };
 }
 

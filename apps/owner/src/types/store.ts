@@ -43,6 +43,7 @@ export interface StoreResponse {
   businessNumber: string;
   address: StoreAddress;
   contact: string;
+  status: "OPEN" | "CLOSED";
   description?: string;
   mainImageUrl?: string;
   storeCategory: string[];
