@@ -73,7 +73,7 @@ describe("ProductBottomSheet Test", () => {
           productId: "1L",
           productName: "오늘의 서프라이즈 잇고백",
           price: 10000,
-          quantity: 10,
+          quantity: 1,
         },
       ],
     });

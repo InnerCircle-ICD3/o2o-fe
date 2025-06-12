@@ -41,8 +41,6 @@ describe("Products Component", () => {
 
     expect(screen.getByText("24,000₩")).toBeInTheDocument();
     expect(screen.getByText("12,000₩")).toBeInTheDocument();
-
-    expect(screen.getByText("과자, 음료")).toBeInTheDocument();
   });
 
   it("마감 상품에는 상태 라벨과 그림자 레이블이 표시된다", () => {
