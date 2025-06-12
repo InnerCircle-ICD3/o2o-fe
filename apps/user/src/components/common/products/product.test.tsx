@@ -36,14 +36,12 @@ describe("Products Component", () => {
     render(<Products products={mockProducts} />);
 
     expect(screen.getByText("잇고백 S")).toBeInTheDocument();
-
     expect(screen.getByText("소형 잇고백입니다")).toBeInTheDocument();
-
     expect(screen.getByText("24,000₩")).toBeInTheDocument();
     expect(screen.getByText("12,000₩")).toBeInTheDocument();
   });
 
-  it("마감 상품에는 상태 라벨과 그림자 레이블이 표시된다", () => {
+  it("품절 상품에는 상태 라벨과 그림자 레이블이 표시된다", () => {
     const mockProducts: Product[] = [
       {
         id: "3",
@@ -70,7 +68,7 @@ describe("Products Component", () => {
 
     render(<Products products={mockProducts} />);
 
-    expect(screen.getByText("마감")).toBeInTheDocument();
+    expect(screen.getByText("품절")).toBeInTheDocument();
 
     const shadowElements = document.querySelectorAll("[class*='shadowLabel']");
     expect(shadowElements.length).toBeGreaterThanOrEqual(1);
