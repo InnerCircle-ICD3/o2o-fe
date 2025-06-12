@@ -22,7 +22,10 @@ const Select = (props: SelectProps) => {
   };
 
   const handleSelectProduct = (product: Product) => {
-    onChange(product);
+    if (product.status !== "SOLD_OUT" && product.inventory.quantity > 0) {
+      onChange(product);
+    }
+
     setIsOpen(false);
   };
 

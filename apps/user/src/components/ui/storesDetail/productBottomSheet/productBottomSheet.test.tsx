@@ -68,7 +68,14 @@ describe("ProductBottomSheet Test", () => {
 
     expect(mockSubmit).toHaveBeenCalledWith({
       storeId: "1L",
-      products: [{ productId: "1L", selectedCount: 1 }],
+      orderItems: [
+        {
+          productId: "1L",
+          productName: "오늘의 서프라이즈 잇고백",
+          price: 10000,
+          quantity: 10,
+        },
+      ],
     });
   });
 });
