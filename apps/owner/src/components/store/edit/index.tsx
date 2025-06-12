@@ -129,6 +129,7 @@ export default function StoreEdit() {
             name="description"
             value={watch("description") ?? ""}
             onChange={(e) => setValue("description", e.target.value)}
+            className="h-30 resize-none"
             error={errors.description}
           />
 
