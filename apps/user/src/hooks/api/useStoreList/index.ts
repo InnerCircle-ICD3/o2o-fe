@@ -12,6 +12,8 @@ interface Coordinates {
 
 const SIZE = 10;
 
+export const STORE_LIST_QUERY_KEY = "storeList";
+
 //FIXME 처음 로딩될때 page 2개씩 호출됨
 export const useStoreList = (locations: Coordinates | null) => {
   const { selectedFoodType, getPickupTimeString, reservable } = useFilterTab();
@@ -27,7 +29,7 @@ export const useStoreList = (locations: Coordinates | null) => {
     error,
     isError,
   } = useInfiniteQuery<Result<StoreListResponse>, Error, InfiniteQueryResponse<StoreListResponse>>({
-    queryKey: ["stores", "locations", locations, selectedFoodType, pickupTime, reservable],
+    queryKey: [STORE_LIST_QUERY_KEY, locations, selectedFoodType, pickupTime, reservable],
     queryFn: ({ pageParam }) => {
       // robust params: only string | number | undefined
       const params: Record<string, string | number | undefined> = {

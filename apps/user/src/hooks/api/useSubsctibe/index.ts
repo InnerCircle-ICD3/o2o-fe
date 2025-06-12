@@ -2,6 +2,8 @@ import { apiClient } from "@/apis/client";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import type { SubscribeSuccess } from "@/types/apis/subscribe.type";
 import { useQueryClient } from "@tanstack/react-query";
+import { STORE_LIST_QUERY_KEY } from "../useStoreList";
+import { MY_SUBSCRIBE_QUERY_KEY } from "../useSubscribeList";
 import { useMutation } from "../utils/useMutation";
 
 const subscribe = ({
@@ -34,7 +36,10 @@ const useSubscribe = () => {
       {
         onSuccess: (res) => {
           queryClient.invalidateQueries({
-            queryKey: ["subscribe", res.data.userId],
+            queryKey: [MY_SUBSCRIBE_QUERY_KEY, res.data.userId],
+          });
+          queryClient.invalidateQueries({
+            queryKey: [STORE_LIST_QUERY_KEY],
           });
         },
         onError: (error) => {
