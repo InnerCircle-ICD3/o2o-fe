@@ -32,7 +32,9 @@ const Products = (props: ProductsProps) => {
               <div className={style.thumbnail}>
                 <Image src={PRODUCTS_IMAGE[product.size]} alt={""} width={88} height={105} />
 
-                {status === "soldOut" && <div className={style.shadowLabel} />}
+                {(status === "soldOut" || product.inventory.quantity === 0) && (
+                  <div className={style.shadowLabel} />
+                )}
 
                 <div className={style.productLabel}>
                   <StatusLabel status={status}>{label}</StatusLabel>
