@@ -10,6 +10,11 @@ import type { StoreList } from "@/types/apis/stores.type";
 import Categories from "../categories";
 import * as style from "./storeListContainer.css";
 
+// {
+//   lat: 37.572859,
+//   lng: 126.976991,
+// },
+
 const StoreListContainer = () => {
   const locations = useGeolocation();
   const { stores, isLoading, fetchNextPage, isError, error } = useStoreList(locations);
