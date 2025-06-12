@@ -81,8 +81,9 @@ export interface StoreList {
   storeId: number;
   storeName: string;
   storeImage: string;
-  category: string[];
+  foodCategory: string[];
   distanceKm: number;
+  totalStockCount: number;
   open: boolean;
   stock: number;
   roadAddress: {
@@ -104,14 +105,14 @@ export interface StoreList {
     openTime: string;
     closeTime: string;
   };
-  reviewCount: number;
-  reviewScore: number;
+  ratingAverage: number;
+  ratingCount: number;
   isFavorite: boolean;
 }
 
 export interface StoreListResponse {
-  pageNumber?: number;
-  storeList: StoreList[];
+  lastId: string;
+  contents: StoreList[];
 }
 
 export interface StoreProductsResponse {

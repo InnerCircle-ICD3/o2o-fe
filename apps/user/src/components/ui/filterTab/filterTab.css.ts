@@ -13,6 +13,8 @@ export const container = style({
   justifyContent: "flex-start",
   alignItems: "center",
   gap: 4,
+
+  overflowX: "auto",
 });
 
 export const tab = recipe({
@@ -68,6 +70,31 @@ export const tab = recipe({
   },
 });
 
+export const reservation = recipe({
+  base: {
+    backgroundColor: globalTheme.color.white,
+    border: `1px solid ${globalTheme.color.gray.light}`,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+    height: 34,
+    padding: "10px 12px",
+    flexShrink: 0,
+    borderRadius: 16.5,
+    fontSize: "0.875rem",
+    fontWeight: 400,
+  },
+  variants: {
+    parentActive: {
+      true: {
+        color: globalTheme.color.white,
+        backgroundColor: globalTheme.color.black,
+      },
+    },
+  },
+});
+
 export const textStyle = recipe({
   base: {
     lineHeight: "normal",
@@ -117,9 +144,6 @@ export const filterListItemHover = style([
     width: "100%",
     borderRadius: 16.5,
     padding: "10px 12px",
-    ":hover": {
-      background: globalTheme.color.gray.background,
-    },
   },
 ]);
 

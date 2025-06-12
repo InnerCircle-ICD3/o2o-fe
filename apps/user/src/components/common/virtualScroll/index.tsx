@@ -3,9 +3,17 @@
 import type { HeightSpec, VirtualItemProps } from "@/types/virtualScroll.type";
 import { renderVirtualContent } from "@/utils/virtualScroll";
 import classNames from "classnames";
-import { Children, useEffect, useRef, useState } from "react";
+import { Children, createContext, useEffect, useRef, useState } from "react";
 import type { PropsWithChildren, ReactElement } from "react";
 import * as style from "./virtualScroll.css";
+
+interface VirtualScrollContextType {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}
+
+export const VirtualScrollContext = createContext<VirtualScrollContextType>({
+  containerRef: { current: null },
+});
 
 interface VirtualScrollProps extends PropsWithChildren {
   overscan?: number;
@@ -73,13 +81,15 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
   }, [onScrollEnd]);
 
   return (
-    <div ref={containerRef} className={containerStyle}>
-      <div style={{ height: totalHeight }}>
-        {containerSize.height !== 0 && containerSize.width !== 0 && (
-          <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
-        )}
+    <VirtualScrollContext.Provider value={{ containerRef }}>
+      <div ref={containerRef} className={containerStyle}>
+        <div style={{ height: totalHeight }}>
+          {containerSize.height !== 0 && containerSize.width !== 0 && (
+            <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
+          )}
+        </div>
       </div>
-    </div>
+    </VirtualScrollContext.Provider>
   );
 };
 

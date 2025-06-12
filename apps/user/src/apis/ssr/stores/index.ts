@@ -11,7 +11,7 @@ export const getStoresDetailProducts = async (id: string) => {
 };
 
 export const getStoreList = async (params: string) => {
-  return await toSafeResult(() => apiClient.get<StoreListResponse>(`store/list?${params}`));
+  return await toSafeResult(() => apiClient.get<StoreListResponse>(`search/store?${params}`));
 };
 
 export const getSearchStoreList = async (keyword: string, size: number, page: number) => {
