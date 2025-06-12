@@ -1,17 +1,16 @@
 "use client";
 
-import { putStore } from "@/apis/ssr/stores";
 import { FormField } from "@/components/common/formField";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { STORE_CATEGORIES } from "@/constants/store";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
+import usePutOwnerStore from "@/hooks/api/usePutOwnerStore";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
 import { getDefaultStoreFormValues } from "@/utils/stores";
-import { useMutation } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "../register/businessHoursSection";
 
@@ -23,20 +22,26 @@ export default function StoreEdit() {
   const [isOpen, setIsOpen] = useState(true); // true: 영업중, false: 영업종료
 
   const form = useForm<UpdateStoreRequest>({
-    defaultValues: useMemo(() => getDefaultStoreFormValues(storeData), [storeData]),
-  });
-
-  const { errors, handleSubmit, watch, setValue } = form;
-
-  const updateStoreMutation = useMutation({
-    mutationFn: (data: UpdateStoreRequest) => {
-      if (!owner?.userId) throw new Error("사용자 정보가 없습니다");
-      if (!storeData?.data.id) throw new Error("매장 정보가 없습니다");
-      return putStore(Number(owner.userId), Number(storeData.data.id), data);
+    defaultValues: {
+      storeCategory: [],
+      foodCategory: [],
     },
   });
 
-  const patchStoreStatusMutation = usePatchOwnerStoreStatus(owner?.userId, storeData?.data.id);
+  useEffect(() => {
+    if (storeData) {
+      const defaultValues = getDefaultStoreFormValues(storeData);
+  
+      (Object.keys(defaultValues) as (keyof UpdateStoreRequest)[]).forEach((key) => {
+        setValue(key, defaultValues[key]);
+      });
+    }
+  }, [storeData]);
+
+  const { errors, handleSubmit, watch, setValue } = form;
+
+  const updateStoreMutation = usePutOwnerStore(owner?.userId, storeData?.id);
+  const patchStoreStatusMutation = usePatchOwnerStoreStatus(owner?.userId, storeData?.id);
 
   const onSubmit = async (data: UpdateStoreRequest) => {
     const isValid = await form.validate();
@@ -90,13 +95,6 @@ export default function StoreEdit() {
             value={watch("contact")}
             onChange={(e) => setValue("contact", e.target.value)}
             error={errors.contact}
-          />
-          <FormField
-            type="input"
-            label="대표 이미지 URL"
-            name="mainImageUrl"
-            value={watch("mainImageUrl")}
-            onChange={(e) => setValue("mainImageUrl", e.target.value)}
           />
           <FormField
             type="textarea"

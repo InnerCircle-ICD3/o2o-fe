@@ -15,7 +15,7 @@ export const postStore = async (storeOwnerId: number, data: CreateStoreRequest) 
 
 export const getStore = async (storeOwnerId: number) => {
   return await toSafeResult(() =>
-    apiClient.get<StoreResponse>(`stores?storeOwnerId=${storeOwnerId}`),
+    apiClient.get<StoreResponse[]>(`stores?storeOwnerId=${storeOwnerId}`),
   );
 };
 
