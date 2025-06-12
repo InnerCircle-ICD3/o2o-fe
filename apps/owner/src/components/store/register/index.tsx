@@ -3,14 +3,16 @@
 import { FormField } from "@/components/common/formField";
 import { Stepper } from "@/components/common/stepper";
 import { Button } from "@/components/ui/button";
-import { STORE_CATEGORIES, VALIDATION_RULES } from "@/constants/store";
+import { Label } from "@/components/ui/label";
+import { STORE_CATEGORIES, VALIDATION_RULES, initialCreateStoreFormData } from "@/constants/store";
+import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePostOwnerStore from "@/hooks/api/usePostOwnerStore";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
 import type { CreateStoreRequest } from "@/types/store";
-import { initialStoreFormData } from "@/types/store";
 import { useState } from "react";
+import React from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
 
@@ -22,7 +24,7 @@ export default function StoreRegisterForm() {
   const { owner } = useOwnerStore();
 
   const form = useForm<CreateStoreRequest>({
-    defaultValues: initialStoreFormData,
+    defaultValues: initialCreateStoreFormData,
     validationRules: VALIDATION_RULES,
     defaultOptions: {
       transform: (value: string) => value.trim(),
@@ -51,6 +53,24 @@ export default function StoreRegisterForm() {
     };
 
   const createStoreMutation = usePostOwnerStore(owner?.userId);
+
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const { mutateAsync: uploadImage, isPending: isUploading } = usePostFileUpload();
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const presignedUrl = await uploadImage({ file, folderPath: "store" });
+    await fetch(presignedUrl, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": file.type || "image/jpeg",
+      },
+    });
+    const imageUrl = presignedUrl.split("?")[0];
+    setValue("mainImageUrl", imageUrl);
+  };
 
   const onSubmit = async (data: CreateStoreRequest) => {
     const isValid = await form.validate();
@@ -94,28 +114,40 @@ export default function StoreRegisterForm() {
                 onChange={(e) => setValue("contact", e.target.value)}
                 error={errors.contact}
               />
-              <FormField
-                type="input"
-                label="대표 이미지 URL"
-                name="mainImageUrl"
-                {...register("mainImageUrl")}
-              />
-              <FormField
-                type="image"
-                label="대표 이미지 업로드"
-                name="mainImageUrl"
-                value={watch("mainImageUrl") || ""}
-                onChange={(value: string) => setValue("mainImageUrl", value)}
-              />
-              <FormField
-                type="textarea"
-                label="설명"
-                name="description"
-                onBlur={handleBlur("description")}
-                value={watch("description")}
-                onChange={(e) => setValue("description", e.target.value)}
-                className="h-30 resize-none"
-              />
+              <div className="space-y-2">
+                <div className="flex gap-8 items-center">
+                  <Label htmlFor="mainImageUpload" className="w-[90px]">
+                    대표 이미지 업로드
+                  </Label>
+                  <input
+                    id="mainImageUpload"
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    className="cursor-pointer border rounded px-3 py-2 w-full"
+                    disabled={isUploading}
+                  />
+                </div>
+                <div
+                  className="flex justify-center items-center border border-gray-300 rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
+                  style={{ minHeight: 180 }}
+                >
+                  {watch("mainImageUrl") ? (
+                    <img
+                      src={watch("mainImageUrl") || ""}
+                      alt="미리보기"
+                      className="object-contain w-full h-full"
+                      style={{ maxWidth: "100%", maxHeight: "100%" }}
+                    />
+                  ) : (
+                    <span className="text-gray-400 text-sm">이미지 미리보기</span>
+                  )}
+                </div>
+                {errors.mainImageUrl && (
+                  <p className="text-sm text-red-500">{errors.mainImageUrl}</p>
+                )}
+              </div>
             </fieldset>
           )}
 
@@ -167,6 +199,15 @@ export default function StoreRegisterForm() {
                 value={watch("foodCategory")}
                 onChange={(value: string[]) => setValue("foodCategory", value)}
                 error={errors.foodCategory}
+              />
+              <FormField
+                type="textarea"
+                label="설명"
+                name="description"
+                onBlur={handleBlur("description")}
+                value={watch("description")}
+                onChange={(e) => setValue("description", e.target.value)}
+                className="h-30 resize-none"
               />
             </fieldset>
           )}

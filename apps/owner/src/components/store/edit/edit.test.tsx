@@ -25,6 +25,7 @@ const mockOwner: Owner = { userId: 1 };
 const mockStoreData: StoreResponse = {
   id: 1,
   name: "테스트매장",
+  status: "OPEN",
   businessNumber: "123-45-67890",
   contact: "010-1234-5678",
   mainImageUrl: "",
@@ -86,7 +87,6 @@ describe("StoreEdit", () => {
     });
     renderWithClient(<StoreEdit />);
     screen.getByLabelText("매장명");
-    screen.getByLabelText("사업자 번호");
     screen.getByLabelText("도로명 주소");
   });
 

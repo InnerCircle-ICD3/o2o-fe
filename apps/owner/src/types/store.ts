@@ -71,7 +71,6 @@ export interface StoreAddress {
 }
 export interface UpdateStoreRequest {
   name?: string;
-  businessNumber?: string;
   roadNameAddress?: string;
   lotNumberAddress?: string;
   buildingName?: string;
@@ -97,24 +96,3 @@ export interface UpdateStoreRequest {
 export interface StoreStatus {
   status: "OPEN" | "CLOSED";
 }
-
-export const initialStoreFormData: CreateStoreRequest = {
-  name: "",
-  businessNumber: "",
-  roadNameAddress: "",
-  lotNumberAddress: "",
-  buildingName: "",
-  zipCode: "",
-  region1DepthName: "",
-  region2DepthName: "",
-  region3DepthName: "",
-  latitude: "",
-  longitude: "",
-  pickupDay: "TODAY",
-  businessHours: [],
-  contact: "",
-  description: "",
-  mainImageUrl: "",
-  storeCategory: [],
-  foodCategory: [],
-};
