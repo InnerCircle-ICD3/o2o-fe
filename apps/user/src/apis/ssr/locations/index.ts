@@ -8,7 +8,7 @@ type ViewPoint = {
   longitude: number;
 };
 
-interface CustomerAddress {
+export interface CustomerAddress {
   address: {
     roadNameAddress: string;
     lotNumberAddress: string;
