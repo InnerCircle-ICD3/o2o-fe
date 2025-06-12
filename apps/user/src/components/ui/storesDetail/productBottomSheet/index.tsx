@@ -32,7 +32,7 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
         productId: product.id,
         productName: product.name,
         price: product.price.finalPrice,
-        quantity: product.quantity,
+        quantity: product.selectedCount,
       })),
     };
 
