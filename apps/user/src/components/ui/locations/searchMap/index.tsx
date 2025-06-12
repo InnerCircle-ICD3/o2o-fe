@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import * as styles from "./searchMap.css";
 
-import type { MapStore } from "@/types/searchMap.type";
+import type { MapStore } from "@/types/locations.type";
 
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
@@ -16,11 +16,7 @@ import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
 import { CLUSTERER_STYLE } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import {
-  calculateMovedDistance,
-  createStoreMarker,
-  createUserMarker,
-} from "@/utils/locations/locationUtils";
+import { calculateMovedDistance, createStoreMarker, createUserMarker } from "@/utils/locations";
 
 export default function SearchMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
@@ -71,7 +67,7 @@ export default function SearchMap() {
       const center = map.getCenter();
       const movedDistance = calculateMovedDistance(center, location);
 
-      setShouldShowRefetch(movedDistance > 0.01);
+      setShouldShowRefetch(movedDistance > 0.02);
     },
     [location],
   );
