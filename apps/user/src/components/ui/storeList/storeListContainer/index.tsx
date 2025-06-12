@@ -7,6 +7,7 @@ import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStore
 import { useStoreList } from "@/hooks/api/useStoreList";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import type { StoreList } from "@/types/apis/stores.type";
+import Categories from "../categories";
 import * as style from "./storeListContainer.css";
 
 const StoreListContainer = () => {
@@ -33,29 +34,33 @@ const StoreListContainer = () => {
           isButton={false}
         />
       ) : (
-        <>
-          <VirtualScroll
-            overscan={3}
-            heights={{
-              "store-title": {
-                height: 48,
-              },
-              "store-item": {
-                height: 228,
-              },
-            }}
-            onScrollEnd={fetchNextPage}
-          >
-            <VirtualItem name={"store-title"}>
-              <h2 className={style.title}>우리동네에서 지금 할인중이에요!</h2>
+        <VirtualScroll
+          overscan={3}
+          heights={{
+            "store-title": {
+              height: 48,
+            },
+            "store-item": {
+              height: 228,
+            },
+            "store-category": {
+              aspectRatio: 388 / 205,
+            },
+          }}
+          onScrollEnd={fetchNextPage}
+        >
+          <VirtualItem name={"store-title"}>
+            <h2 className={style.title}>우리동네에서 지금 할인중이에요!</h2>
+          </VirtualItem>
+          <VirtualItem name={"store-category"}>
+            <Categories />
+          </VirtualItem>
+          {list.map((store: StoreList) => (
+            <VirtualItem key={store.storeId} name={"store-item"}>
+              <StoreCard storesDetail={store} />
             </VirtualItem>
-            {list.map((store: StoreList) => (
-              <VirtualItem key={store.storeId} name={"store-item"}>
-                <StoreCard storesDetail={store} />
-              </VirtualItem>
-            ))}
-          </VirtualScroll>
-        </>
+          ))}
+        </VirtualScroll>
       )}
     </div>
   );
