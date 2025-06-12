@@ -1,8 +1,8 @@
 import { getStoresByCenter } from "@/apis/ssr/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import type { MapStore } from "@/types/searchMap.type";
-import { calculateMovedDistance } from "@/utils/locations/locationUtils";
+import type { MapStore } from "@/types/locations.type";
+import { calculateMovedDistance } from "@/utils/locations";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { type Mock, vi } from "vitest";
 import SearchMap from "../../../../app/(bottomNav)/locations/search/page";
@@ -117,23 +117,20 @@ vi.mock("@/components/common/kakaoMap", () => ({
   },
 }));
 
-vi.mock("@/utils/locations/locationUtils", async () => {
-  return {
-    fetchStoresByCenter: vi.fn().mockResolvedValue([]),
-    calculateMovedDistance: vi.fn(),
-    createStoreMarker: vi.fn().mockImplementation((store, onMarkerClick) => {
-      const marker = {
-        setMap: vi.fn(),
-        setImage: vi.fn(),
-      };
-      kakao.maps.event.addListener(marker, "click", () => {
-        onMarkerClick(store);
-      });
-      return marker;
-    }),
-    createUserMarker: vi.fn(),
-  };
-});
+vi.mock("@/utils/locations", () => ({
+  calculateMovedDistance: vi.fn(),
+  createStoreMarker: vi.fn().mockImplementation((store, onMarkerClick) => {
+    const marker = {
+      setMap: vi.fn(),
+      setImage: vi.fn(),
+    };
+    kakao.maps.event.addListener(marker, "click", () => {
+      onMarkerClick(store);
+    });
+    return marker;
+  }),
+  createUserMarker: vi.fn(),
+}));
 
 describe("SearchMap", () => {
   const mockLocation = { lat: 37.123456, lng: 127.123456 };

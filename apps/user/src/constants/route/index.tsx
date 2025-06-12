@@ -161,6 +161,10 @@ const ROUTE = {
       name: "이용 약관",
       path: "/mypage/terms",
     },
+    addressSearch: {
+      name: "동네 검색",
+      path: "/locations/address-search",
+    },
     setting: {
       name: "설정",
       path: "/mypage/setting",

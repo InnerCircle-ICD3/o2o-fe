@@ -13,7 +13,7 @@ export const bottomSheetContainer = style({
   left: 0,
   zIndex: 1000,
   width: "100%",
-  height: "30%",
+  height: "auto",
   padding: "20px",
   backgroundColor: "#fff",
   borderRadius: "20px 20px 0 0",
@@ -30,17 +30,9 @@ export const bottomSheetHeader = style({
 export const bottomSheetContent = style({
   position: "relative",
   display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-start",
-  padding: "24px 0",
-});
-
-export const bottomSheetFooter = style({
-  display: "flex",
+  flexDirection: "column",
   justifyContent: "space-between",
   alignItems: "center",
-  width: "100%",
-  padding: "10px 0",
 });
 
 export const bottomSheetTitle = style({
@@ -49,12 +41,12 @@ export const bottomSheetTitle = style({
 });
 
 export const buttonText = style({
-  fontSize: "16px",
+  fontSize: "24px",
 });
 
 export const trackWrapper = style({
   position: "absolute",
-  top: "33px",
+  bottom: "133px",
   left: "calc(12.5%)",
   width: "75%",
   height: "4px",
@@ -123,4 +115,37 @@ export const label = style({
   marginTop: "8px",
   fontSize: "12px",
   color: "#333",
+  width: "60px",
+  textAlign: "center",
+});
+
+export const buttonWrapper = style({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%",
+  padding: "10px 0",
+  gap: "10px",
+});
+
+export const searchWrapper = style({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%",
+  padding: "10px 0",
+});
+
+export const rangeWrapper = style({
+  display: "flex",
+  justifyContent: "space-between",
+  width: "100%",
+  padding: "10px 0",
+});
+
+export const buttonContent = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-around",
+  gap: "5px",
 });

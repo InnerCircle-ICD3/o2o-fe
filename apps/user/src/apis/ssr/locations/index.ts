@@ -1,7 +1,11 @@
 import { apiClient } from "@/apis/client";
 import type { Result } from "@/apis/types";
 import { toSafeResult } from "@/apis/utils/result";
-import type { StoreResponseData } from "@/types/searchMap.type";
+import type {
+  CustomerAddressRequest,
+  CustomerAddressResponse,
+  StoreResponseData,
+} from "@/types/locations.type";
 
 type ViewPoint = {
   latitude: number;
@@ -41,8 +45,26 @@ export const getStoresByCenter = async (
   );
 };
 
-export const postCustomerAddress = async (customerId: string, body: CustomerAddress) => {
+export const postCustomerAddress = async ({
+  customerId,
+  address,
+}: { customerId: number; address: CustomerAddressRequest }) => {
   return await toSafeResult(() =>
-    apiClient.post(`customers/address?customerId=${customerId}`, body),
+    apiClient.post(`customers/address?customerId=${customerId}`, address),
+  );
+};
+
+export const getCustomerAddress = async ({ customerId }: { customerId: number }) => {
+  return await toSafeResult(() =>
+    apiClient.get<CustomerAddressResponse[]>(`customers/address?customerId=${customerId}`),
+  );
+};
+
+export const deleteCustomerAddress = async ({
+  customerId,
+  addressId,
+}: { customerId: number; addressId: number }) => {
+  return await toSafeResult(() =>
+    apiClient.delete(`customers/address/${addressId}?customerId=${customerId}`),
   );
 };
