@@ -56,6 +56,10 @@ export const skeletonCardStyle = recipe({
         flexDirection: "row",
         alignItems: "center",
       },
+      left: {
+        flexDirection: "row-reverse",
+        alignItems: "center",
+      },
     },
   },
   defaultVariants: {
