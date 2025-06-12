@@ -6,3 +6,10 @@ export const container = style({
 
   padding: "44px 0 20px",
 });
+
+export const title = style({
+  fontSize: 18,
+  fontWeight: "bold",
+  marginTop: 20,
+  marginBottom: 10,
+});

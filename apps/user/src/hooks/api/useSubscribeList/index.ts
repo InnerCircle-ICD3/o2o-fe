@@ -10,14 +10,14 @@ const getMySubscribe = (params: string) => {
 
 const MY_SUBSCRIBE_QUERY_KEY = "subscribe";
 
-const useSubscribeList = (id: number, isLogin: boolean) => {
+const useSubscribeList = (id?: number) => {
   const { queryParams, setAllQueryParams } = useQueryParams();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } =
     useInfiniteQuery<Result<SubscribeList>, Error, InfiniteQueryResponse<SubscribeList>>({
       queryKey: [MY_SUBSCRIBE_QUERY_KEY, id],
       queryFn: ({ pageParam }) => {
-        const params = { customerId: id.toString() } as Record<string, string | number>;
+        const params = { customerId: id?.toString() } as Record<string, string | number>;
         if (pageParam !== undefined) params.lastId = pageParam as number;
 
         setAllQueryParams(params);
@@ -31,7 +31,7 @@ const useSubscribeList = (id: number, isLogin: boolean) => {
           : undefined;
       },
       initialPageParam: undefined,
-      enabled: isLogin,
+      enabled: !!id,
     });
 
   return {

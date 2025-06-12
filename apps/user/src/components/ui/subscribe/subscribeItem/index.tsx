@@ -36,9 +36,7 @@ const SubscribeItem = (props: SubscribeItemProps) => {
 
           <div className={style.info}>
             <p className={style.category}>{subscribe.foodCategory.join(" | ")}</p>
-            <p className={style.description}>
-              {subscribe.description} 길다 길어~길다 길어~길다 길어~길다 길어~
-            </p>
+            <p className={style.description}>{subscribe.description}</p>
             <div className={style.prices}>
               <p className={style.original}>{formatCurrency(subscribe.originalPrice)}</p>
               <p className={classNames(style.discount, globalStyle.primaryColor)}>
