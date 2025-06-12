@@ -3,12 +3,11 @@ import StoresProducts from "@/components/ui/storesDetail/storesProducts";
 import { Suspense } from "react";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 const Page = async (props: PageProps) => {
-  const { params } = props;
-  const { id } = await params;
+  const { id } = props.params;
 
   const productsResponse = await getStoresDetailProducts(id);
 

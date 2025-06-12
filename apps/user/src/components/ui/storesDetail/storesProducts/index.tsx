@@ -22,7 +22,7 @@ const StoresProducts = (props: StoresProductsProps) => {
       <article className={classNames(globalStyle.innerPadding, style.container)}>
         <h2 className={style.productTitle}>
           <span className={classNames(globalStyle.primaryColor, style.titleEmp)}>
-            {storesProducts[0].storeName}
+            {storesProducts.length ? storesProducts[0].storeName : "이 매장"}
           </span>{" "}
           에서 지금 판매중이에요!
         </h2>
