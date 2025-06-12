@@ -2,6 +2,7 @@
 
 import { getCustomer } from "@/apis/ssr/customers";
 import type { Result } from "@/apis/types";
+import ErrorUi from "@/components/common/errorUi";
 import LoginLink from "@/components/ui/mypage/loginLink";
 import { userInfoStore } from "@/stores/userInfoStore";
 import type { Customer } from "@/types/apis/accounts.type";
@@ -18,13 +19,16 @@ const Page = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const result = await getCustomer(user?.customerId ?? 0);
+      if (!user?.customerId) return;
+      const result = await getCustomer(user.customerId);
       if (result.success) {
         setUserInfo(result);
       }
     };
     fetchUserInfo();
   }, [user?.customerId]);
+
+  if (!userInfo) return <ErrorUi message={"사용자 정보를 불러오는데 실패했습니다."} />;
 
   return (
     <div className={style.container}>

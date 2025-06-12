@@ -1,62 +1,144 @@
 "use client";
 
+import { postCustomerAddress } from "@/apis/ssr/locations";
 import Button from "@/components/common/button";
+import ErrorUi from "@/components/common/errorUi";
 import { KakaoMap } from "@/components/common/kakaoMap";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
-import { RANGE_OPTIONS } from "@/constants/locations";
-import { useGeolocation } from "@/hooks/useGeolocation";
+import { ADDRESS_TYPES } from "@/constants/locations";
+import useDeleteCustomerAddress from "@/hooks/api/useDeleteCustomerAddress";
+import useGetCustomerAddress from "@/hooks/api/useGetCustomerAddress";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import {
-  createUserMarker,
-  getRegionByCoords,
-  renderMyLocationCircle,
-} from "@/utils/locations/locationUtils";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useSelectedAddressStore } from "@/stores/selectedAddressStore";
+import { userInfoStore } from "@/stores/userInfoStore";
+import { createUserMarker, renderMyLocationCircle } from "@/utils/locations";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import AddressSelector from "../addressSelector";
+import RangeSelector from "../rangeSelector";
 import * as styles from "./myLocation.css";
 
-type RangeOption = (typeof RANGE_OPTIONS)[number]["value"];
-
 export default function MyLocation() {
-  const mapRef = useRef<kakao.maps.Map | null>(null);
-  const location = useGeolocation();
+  const router = useRouter();
+  const { user } = userInfoStore();
+  const selectedAddressStore = useSelectedAddressStore();
   const isLoaded = useKakaoLoader();
-  const [range, setRange] = useState<RangeOption>(500);
-  const selectedIndex = RANGE_OPTIONS.findIndex((option) => option.value === range);
+  const [range, setRange] = useState(0.5);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  const mapRef = useRef<kakao.maps.Map | null>(null);
   const markerRef = useRef<kakao.maps.Marker | null>(null);
   const circleRef = useRef<kakao.maps.Circle | null>(null);
 
-  // 지도 초기화
+  const {
+    data: customerAddress,
+    isLoading,
+    isError,
+    error,
+  } = useGetCustomerAddress(user?.customerId);
+  const { mutate: deleteCustomerAddress } = useDeleteCustomerAddress();
+
+  const addressMap = useMemo(
+    () => ({
+      HOME: customerAddress?.find((addr) => addr.customerAddressType === "HOME"),
+      WORK: customerAddress?.find((addr) => addr.customerAddressType === "WORK"),
+    }),
+    [customerAddress],
+  );
+
+  const searchParams = useSearchParams();
+  const addressType = (searchParams.get("address_type") || "HOME") as "HOME" | "WORK";
+  useEffect(() => {
+    setSelectedIndex(addressType === "WORK" ? 1 : 0);
+  }, [addressType]);
+
+  useEffect(() => {
+    if (
+      !selectedAddressStore.selectedAddress.HOME &&
+      !selectedAddressStore.selectedAddress.WORK &&
+      customerAddress
+    ) {
+      if (customerAddress.find((addr) => addr.customerAddressType === "HOME")) {
+        setSelectedIndex(0);
+      } else if (customerAddress.find((addr) => addr.customerAddressType === "WORK")) {
+        setSelectedIndex(1);
+      }
+    }
+  }, [
+    customerAddress,
+    selectedAddressStore.selectedAddress.HOME,
+    selectedAddressStore.selectedAddress.WORK,
+  ]);
+
+  useEffect(() => {
+    const type = ADDRESS_TYPES[selectedIndex];
+    const selected = selectedAddressStore.selectedAddress[type];
+
+    if (selected?.address?.coordinate) {
+      setLocation({
+        lat: selected.address.coordinate.latitude,
+        lng: selected.address.coordinate.longitude,
+      });
+      setRange(selected.radiusInKilometers);
+    } else if (addressMap[type]) {
+      setLocation({
+        lat: addressMap[type].latitude,
+        lng: addressMap[type].longitude,
+      });
+      setRange(addressMap[type].radiusInKilometers);
+    } else if (
+      !selectedAddressStore.selectedAddress.HOME &&
+      !selectedAddressStore.selectedAddress.WORK &&
+      !addressMap.HOME &&
+      !addressMap.WORK
+    ) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          setRange(0.5);
+        });
+      }
+    }
+  }, [selectedIndex, selectedAddressStore.selectedAddress, addressMap]);
+
+  useEffect(() => {
+    if (!isLoaded || !mapRef.current || !location) return;
+
+    markerRef.current?.setMap(null);
+    circleRef.current?.setMap(null);
+
+    markerRef.current = createUserMarker(location, mapRef.current);
+    circleRef.current = renderMyLocationCircle(mapRef.current, location, range);
+    mapRef.current.setCenter(new window.kakao.maps.LatLng(location.lat, location.lng));
+  }, [isLoaded, location, range]);
+
   const handleMapReady = useCallback((map: kakao.maps.Map) => {
     mapRef.current = map;
   }, []);
 
-  // 위치나 범위가 변경될 때 마커와 원 업데이트
-  useEffect(() => {
-    if (!mapRef.current || !location) return;
+  const handleRegister = async () => {
+    const type = ADDRESS_TYPES[selectedIndex];
+    const selected = selectedAddressStore.selectedAddress[type];
+    if (!user?.customerId || !selected) return;
 
-    // 기존 마커와 원 제거
-    if (markerRef.current) markerRef.current.setMap(null);
-    if (circleRef.current) circleRef.current.setMap(null);
+    const result = await postCustomerAddress({
+      customerId: user.customerId,
+      address: {
+        ...selected,
+        customerAddressType: type,
+        radiusInKilometers: range,
+      },
+    });
 
-    // 새로운 마커와 원 생성
-    markerRef.current = createUserMarker(location, mapRef.current);
-    circleRef.current = renderMyLocationCircle(mapRef.current, location, range);
-  }, [location, range]);
-
-  const handleGetRegion = async () => {
-    if (!location) return;
-
-    try {
-      const region = await getRegionByCoords(location.lat, location.lng);
-      if (region) {
-        console.log(region, range);
-      }
-    } catch (error) {
-      console.error("지역 정보를 가져오는 데 실패했습니다:", error);
+    if (result.success) {
+      selectedAddressStore.clearSelectedAddress(type);
+      router.push("/mypage");
     }
   };
 
-  if (!location || !isLoaded) return <LoadingMap />;
+  if (isError) return <ErrorUi message={error?.message} />;
+  if (!location || !isLoaded || isLoading) return <LoadingMap />;
 
   return (
     <div className={styles.container}>
@@ -66,40 +148,31 @@ export default function MyLocation() {
         <div className={styles.bottomSheetHeader}>
           <h3 className={styles.bottomSheetTitle}>내 동네</h3>
         </div>
-        <div className={styles.bottomSheetContent}>
-          <div className={styles.trackWrapper}>
-            <div className={styles.trackBg} />
-            <div
-              className={styles.trackProgress}
-              style={{ width: `${(selectedIndex / (RANGE_OPTIONS.length - 1)) * 100}%` }}
-            />
-          </div>
-          {RANGE_OPTIONS.map(({ value, label }, index) => {
-            const isSelected = range === value;
-            const isPassed = index < selectedIndex;
 
-            return (
-              <label key={value} className={styles.option}>
-                <input
-                  type="radio"
-                  name="distance"
-                  value={value}
-                  checked={isSelected}
-                  onChange={() => setRange(value as RangeOption)}
-                  className={styles.input}
-                />
-                <span
-                  className={`${styles.circle} ${isSelected ? styles.circleSelected : isPassed ? styles.circlePassed : styles.circleInactive}`}
-                />
-                {label && <span className={styles.label}>{label}</span>}
-              </label>
-            );
-          })}
-        </div>
-        <div className={styles.bottomSheetFooter}>
-          <Button status="primary" onClick={handleGetRegion}>
-            <span className={styles.buttonText}>설정하기</span>
-          </Button>
+        <div className={styles.bottomSheetContent}>
+          <AddressSelector
+            selectedIndex={selectedIndex}
+            setSelectedIndex={setSelectedIndex}
+            customerAddress={customerAddress}
+            selectedAddress={{
+              HOME: selectedAddressStore.selectedAddress.HOME,
+              WORK: selectedAddressStore.selectedAddress.WORK,
+            }}
+            deleteCustomerAddress={deleteCustomerAddress}
+            clearSelectedAddress={selectedAddressStore.clearSelectedAddress}
+          />
+
+          <RangeSelector range={range} setRange={setRange} />
+
+          <div className={styles.buttonWrapper}>
+            <Button
+              status="primary"
+              onClick={handleRegister}
+              disabled={!selectedAddressStore.selectedAddress[ADDRESS_TYPES[selectedIndex]]}
+            >
+              <p className={styles.buttonText}>등록하기</p>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
