@@ -22,3 +22,9 @@ export interface SubscribeList {
   contents: SubscribeDetail[];
   lastId: number;
 }
+
+export interface SubscribeSuccess {
+  id: number;
+  userId: number;
+  storeId: number;
+}

@@ -14,6 +14,12 @@ export const card = style({
   border: `0.5px solid ${globalTheme.color.line}`,
 });
 
+export const subscribeButton = style({
+  position: "absolute",
+  top: "10px",
+  right: "10px",
+});
+
 export const label = style({
   position: "absolute",
   top: "10px",
