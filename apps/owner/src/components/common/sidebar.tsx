@@ -3,10 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Home, List, Package, Plus, ShoppingCart } from "lucide-react";
+import { Home, List, MessageCircle, Package, Plus, ShoppingCart } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 type MenuItem = {
   title: string;
@@ -57,19 +56,26 @@ const menuConfig: Record<string, MenuItem> = {
       },
     ],
   },
+  reviews: {
+    title: "리뷰 관리",
+    icon: MessageCircle,
+    submenu: [
+      {
+        title: "리뷰 조회",
+        href: "/reviews",
+        icon: List,
+      },
+    ],
+  },
 };
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const router = useRouter();
 
   const isSubmenuActive = (menuId: string) => {
     const menu = menuConfig[menuId];
     return menu.submenu.some((submenu) => pathname.startsWith(submenu.href));
-  };
-
-  const toggleMenu = (menuId: string) => {
-    setOpenMenuId((prev) => (prev === menuId ? null : menuId));
   };
 
   return (
@@ -81,47 +87,46 @@ export function Sidebar() {
         <div className="space-y-1 p-2">
           {Object.entries(menuConfig).map(([menuId, menu]) => {
             const hasActiveSubmenu = isSubmenuActive(menuId);
-            const isOpen = openMenuId === menuId;
-            const showSubmenu = menu.submenu.length > 0 && (isOpen || hasActiveSubmenu);
 
             return (
               <div key={menuId}>
                 <Button
                   variant={hasActiveSubmenu ? "secondary" : "ghost"}
-                  className={cn("w-full justify-between", hasActiveSubmenu && "bg-secondary")}
-                  onClick={() => toggleMenu(menuId)}
+                  className={cn("w-full justify-start", hasActiveSubmenu && "bg-secondary")}
+                  asChild
                 >
-                  <div className="flex w-full items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      router.push(menu.submenu[0].href);
+                    }}
+                    className="w-full text-left"
+                  >
                     <div className="flex items-center">
                       <menu.icon className="mr-2 h-4 w-4" />
                       {menu.title}
                     </div>
-                    <ChevronDown
-                      className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")}
-                    />
-                  </div>
+                  </button>
                 </Button>
 
-                {showSubmenu && (
-                  <div className="ml-6 mt-1 space-y-1">
-                    {menu.submenu.map((submenu) => (
-                      <Button
-                        key={submenu.href}
-                        variant={pathname === submenu.href ? "secondary" : "ghost"}
-                        className={cn(
-                          "w-full justify-start text-sm",
-                          pathname === submenu.href && "bg-secondary",
-                        )}
-                        asChild
-                      >
-                        <Link href={submenu.href}>
-                          <submenu.icon className="mr-2 h-4 w-4" />
-                          {submenu.title}
-                        </Link>
-                      </Button>
-                    ))}
-                  </div>
-                )}
+                <div className="ml-6 mt-1 space-y-1">
+                  {menu.submenu.map((submenu) => (
+                    <Button
+                      key={submenu.href}
+                      variant={pathname === submenu.href ? "secondary" : "ghost"}
+                      className={cn(
+                        "w-full justify-start text-sm",
+                        pathname === submenu.href && "bg-secondary",
+                      )}
+                      asChild
+                    >
+                      <Link href={submenu.href}>
+                        <submenu.icon className="mr-2 h-4 w-4" />
+                        {submenu.title}
+                      </Link>
+                    </Button>
+                  ))}
+                </div>
               </div>
             );
           })}
