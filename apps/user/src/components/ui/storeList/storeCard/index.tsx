@@ -54,7 +54,7 @@ export const StoreCard = ({ storesDetail }: StoreCardProps) => {
           <StoreInfo storesDetail={storesDetail} />
         </div>
       </button>
-      
+
       <div className={style.label}>
         <StatusLabel status={uiStatus}>{label}</StatusLabel>
       </div>
