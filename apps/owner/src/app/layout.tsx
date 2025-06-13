@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { LayoutContent } from "@/components/common/layout-content";
 import OrderAlertModal from "@/components/common/order-alert-modal";
-import OrderSseListener from "@/components/common/order-sse-listener";
+import OrderSseListenerWrapper from "@/components/common/order-sse-listener-wrapper";
 import { OwnerInfoProvider } from "@/providers/ownerInfo";
 
 if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "development") {
@@ -43,7 +43,7 @@ export default function RootLayout({
         <Providers>
           <OwnerInfoProvider />
           <OrderAlertModal />
-          <OrderSseListener />
+          <OrderSseListenerWrapper />
           <LayoutContent>{children}</LayoutContent>
         </Providers>
       </body>

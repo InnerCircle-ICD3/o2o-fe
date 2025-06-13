@@ -1,3 +1,5 @@
+"use client";
+
 import { useOrderModalStore } from "@/stores/orderModalStore";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import { useEffect } from "react";
@@ -14,8 +16,8 @@ export default function OrderSseListener() {
       try {
         const data = JSON.parse(event.data);
         openModal(data);
-      } catch {
-        // 파싱 에러 무시
+      } catch (err) {
+        console.error(err);
       }
     };
     eventSource.onerror = () => {
