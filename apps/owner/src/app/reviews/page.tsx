@@ -16,13 +16,17 @@ interface ReviewCardProps {
   onImageClick: (image: string) => void;
 }
 
+//TODO: 교체 필요
+const ownerId = 1;
+const ownerStoreId = 1;
+
 export default function page() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const result = await getReviews(1, 1);
+      const result = await getReviews(ownerId, ownerStoreId);
       if (result.success) {
         setReviews(result.data.contents);
       }
