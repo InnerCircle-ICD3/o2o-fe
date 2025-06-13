@@ -41,7 +41,13 @@ const Categories = () => {
     >
       <button type="button" className={style.button} onClick={onResetFoodType}>
         <span className={style.buttonInner}>
-          <Image src={"/images/all.png"} alt={""} fill className={style.buttonImage} />
+          <Image
+            src={"/images/all.png"}
+            alt={""}
+            fill
+            className={style.buttonImage}
+            sizes={"150px"}
+          />
         </span>
 
         <span className={style.buttonText}>전체</span>
@@ -59,6 +65,7 @@ const Categories = () => {
               alt={""}
               fill
               className={style.buttonImage}
+              sizes={"150px"}
             />
           </span>
 
@@ -68,7 +75,13 @@ const Categories = () => {
 
       <button type="button" className={style.button} onClick={() => router.push("/subscribes")}>
         <span className={style.buttonInner}>
-          <Image src={"/images/subscribe.png"} alt={""} fill className={style.buttonImage} />
+          <Image
+            src={"/images/subscribe.png"}
+            alt={""}
+            fill
+            className={style.buttonImage}
+            sizes={"150px"}
+          />
         </span>
 
         <span className={style.buttonText}>찜 목록</span>
@@ -87,6 +100,7 @@ const Categories = () => {
               alt={""}
               fill
               className={style.buttonImage}
+              sizes={"150px"}
             />
           </span>
 

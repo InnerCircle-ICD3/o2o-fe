@@ -28,7 +28,7 @@ const StoreListContainer = () => {
         ))
       ) : list.length === 0 ? (
         <ErrorUi
-          type={"subscribe"}
+          type={"home"}
           message={`이 근처에는 아직 등록된 가게가 없어요.
 우리, 좀 더 유명해져야 할 이유가 생겼네요.`}
           isButton={false}
