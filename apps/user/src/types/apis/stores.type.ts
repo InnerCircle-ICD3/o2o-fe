@@ -88,6 +88,7 @@ export interface StoreList {
   distanceKm: number;
   totalStockCount: number;
   open: boolean;
+  status: StoreStatus;
   stock: number;
   roadAddress: {
     addressName: string;
