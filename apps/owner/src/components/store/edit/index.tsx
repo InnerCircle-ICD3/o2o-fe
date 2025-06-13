@@ -1,6 +1,7 @@
 "use client";
 
 import { FormField } from "@/components/common/formField";
+import { ToastMessage } from "@/components/common/toastMessage";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { STORE_CATEGORIES, initialUpdateStoreFormData } from "@/constants/store";
@@ -11,7 +12,7 @@ import usePutOwnerStore from "@/hooks/api/usePutOwnerStore";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
 import { getDefaultStoreFormValues } from "@/utils/stores";
-import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "../register/businessHoursSection";
@@ -24,10 +25,15 @@ export default function StoreEdit() {
   const [isOpen, setIsOpen] = useState(true); // true: 영업중, false: 영업종료
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [toastMessage, setToastMessage] = useState("");
+  const [isToastVisible, setIsToastVisible] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const form = useForm<UpdateStoreRequest>({
     defaultValues: initialUpdateStoreFormData,
   });
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (storeData) {
@@ -64,11 +70,22 @@ export default function StoreEdit() {
         folderPath: "store",
       });
       if (!mainImageUrl) {
-        alert("이미지 업로드 실패");
+        showToast("이미지 업로드 실패", true);
         return;
       }
     }
-    updateStoreMutation.mutate({ ...data, mainImageUrl });
+    updateStoreMutation.mutate(
+      { ...data, mainImageUrl },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["ownerStore"] });
+          showToast("매장 정보가 수정되었습니다.");
+        },
+        onError: () => {
+          showToast("매장 정보 수정에 실패했습니다.", true);
+        },
+      },
+    );
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +102,31 @@ export default function StoreEdit() {
     }
   };
 
+  const showToast = (message: string, isError = false) => {
+    setIsToastVisible(false);
+    setTimeout(() => {
+      setToastMessage(message);
+      setIsError(isError);
+      setIsToastVisible(true);
+    }, 100);
+  };
+
+  const handleToastClose = () => {
+    setIsToastVisible(false);
+  };
+
+  const handleStatusChange = async (checked: boolean) => {
+    try {
+      await patchStoreStatusMutation.mutateAsync({
+        status: checked ? "OPEN" : "CLOSED",
+      });
+      setIsOpen(checked);
+      showToast(checked ? "영업이 시작되었습니다." : "영업이 종료되었습니다.");
+    } catch {
+      showToast("상태 변경에 실패했습니다.", true);
+    }
+  };
+
   if (!owner?.userId) return <div>유저 정보가 없습니다.</div>;
   if (isLoading) return <div>Loading...</div>;
 
@@ -97,10 +139,8 @@ export default function StoreEdit() {
           </span>
           <Switch
             checked={isOpen}
-            onCheckedChange={(checked: boolean) => {
-              setIsOpen(checked);
-              patchStoreStatusMutation.mutate({ status: checked ? "OPEN" : "CLOSED" });
-            }}
+            onCheckedChange={handleStatusChange}
+            disabled={patchStoreStatusMutation.isPending}
             aria-label="영업 상태 스위치"
           />
         </label>
@@ -192,28 +232,45 @@ export default function StoreEdit() {
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="cursor-pointer"
+              className="cursor-pointer border rounded px-3 py-2 w-full"
             />
-            {previewUrl && (
-              <>
-                <span className="text-sm text-gray-500">현재 등록된 이미지</span>
-                <div className="relative w-[200px] h-[200px] border rounded-lg overflow-hidden">
-                  <Image
-                    src={previewUrl}
-                    alt="매장 대표 이미지 미리보기"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </>
-            )}
+            <div
+              className="flex justify-center items-center border border-gray-300 rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
+              style={{ minHeight: 180 }}
+            >
+              {previewUrl ? (
+                <img
+                  src={previewUrl}
+                  alt="미리보기"
+                  className="object-contain w-full h-full"
+                  style={{ maxWidth: "100%", maxHeight: "100%" }}
+                />
+              ) : (
+                <span className="text-gray-400 text-sm">이미지 미리보기</span>
+              )}
+            </div>
+            {errors.mainImageUrl && <p className="text-sm text-red-500">{errors.mainImageUrl}</p>}
           </div>
 
-          <Button type="submit" className="w-full mt-4">
-            수정하기
+          <Button type="submit" className="w-full mt-4" disabled={updateStoreMutation.isPending}>
+            {updateStoreMutation.isPending ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>수정 중...</span>
+              </div>
+            ) : (
+              "수정하기"
+            )}
           </Button>
         </div>
       </form>
+
+      <ToastMessage
+        message={toastMessage}
+        isVisible={isToastVisible}
+        onClose={handleToastClose}
+        isError={isError}
+      />
     </section>
   );
 }

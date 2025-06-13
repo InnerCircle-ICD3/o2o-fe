@@ -91,7 +91,7 @@ export function FormField(props: FormFieldProps) {
           ) : (
             <Input id={name} aria-label={label} {...props} />
           )}
-          {rightElement}
+          {rightElement && <div className="flex items-center">{rightElement}</div>}
         </div>
       </div>
       {error && <p className="text-sm text-red-500 ml-[124px]">{error}</p>}
