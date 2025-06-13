@@ -1,27 +1,25 @@
+import type { CustomerAddress } from "@/apis/ssr/locations";
 import BottomSheet from "@/components/common/bottomSheet";
-import Button from "@/components/common/button";
+import { useFilterTab } from "@/stores/useFilterTab";
 import Image from "next/image";
-import { useState } from "react";
 import * as styles from "./mainHeader.css";
-
-type Location = "강남역" | string;
 
 interface LocationFilterProps {
   isOpen: boolean;
-  onChange: (location?: Location) => void;
+  addressList: CustomerAddress[];
   onClose: () => void;
 }
 
-export default function LocationFilter({ isOpen, onChange, onClose }: LocationFilterProps) {
-  const [tempSelectedLocation, setTempSelectedLocation] = useState<Location | undefined>();
+export default function LocationFilter({ isOpen, addressList, onClose }: LocationFilterProps) {
+  const { onLocationChange, onResetLocation } = useFilterTab();
 
-  const handleLocationClick = (location: Location) => {
-    setTempSelectedLocation(location);
-  };
+  const handleSelectLocation = (address: CustomerAddress) => {
+    const location = {
+      label: address.description,
+      coordinate: address.address.coordinate,
+    };
 
-  const handleSelectComplete = () => {
-    onChange(tempSelectedLocation);
-    onClose();
+    onLocationChange(location);
   };
 
   const handleAddLocation = () => {
@@ -36,27 +34,37 @@ export default function LocationFilter({ isOpen, onChange, onClose }: LocationFi
           <button
             className={styles.bottomSheetListItemButtonStyle}
             type="button"
-            onClick={() => handleLocationClick("강남역")}
-            aria-pressed={tempSelectedLocation === "강남역"}
+            onClick={onResetLocation}
           >
             <Image src="/icons/pin.svg" alt="store" width={30} height={30} />
-            <span>강남역</span>
+            <span>모든 지역</span>
           </button>
         </li>
-        <li className={styles.bottomSheetListItemStyle}>
-          <button
-            className={styles.bottomSheetListItemButtonStyle}
-            type="button"
-            onClick={handleAddLocation}
-          >
-            <Image src="/icons/add.svg" alt="store" width={30} height={30} />
-            <span>자주가는 장소 등록</span>
-          </button>
-        </li>
+        {addressList.map((address, idx) => (
+          <li className={styles.bottomSheetListItemStyle} key={`${address.address}-${idx}`}>
+            <button
+              className={styles.bottomSheetListItemButtonStyle}
+              type="button"
+              onClick={() => handleSelectLocation(address)}
+            >
+              <Image src="/icons/pin.svg" alt="store" width={30} height={30} />
+              <span>{address.description}</span>
+            </button>
+          </li>
+        ))}
+        {addressList.length < 2 && (
+          <li className={styles.bottomSheetListItemStyle}>
+            <button
+              className={styles.bottomSheetListItemButtonStyle}
+              type="button"
+              onClick={handleAddLocation}
+            >
+              <Image src="/icons/add.svg" alt="store" width={30} height={30} />
+              <span>장소 등록</span>
+            </button>
+          </li>
+        )}
       </ul>
-      <Button status="primary" style={{ marginTop: 20 }} onClick={handleSelectComplete}>
-        선택완료
-      </Button>
     </BottomSheet>
   );
 }

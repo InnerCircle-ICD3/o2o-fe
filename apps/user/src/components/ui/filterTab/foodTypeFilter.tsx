@@ -1,31 +1,25 @@
 import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
-import { useState } from "react";
+import { useFilterTab } from "@/stores/useFilterTab";
 import { foodTypeList } from "./constant";
 import * as styles from "./filterTab.css";
 import type { FoodType } from "./type";
 
 interface FoodTypeFilterProps {
   isOpen: boolean;
-  onChange: (foodType?: FoodType) => void;
   onClose: () => void;
 }
 
-export default function FoodTypeFilter({ isOpen, onChange, onClose }: FoodTypeFilterProps) {
-  const [tempSelectedFoodType, setTempSelectedFoodType] = useState<string>();
+export default function FoodTypeFilter({ isOpen, onClose }: FoodTypeFilterProps) {
+  const { selectedFoodType, onSelectedFoodType, onResetFoodType } = useFilterTab();
 
-  const handleTempFoodTypeClick = (foodType: string) => {
-    setTempSelectedFoodType(foodType);
-  };
-
-  const handleFoodTypeClick = () => {
-    onChange(tempSelectedFoodType as FoodType);
+  const handleSubmitFoodType = (food: FoodType) => {
+    onSelectedFoodType(food);
     onClose();
   };
 
-  const handleResetClick = () => {
-    onChange(undefined);
-    setTempSelectedFoodType(undefined);
+  const handleResetFoodType = () => {
+    onResetFoodType();
   };
 
   return (
@@ -34,30 +28,26 @@ export default function FoodTypeFilter({ isOpen, onChange, onClose }: FoodTypeFi
         {foodTypeList.map((item) => (
           <li
             className={
-              tempSelectedFoodType === item
+              selectedFoodType === item.value
                 ? styles.filterListItemSelected
                 : styles.filterListItemHover
             }
-            key={item}
+            key={item.value}
           >
             <button
-              aria-selected={tempSelectedFoodType === item}
-              aria-label={`${item} 선택`}
+              aria-label={`${item.label} 선택`}
               className={styles.filterListItemButtonStyle}
               type="button"
-              onClick={() => handleTempFoodTypeClick(item)}
+              onClick={() => handleSubmitFoodType(item.value)}
             >
-              <span>{item}</span>
+              <span>{item.label}</span>
             </button>
           </li>
         ))}
       </ul>
       <div className={styles.filterButtonContainer}>
-        <Button status="common" onClick={handleResetClick}>
+        <Button status="common" onClick={handleResetFoodType}>
           초기화
-        </Button>
-        <Button status="primary" onClick={handleFoodTypeClick}>
-          선택완료
         </Button>
       </div>
     </BottomSheet>

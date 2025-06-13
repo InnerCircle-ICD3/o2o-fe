@@ -1,3 +1,4 @@
+import type { StoreStatus } from "@/types/apis/stores.type";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { StoreCard } from ".";
@@ -16,8 +17,10 @@ describe("StoreCard Test", () => {
     storeId: 1,
     storeName: "테스트 매장",
     storeImage: "/test.png",
-    category: ["김밥", "주먹밥", "가정식"],
+    foodCategory: ["김밥", "주먹밥", "가정식"],
     distanceKm: 1,
+    totalStockCount: 10,
+    status: "OPEN" as StoreStatus,
     open: true,
     stock: 10,
     roadAddress: {
@@ -39,8 +42,8 @@ describe("StoreCard Test", () => {
       openTime: "09:00",
       closeTime: "21:00",
     },
-    reviewCount: 257,
-    reviewScore: 4.7,
+    ratingCount: 257,
+    ratingAverage: 4.7,
     isFavorite: false,
   };
 
