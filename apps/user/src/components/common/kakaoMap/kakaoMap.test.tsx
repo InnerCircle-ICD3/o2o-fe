@@ -10,9 +10,7 @@ const mockMapInstance = {
 };
 
 const mockKakaoMaps = {
-  // biome-ignore lint/style/useNamingConvention: false
   Map: vi.fn().mockReturnValue(mockMapInstance),
-  // biome-ignore lint/style/useNamingConvention: false
   LatLng: vi.fn(),
   event: {
     addListener: vi.fn(),

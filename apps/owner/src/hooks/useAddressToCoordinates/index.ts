@@ -28,7 +28,6 @@ export const useAddressToCoordinates = ({ address, onSuccess }: Options) => {
           `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`,
           {
             headers: {
-              // biome-ignore lint/style/useNamingConvention: false
               Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
             },
           },

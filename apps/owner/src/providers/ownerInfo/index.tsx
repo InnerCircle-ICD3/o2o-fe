@@ -8,13 +8,6 @@ export function OwnerInfoProvider() {
   const clearOwner = useOwnerStore((state) => state.clearOwner);
 
   useEffect(() => {
-    const token = document.cookie.split("; ").find((row) => row.startsWith("access_token="));
-
-    if (!token) {
-      clearOwner();
-      return;
-    }
-
     fetch("/api/me", { credentials: "include" })
       .then((res) => res.json())
       .then((res) => {
