@@ -15,14 +15,17 @@ interface SubscribeItemProps {
 const SubscribeItem = (props: SubscribeItemProps) => {
   const { subscribe } = props;
 
-  const { status, label } = generateProductStatus(subscribe.totalStockCount);
+  const { uiStatus, label } = generateProductStatus(subscribe.status, {
+    quantity: subscribe.totalStockCount,
+    stock: subscribe.totalStockCount,
+  });
 
   return (
     <div className={style.container}>
       <Link href={`/stores/${subscribe.storeId}`} className={style.wrapper}>
         <div className={style.titleBox}>
           <h3 className={style.title}>{subscribe.storeName}</h3>
-          <StatusLabel status={status}>{label}</StatusLabel>
+          <StatusLabel status={uiStatus}>{label}</StatusLabel>
         </div>
 
         <div className={style.infoBox}>

@@ -2,13 +2,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { WEEKDAYS, WEEKDAY_MAP, type WeekdayEng } from "@/constants/store";
 import { useBusinessHours } from "@/hooks/useBusinessHours";
-import type { StoreFormData } from "@/types/store";
 import type { useForm } from "use-form-light";
 
-export function BusinessHoursSection({
+interface WithBusinessHours {
+  businessHours?: {
+    dayOfWeek: string;
+    openTime: string;
+    closeTime: string;
+  }[];
+}
+
+export function BusinessHoursSection<T extends WithBusinessHours>({
   form,
 }: {
-  form: ReturnType<typeof useForm<StoreFormData>>;
+  form: ReturnType<typeof useForm<T>>;
 }) {
   const { selectedDays, businessHours, toggleDay, handleBusinessHoursChange, applyToAllDays } =
     useBusinessHours(form);
@@ -35,9 +42,9 @@ export function BusinessHoursSection({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       <div className="space-y-6">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap w-full">
           {WEEKDAYS.map((day) => {
             const dayKey = WEEKDAY_MAP[day];
             return (
@@ -46,6 +53,7 @@ export function BusinessHoursSection({
                 type="button"
                 variant={selectedDays.includes(dayKey) ? "default" : "outline"}
                 onClick={() => toggleDay(dayKey)}
+                className="flex-1 min-w-0"
               >
                 {day}
               </Button>
@@ -55,7 +63,7 @@ export function BusinessHoursSection({
 
         <div className="space-y-3">
           {/* 전체 일괄 적용 */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-4 justify-between">
             <span className="w-16">전체</span>
             <Input
               type="time"
@@ -79,7 +87,7 @@ export function BusinessHoursSection({
             const dayKey = WEEKDAY_MAP[day];
             const isSelected = selectedDays.includes(dayKey);
             return (
-              <div key={day} className="flex items-center gap-2">
+              <div key={day} className="flex items-center gap-2 justify-between">
                 <span className="w-16">{day}요일</span>
                 <Input
                   type="time"

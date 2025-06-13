@@ -1,4 +1,4 @@
-import type { StoreFormData } from "@/types/store";
+import type { CreateStoreRequest } from "@/types/store";
 import { fireEvent, render, screen } from "@testing-library/react";
 import type { useForm } from "use-form-light";
 import { describe, expect, it, vi } from "vitest";
@@ -43,7 +43,7 @@ describe("BusinessHoursSection", () => {
     validate: vi.fn(),
     handleSubmit: vi.fn(),
     register: vi.fn(),
-  } as unknown as ReturnType<typeof useForm<StoreFormData>>;
+  } as unknown as ReturnType<typeof useForm<CreateStoreRequest>>;
 
   it("요일 버튼이 렌더링되어야 합니다", () => {
     render(<BusinessHoursSection form={mockForm} />);

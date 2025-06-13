@@ -1,3 +1,4 @@
+import type { StoreStatus } from "@/types/apis/stores.type";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { StoreCard } from ".";
@@ -19,6 +20,7 @@ describe("StoreCard Test", () => {
     foodCategory: ["김밥", "주먹밥", "가정식"],
     distanceKm: 1,
     totalStockCount: 10,
+    status: "OPEN" as StoreStatus,
     open: true,
     stock: 10,
     roadAddress: {

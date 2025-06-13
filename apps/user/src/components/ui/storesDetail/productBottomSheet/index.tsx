@@ -28,9 +28,11 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
   const handleSubmit = () => {
     const orderBody = {
       storeId: storesProducts[0].storeId,
-      products: selectedProducts.map((product) => ({
+      orderItems: selectedProducts.map((product) => ({
         productId: product.id,
-        selectedCount: product.selectedCount,
+        productName: product.name,
+        price: product.price.finalPrice,
+        quantity: product.selectedCount,
       })),
     };
 

@@ -29,7 +29,6 @@ vi.mock("./ui/searchResult", () => ({
 vi.mock("@/providers/search", () => {
   const MockSearchProvider = ({ children }: { children: ReactNode }) => <>{children}</>;
   return {
-    // biome-ignore lint/style/useNamingConvention: <explanation>
     SearchProvider: MockSearchProvider,
   };
 });

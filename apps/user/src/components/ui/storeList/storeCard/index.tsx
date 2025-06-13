@@ -14,7 +14,11 @@ interface StoreCardProps {
 
 export const StoreCard = ({ storesDetail }: StoreCardProps) => {
   const router = useRouter();
-  const { status, label } = generateProductStatus(storesDetail.totalStockCount);
+  const { uiStatus, label } = generateProductStatus(storesDetail.status, {
+    quantity: storesDetail.totalStockCount,
+    stock: storesDetail.totalStockCount,
+  });
+
   const handleClick = () => {
     router.push(`/stores/${storesDetail.storeId}`);
   };
@@ -41,7 +45,7 @@ export const StoreCard = ({ storesDetail }: StoreCardProps) => {
       </div>
 
       <div className={style.label}>
-        <StatusLabel status={status}>{label}</StatusLabel>
+        <StatusLabel status={uiStatus}>{label}</StatusLabel>
       </div>
     </div>
   );
