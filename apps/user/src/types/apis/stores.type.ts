@@ -123,3 +123,8 @@ export interface StoreProductsResponse {
   storeName: string;
   products: Product[];
 }
+
+export interface StoreProductsResponse {
+  storeName: string;
+  products: Product[];
+}
