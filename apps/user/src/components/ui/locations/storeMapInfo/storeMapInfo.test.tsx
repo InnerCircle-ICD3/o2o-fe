@@ -24,7 +24,7 @@ describe("StoreInfoCard", () => {
     maxPrice: 20000,
     ratingAverage: 4.5,
     ratingCount: 100,
-    status: "판매중",
+    status: "OPEN",
   };
 
   beforeEach(() => {
@@ -51,13 +51,10 @@ describe("StoreInfoCard", () => {
     expect(screen.getByText("4.5")).toBeInTheDocument();
     expect(screen.getByText("(100)")).toBeInTheDocument();
 
-    // statusBadge와 salePrice를 구분하여 테스트
-    const statusBadge = screen.getByText("판매중", {
-      selector: ".storeMapInfo_statusBadge__hs6taa2",
-    });
-    const salePrice = screen.getByText("판매중", { selector: ".storeMapInfo_salePrice__hs6taaa" });
-    expect(statusBadge).toBeInTheDocument();
-    expect(salePrice).toBeInTheDocument();
+    // statusBadge 확인
+    const statusBadge = screen.getByText("영업중");
+    expect(statusBadge).toHaveClass("storeMapInfo_statusBadge__hs6taa2");
+    expect(statusBadge).toHaveClass("storeMapInfo_openStatus__hs6taa3");
   });
 
   it("썸네일이 없을 경우 기본 이미지가 표시되어야 합니다", async () => {
