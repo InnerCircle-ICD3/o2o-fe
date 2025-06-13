@@ -2,18 +2,17 @@
 
 import ROUTE from "@/constants/route";
 import Image from "next/image";
-import { useRouter, useSelectedLayoutSegment } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import * as style from "./topNav.css";
 
 const TopNav = (props: PropsWithChildren) => {
   const { children } = props;
-  const segment = useSelectedLayoutSegment();
   const router = useRouter();
+  const pathname = usePathname();
 
-  const route = Object.values(ROUTE.topNav).find((item) => {
-    return item.path.includes(segment ?? "");
-  });
+  const sortedNav = Object.values(ROUTE.topNav).sort((a, b) => b.path.length - a.path.length);
+  const route = sortedNav.find((item) => pathname.startsWith(item.path));
 
   if (!route) {
     throw new Error("Route not found");

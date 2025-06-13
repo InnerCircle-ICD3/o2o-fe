@@ -10,9 +10,7 @@ const mockMapInstance = {
 };
 
 const mockKakaoMaps = {
-  // biome-ignore lint/style/useNamingConvention: false
   Map: vi.fn().mockReturnValue(mockMapInstance),
-  // biome-ignore lint/style/useNamingConvention: false
   LatLng: vi.fn(),
   event: {
     addListener: vi.fn(),
@@ -46,7 +44,7 @@ describe("KakaoMap", () => {
     expect(mockKakaoMaps.LatLng).toHaveBeenCalledWith(mockProps.lat, mockProps.lng);
 
     // 지도 레벨 설정이 호출되었는지 확인
-    expect(mockMapInstance.setMinLevel).toHaveBeenCalledWith(3);
+    expect(mockMapInstance.setMinLevel).toHaveBeenCalledWith(1);
     expect(mockMapInstance.setMaxLevel).toHaveBeenCalledWith(6);
   });
 

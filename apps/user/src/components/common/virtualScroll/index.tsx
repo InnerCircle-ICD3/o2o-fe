@@ -3,9 +3,17 @@
 import type { HeightSpec, VirtualItemProps } from "@/types/virtualScroll.type";
 import { renderVirtualContent } from "@/utils/virtualScroll";
 import classNames from "classnames";
-import { Children, useEffect, useRef, useState } from "react";
+import { Children, createContext, useEffect, useRef, useState } from "react";
 import type { PropsWithChildren, ReactElement } from "react";
 import * as style from "./virtualScroll.css";
+
+interface VirtualScrollContextType {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}
+
+export const VirtualScrollContext = createContext<VirtualScrollContextType>({
+  containerRef: { current: null },
+});
 
 interface VirtualScrollProps extends PropsWithChildren {
   overscan?: number;
@@ -15,7 +23,6 @@ interface VirtualScrollProps extends PropsWithChildren {
 
 const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: VirtualScrollProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerSize, setContainerSize] = useState({
     width: 0,
@@ -55,34 +62,34 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
   }, []);
 
   useEffect(() => {
-    if (!observerRef.current) return;
+    const el = containerRef.current;
+    if (!el) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting && onScrollEnd) {
-            onScrollEnd();
-          }
-        }
-      },
-      { threshold: 1.0 },
-    );
+    const onScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
 
-    observer.observe(observerRef.current);
+      setScrollTop(scrollTop);
 
-    return () => observer.disconnect();
+      // 스크롤이 바닥에 도달한 경우
+      if (onScrollEnd && scrollTop + clientHeight >= scrollHeight - 1) {
+        onScrollEnd();
+      }
+    };
+
+    el.addEventListener("scroll", onScroll);
+    return () => el.removeEventListener("scroll", onScroll);
   }, [onScrollEnd]);
 
   return (
-    <div ref={containerRef} className={containerStyle}>
-      <div style={{ height: totalHeight }}>
-        {containerSize.height !== 0 && containerSize.width !== 0 && (
-          <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
-        )}
+    <VirtualScrollContext.Provider value={{ containerRef }}>
+      <div ref={containerRef} className={containerStyle}>
+        <div style={{ height: totalHeight }}>
+          {containerSize.height !== 0 && containerSize.width !== 0 && (
+            <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
+          )}
+        </div>
       </div>
-
-      {onScrollEnd && <div ref={observerRef} />}
-    </div>
+    </VirtualScrollContext.Provider>
   );
 };
 

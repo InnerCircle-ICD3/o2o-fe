@@ -27,10 +27,10 @@ interface Address {
 }
 
 // 픽업 가능일을 나타내는 리터럴 타입
-type PickupDay = "TODAY" | "TOMORROW" | "YESTERDAY";
+type PickupDay = "TODAY" | "TOMORROW";
 
 // 가게 상태를 나타내는 리터럴 타입
-type StoreStatus = "OPEN" | "CLOSED";
+export type StoreStatus = "OPEN" | "CLOSED";
 
 export interface StoresDetail {
   id: number;
@@ -62,6 +62,9 @@ export interface Price {
   finalPrice: number;
 }
 
+type ProductSize = "S" | "M" | "L";
+export type ProductStatus = "ACTIVE" | "INACTIVE" | "SOLD_OUT";
+
 export interface Product {
   id: string;
   createdAt: string;
@@ -73,17 +76,19 @@ export interface Product {
   storeName: string;
   name: string;
   price: Price;
-  size: "S" | "M" | "L";
-  status: string;
+  size: ProductSize;
+  status: ProductStatus;
 }
 
 export interface StoreList {
   storeId: number;
   storeName: string;
   storeImage: string;
-  category: string[];
+  foodCategory: string[];
   distanceKm: number;
+  totalStockCount: number;
   open: boolean;
+  status: StoreStatus;
   stock: number;
   roadAddress: {
     addressName: string;
@@ -104,14 +109,19 @@ export interface StoreList {
     openTime: string;
     closeTime: string;
   };
-  reviewCount: number;
-  reviewScore: number;
+  ratingAverage: number;
+  ratingCount: number;
   isFavorite: boolean;
 }
 
 export interface StoreListResponse {
-  pageNumber?: number;
-  storeList: StoreList[];
+  lastId: string;
+  contents: StoreList[];
+}
+
+export interface StoreProductsResponse {
+  storeName: string;
+  products: Product[];
 }
 
 export interface StoreProductsResponse {

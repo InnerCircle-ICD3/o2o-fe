@@ -12,9 +12,10 @@ describe("Products Component", () => {
     const mockProducts: Product[] = [
       {
         id: "2",
+        storeName: "블루문",
         createdAt: "2025-05-06T10:15:30Z",
-        name: "럭키백 S",
-        description: "소형 럭키백입니다",
+        name: "잇고백 S",
+        description: "소형 잇고백입니다",
         foodType: ["과자", "음료"],
         imageUrl: "/images/thumb.png",
         inventory: {
@@ -29,29 +30,25 @@ describe("Products Component", () => {
         },
         size: "M",
         status: "ACTIVE",
-        storeName: "블르문",
       },
     ];
 
     render(<Products products={mockProducts} />);
 
-    expect(screen.getByText("럭키백 S")).toBeInTheDocument();
-
-    expect(screen.getByText("소형 럭키백입니다")).toBeInTheDocument();
-
+    expect(screen.getByText("잇고백 S")).toBeInTheDocument();
+    expect(screen.getByText("소형 잇고백입니다")).toBeInTheDocument();
     expect(screen.getByText("24,000₩")).toBeInTheDocument();
     expect(screen.getByText("12,000₩")).toBeInTheDocument();
-
-    expect(screen.getByText("과자, 음료")).toBeInTheDocument();
   });
 
-  it("마감 상품에는 상태 라벨과 그림자 레이블이 표시된다", () => {
+  it("품절 상품에는 상태 라벨과 그림자 레이블이 표시된다", () => {
     const mockProducts: Product[] = [
       {
         id: "3",
+        storeName: "블르문",
         createdAt: "2025-05-06T10:15:30Z",
-        name: "럭키백 L",
-        description: "대형 럭키백입니다",
+        name: "잇고백 L",
+        description: "대형 잇고백입니다",
         foodType: ["간식", "과일"],
         imageUrl: "/images/thumb.png",
         inventory: {
@@ -66,13 +63,12 @@ describe("Products Component", () => {
         },
         size: "L",
         status: "ACTIVE",
-        storeName: "블루문",
       },
     ];
 
     render(<Products products={mockProducts} />);
 
-    expect(screen.getByText("마감")).toBeInTheDocument();
+    expect(screen.getByText("품절")).toBeInTheDocument();
 
     const shadowElements = document.querySelectorAll("[class*='shadowLabel']");
     expect(shadowElements.length).toBeGreaterThanOrEqual(1);

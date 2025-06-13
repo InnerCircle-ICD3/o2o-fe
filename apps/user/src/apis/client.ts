@@ -7,6 +7,7 @@ const api = ky.create({
   headers: {
     "Content-Type": "application/json",
   },
+  credentials: "include",
 });
 
 // API 함수들
@@ -15,7 +16,7 @@ export const apiClient = {
     return toResult<T>(() => api.get(url, options).json());
   },
 
-  post: async <T>(url: string, data: unknown, options = {}) => {
+  post: async <T>(url: string, data?: unknown, options = {}) => {
     return toResult<T>(() => api.post(url, { json: data, ...options }).json());
   },
 
@@ -25,5 +26,9 @@ export const apiClient = {
 
   delete: async <T>(url: string, options = {}) => {
     return toResult<T>(() => api.delete(url, options).json());
+  },
+
+  patch: async <T>(url: string, data: unknown, options = {}) => {
+    return toResult<T>(() => api.patch(url, { json: data, ...options }).json());
   },
 };

@@ -1,10 +1,11 @@
-import type { Product } from "@/types/apis/stores.type";
+import type { Product, ProductStatus } from "@/types/apis/stores.type";
 import { act, renderHook } from "@testing-library/react";
 import { it } from "vitest";
 import useSelectedProducts from "../useSelectedProducts";
 
 const mockProduct: Product = {
   id: "1",
+  storeName: "블루문",
   name: "샌드위치",
   imageUrl: "",
   description: "",
@@ -16,9 +17,8 @@ const mockProduct: Product = {
     finalPrice: 5000,
   },
   size: "S",
-  status: "OPEN",
+  status: "ACTIVE" as ProductStatus,
   storeId: "1",
-  storeName: "블루문",
   createdAt: "",
 };
 

@@ -12,7 +12,7 @@ const mockProducts: Product[] = [
   {
     id: "1L",
     createdAt: "2025-05-06T10:15:30Z",
-    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 럭키백입니다.",
+    description: "신선한 제철 과일 및 계절 채소로 구성된 특별 잇고백입니다.",
     foodType: ["크림빵", "야채빵"],
     imageUrl: "https://example.com/images/luckybags/1L.jpg",
     inventory: {
@@ -21,7 +21,7 @@ const mockProducts: Product[] = [
     },
     storeId: "1L",
     storeName: "상점1",
-    name: "오늘의 서프라이즈 럭키백",
+    name: "오늘의 서프라이즈 잇고백",
     price: {
       originalPrice: 20000,
       discountRate: 0.5,
@@ -57,18 +57,25 @@ describe("ProductBottomSheet Test", () => {
       </>,
     );
 
-    // 럭키백 선택 드롭다운 열기
-    fireEvent.click(screen.getByRole("button", { name: "럭키백을 선택해주세요 dropdown" }));
+    // 잇고백 선택 드롭다운 열기
+    fireEvent.click(screen.getByRole("button", { name: "잇고백을 선택해주세요 dropdown" }));
 
     // 실제 상품명으로 선택
-    fireEvent.click(screen.getByText("오늘의 서프라이즈 럭키백"));
+    fireEvent.click(screen.getByText("오늘의 서프라이즈 잇고백"));
 
     const orderButton = screen.getByRole("button", { name: "주문하기" });
     fireEvent.click(orderButton);
 
     expect(mockSubmit).toHaveBeenCalledWith({
       storeId: "1L",
-      products: [{ productId: "1L", selectedCount: 1 }],
+      orderItems: [
+        {
+          productId: "1L",
+          productName: "오늘의 서프라이즈 잇고백",
+          price: 10000,
+          quantity: 1,
+        },
+      ],
     });
   });
 });

@@ -1,49 +1,62 @@
 "use client";
 
+import StatusLabel from "@/components/common/statusLabel";
 import StoreInfo from "@/components/common/storeInfo";
+import Subscribe from "@/components/common/subscribe";
+import { userInfoStore } from "@/stores/userInfoStore";
 import type { StoreList } from "@/types/apis/stores.type";
+import generateProductStatus from "@/utils/productStatus";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import * as styles from "./storeCard.css";
+import * as style from "./storeCard.css";
 
 interface StoreCardProps {
   storesDetail: StoreList;
 }
 
-export const StoreCard: React.FC<StoreCardProps> = ({ storesDetail }: StoreCardProps) => {
+export const StoreCard = ({ storesDetail }: StoreCardProps) => {
   const router = useRouter();
 
-  const { storeId, storeImage, storeName } = storesDetail;
+  const { user } = userInfoStore();
+  const isLogin = !!user;
+
+  const { uiStatus, label } = generateProductStatus(storesDetail.status, {
+    quantity: storesDetail.totalStockCount,
+    stock: storesDetail.totalStockCount,
+  });
 
   const handleClick = () => {
-    router.push(`/stores/${storeId}`);
+    router.push(`/stores/${storesDetail.storeId}`);
   };
+
   return (
-    <div
-      className={styles.card}
-      onClick={handleClick}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          router.push(`/stores/${storeId}`);
-        }
-      }}
-    >
-      <Image
-        src={storeImage}
-        alt={storeName}
-        className={styles.image}
-        width={240}
-        height={140}
-        priority={false}
-      />
-      <div className={styles.priceSectionWrapper}>
-        <div className={styles.content}>
+    <div className={style.card}>
+      {isLogin && (
+        <div className={style.subscribeButton}>
+          <Subscribe
+            isFavorite={storesDetail.isFavorite}
+            storeId={storesDetail.storeId}
+            customerId={user.customerId}
+          />
+        </div>
+      )}
+
+      <button type={"button"} onClick={handleClick}>
+        <Image
+          src={storesDetail.storeImage || "/images/thumb.png"}
+          alt={""}
+          className={style.image}
+          width={240}
+          height={140}
+          priority={false}
+        />
+        <div className={style.priceSectionWrapper}>
           <StoreInfo storesDetail={storesDetail} />
         </div>
-        <div className={styles.priceRightSection}>
-          <p className={styles.originalPriceText}>10,000₩</p>
-          <p className={styles.salePriceText}>5,000₩</p>
-        </div>
+      </button>
+
+      <div className={style.label}>
+        <StatusLabel status={uiStatus}>{label}</StatusLabel>
       </div>
     </div>
   );

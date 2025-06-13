@@ -23,6 +23,14 @@ export const globalTheme = createThemeContract({
     },
 
     label: {
+      open: {
+        background: null,
+        color: null,
+      },
+      close: {
+        background: null,
+        color: null,
+      },
       sales: {
         background: null,
         color: null,
@@ -43,7 +51,7 @@ export const globalTheme = createThemeContract({
         background: null,
         color: null,
       },
-      cancelled: {
+      canceled: {
         background: null,
         color: null,
       },
@@ -72,6 +80,14 @@ export const theme = createGlobalTheme(":root", globalTheme, {
       primary: "#284835",
     },
     label: {
+      open: {
+        background: "#D8F4E4",
+        color: "#35A865",
+      },
+      close: {
+        background: "#393A40",
+        color: "#FFFFFF",
+      },
       sales: {
         background: "#D8F4E4",
         color: "#35A865",
@@ -92,7 +108,7 @@ export const theme = createGlobalTheme(":root", globalTheme, {
         background: "#D8F4E4",
         color: "#35A865",
       },
-      cancelled: {
+      canceled: {
         background: "#F3F3F3",
         color: "#666666",
       },

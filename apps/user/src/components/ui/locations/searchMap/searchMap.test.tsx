@@ -1,8 +1,8 @@
 import { getStoresByCenter } from "@/apis/ssr/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import type { MapStore } from "@/types/searchMap.type";
-import { calculateMovedDistance } from "@/utils/locations/locationUtils";
+import type { MapStore } from "@/types/locations.type";
+import { calculateMovedDistance } from "@/utils/locations";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { type Mock, vi } from "vitest";
 import SearchMap from "../../../../app/(bottomNav)/locations/search/page";
@@ -10,36 +10,27 @@ import SearchMap from "../../../../app/(bottomNav)/locations/search/page";
 // kakao 객체 mock
 globalThis.kakao = {
   maps: {
-    // biome-ignore lint/style/useNamingConvention: false
     Marker: vi.fn().mockImplementation((options) => ({
       ...options,
       setMap: vi.fn(),
       setImage: vi.fn(),
     })),
-    // biome-ignore lint/style/useNamingConvention: false
     MarkerImage: vi.fn(),
-    // biome-ignore lint/style/useNamingConvention: false
     Size: vi.fn(),
     event: {
       addListener: vi.fn(),
     },
     load: vi.fn(),
-    // biome-ignore lint/style/useNamingConvention: false
     Map: vi.fn(),
-    // biome-ignore lint/style/useNamingConvention: false
     Circle: vi.fn(),
-    // biome-ignore lint/style/useNamingConvention: false
     InfoWindow: vi.fn(),
-    // biome-ignore lint/style/useNamingConvention: false
     Polygon: vi.fn().mockImplementation(() => ({
       setMap: vi.fn(),
     })),
-    // biome-ignore lint/style/useNamingConvention: false
     LatLng: vi.fn().mockImplementation((lat, lng) => ({
       getLat: () => lat,
       getLng: () => lng,
     })),
-    // biome-ignore lint/style/useNamingConvention: false
     LatLngBounds: vi.fn().mockImplementation(() => {
       const points: { lat: number; lng: number }[] = [];
       return {
@@ -47,13 +38,11 @@ globalThis.kakao = {
         getBounds: vi.fn(() => points),
       };
     }),
-    // biome-ignore lint/style/useNamingConvention: false
     MarkerClusterer: vi.fn().mockImplementation(() => ({
       addMarkers: vi.fn(),
       clear: vi.fn(),
     })),
     services: {
-      // biome-ignore lint/style/useNamingConvention: false
       Geocoder: vi.fn().mockImplementation(() => ({
         coord2RegionCode: vi.fn((lng, lat, callback) => {
           if (lng === 126.570677 && lat === 33.450705) {
@@ -82,7 +71,6 @@ vi.mock("@/hooks/useKakaoLoader");
 vi.mock("@/apis/ssr/locations");
 
 vi.mock("@/components/common/kakaoMap", () => ({
-  // biome-ignore lint/style/useNamingConvention: false
   KakaoMap: ({
     lat,
     lng,
@@ -117,23 +105,20 @@ vi.mock("@/components/common/kakaoMap", () => ({
   },
 }));
 
-vi.mock("@/utils/locations/locationUtils", async () => {
-  return {
-    fetchStoresByCenter: vi.fn().mockResolvedValue([]),
-    calculateMovedDistance: vi.fn(),
-    createStoreMarker: vi.fn().mockImplementation((store, onMarkerClick) => {
-      const marker = {
-        setMap: vi.fn(),
-        setImage: vi.fn(),
-      };
-      kakao.maps.event.addListener(marker, "click", () => {
-        onMarkerClick(store);
-      });
-      return marker;
-    }),
-    createUserMarker: vi.fn(),
-  };
-});
+vi.mock("@/utils/locations", () => ({
+  calculateMovedDistance: vi.fn(),
+  createStoreMarker: vi.fn().mockImplementation((store, onMarkerClick) => {
+    const marker = {
+      setMap: vi.fn(),
+      setImage: vi.fn(),
+    };
+    kakao.maps.event.addListener(marker, "click", () => {
+      onMarkerClick(store);
+    });
+    return marker;
+  }),
+  createUserMarker: vi.fn(),
+}));
 
 describe("SearchMap", () => {
   const mockLocation = { lat: 37.123456, lng: 127.123456 };
