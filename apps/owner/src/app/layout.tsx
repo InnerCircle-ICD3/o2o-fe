@@ -5,6 +5,8 @@ import "./globals.css";
 import { LayoutContent } from "@/components/common/layout-content";
 import OrderAlertModal from "@/components/common/order-alert-modal";
 import OrderSseListenerWrapper from "@/components/common/order-sse-listener-wrapper";
+import SseStatusIndicator from "@/components/common/sse-status-indicator";
+import SseTestPanel from "@/components/common/sse-test-panel";
 import { OwnerInfoProvider } from "@/providers/ownerInfo";
 
 if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "development") {
@@ -39,11 +41,12 @@ export default function RootLayout({
         <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {" "}
         <Providers>
           <OwnerInfoProvider />
           <OrderAlertModal />
           <OrderSseListenerWrapper />
+          <SseStatusIndicator />
+          {process.env.NODE_ENV === "development" && <SseTestPanel />}
           <LayoutContent>{children}</LayoutContent>
         </Providers>
       </body>
