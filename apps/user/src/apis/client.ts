@@ -15,7 +15,7 @@ export const apiClient = {
     return toResult<T>(() => api.get(url, options).json());
   },
 
-  post: async <T>(url: string, data: unknown, options = {}) => {
+  post: async <T>(url: string, data?: unknown, options = {}) => {
     return toResult<T>(() => api.post(url, { json: data, ...options }).json());
   },
 

@@ -1,6 +1,7 @@
 import StatusLabel from "@/components/common/statusLabel";
+import Subscribe from "@/components/common/subscribe";
+import { userInfoStore } from "@/stores/userInfoStore";
 import * as globalStyle from "@/styles/global.css";
-import type { StoreStatus } from "@/types/apis/stores.type";
 import type { SubscribeDetail } from "@/types/apis/subscribe.type";
 import { formatCurrency } from "@/utils/format";
 import generateProductStatus from "@/utils/productStatus";
@@ -15,14 +16,19 @@ interface SubscribeItemProps {
 
 const SubscribeItem = (props: SubscribeItemProps) => {
   const { subscribe } = props;
+  const { user } = userInfoStore();
+  const isLogin = !!user;
 
-  const { uiStatus, label } = generateProductStatus<StoreStatus>(subscribe.status, {
+  const { uiStatus, label } = generateProductStatus(subscribe.status, {
     quantity: subscribe.totalStockCount,
     stock: subscribe.totalStockCount,
   });
 
   return (
     <div className={style.container}>
+      {isLogin && (
+        <Subscribe isFavorite={true} storeId={subscribe.storeId} customerId={user.customerId} />
+      )}
       <Link href={`/stores/${subscribe.storeId}`} className={style.wrapper}>
         <div className={style.titleBox}>
           <h3 className={style.title}>{subscribe.storeName}</h3>

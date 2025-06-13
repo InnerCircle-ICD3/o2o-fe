@@ -1,13 +1,15 @@
 "use client";
 
+import { useFilterTab } from "@/stores/useFilterTab";
 import { padTwoDigits } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import { type ReactNode, useState } from "react";
+import { foodTypeList } from "./constant";
 import * as styles from "./filterTab.css";
 import FoodTypeFilter from "./foodTypeFilter";
 import PickUpTimeFilter from "./pickUpTimeFilter";
-import type { FoodType, PickupTime, TabKey } from "./type";
+import type { TabKey } from "./type";
 
 interface FilterTabButtonProps {
   tabKey: TabKey;
@@ -32,40 +34,24 @@ const FilterTabButton = ({ tabKey, isActive, onClick, children }: FilterTabButto
 };
 
 export default function FilterTab() {
+  const { reservable, selectedFoodType, selectedPickupTime, onToggleReservable } = useFilterTab();
   const [activeTab, setActiveTab] = useState<TabKey>("reservation");
-  const [selectedFoodType, setSelectedFoodType] = useState<FoodType | undefined>(undefined);
-  const [selectedPickupTime, setSelectedPickupTime] = useState<PickupTime | undefined>(undefined);
 
   const handleTabClick = (tab: TabKey) => {
     setActiveTab(tab);
   };
 
-  const handleFoodTypeChange = (foodType?: FoodType) => {
-    setSelectedFoodType(foodType);
-  };
-
-  const handlePickupTimeChange = (time?: PickupTime) => {
-    setSelectedPickupTime(time);
-  };
-
   const renderTabContent = (tabKey: TabKey) => {
     switch (tabKey) {
-      case "reservation":
-        return (
-          <span
-            className={styles.textStyle({ type: "tab", parentActive: activeTab === "reservation" })}
-          >
-            예약가능만
-          </span>
-        );
-
       case "foodType":
         return (
           <>
             <span
               className={styles.textStyle({ type: "tab", parentActive: activeTab === "foodType" })}
             >
-              {selectedFoodType ? selectedFoodType : "음식 종류"}
+              {foodTypeList.find(
+                (f: { label: string; value: string }) => f.value === selectedFoodType,
+              )?.label || "음식 종류"}
             </span>
             <Image
               src="/icons/dropdown_off.svg"
@@ -110,11 +96,19 @@ export default function FilterTab() {
     }
   };
 
-  const tabs: TabKey[] = ["reservation", "foodType", "pickupTime"];
+  const tabs: TabKey[] = ["foodType", "pickupTime"];
 
   return (
     <>
       <div className={styles.container}>
+        <button
+          type={"button"}
+          className={styles.reservation({ parentActive: reservable })}
+          onClick={onToggleReservable}
+        >
+          예약가능만
+        </button>
+
         {tabs.map((tabKey) => (
           <FilterTabButton
             key={tabKey}
@@ -130,14 +124,12 @@ export default function FilterTab() {
       {/* 음식 종류 선택 */}
       <FoodTypeFilter
         isOpen={activeTab === "foodType"}
-        onChange={handleFoodTypeChange}
         onClose={() => setActiveTab("reservation")}
       />
 
       {/* 픽업 가능시간 선택 */}
       <PickUpTimeFilter
         isOpen={activeTab === "pickupTime"}
-        onChange={handlePickupTimeChange}
         onClose={() => setActiveTab("reservation")}
       />
     </>

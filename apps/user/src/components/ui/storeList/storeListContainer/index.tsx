@@ -11,21 +11,13 @@ import * as style from "./storeListContainer.css";
 
 const StoreListContainer = () => {
   const locations = useGeolocation();
-  const { stores, isLoading, fetchNextPage, isError, error } = useStoreList(
-    // {
-    //   lat: 37.572859,
-    //   lng: 126.976991,
-    // },
-    locations,
-  );
-
-  console.log(error);
+  const { stores, isLoading, fetchNextPage, isError, error } = useStoreList(locations);
 
   if (isError) {
     return <ErrorUi message={error?.message} />;
   }
 
-  const list = stores?.pages.flatMap((page) => (page.success ? page.data.storeList : [])) || [];
+  const list = stores?.pages.flatMap((page) => (page.success ? page.data.contents : [])) || [];
 
   return (
     <div className={style.container}>
