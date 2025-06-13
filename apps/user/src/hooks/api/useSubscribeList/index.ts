@@ -8,7 +8,7 @@ const getMySubscribe = (params: string) => {
   return apiClient.get<SubscribeList>(`store-subscriptions/me?${params}`);
 };
 
-const MY_SUBSCRIBE_QUERY_KEY = "subscribe";
+export const MY_SUBSCRIBE_QUERY_KEY = "subscribe";
 
 const useSubscribeList = (id: number, isLogin: boolean) => {
   const { queryParams, setAllQueryParams } = useQueryParams();
