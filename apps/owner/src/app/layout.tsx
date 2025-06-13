@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { LayoutContent } from "@/components/common/layout-content";
+import OrderAlertModal from "@/components/common/order-alert-modal";
+import OrderSseListener from "@/components/common/order-sse-listener";
 import { OwnerInfoProvider } from "@/providers/ownerInfo";
 
 if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "development") {
@@ -37,8 +39,11 @@ export default function RootLayout({
         <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        {" "}
         <Providers>
           <OwnerInfoProvider />
+          <OrderAlertModal />
+          <OrderSseListener />
           <LayoutContent>{children}</LayoutContent>
         </Providers>
       </body>
