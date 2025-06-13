@@ -1,0 +1,63 @@
+import type { FoodType, Location, PickupTime } from "@/components/ui/filterTab/type";
+import { create } from "zustand";
+
+interface FilterTabState {
+  selectedFoodType?: FoodType;
+  selectedPickupTime?: PickupTime;
+  reservable: boolean;
+  location?: Location;
+  onSelectedFoodType: (foodType?: FoodType) => void;
+  onResetFoodType: () => void;
+  onSelectedPickupTime: (time: PickupTime) => void;
+  onResetPickupTime: () => void;
+  onToggleReservable: () => void;
+  getPickupTimeString: () => string;
+  onLocationChange: (location: Location) => void;
+  onResetLocation: () => void;
+}
+
+export const useFilterTab = create<FilterTabState>((set, get) => {
+  const getPickupTimeString = (): string => {
+    const state = get();
+    if (
+      !state.selectedPickupTime ||
+      state.selectedPickupTime.hour === undefined ||
+      state.selectedPickupTime.minute === undefined
+    )
+      return "";
+    let hour: number = Number(state.selectedPickupTime.hour);
+    if (state.selectedPickupTime.day === "오후" && hour < 12) hour += 12;
+    if (state.selectedPickupTime.day === "오전" && hour === 12) hour = 0;
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    return `${pad(hour)}:${pad(Number(state.selectedPickupTime.minute))}`;
+  };
+
+  return {
+    selectedFoodType: undefined,
+    selectedPickupTime: undefined,
+    reservable: false,
+    location: undefined,
+    onToggleReservable: () => set((state) => ({ reservable: !state.reservable })),
+    onSelectedFoodType: (foodType?: FoodType) => {
+      set({
+        selectedFoodType: foodType,
+      });
+    },
+    onResetFoodType: () => {
+      set({ selectedFoodType: undefined });
+    },
+    onSelectedPickupTime: (time: PickupTime) => {
+      set({ selectedPickupTime: time });
+    },
+    onResetPickupTime: () => {
+      set({ selectedPickupTime: undefined });
+    },
+    getPickupTimeString,
+    onLocationChange: (location: Location) => {
+      set({ location });
+    },
+    onResetLocation: () => {
+      set({ location: undefined });
+    },
+  };
+});
