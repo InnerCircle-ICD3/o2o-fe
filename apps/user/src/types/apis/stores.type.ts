@@ -62,6 +62,9 @@ export interface Price {
   finalPrice: number;
 }
 
+type ProductSize = "S" | "M" | "L";
+export type ProductStatus = "ACTIVE" | "INACTIVE" | "SOLD_OUT";
+
 export interface Product {
   id: string;
   createdAt: string;
@@ -73,8 +76,8 @@ export interface Product {
   storeName: string;
   name: string;
   price: Price;
-  size: "S" | "M" | "L";
-  status: string;
+  size: ProductSize;
+  status: ProductStatus;
 }
 
 export interface StoreList {
@@ -110,7 +113,7 @@ export interface StoreList {
 }
 
 export interface StoreListResponse {
-  pageNumber?: number;
+  lastId: string;
   storeList: StoreList[];
 }
 

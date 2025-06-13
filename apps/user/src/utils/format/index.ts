@@ -77,3 +77,17 @@ export const formatHourTo12HourText = (time: string) => {
 export const padTwoDigits = (num: number): string => {
   return String(num).padStart(2, "0");
 };
+
+/**
+ * 거리를 소수점 첫째 자리까지 반올림하여 문자열로 반환합니다.
+ * @param {number} distance - 거리 (km 단위)
+ * @return {string} 소수점 첫째 자리까지 반올림된 거리 문자열
+ * @example
+ * formatDistance(1.23456) // "1.2km"
+ * formatDistance(1.2) // "1.2km"
+ * formatDistance(0.01) // "0.1km"
+ */
+export const formatDistance = (distance: number): string => {
+  const roundedDistance = Math.max(Math.round(distance * 10) / 10, 0.1);
+  return `${roundedDistance}km`;
+};

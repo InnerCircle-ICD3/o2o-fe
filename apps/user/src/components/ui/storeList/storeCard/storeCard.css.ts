@@ -1,3 +1,4 @@
+import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const card = style({
@@ -8,6 +9,8 @@ export const card = style({
   backgroundColor: "#fff",
   cursor: "pointer",
   marginBottom: "20px",
+  boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
+  border: `0.5px solid ${globalTheme.color.line}`,
 });
 
 export const image = style({

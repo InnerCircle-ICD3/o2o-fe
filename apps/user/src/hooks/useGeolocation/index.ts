@@ -41,6 +41,5 @@ export const useGeolocation = (): Coordinates => {
   }, [updateLocations]);
 
   const location = getLocations();
-
   return isValidCoordinates(location) ? location : FALLBACK_COORDINATES;
 };

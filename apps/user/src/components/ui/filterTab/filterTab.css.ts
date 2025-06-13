@@ -13,6 +13,8 @@ export const container = style({
   justifyContent: "flex-start",
   alignItems: "center",
   gap: 4,
+
+  overflowX: "auto",
 });
 
 export const tab = recipe({

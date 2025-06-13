@@ -21,6 +21,9 @@ export const message = style({
 
   fontSize: 16,
   fontWeight: "700",
+
+  whiteSpace: "pre-wrap",
+  textAlign: "center",
 });
 
 export const buttons = style({
