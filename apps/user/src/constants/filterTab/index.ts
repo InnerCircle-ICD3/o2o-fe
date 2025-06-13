@@ -1,4 +1,4 @@
-import type { PickupTime } from "./type";
+import type { PickupTime } from "../../types/filterTab.type";
 
 export const foodTypeList = [
   { label: "베이커리", value: "BREAD" },

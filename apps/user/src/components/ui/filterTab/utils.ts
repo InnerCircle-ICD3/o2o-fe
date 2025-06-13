@@ -1,4 +1,4 @@
-import type { HourType, MinuteType } from "./type";
+import type { HourType, MinuteType } from "../../../types/filterTab.type";
 
 export const toHourType = (value: number): HourType => {
   if (value < 0 || value > 23) {
