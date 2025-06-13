@@ -1,13 +1,12 @@
 interface StepperProps {
   step: number;
+  labels: string[];
 }
 
-const steps = ["가게 등록", "상세 설정", "픽업 설정"];
-
-export function Stepper({ step }: StepperProps) {
+export function Stepper({ step, labels }: StepperProps) {
   return (
     <ol className="flex items-center justify-center gap-8">
-      {steps.map((label, index) => {
+      {labels.map((label, index) => {
         const isActive = step === index + 1;
         const isCompleted = step > index + 1;
 
@@ -24,7 +23,7 @@ export function Stepper({ step }: StepperProps) {
               aria-label={`${label} ${isActive ? "현재 단계" : isCompleted ? "완료된 단계" : "미완료 단계"}`}
             />
             <span className="mt-1 text-xs text-center text-gray-600">{label}</span>
-            {index < steps.length - 1 && (
+            {index < labels.length - 1 && (
               <div
                 className="w-16 h-px bg-gray-300 absolute left-[calc(100%+0.5rem)] top-2"
                 aria-hidden="true"

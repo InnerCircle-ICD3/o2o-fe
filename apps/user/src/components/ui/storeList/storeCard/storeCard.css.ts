@@ -2,6 +2,7 @@ import { globalTheme } from "@/styles/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const card = style({
+  position: "relative",
   display: "flex",
   flexDirection: "column",
   borderRadius: "12px",
@@ -11,6 +12,12 @@ export const card = style({
   marginBottom: "20px",
   boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
   border: `0.5px solid ${globalTheme.color.line}`,
+});
+
+export const label = style({
+  position: "absolute",
+  top: "10px",
+  left: "10px",
 });
 
 export const image = style({
@@ -23,16 +30,6 @@ export const content = style({
   display: "flex",
   flexDirection: "column",
   gap: "4px",
-});
-
-export const label = style({
-  fontSize: "10px",
-  backgroundColor: "#e0f5e0",
-  color: "#1d7f1d",
-  padding: "2px 6px",
-  borderRadius: "6px",
-  alignSelf: "flex-start",
-  fontWeight: 500,
 });
 
 export const title = style({
@@ -81,7 +78,8 @@ export const titleWrapper = style({
 
 export const priceSectionWrapper = style({
   display: "flex",
-  justifyContent: "space-between",
+  flexDirection: "column",
+  gap: "4px",
   padding: "12px",
 });
 

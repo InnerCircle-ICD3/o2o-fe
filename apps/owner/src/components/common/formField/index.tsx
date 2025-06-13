@@ -1,5 +1,4 @@
-import { MultiSelect } from "@/components/store/register/multipleSelect";
-// components/common/FormField.tsx
+import { MultiSelect } from "@/components/common/multipleSelect";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,11 +37,18 @@ type MultiSelectFieldProps = {
   options: StoreCategory[];
 } & BaseProps;
 
+type ImageFieldProps = {
+  type: "image";
+  value: string;
+  onChange: (value: string) => void;
+} & BaseProps;
+
 type FormFieldProps =
   | InputFieldProps
   | TextareaFieldProps
   | TagInputFieldProps
-  | MultiSelectFieldProps;
+  | MultiSelectFieldProps
+  | ImageFieldProps;
 
 export function FormField(props: FormFieldProps) {
   const { label, name, rightElement, error } = props;
@@ -65,6 +71,23 @@ export function FormField(props: FormFieldProps) {
             <TagInput label={label} value={props.value} onChange={props.onChange} error={error} />
           ) : props.type === "textarea" ? (
             <Textarea id={name} aria-label={label} {...props} />
+          ) : props.type === "image" ? (
+            <input
+              id={name}
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    props.onChange(reader.result as string);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="cursor-pointer border rounded px-3 py-2 w-full"
+            />
           ) : (
             <Input id={name} aria-label={label} {...props} />
           )}

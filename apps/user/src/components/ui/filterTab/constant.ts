@@ -1,10 +1,20 @@
 import type { PickupTime } from "./type";
-import { toHourType, toMinuteType } from "./utils";
 
-export const foodTypeList = ["빵", "디저트", "한식", "과일", "피자", "샐러드"];
+export const foodTypeList = [
+  { label: "빵", value: "BREAD" },
+  { label: "베이커리", value: "BAKERY" },
+  { label: "카페", value: "CAFE" },
+  { label: "디저트", value: "DESSERT" },
+  { label: "한식", value: "KOREAN" },
+  { label: "과일", value: "FRUIT" },
+  { label: "피자", value: "PIZZA" },
+  { label: "샐러드", value: "SALAD" },
+  { label: "떡", value: "RICECAKE" },
+  { label: "샌드위치", value: "SANDWICH" },
+];
 
 export const pickupTimeDefaultValue: PickupTime = {
-  day: "오전",
-  hour: toHourType(0),
-  minute: toMinuteType(0),
+  day: undefined,
+  hour: undefined,
+  minute: undefined,
 };

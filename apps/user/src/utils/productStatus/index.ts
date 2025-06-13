@@ -14,7 +14,7 @@ interface ProductStatusResult {
 interface StoreStatusResult {
   status: StoreStatus;
   label: string;
-  uiStatus: "open" | "close";
+  uiStatus: "open" | "close" | "endSoon";
 }
 
 type StatusResult<T> = T extends ProductStatus ? ProductStatusResult : StoreStatusResult;
@@ -70,7 +70,10 @@ function generateProductStatus<T extends ProductStatus | StoreStatus>(
 
     switch (status) {
       case "OPEN":
-        result = { status: "OPEN", uiStatus: "open", label: "영업 중" };
+        if (inventory.stock <= 5)
+          result = { status: "CLOSED", uiStatus: "endSoon", label: "마감 임박" };
+        else result = { status: "OPEN", uiStatus: "open", label: "영업 중" };
+
         break;
       case "CLOSED":
         result = { status: "CLOSED", uiStatus: "close", label: "영업 종료" };

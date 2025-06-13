@@ -28,7 +28,6 @@ vi.mock("@/hooks/useGeolocation");
 vi.mock("@/hooks/useKakaoLoader");
 vi.mock("@/hooks/api/useGetCustomerAddress");
 vi.mock("@/components/common/kakaoMap", () => ({
-  // biome-ignore lint/style/useNamingConvention: false
   KakaoMap: ({
     lat,
     lng,

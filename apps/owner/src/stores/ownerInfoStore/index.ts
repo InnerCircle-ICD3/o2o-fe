@@ -2,10 +2,10 @@ import { create } from "zustand";
 
 interface OwnerState {
   owner: {
-    storeOwnerId: string;
+    storeOwnerId: number;
     roles: string[];
     nickname: string;
-    customerId: number;
+    userId: number;
   } | null;
   setOwner: (owner: OwnerState["owner"]) => void;
   clearOwner: () => void;

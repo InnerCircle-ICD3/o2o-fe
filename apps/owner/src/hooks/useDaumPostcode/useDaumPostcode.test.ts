@@ -11,7 +11,6 @@ describe("useDaumPostcode()", () => {
 
   beforeEach(() => {
     window.daum = {
-      // biome-ignore lint/style/useNamingConvention: false
       Postcode: mockPostcodeConstructor,
     } as Window["daum"];
 

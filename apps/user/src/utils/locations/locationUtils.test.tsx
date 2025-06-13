@@ -18,35 +18,26 @@ describe("locationUtils", () => {
 
     globalThis.kakao = {
       maps: {
-        // biome-ignore lint/style/useNamingConvention: false
         Marker: vi.fn().mockImplementation((options) => ({
           ...options,
           setMap: vi.fn(),
         })),
-        // biome-ignore lint/style/useNamingConvention: false
         MarkerImage: vi.fn(),
-        // biome-ignore lint/style/useNamingConvention: false
         Size: vi.fn(),
         event: {
           addListener: vi.fn(),
         },
         load: vi.fn(),
-        // biome-ignore lint/style/useNamingConvention: false
         Map: vi.fn(),
-        // biome-ignore lint/style/useNamingConvention: false
         Circle: vi.fn(),
-        // biome-ignore lint/style/useNamingConvention: false
         InfoWindow: vi.fn(),
-        // biome-ignore lint/style/useNamingConvention: false
         Polygon: vi.fn().mockImplementation(() => ({
           setMap: vi.fn(),
         })),
-        // biome-ignore lint/style/useNamingConvention: false
         LatLng: vi.fn().mockImplementation((lat, lng) => ({
           getLat: () => lat,
           getLng: () => lng,
         })),
-        // biome-ignore lint/style/useNamingConvention: false
         LatLngBounds: vi.fn().mockImplementation(() => {
           const points: { lat: number; lng: number }[] = [];
           return {
@@ -55,7 +46,6 @@ describe("locationUtils", () => {
           };
         }),
         services: {
-          // biome-ignore lint/style/useNamingConvention: false
           Geocoder: vi.fn().mockImplementation(() => ({
             coord2Address: vi.fn((lng, lat, callback) => {
               if (lng === 126.570677 && lat === 33.450705) {
@@ -97,7 +87,6 @@ describe("locationUtils", () => {
             }),
           })),
         },
-        // biome-ignore lint/style/useNamingConvention: false
         MarkerClusterer: vi.fn().mockImplementation(() => ({
           addMarkers: vi.fn(),
           clear: vi.fn(),

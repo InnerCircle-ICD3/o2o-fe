@@ -1,6 +1,5 @@
 import StatusLabel from "@/components/common/statusLabel";
 import * as globalStyle from "@/styles/global.css";
-import type { StoreStatus } from "@/types/apis/stores.type";
 import type { SubscribeDetail } from "@/types/apis/subscribe.type";
 import { formatCurrency } from "@/utils/format";
 import generateProductStatus from "@/utils/productStatus";
@@ -16,7 +15,7 @@ interface SubscribeItemProps {
 const SubscribeItem = (props: SubscribeItemProps) => {
   const { subscribe } = props;
 
-  const { uiStatus, label } = generateProductStatus<StoreStatus>(subscribe.status, {
+  const { uiStatus, label } = generateProductStatus(subscribe.status, {
     quantity: subscribe.totalStockCount,
     stock: subscribe.totalStockCount,
   });
