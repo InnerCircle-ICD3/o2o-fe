@@ -3,7 +3,7 @@ import { toResult } from "./utils/result";
 
 // API 기본 설정
 const api = ky.create({
-  prefixUrl: "/api",
+  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
   },

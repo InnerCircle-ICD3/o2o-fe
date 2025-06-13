@@ -29,6 +29,6 @@ export const resetPositionVariants = styleVariants({
     bottom: 16,
   },
   withStoreInfo: {
-    bottom: 260,
+    bottom: 340,
   },
 });

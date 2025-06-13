@@ -112,6 +112,10 @@ export default function SearchMap() {
       if (location) {
         createUserMarker(location, map);
       }
+
+      kakao.maps.event.addListener(map, "click", () => {
+        setSelectedStoreId(null);
+      });
     },
     [location],
   );
