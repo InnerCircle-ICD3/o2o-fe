@@ -8,8 +8,9 @@ type SseStatus = "disconnected" | "connecting" | "connected" | "error";
 export default function SseStatusIndicator() {
   const [status, setStatus] = useState<SseStatus>("disconnected");
   const [lastMessage, setLastMessage] = useState<string>("");
+  const [messageCount, setMessageCount] = useState(0);
   const owner = useOwnerStore((state) => state.owner);
-  const storeId = owner?.storeOwnerId;
+  const storeId = owner?.userId;
 
   useEffect(() => {
     if (!storeId) {
@@ -30,6 +31,7 @@ export default function SseStatusIndicator() {
     eventSource.onmessage = (event) => {
       console.log("📨 SSE 메시지 수신:", event.data);
       setLastMessage(event.data);
+      setMessageCount((prev) => prev + 1);
       try {
         const data = JSON.parse(event.data);
         console.log("📦 파싱된 데이터:", data);
@@ -74,7 +76,11 @@ export default function SseStatusIndicator() {
           <span className="text-sm font-medium">SSE {statusDisplay.text}</span>
         </div>
 
-        {storeId && <div className="text-xs text-gray-600 mb-1">Store ID: {storeId}</div>}
+        {storeId && (
+          <div className="text-xs text-gray-600 mb-1">
+            Store ID: {storeId} | 메시지: {messageCount}개
+          </div>
+        )}
 
         {lastMessage && (
           <div className="text-xs text-gray-500 break-all">

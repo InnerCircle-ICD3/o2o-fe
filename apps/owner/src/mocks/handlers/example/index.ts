@@ -90,6 +90,19 @@ const handlers = [
       },
     );
   }),
+
+  // Owner 정보 API 목업
+  http.get("/api/me", () => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        storeOwnerId: 2001,
+        roles: ["OWNER"],
+        nickname: "테스트사장님",
+        userId: 1001,
+      },
+    });
+  }),
 ];
 
 export default handlers;
