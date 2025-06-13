@@ -1,8 +1,13 @@
 import Page from "@/app/page";
-import { render, screen } from "@testing-library/react";
-import { expect, test } from "vitest";
+import { redirect } from "next/navigation";
+import { expect, test, vi } from "vitest";
 
-test("Page", () => {
-  render(<Page />);
-  expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeDefined();
+// Next.js의 redirect 함수를 모킹
+vi.mock("next/navigation", () => ({
+  redirect: vi.fn(),
+}));
+
+test("Page should redirect to store management edit page", () => {
+  Page();
+  expect(redirect).toHaveBeenCalledWith("/store-management/edit");
 });

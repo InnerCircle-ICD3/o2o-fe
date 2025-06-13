@@ -13,11 +13,13 @@ import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
 import { getDefaultStoreFormValues } from "@/utils/stores";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "../register/businessHoursSection";
 
 export default function StoreEdit() {
+  const router = useRouter();
   const { owner } = useOwnerStore();
 
   const { data: storeData, isLoading } = useGetOwnerStore(owner?.userId);
@@ -127,8 +129,27 @@ export default function StoreEdit() {
     }
   };
 
-  if (!owner?.userId) return <div>유저 정보가 없습니다.</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (!owner?.userId) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[600px] gap-4">
+        <p className="text-gray-600">유저 정보를 불러올 수 없습니다. 다시 로그인해주세요.</p>
+        <Button onClick={() => router.push("/store/login")} variant="default">
+          로그인 하러 가기
+        </Button>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[600px]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <span className="text-gray-600">매장 정보를 불러오는 중...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 수정 폼">
