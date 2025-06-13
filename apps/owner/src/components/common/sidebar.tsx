@@ -24,8 +24,8 @@ const menuConfig: Record<string, MenuItem> = {
     icon: Home,
     submenu: [
       {
-        title: "매장 목록",
-        href: "/store-management",
+        title: "매장 정보 수정",
+        href: "/store-management/edit",
         icon: List,
       },
     ],

@@ -1,33 +1,35 @@
 "use client";
 
-import { postStore } from "@/apis/ssr/store";
-import { FormField } from "@/components/store/register/formField";
+import { FormField } from "@/components/common/formField";
+import { Stepper } from "@/components/common/stepper";
 import { Button } from "@/components/ui/button";
-import { STORE_CATEGORIES, VALIDATION_RULES } from "@/constants/store";
+import { Label } from "@/components/ui/label";
+import { STORE_CATEGORIES, VALIDATION_RULES, initialCreateStoreFormData } from "@/constants/store";
+import usePostFileUpload from "@/hooks/api/usePostFileUpload";
+import usePostOwnerStore from "@/hooks/api/usePostOwnerStore";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
-import type { StoreFormData } from "@/types/store";
-import { initialStoreFormData } from "@/types/store";
-import { useRouter } from "next/navigation";
+import type { CreateStoreRequest } from "@/types/store";
 import { useState } from "react";
+import React from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
-import { Stepper } from "./stepper";
 
-export default function StoreRegisterFormWizard() {
+const STEP_LABELS = ["가게 등록", "상세 설정", "픽업 설정"];
+
+export default function StoreRegisterForm() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
   const { owner } = useOwnerStore();
-  const router = useRouter();
 
-  const form = useForm<StoreFormData>({
-    defaultValues: initialStoreFormData,
+  const form = useForm<CreateStoreRequest>({
+    defaultValues: initialCreateStoreFormData,
     validationRules: VALIDATION_RULES,
     defaultOptions: {
       transform: (value: string) => value.trim(),
     },
-  } as UseFormOptions<StoreFormData>);
+  } as UseFormOptions<CreateStoreRequest>);
 
   const { errors, handleSubmit, register, watch, setValue } = form;
   const { openPostcode, addressType } = useStoreAddress(form);
@@ -35,14 +37,14 @@ export default function StoreRegisterFormWizard() {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const validateSingleField = (name: keyof StoreFormData, value: string): string => {
+  const validateSingleField = (name: keyof CreateStoreRequest, value: string): string => {
     const rule = VALIDATION_RULES[name];
     if (!rule) return "";
     return rule.pattern.test(value) ? "" : rule.message;
   };
 
   const handleBlur =
-    (field: keyof StoreFormData) =>
+    (field: keyof CreateStoreRequest) =>
     (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
       const error = validateSingleField(field, value);
@@ -50,22 +52,36 @@ export default function StoreRegisterFormWizard() {
       errors[field] = error;
     };
 
-  const onSubmit = async (data: StoreFormData) => {
-    const storeOwnerId = owner?.storeOwnerId;
-    const isValid = await form.validate();
-    if (!isValid || !storeOwnerId) return;
+  const createStoreMutation = usePostOwnerStore(owner?.userId);
 
-    const result = await postStore(storeOwnerId, data);
-    if (result.success) {
-      router.push("/");
-    } else {
-      console.error("매장 등록 실패:", result);
-    }
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const { mutateAsync: uploadImage, isPending: isUploading } = usePostFileUpload();
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const presignedUrl = await uploadImage({ file, folderPath: "store" });
+    await fetch(presignedUrl, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": file.type || "image/jpeg",
+      },
+    });
+    const imageUrl = presignedUrl.split("?")[0];
+    setValue("mainImageUrl", imageUrl);
+  };
+
+  const onSubmit = async (data: CreateStoreRequest) => {
+    const isValid = await form.validate();
+    if (!isValid) return;
+
+    createStoreMutation.mutate(data);
   };
 
   return (
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
-      <Stepper step={step} />
+      <Stepper step={step} labels={STEP_LABELS} />
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
         <div className="flex flex-col">
@@ -98,21 +114,40 @@ export default function StoreRegisterFormWizard() {
                 onChange={(e) => setValue("contact", e.target.value)}
                 error={errors.contact}
               />
-              <FormField
-                type="input"
-                label="대표 이미지 URL"
-                name="mainImageUrl"
-                {...register("mainImageUrl")}
-              />
-              <FormField
-                type="textarea"
-                label="설명"
-                name="description"
-                onBlur={handleBlur("description")}
-                value={watch("description")}
-                onChange={(e) => setValue("description", e.target.value)}
-                className="h-30 resize-none"
-              />
+              <div className="space-y-2">
+                <div className="flex gap-8 items-center">
+                  <Label htmlFor="mainImageUpload" className="w-[90px]">
+                    대표 이미지 업로드
+                  </Label>
+                  <input
+                    id="mainImageUpload"
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    className="cursor-pointer border rounded px-3 py-2 w-full"
+                    disabled={isUploading}
+                  />
+                </div>
+                <div
+                  className="flex justify-center items-center border border-gray-300 rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
+                  style={{ minHeight: 180 }}
+                >
+                  {watch("mainImageUrl") ? (
+                    <img
+                      src={watch("mainImageUrl") || ""}
+                      alt="미리보기"
+                      className="object-contain w-full h-full"
+                      style={{ maxWidth: "100%", maxHeight: "100%" }}
+                    />
+                  ) : (
+                    <span className="text-gray-400 text-sm">이미지 미리보기</span>
+                  )}
+                </div>
+                {errors.mainImageUrl && (
+                  <p className="text-sm text-red-500">{errors.mainImageUrl}</p>
+                )}
+              </div>
             </fieldset>
           )}
 
@@ -164,6 +199,15 @@ export default function StoreRegisterFormWizard() {
                 value={watch("foodCategory")}
                 onChange={(value: string[]) => setValue("foodCategory", value)}
                 error={errors.foodCategory}
+              />
+              <FormField
+                type="textarea"
+                label="설명"
+                name="description"
+                onBlur={handleBlur("description")}
+                value={watch("description")}
+                onChange={(e) => setValue("description", e.target.value)}
+                className="h-30 resize-none"
               />
             </fieldset>
           )}

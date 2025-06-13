@@ -1,6 +1,11 @@
-import type { StoreCategory, StoreFormData, ValidationRules } from "@/types/store";
+import type {
+  CreateStoreRequest,
+  StoreCategory,
+  UpdateStoreRequest,
+  ValidationRules,
+} from "@/types/store";
 
-export const VALIDATION_RULES: ValidationRules<StoreFormData> = {
+export const VALIDATION_RULES: ValidationRules<CreateStoreRequest> = {
   name: {
     pattern: /^\S.{0,49}$/,
     message: "1~50자 사이의 공백 없는 이름을 입력해주세요.",
@@ -50,4 +55,77 @@ export const WEEKDAY_MAP: Record<WeekdayKor, WeekdayEng> = {
   금: "FRIDAY",
   토: "SATURDAY",
   일: "SUNDAY",
+};
+
+export const PICKUP_DAY = {
+  TODAY: "TODAY",
+  TOMORROW: "TOMORROW",
+} as const;
+
+export const STORE_STATUS_OPTIONS = [
+  { value: "OPEN", label: "영업중" },
+  { value: "CLOSED", label: "영업종료" },
+] as const;
+
+export const initialCreateStoreFormData: CreateStoreRequest = {
+  name: "",
+  businessNumber: "",
+  roadNameAddress: "",
+  lotNumberAddress: "",
+  buildingName: "",
+  zipCode: "",
+  region1DepthName: "",
+  region2DepthName: "",
+  region3DepthName: "",
+  latitude: "",
+  longitude: "",
+  pickupDay: "TODAY",
+  businessHours: [],
+  contact: "",
+  description: "",
+  mainImageUrl: "",
+  storeCategory: [],
+  foodCategory: [],
+};
+
+export const initialUpdateStoreFormData: UpdateStoreRequest = {
+  name: "",
+  roadNameAddress: "",
+  lotNumberAddress: "",
+  buildingName: "",
+  zipCode: "",
+  region1DepthName: "",
+  region2DepthName: "",
+  region3DepthName: "",
+  latitude: 0,
+  longitude: 0,
+  businessHours: [],
+  pickupDay: "TODAY",
+  contact: "",
+  description: "",
+  mainImageUrl: "",
+  storeCategory: [],
+  foodCategory: [],
+};
+
+export const initialStoreData = {
+  name: "",
+  businessNumber: "",
+  roadNameAddress: "",
+  lotNumberAddress: "",
+  buildingName: "",
+  zipCode: "",
+  region1DepthName: "",
+  region2DepthName: "",
+  region3DepthName: "",
+  latitude: "",
+  longitude: "",
+  businessHours: [],
+  pickupDay: "TODAY",
+  contact: "",
+  description: "",
+  mainImageUrl: "",
+  storeCategory: [],
+  foodCategory: [],
+  status: "OPEN",
 };

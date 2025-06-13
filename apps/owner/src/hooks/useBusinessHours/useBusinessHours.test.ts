@@ -1,4 +1,4 @@
-import type { StoreFormData } from "@/types/store";
+import type { CreateStoreRequest } from "@/types/store";
 import { act, renderHook } from "@testing-library/react";
 import type { UseFormReturn } from "use-form-light";
 import { vi } from "vitest";
@@ -12,7 +12,7 @@ describe("useBusinessHours()", () => {
     validate: vi.fn(),
     handleSubmit: vi.fn(),
     register: vi.fn(),
-  } as unknown as UseFormReturn<StoreFormData>;
+  } as unknown as UseFormReturn<CreateStoreRequest>;
 
   beforeEach(() => {
     vi.clearAllMocks();

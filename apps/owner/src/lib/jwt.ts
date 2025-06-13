@@ -28,7 +28,8 @@ const SECRET = Buffer.from(base64Secret, "base64").toString("utf-8");
  */
 export function verifyToken(token: string): TokenPayload {
   try {
-    return jwt.verify(token, SECRET) as TokenPayload;
+    const payload = jwt.verify(token, SECRET) as TokenPayload;
+    return payload;
   } catch (err) {
     throw new Error("Invalid token", { cause: err });
   }

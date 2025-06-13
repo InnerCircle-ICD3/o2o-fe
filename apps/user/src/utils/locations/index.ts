@@ -189,7 +189,6 @@ export async function searchAddress(query: string): Promise<SearchAddressResult[
     `https://dapi.kakao.com/v2/local/search/${endpoint}.json?query=${encodeURIComponent(query)}`,
     {
       headers: {
-        /* biome-ignore lint/style/useNamingConvention: false */
         Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
       },
     },

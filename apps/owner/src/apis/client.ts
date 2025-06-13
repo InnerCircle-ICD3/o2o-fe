@@ -3,10 +3,11 @@ import { toResult } from "./utils/result";
 
 // API 기본 설정
 const api = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+  prefixUrl: "/api",
   headers: {
     "Content-Type": "application/json",
   },
+  credentials: "include",
 });
 
 // API 함수들
@@ -21,6 +22,10 @@ export const apiClient = {
 
   put: async <T>(url: string, data: unknown, options = {}) => {
     return toResult<T>(() => api.put(url, { json: data, ...options }).json());
+  },
+
+  patch: async <T>(url: string, data: unknown, options = {}) => {
+    return toResult<T>(() => api.patch(url, { json: data, ...options }).json());
   },
 
   delete: async <T>(url: string, options = {}) => {
