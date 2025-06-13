@@ -31,7 +31,6 @@ export const useStoreList = (locations: Coordinates | null) => {
   } = useInfiniteQuery<Result<StoreListResponse>, Error, InfiniteQueryResponse<StoreListResponse>>({
     queryKey: [STORE_LIST_QUERY_KEY, locations, selectedFoodType, pickupTime, reservable],
     queryFn: ({ pageParam }) => {
-      // robust params: only string | number | undefined
       const params: Record<string, string | number | undefined> = {
         size: SIZE,
         latitude: locations?.lat,

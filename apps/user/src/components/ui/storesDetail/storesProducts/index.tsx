@@ -10,19 +10,20 @@ import { useState } from "react";
 import * as style from "./storesProduct.css";
 
 interface StoresProductsProps {
-  storeName: string;
   storesProducts: Product[];
 }
 
 const StoresProducts = (props: StoresProductsProps) => {
-  const { storeName, storesProducts } = props;
+  const { storesProducts } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <article className={classNames(globalStyle.innerPadding, style.container)}>
         <h2 className={style.productTitle}>
-          <span className={classNames(globalStyle.primaryColor, style.titleEmp)}>{storeName}</span>{" "}
+          <span className={classNames(globalStyle.primaryColor, style.titleEmp)}>
+            {storesProducts.length ? storesProducts[0].storeName : "이 매장"}
+          </span>{" "}
           에서 지금 판매중이에요!
         </h2>
 

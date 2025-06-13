@@ -16,9 +16,15 @@ interface StoreCardProps {
 
 export const StoreCard = ({ storesDetail }: StoreCardProps) => {
   const router = useRouter();
+
   const { user } = userInfoStore();
   const isLogin = !!user;
-  const { status, label } = generateProductStatus(storesDetail.totalStockCount);
+
+  const { uiStatus, label } = generateProductStatus(storesDetail.status, {
+    quantity: storesDetail.totalStockCount,
+    stock: storesDetail.totalStockCount,
+  });
+
   const handleClick = () => {
     router.push(`/stores/${storesDetail.storeId}`);
   };
@@ -47,11 +53,11 @@ export const StoreCard = ({ storesDetail }: StoreCardProps) => {
         <div className={style.priceSectionWrapper}>
           <StoreInfo storesDetail={storesDetail} />
         </div>
-
-        <div className={style.label}>
-          <StatusLabel status={status}>{label}</StatusLabel>
-        </div>
       </button>
+      
+      <div className={style.label}>
+        <StatusLabel status={uiStatus}>{label}</StatusLabel>
+      </div>
     </div>
   );
 };
