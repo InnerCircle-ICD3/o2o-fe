@@ -96,3 +96,5 @@ export interface UpdateStoreRequest {
 export interface StoreStatus {
   status: "OPEN" | "CLOSED";
 }
+
+export type StoreFormData = CreateStoreRequest;
