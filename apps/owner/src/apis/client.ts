@@ -3,10 +3,11 @@ import { toResult } from "./utils/result";
 
 // API 기본 설정
 const api = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+  prefixUrl: "/api",
   headers: {
     "Content-Type": "application/json",
   },
+  credentials: "include",
 });
 
 // API 함수들
