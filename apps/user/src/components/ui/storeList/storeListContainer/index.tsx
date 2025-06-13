@@ -12,7 +12,13 @@ import * as style from "./storeListContainer.css";
 
 const StoreListContainer = () => {
   const locations = useGeolocation();
-  const { stores, isLoading, fetchNextPage, isError, error } = useStoreList(locations);
+  const { stores, isLoading, fetchNextPage, isError, error } = useStoreList(
+    locations,
+    // {
+    // lat: 37.572859,
+    // lng: 126.976991,
+    //   }
+  );
 
   if (isError) {
     return <ErrorUi message={error?.message} />;
@@ -29,8 +35,8 @@ const StoreListContainer = () => {
       ) : list.length === 0 ? (
         <ErrorUi
           type={"home"}
-          message={`이 근처에는 아직 등록된 가게가 없어요.
-우리, 좀 더 유명해져야 할 이유가 생겼네요.`}
+          message={`찾으시는 가게가 이 근처엔 아직 없어요.
+곧 생길지도 몰라요!`}
           isButton={false}
         />
       ) : (

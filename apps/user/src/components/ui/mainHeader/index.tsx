@@ -13,7 +13,7 @@ export default function MainHeader() {
   const { user } = userInfoStore();
   const isLogin = !!user;
 
-  const { data: addressData, isError } = useAddressList();
+  const { data: addressData, isError } = useAddressList(user?.customerId);
   const { location } = useFilterTab();
 
   const { showBottomSheet, handleShowBottomSheet, handleCloseBottomSheet } = useBottomSheet();
