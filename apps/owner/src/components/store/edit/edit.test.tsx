@@ -98,7 +98,7 @@ describe("StoreEdit", () => {
     });
     const patchMutate = vi.fn();
     (usePatchOwnerStoreStatus as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      mutate: patchMutate,
+      mutateAsync: patchMutate,
     });
     renderWithClient(<StoreEdit />);
     const switchButton = screen.getByRole("switch");
