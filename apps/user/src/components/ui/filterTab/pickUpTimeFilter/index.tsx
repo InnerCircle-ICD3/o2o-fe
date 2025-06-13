@@ -1,11 +1,11 @@
 import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
+import { pickupTimeDefaultValue } from "@/constants/filterTab";
 import { useFilterTab } from "@/stores/useFilterTab";
+import type { HourType, MinuteType, PickupTime } from "@/types/filterTab.type";
 import { padTwoDigits } from "@/utils/format";
 import { useRef, useState } from "react";
-import { pickupTimeDefaultValue } from "./constant";
-import * as styles from "./filterTab.css";
-import type { HourType, MinuteType, PickupTime } from "./type";
+import * as styles from "./pickUpTimeFilter.css";
 
 interface PickUpTimeFilterProps {
   isOpen: boolean;

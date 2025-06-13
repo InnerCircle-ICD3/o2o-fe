@@ -3,7 +3,7 @@ import { useFilterTab } from "@/stores/useFilterTab";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
-import { foodTypeList } from "../../filterTab/constant";
+import { foodTypeList } from "../../../../constants/filterTab";
 import * as style from "./categories.css";
 
 const Categories = () => {

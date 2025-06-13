@@ -5,11 +5,11 @@ import { padTwoDigits } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import { type ReactNode, useState } from "react";
-import { foodTypeList } from "./constant";
+import { foodTypeList } from "../../../constants/filterTab";
+import type { TabKey } from "../../../types/filterTab.type";
 import * as styles from "./filterTab.css";
 import FoodTypeFilter from "./foodTypeFilter";
 import PickUpTimeFilter from "./pickUpTimeFilter";
-import type { TabKey } from "./type";
 
 interface FilterTabButtonProps {
   tabKey: TabKey;
