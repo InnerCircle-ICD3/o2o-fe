@@ -36,10 +36,8 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
     scrollTop,
     overscan,
   });
-
   const containerStyle = classNames(style.container, "virtual-scroll");
 
-  // resize 감지
   useEffect(() => {
     if (!containerRef.current) return;
     const resizeObserver = new ResizeObserver(([entry]) => {
@@ -50,15 +48,6 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
     });
     resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  }, []);
-
-  // scroll 감지
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const onScroll = () => setScrollTop(el.scrollTop);
-    el.addEventListener("scroll", onScroll);
-    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
