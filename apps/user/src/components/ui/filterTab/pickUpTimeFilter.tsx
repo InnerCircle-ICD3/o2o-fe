@@ -24,8 +24,10 @@ export default function PickUpTimeFilter({ isOpen, onClose }: PickUpTimeFilterPr
   };
 
   const handlePickupTimeClick = () => {
-    onSelectedPickupTime(tempPickupTime);
-    onClose();
+    if (tempPickupTime.day && tempPickupTime.hour && tempPickupTime.minute) {
+      onSelectedPickupTime(tempPickupTime);
+      onClose();
+    }
   };
 
   const handleResetPickupTime = () => {
