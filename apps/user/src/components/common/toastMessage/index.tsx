@@ -1,16 +1,11 @@
 "use client";
 
+import { useToastStore } from "@/stores/toastStore";
 import { useEffect, useState } from "react";
 import * as styles from "./toastMessage.css";
 
-interface ToastProps {
-  message: string;
-  isVisible: boolean;
-  onClose: () => void;
-  isError?: boolean;
-}
-
-export function ToastMessage({ message, isVisible, onClose, isError = false }: ToastProps) {
+export function ToastMessage() {
+  const { message, isVisible, isError, hideToast } = useToastStore();
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
@@ -18,12 +13,12 @@ export function ToastMessage({ message, isVisible, onClose, isError = false }: T
       setIsFading(false);
       const timer = setTimeout(() => {
         setIsFading(true);
-        setTimeout(onClose, 300);
+        setTimeout(hideToast, 300);
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, onClose]);
+  }, [isVisible, hideToast]);
 
   if (!isVisible) return null;
 
