@@ -3,9 +3,17 @@
 import type { HeightSpec, VirtualItemProps } from "@/types/virtualScroll.type";
 import { renderVirtualContent } from "@/utils/virtualScroll";
 import classNames from "classnames";
-import { Children, useEffect, useRef, useState } from "react";
+import { Children, createContext, useEffect, useRef, useState } from "react";
 import type { PropsWithChildren, ReactElement } from "react";
 import * as style from "./virtualScroll.css";
+
+interface VirtualScrollContextType {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}
+
+export const VirtualScrollContext = createContext<VirtualScrollContextType>({
+  containerRef: { current: null },
+});
 
 interface VirtualScrollProps extends PropsWithChildren {
   overscan?: number;
@@ -28,10 +36,8 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
     scrollTop,
     overscan,
   });
-
   const containerStyle = classNames(style.container, "virtual-scroll");
 
-  // resize 감지
   useEffect(() => {
     if (!containerRef.current) return;
     const resizeObserver = new ResizeObserver(([entry]) => {
@@ -42,15 +48,6 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
     });
     resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  }, []);
-
-  // scroll 감지
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const onScroll = () => setScrollTop(el.scrollTop);
-    el.addEventListener("scroll", onScroll);
-    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -73,13 +70,15 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
   }, [onScrollEnd]);
 
   return (
-    <div ref={containerRef} className={containerStyle}>
-      <div style={{ height: totalHeight }}>
-        {containerSize.height !== 0 && containerSize.width !== 0 && (
-          <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
-        )}
+    <VirtualScrollContext.Provider value={{ containerRef }}>
+      <div ref={containerRef} className={containerStyle}>
+        <div style={{ height: totalHeight }}>
+          {containerSize.height !== 0 && containerSize.width !== 0 && (
+            <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
+          )}
+        </div>
       </div>
-    </div>
+    </VirtualScrollContext.Provider>
   );
 };
 

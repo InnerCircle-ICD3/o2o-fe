@@ -1,4 +1,4 @@
-import type { foodTypeList } from "./constant";
+import type { foodTypeList } from "../constants/filterTab";
 
 export type DayType = "오전" | "오후";
 export type HourType = number & { __brand: "Hour" };

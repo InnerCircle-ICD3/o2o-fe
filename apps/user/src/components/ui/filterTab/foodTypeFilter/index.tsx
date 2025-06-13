@@ -1,9 +1,9 @@
 import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
+import { foodTypeList } from "@/constants/filterTab";
 import { useFilterTab } from "@/stores/useFilterTab";
-import { foodTypeList } from "./constant";
-import * as styles from "./filterTab.css";
-import type { FoodType } from "./type";
+import type { FoodType } from "@/types/filterTab.type";
+import * as styles from "./foodTypeFilter.css";
 
 interface FoodTypeFilterProps {
   isOpen: boolean;
@@ -30,7 +30,7 @@ export default function FoodTypeFilter({ isOpen, onClose }: FoodTypeFilterProps)
             className={
               selectedFoodType === item.value
                 ? styles.filterListItemSelected
-                : styles.filterListItemHover
+                : styles.filterListItem
             }
             key={item.value}
           >

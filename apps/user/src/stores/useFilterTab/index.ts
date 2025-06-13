@@ -1,4 +1,4 @@
-import type { FoodType, Location, PickupTime } from "@/components/ui/filterTab/type";
+import type { FoodType, Location, PickupTime } from "@/types/filterTab.type";
 import { create } from "zustand";
 
 interface FilterTabState {

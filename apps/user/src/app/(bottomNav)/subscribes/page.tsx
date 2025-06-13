@@ -18,7 +18,7 @@ const Page = () => {
     isError,
     isLoading,
     fetchNextPage,
-  } = useSubscribeList(1, isLogin);
+  } = useSubscribeList(user?.customerId);
 
   if (!isLogin) {
     return <RequireLogin text="찜" />;
@@ -41,12 +41,18 @@ const Page = () => {
         <VirtualScroll
           overscan={3}
           heights={{
+            "subscribe-title": {
+              height: 48,
+            },
             "subscribe-item": {
-              aspectRatio: 388 / 190,
+              aspectRatio: 190,
             },
           }}
           onScrollEnd={fetchNextPage}
         >
+          <VirtualItem name={"subscribe-title"}>
+            <h2 className={style.title}>우리 동네에서 관심 있는 가게, 지금 확인해보세요!</h2>
+          </VirtualItem>
           {contents.map((subscribe) => (
             <VirtualItem key={subscribe.id} name={"subscribe-item"}>
               <SubscribeItem subscribe={subscribe} />

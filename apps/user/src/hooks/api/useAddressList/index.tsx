@@ -8,10 +8,11 @@ const getAddressList = () => {
 
 const ADDRESS_KEY = "address";
 
-const useAddressList = () => {
+const useAddressList = (id?: number) => {
   const { data, isLoading, isError, error } = useQuery<CustomerAddress[]>({
     queryKey: [ADDRESS_KEY],
     queryFn: getAddressList,
+    enabled: !!id,
   });
 
   return {
