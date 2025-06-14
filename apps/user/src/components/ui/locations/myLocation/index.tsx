@@ -10,6 +10,7 @@ import useDeleteCustomerAddress from "@/hooks/api/useDeleteCustomerAddress";
 import useGetCustomerAddress from "@/hooks/api/useGetCustomerAddress";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { useSelectedAddressStore } from "@/stores/selectedAddressStore";
+import { useToastStore } from "@/stores/toastStore";
 import { userInfoStore } from "@/stores/userInfoStore";
 import { createUserMarker, renderMyLocationCircle } from "@/utils/locations";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -22,6 +23,7 @@ export default function MyLocation() {
   const router = useRouter();
   const { user } = userInfoStore();
   const selectedAddressStore = useSelectedAddressStore();
+  const { showToast } = useToastStore();
   const isLoaded = useKakaoLoader();
   const [range, setRange] = useState(0.5);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -132,8 +134,11 @@ export default function MyLocation() {
     });
 
     if (result.success) {
+      showToast("주소가 등록되었습니다.");
       selectedAddressStore.clearSelectedAddress(type);
       router.push("/mypage");
+    } else {
+      showToast("주소 등록에 실패했습니다.", true);
     }
   };
 

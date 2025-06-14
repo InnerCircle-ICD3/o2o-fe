@@ -2,7 +2,6 @@
 
 import { getCustomer } from "@/apis/ssr/customers";
 import type { Result } from "@/apis/types";
-import ErrorUi from "@/components/common/errorUi";
 import LoginLink from "@/components/ui/mypage/loginLink";
 import { userInfoStore } from "@/stores/userInfoStore";
 import type { Customer } from "@/types/apis/accounts.type";
@@ -28,8 +27,6 @@ const Page = () => {
     fetchUserInfo();
   }, [user?.customerId]);
 
-  if (!userInfo) return <ErrorUi message={"사용자 정보를 불러오는데 실패했습니다."} />;
-
   return (
     <div className={style.container}>
       <h2 className={style.title}>마이페이지</h2>
@@ -37,7 +34,7 @@ const Page = () => {
       <section className={style.wrapper}>
         <LoginLink userInfo={userInfo} />
 
-        {isLogin && (
+        {isLogin && userInfo && (
           <>
             <div className={style.shortcuts}>
               <Link href="/subscribes" className={style.shortcutItem}>
@@ -72,7 +69,7 @@ const Page = () => {
           </>
         )}
       </section>
-      {isLogin && (
+      {isLogin && userInfo && (
         <div className={style.bottomButtons}>
           <button className={style.bottomButton} type={"button"}>
             로그아웃

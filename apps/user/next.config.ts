@@ -7,7 +7,14 @@ const nextConfig: NextConfig = {
   /* config options here */
   distDir: ".next",
   output: "standalone",
-
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://customer.eatngo.org/api/v1/:path*",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
