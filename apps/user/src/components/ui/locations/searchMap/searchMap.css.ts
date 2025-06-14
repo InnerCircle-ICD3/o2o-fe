@@ -32,3 +32,11 @@ export const resetPositionVariants = styleVariants({
     bottom: 340,
   },
 });
+
+export const buttonText = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: 4,
+  fontSize: 14,
+});
