@@ -27,7 +27,7 @@ export default function StoreInfo({
       {/* rating & distance */}
       {showRating && (
         <div className={commonStyle.reviewAndDistanceWrapper}>
-          <Image src={"/icons/review.svg"} alt={""} width={16} height={16} />
+          <Image src={"/icons/star.svg"} alt={""} width={16} height={16} />
           {showDistance && (
             <span>
               <strong>{storesDetail.ratingAverage}</strong> ({storesDetail.ratingCount}){" "}
