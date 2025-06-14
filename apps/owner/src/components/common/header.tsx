@@ -10,13 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import usePostLogout from "@/hooks/api/usePostLogout";
+import { useToastMessage } from "@/hooks/useToastMessage";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useToastStore } from "../../../../user/src/stores/toastStore/index";
 
 export function Header() {
   const logoutMutation = usePostLogout();
-  const { showToast } = useToastStore();
+  const { showToast } = useToastMessage();
   const router = useRouter();
 
   const handleLogout = async () => {
