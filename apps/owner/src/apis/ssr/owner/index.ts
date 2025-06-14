@@ -1,6 +1,6 @@
-import { apiClient } from "@/apis/client";
+import { api } from "@/apis/client";
 import { toSafeResult } from "@/apis/utils/result";
 
 export const postLogout = async () => {
-  return await toSafeResult(() => apiClient.post("oauth2/logout", {}));
+  return await toSafeResult(() => api.post("oauth2/logout", {}));
 };
