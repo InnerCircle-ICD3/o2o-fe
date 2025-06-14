@@ -7,7 +7,8 @@ import { useEffect } from "react";
 export default function OrderSseListener() {
   const openModal = useOrderModalStore((state) => state.openModal);
   const owner = useOwnerStore((state) => state.owner);
-  const storeId = owner?.storeOwnerId;
+  const storeId = owner?.userId;
+
   useEffect(() => {
     if (!storeId) {
       console.log("❌ SSE: storeId가 없어서 연결하지 않음");
