@@ -29,7 +29,7 @@ const StoresInfo = (props: StoreInfoProps) => {
           </span>
         </h2>
         <div className={style.reviewAndDistanceWrapper}>
-          <Image src={"/icons/review.svg"} alt={""} width={16} height={16} />
+          <Image src={"/icons/star.svg"} alt={""} width={16} height={16} />
           <span>
             <strong>4.5</strong> (123) 1km
           </span>

@@ -63,9 +63,16 @@ const OrderItem = (props: OrderItemProps) => {
         </div>
       </Link>
 
-      {isCompleted && (
-        <Button status={"primary"}>리뷰 {order.hasReview ? "확인하기" : "작성하기"}</Button>
-      )}
+      {isCompleted &&
+        (order.hasReview ? (
+          <Link href={`/review/${order.id}`}>
+            <Button status={"primary"}>리뷰 확인하기</Button>
+          </Link>
+        ) : (
+          <Link href={`/review/register?id=${order.id}`}>
+            <Button status={"primary"}>리뷰 작성하기</Button>
+          </Link>
+        ))}
     </div>
   );
 };

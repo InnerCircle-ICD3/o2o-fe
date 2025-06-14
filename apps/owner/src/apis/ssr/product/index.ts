@@ -11,9 +11,7 @@ export const deleteProduct = async (storeId: number, productId: number) => {
 };
 
 export const getProduct = async (storeId: number, productId: number) => {
-  return await toSafeResult(() =>
-    api.get<Product>(`stores/${storeId}/products/${productId}`),
-  );
+  return await toSafeResult(() => api.get<Product>(`stores/${storeId}/products/${productId}`));
 };
 
 export const createProduct = async (storeId: number, data: Partial<Product>) => {
