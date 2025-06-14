@@ -53,25 +53,85 @@ type FormFieldProps =
 export function FormField(props: FormFieldProps) {
   const { label, name, rightElement, error } = props;
 
-  return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-4">
-        <Label htmlFor={name} className="w-[90px]">
-          {label}
-        </Label>
-        <div className="flex-1 flex gap-2">
-          {props.type === "multiSelect" ? (
+  if (props.type === "multiSelect") {
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-4">
+          <Label htmlFor={name} className="w-[90px]">
+            {label}
+          </Label>
+          <div className="flex-1 flex gap-2">
             <MultiSelect
               options={props.options}
               value={props.value}
               onChange={props.onChange}
               placeholder="카테고리를 선택하세요"
             />
-          ) : props.type === "tagInput" ? (
+            {rightElement && <div className="flex items-center">{rightElement}</div>}
+          </div>
+        </div>
+        {error && (
+          <p className="text-xs text-red-500 ml-[124px] break-words whitespace-pre-line max-w-[250px]">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+  if (props.type === "tagInput") {
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-4">
+          <Label htmlFor={name} className="w-[90px]">
+            {label}
+          </Label>
+          <div className="flex-1 flex gap-2">
             <TagInput label={label} value={props.value} onChange={props.onChange} error={error} />
-          ) : props.type === "textarea" ? (
-            <Textarea id={name} aria-label={label} {...props} />
-          ) : props.type === "image" ? (
+            {rightElement && <div className="flex items-center">{rightElement}</div>}
+          </div>
+        </div>
+        {error && (
+          <p className="text-xs text-red-500 ml-[124px] break-words whitespace-pre-line max-w-[250px]">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+  if (props.type === "textarea") {
+    // TextareaFieldProps만 추출
+    const { type, label, name, rightElement, error, ...textareaProps } = props;
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-4">
+          <Label htmlFor={name} className="w-[90px]">
+            {label}
+          </Label>
+          <div className="flex-1 flex gap-2">
+            <Textarea
+              id={name}
+              aria-label={label}
+              {...(textareaProps as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+            />
+            {rightElement && <div className="flex items-center">{rightElement}</div>}
+          </div>
+        </div>
+        {error && (
+          <p className="text-xs text-red-500 ml-[124px] break-words whitespace-pre-line max-w-[250px]">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+  if (props.type === "image") {
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-4">
+          <Label htmlFor={name} className="w-[90px]">
+            {label}
+          </Label>
+          <div className="flex-1 flex gap-2">
             <input
               id={name}
               type="file"
@@ -88,13 +148,46 @@ export function FormField(props: FormFieldProps) {
               }}
               className="cursor-pointer border rounded px-3 py-2 w-full"
             />
-          ) : (
-            <Input id={name} aria-label={label} {...props} />
-          )}
-          {rightElement}
+            {rightElement && <div className="flex items-center">{rightElement}</div>}
+          </div>
+        </div>
+        {error && (
+          <p className="text-xs text-red-500 ml-[124px] break-words whitespace-pre-line max-w-[250px]">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  const {
+    type,
+    label: _label,
+    name: _name,
+    rightElement: _rightElement,
+    error: _error,
+    ...inputProps
+  } = props;
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-4">
+        <Label htmlFor={name} className="w-[90px]">
+          {label}
+        </Label>
+        <div className="flex-1 flex gap-2">
+          <Input
+            id={name}
+            aria-label={label}
+            {...(inputProps as InputHTMLAttributes<HTMLInputElement>)}
+          />
+          {rightElement && <div className="flex items-center">{rightElement}</div>}
         </div>
       </div>
-      {error && <p className="text-sm text-red-500 ml-[124px]">{error}</p>}
+      {error && (
+        <p className="text-xs text-red-500 ml-[124px] break-words whitespace-pre-line max-w-[250px]">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
