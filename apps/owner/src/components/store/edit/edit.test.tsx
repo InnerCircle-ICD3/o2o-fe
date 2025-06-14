@@ -22,7 +22,7 @@ import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { StoreResponse } from "@/types/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 
 type Owner = { userId: number };
 
@@ -69,12 +69,12 @@ describe("StoreEdit", () => {
     vi.clearAllMocks();
   });
 
-  it("유저 정보 없을 때 메시지 렌더링", () => {
+  it("유저 정보 없을 때 메시지 렌더링", async () => {
     renderWithClient(<StoreEdit />);
     screen.getByText("유저 정보를 불러올 수 없습니다. 다시 로그인해주세요.");
   });
 
-  it("로딩 중일 때 Loading 메시지 렌더링", () => {
+  it("로딩 중일 때 Loading 메시지 렌더링", async () => {
     (useOwnerStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ owner: mockOwner });
     (useGetOwnerStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       data: null,
@@ -95,7 +95,7 @@ describe("StoreEdit", () => {
     screen.getByLabelText("도로명 주소");
   });
 
-  it("영업중/영업종료 토글 동작", () => {
+  it("영업중/영업종료 토글 동작", async () => {
     (useOwnerStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ owner: mockOwner });
     (useGetOwnerStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       data: { data: mockStoreData },
@@ -107,7 +107,9 @@ describe("StoreEdit", () => {
     });
     renderWithClient(<StoreEdit />);
     const switchButton = screen.getByRole("switch");
-    fireEvent.click(switchButton);
+    await act(async () => {
+      fireEvent.click(switchButton);
+    });
     expect(patchMutate).toHaveBeenCalled();
   });
 });

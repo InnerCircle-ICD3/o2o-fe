@@ -27,12 +27,20 @@ export const statusBadge = style({
   position: "absolute",
   top: 20,
   left: 25,
-  backgroundColor: globalTheme.color.label.sales.background,
-  color: globalTheme.color.label.sales.color,
   fontSize: 12,
   fontWeight: 600,
   padding: "6px 10px",
   borderRadius: 999,
+});
+
+export const openStatus = style({
+  backgroundColor: globalTheme.color.label.sales.background,
+  color: globalTheme.color.label.sales.color,
+});
+
+export const closedStatus = style({
+  backgroundColor: "#FFE5E5",
+  color: "#FF4D4D",
 });
 
 export const likeButton = style({
@@ -83,7 +91,8 @@ export const ratingRow = style({
   justifyContent: "space-between",
   fontSize: 12,
   color: globalTheme.color.gray.base,
-  gap: 4,
+  gap: 8,
+  marginTop: 4,
 });
 
 export const originPrice = style({
@@ -96,4 +105,9 @@ export const salePrice = style({
   fontSize: 18,
   fontWeight: 700,
   color: globalTheme.color.label.sales.color,
+});
+
+export const pickupTime = style({
+  fontWeight: 700,
+  color: globalTheme.color.primary,
 });

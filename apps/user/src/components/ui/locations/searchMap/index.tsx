@@ -112,6 +112,10 @@ export default function SearchMap() {
       if (location) {
         createUserMarker(location, map);
       }
+
+      kakao.maps.event.addListener(map, "click", () => {
+        setSelectedStoreId(null);
+      });
     },
     [location],
   );
@@ -171,12 +175,14 @@ export default function SearchMap() {
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 2,
-            width: "120px",
+            width: "140px",
             height: "40px",
           }}
           status="primary"
         >
-          현 지도에서 검색
+          <span className={styles.buttonText}>
+            <Image src="/icons/reload.svg" alt="refresh" width={14} height={14} />현 지도에서 검색
+          </span>
         </Button>
       )}
 
