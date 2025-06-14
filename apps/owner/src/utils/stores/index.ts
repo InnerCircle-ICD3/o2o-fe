@@ -36,3 +36,38 @@ export function getStoreStatusLabel(status: "OPEN" | "CLOSED") {
     (status === "OPEN" ? "영업중" : "영업종료")
   );
 }
+
+export const formatContactNumber = (value: string): string => {
+  const numbers = value.replace(/\D/g, "");
+  const len = numbers.length;
+
+  if (len === 11) {
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
+  }
+
+  if (len === 10) {
+    if (numbers.startsWith("02")) {
+      return `${numbers.slice(0, 2)}-${numbers.slice(2, 6)}-${numbers.slice(6)}`;
+    }
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
+  }
+
+  if (len === 9) {
+    if (numbers.startsWith("02")) {
+      return `${numbers.slice(0, 2)}-${numbers.slice(2, 5)}-${numbers.slice(5)}`;
+    }
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 6)}-${numbers.slice(6)}`;
+  }
+
+  if (len === 8) {
+    return `${numbers.slice(0, 4)}-${numbers.slice(4)}`;
+  }
+
+  if (len <= 7) {
+    if (len <= 3) return numbers;
+    return `${numbers.slice(0, len - 4)}-${numbers.slice(len - 4)}`;
+  }
+
+  // 12자리 이상이면 잘라
+  return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+};

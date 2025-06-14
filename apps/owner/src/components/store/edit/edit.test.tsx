@@ -11,6 +11,11 @@ vi.mock("@/hooks/api/useGetOwnerStore", () => ({
 vi.mock("@/hooks/api/usePatchOwnerStoreStatus", () => ({
   default: vi.fn(),
 }));
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+}));
 
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
@@ -66,7 +71,7 @@ describe("StoreEdit", () => {
 
   it("유저 정보 없을 때 메시지 렌더링", () => {
     renderWithClient(<StoreEdit />);
-    screen.getByText("유저 정보가 없습니다.");
+    screen.getByText("유저 정보를 불러올 수 없습니다. 다시 로그인해주세요.");
   });
 
   it("로딩 중일 때 Loading 메시지 렌더링", () => {
@@ -76,7 +81,7 @@ describe("StoreEdit", () => {
       isLoading: true,
     });
     renderWithClient(<StoreEdit />);
-    screen.getByText("Loading...");
+    screen.getByText("매장 정보를 불러오는 중...");
   });
 
   it("폼 필드들이 정상적으로 렌더링", () => {
