@@ -1,6 +1,7 @@
 import type { Result } from "@/apis/types";
 import type { Customer } from "@/types/apis/accounts.type";
-import { render, screen, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { render, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import * as style from "./mypage.css";
 import Page from "./page";
@@ -36,6 +37,11 @@ vi.mock("next/navigation", () => ({
 
 import { getCustomer } from "@/apis/ssr/customers";
 
+const renderWithQueryClient = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient();
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
+
 describe("Mypage Test", () => {
   it("로그인 정보가 있다면 shortcut, menus 메뉴가 나타난다.", async () => {
     // 로그인 상태로 mockUser 설정
@@ -52,7 +58,7 @@ describe("Mypage Test", () => {
       } as Customer,
     } as Result<Customer>);
 
-    const { container } = render(<Page />);
+    const { container } = renderWithQueryClient(<Page />);
     // 비동기 처리 기다림
     await waitFor(() => {
       expect(container.querySelector(`.${style.shortcuts}`)).toBeInTheDocument();
@@ -61,16 +67,16 @@ describe("Mypage Test", () => {
   });
 
   it("로그인 정보가 없다면 shortcut, menus 메뉴가 나타나지 않는다.", async () => {
-    const { container } = render(<Page />);
+    // 비로그인 상태로 mockUser 설정
+    mockUser = null;
+    // getCustomer는 호출되지 않으므로 mock 필요 없음
 
-    // 로그인 링크가 표시되는지 확인
-    expect(screen.getByText("로그인")).toBeInTheDocument();
-    expect(
-      screen.getByText("로그인을 하면 더 많은 서비스를 이용할 수 있어요."),
-    ).toBeInTheDocument();
-
-    // shortcut과 menus가 없는지 확인
-    expect(container.querySelector(`.${style.shortcuts}`)).not.toBeInTheDocument();
-    expect(container.querySelector(`.${style.menus}`)).not.toBeInTheDocument();
+    const { container, getByText } = renderWithQueryClient(<Page />);
+    await waitFor(() => {
+      expect(getByText("로그인")).toBeInTheDocument();
+      expect(getByText("로그인을 하면 더 많은 서비스를 이용할 수 있어요.")).toBeInTheDocument();
+      expect(container.querySelector(`.${style.shortcuts}`)).not.toBeInTheDocument();
+      expect(container.querySelector(`.${style.menus}`)).not.toBeInTheDocument();
+    });
   });
 });
