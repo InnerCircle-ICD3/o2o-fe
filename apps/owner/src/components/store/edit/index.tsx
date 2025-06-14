@@ -9,6 +9,7 @@ import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
 import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePutOwnerStore from "@/hooks/api/usePutOwnerStore";
+import { useToastMessage } from "@/hooks/useToastMessage";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
 import { getDefaultStoreFormValues } from "@/utils/stores";
@@ -27,9 +28,6 @@ export default function StoreEdit() {
   const [isOpen, setIsOpen] = useState(true); // true: 영업중, false: 영업종료
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [toastMessage, setToastMessage] = useState("");
-  const [isToastVisible, setIsToastVisible] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   const form = useForm<UpdateStoreRequest>({
     defaultValues: initialUpdateStoreFormData,
@@ -104,18 +102,7 @@ export default function StoreEdit() {
     }
   };
 
-  const showToast = (message: string, isError = false) => {
-    setIsToastVisible(false);
-    setTimeout(() => {
-      setToastMessage(message);
-      setIsError(isError);
-      setIsToastVisible(true);
-    }, 100);
-  };
-
-  const handleToastClose = () => {
-    setIsToastVisible(false);
-  };
+  const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
 
   const handleStatusChange = async (checked: boolean) => {
     try {
@@ -152,7 +139,7 @@ export default function StoreEdit() {
   }
 
   return (
-    <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 수정 폼">
+    <section className="flex flex-col gap-6 min-h-[600px] max-w-[1200px]" aria-label="매장 수정 폼">
       <div className="flex flex-row justify-end items-center w-full">
         <label className="flex items-center gap-2">
           <span className="ml-2 text-base font-medium select-none">

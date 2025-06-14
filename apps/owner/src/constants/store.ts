@@ -14,10 +14,6 @@ export const VALIDATION_RULES: ValidationRules<CreateStoreRequest> = {
     pattern: /^\d{10}$/,
     message: "10자리 숫자로만 입력해주세요. (- 제외)",
   },
-  contact: {
-    pattern: /^\d{2,3}-\d{3,4}-\d{4}$/,
-    message: "올바른 전화번호 형식으로 입력해주세요. 예: 010-1234-5678",
-  },
   description: {
     pattern: /^.{0,500}$/,
     message: "설명은 최대 500자까지 입력 가능합니다.",
