@@ -1,8 +1,16 @@
+export type OrderStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "PREPARING"
+  | "READY"
+  | "COMPLETED"
+  | "CANCELLED";
+
 export interface Order {
   orderId: number;
   customerId: number;
   storeId: number;
-  orderStatus: "PENDING" | "ACCEPTED" | "PREPARING" | "READY" | "COMPLETED" | "CANCELLED";
+  orderStatus: OrderStatus;
   totalAmount: number;
   orderTime: string;
   pickupTime?: string;
@@ -24,4 +32,9 @@ export interface OrderItemOption {
   optionName: string;
   optionValue: string;
   additionalPrice: number;
+}
+
+export interface OrderListResponse {
+  contents: Order[];
+  lastId: number | null;
 }

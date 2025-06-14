@@ -68,7 +68,7 @@ const createApiClient = (kyInstance: typeof ky) => ({
    * @param data - 전송할 데이터
    * @param options - ky Options (headers, timeout 등, json은 자동으로 설정됨)
    */
-  post: async <T>(url: string, data: unknown, options: Options = {}) => {
+  post: async <T>(url: string, data?: unknown, options: Options = {}) => {
     return toResult<T>(() => kyInstance.post(url, { json: data, ...options }).json());
   },
 
