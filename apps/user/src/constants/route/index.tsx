@@ -173,6 +173,10 @@ const ROUTE = {
       name: "나의 정보 수정",
       path: "/mypage/complete-profile",
     },
+    storeLocation: {
+      name: "매장 위치",
+      path: "/locations/store-location",
+    },
     reviewRegister: {
       name: "리뷰 작성",
       path: "/review/register",
