@@ -4,15 +4,10 @@ import ErrorUi from "@/components/common/errorUi";
 import { KakaoMap } from "@/components/common/kakaoMap";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import { useSearchParams } from "next/navigation";
 import { useCallback, useRef } from "react";
 import * as styles from "./storeMap.css";
 
-export default function StoreMap() {
-  const searchParams = useSearchParams();
-  const lat = Number(searchParams.get("lat"));
-  const lng = Number(searchParams.get("lng"));
-
+export default function StoreMap({ lat, lng }: { lat: number; lng: number }) {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const isLoaded = useKakaoLoader();
 
