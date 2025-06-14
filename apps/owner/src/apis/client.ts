@@ -18,7 +18,7 @@ import { toResult } from "./utils/result";
  * Base URL: 도메인/api/v1 (예: https://api.example.com/api/v1)
  */
 const apiInstance = ky.create({
-  prefixUrl: "/api", // 도메인/api/v1
+  prefixUrl: process.env.NEXT_PUBLIC_API_URL, // 도메인/api/v1
   headers: {
     "Content-Type": "application/json",
   },
