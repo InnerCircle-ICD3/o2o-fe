@@ -2,15 +2,19 @@
 
 import { FormField } from "@/components/common/formField";
 import { Stepper } from "@/components/common/stepper";
+import { ToastMessage } from "@/components/common/toastMessage";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { STORE_CATEGORIES, VALIDATION_RULES, initialCreateStoreFormData } from "@/constants/store";
 import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePostOwnerStore from "@/hooks/api/usePostOwnerStore";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
+import { useToastMessage } from "@/hooks/useToastMessage";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
 import type { CreateStoreRequest } from "@/types/store";
+import { formatContactNumber } from "@/utils/stores";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import React from "react";
 import { useForm } from "use-form-light";
@@ -22,7 +26,12 @@ export default function StoreRegisterForm() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
   const { owner } = useOwnerStore();
+  const router = useRouter();
 
+  const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
+  const createStoreMutation = usePostOwnerStore(owner?.userId);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const { mutateAsync: uploadImage, isPending: isUploading } = usePostFileUpload();
   const form = useForm<CreateStoreRequest>({
     defaultValues: initialCreateStoreFormData,
     validationRules: VALIDATION_RULES,
@@ -52,23 +61,10 @@ export default function StoreRegisterForm() {
       errors[field] = error;
     };
 
-  const createStoreMutation = usePostOwnerStore(owner?.userId);
-
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const { mutateAsync: uploadImage, isPending: isUploading } = usePostFileUpload();
-
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const presignedUrl = await uploadImage({ file, folderPath: "store" });
-    await fetch(presignedUrl, {
-      method: "PUT",
-      body: file,
-      headers: {
-        "Content-Type": file.type || "image/jpeg",
-      },
-    });
-    const imageUrl = presignedUrl.split("?")[0];
+    const imageUrl = await uploadImage({ file, folderPath: "store" });
     setValue("mainImageUrl", imageUrl);
   };
 
@@ -76,7 +72,14 @@ export default function StoreRegisterForm() {
     const isValid = await form.validate();
     if (!isValid) return;
 
-    createStoreMutation.mutate(data);
+    createStoreMutation.mutate(data, {
+      onSuccess: () => {
+        showToast("매장 등록이 완료되었습니다.", false, () => router.push("/store-management"));
+      },
+      onError: () => {
+        showToast("매장 등록에 실패했습니다.", true);
+      },
+    });
   };
 
   return (
@@ -111,7 +114,7 @@ export default function StoreRegisterForm() {
                 name="contact"
                 onBlur={handleBlur("contact")}
                 value={watch("contact")}
-                onChange={(e) => setValue("contact", e.target.value)}
+                onChange={(e) => setValue("contact", formatContactNumber(e.target.value))}
                 error={errors.contact}
               />
               <div className="space-y-2">
@@ -232,6 +235,12 @@ export default function StoreRegisterForm() {
           )}
         </div>
       </form>
+      <ToastMessage
+        message={toastMessage}
+        isVisible={isToastVisible}
+        onClose={handleToastClose}
+        isError={isError}
+      />
     </section>
   );
 }

@@ -71,7 +71,7 @@ describe("StoreEdit", () => {
 
   it("유저 정보 없을 때 메시지 렌더링", async () => {
     renderWithClient(<StoreEdit />);
-    await screen.findByText("유저 정보가 없습니다.");
+    screen.getByText("유저 정보를 불러올 수 없습니다. 다시 로그인해주세요.");
   });
 
   it("로딩 중일 때 Loading 메시지 렌더링", async () => {
@@ -81,7 +81,7 @@ describe("StoreEdit", () => {
       isLoading: true,
     });
     renderWithClient(<StoreEdit />);
-    await screen.findByText("Loading...");
+    screen.getByText("매장 정보를 불러오는 중...");
   });
 
   it("폼 필드들이 정상적으로 렌더링", () => {
