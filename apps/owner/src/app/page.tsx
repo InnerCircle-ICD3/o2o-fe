@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  redirect("/product-management");
+  redirect("/store-management/edit");
 }
