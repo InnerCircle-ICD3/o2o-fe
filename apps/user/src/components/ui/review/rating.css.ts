@@ -29,3 +29,9 @@ export const ratingText = style({
   fontWeight: "500",
   color: "#666",
 });
+
+export const errorText = style({
+  color: "#FF0000",
+  fontSize: "12px",
+  marginTop: "4px",
+});
