@@ -1,3 +1,4 @@
+"use client";
 import { getStoreReviews } from "@/apis/ssr/stores";
 import type { StoreReviewResponse } from "@/types/apis/stores.type";
 import Image from "next/image";
