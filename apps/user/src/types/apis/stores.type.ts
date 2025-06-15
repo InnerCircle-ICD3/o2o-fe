@@ -128,3 +128,18 @@ export interface StoreProductsResponse {
   storeName: string;
   products: Product[];
 }
+
+export interface StoreReviewResponse {
+  id: number;
+  orderId: number;
+  content: string;
+  images: string[];
+  score: number;
+  nickname: string;
+  createdAt: string;
+}
+
+export interface StoreReviewListResponse {
+  contents: StoreReviewResponse[];
+  lastId: number;
+}

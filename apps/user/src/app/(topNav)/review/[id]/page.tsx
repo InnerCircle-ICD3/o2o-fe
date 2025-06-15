@@ -78,7 +78,7 @@ export default function Page(props: PageProps) {
             {[1, 2, 3, 4, 5].map((rating) => (
               <div key={rating} className={styles.starButton}>
                 <Image
-                  src={`/icons/star${rating <= review.score ? "" : "-empty"}.svg`}
+                  src={`/icons/star${rating > review.score && "-empty"}.svg`}
                   alt={`${rating}점`}
                   width={32}
                   height={32}

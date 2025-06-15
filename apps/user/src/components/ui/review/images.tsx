@@ -13,6 +13,7 @@ export interface ImageData {
     contentType: string;
     folderPath: string;
   };
+  origin: File;
 }
 
 interface ReviewImagesProps {
@@ -42,6 +43,7 @@ export default function ReviewImages({ images, onChange }: ReviewImagesProps) {
           if (e.target?.result) {
             const imageData: ImageData = {
               preview: e.target.result as string,
+              origin: file,
               file: {
                 fileName: file.name,
                 contentType: file.type,

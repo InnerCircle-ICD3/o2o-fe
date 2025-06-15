@@ -44,19 +44,37 @@ export default function ReviewRegisterPage() {
 
     //이미지변환 api 호출
     const getS3UploadUrls = await uploadUrls({ files: formDataToUpload });
-
     if (!getS3UploadUrls.success) {
       alert("이미지 업로드에 실패했습니다. 잠시 후 다시 시도해주세요.");
       return;
     }
 
-    const images = getS3UploadUrls.data.map((item) => item.preSignedUrl);
+    //s3업로드
+    await Promise.all(
+      formData.files.map(async (fileData, idx) => {
+        const response = await fetch(getS3UploadUrls.data[idx].preSignedUrl, {
+          method: "PUT",
+          headers: { "Content-Type": fileData.file.contentType },
+          body: fileData.origin,
+        });
 
+        if (!response.ok) {
+          console.error(`File ${idx + 1} upload failed: ${response.statusText}`);
+        }
+
+        return response;
+      }),
+    );
+
+    const combineUrls = getS3UploadUrls.data.map((item) => {
+      const baseUrl = item.preSignedUrl.split("/reviews")[0];
+      return `${baseUrl}/${item.s3Key}`;
+    });
     //등록 api 호출
     const result = await setReview(id as string, {
       score: formData.rating,
       content: formData.content,
-      images: images,
+      images: combineUrls,
     });
 
     if (result.success) {
