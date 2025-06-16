@@ -4,7 +4,6 @@ import { FormField } from "@/components/common/formField";
 import { Stepper } from "@/components/common/stepper";
 import { ToastMessage } from "@/components/common/toastMessage";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { STORE_CATEGORIES, VALIDATION_RULES, initialCreateStoreFormData } from "@/constants/store";
 import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePostOwnerStore from "@/hooks/api/usePostOwnerStore";
@@ -16,7 +15,6 @@ import type { CreateStoreRequest } from "@/types/store";
 import { formatContactNumber } from "@/utils/stores";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import React from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
 
@@ -30,7 +28,6 @@ export default function StoreRegisterForm() {
 
   const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
   const createStoreMutation = usePostOwnerStore(owner?.userId);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { mutateAsync: uploadImage, isPending: isUploading } = usePostFileUpload();
   const form = useForm<CreateStoreRequest>({
     defaultValues: initialCreateStoreFormData,
@@ -42,6 +39,9 @@ export default function StoreRegisterForm() {
 
   const { errors, handleSubmit, register, watch, setValue } = form;
   const { openPostcode, addressType } = useStoreAddress(form);
+
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
@@ -61,16 +61,15 @@ export default function StoreRegisterForm() {
       errors[field] = error;
     };
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const handleImageUpload = async (file: File) => {
     try {
+      setFileName(file.name);
       // 1. presignedUrl 요청
       const presignedUrl = await uploadImage({ file, folderPath: "store" });
       if (!presignedUrl) {
         showToast("이미지 업로드 실패", true);
-        return;
+        setFileName("");
+        return "";
       }
 
       // 2. S3에 PUT 업로드
@@ -81,14 +80,18 @@ export default function StoreRegisterForm() {
       });
       if (!response.ok) {
         showToast("S3 업로드 실패", true);
-        return;
+        setFileName("");
+        return "";
       }
 
       // 3. S3 URL 추출 (쿼리스트링 제거)
       const s3Url = presignedUrl.split("?")[0];
-      setValue("mainImageUrl", s3Url);
-    } catch (error) {
+      setPreviewUrl(s3Url);
+      return s3Url;
+    } catch {
       showToast("이미지 업로드 중 오류가 발생했습니다.", true);
+      setFileName("");
+      return "";
     }
   };
 
@@ -110,7 +113,12 @@ export default function StoreRegisterForm() {
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
       <Stepper step={step} labels={STEP_LABELS} />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        if (step === 3) {
+          handleSubmit(onSubmit)(e);
+        }
+      }} className="flex flex-col justify-between flex-1">
         <div className="flex flex-col">
           {step === 1 && (
             <fieldset className="space-y-6" aria-label="기본 정보">
@@ -141,38 +149,40 @@ export default function StoreRegisterForm() {
                 onChange={(e) => setValue("contact", formatContactNumber(e.target.value))}
                 error={errors.contact}
               />
-              <div className="space-y-2">
-                <div className="flex gap-8 items-center">
-                  <Label htmlFor="mainImageUpload" className="w-[90px]">
-                    대표 이미지 업로드
-                  </Label>
-                  <input
-                    id="mainImageUpload"
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleImageChange}
-                    className="cursor-pointer border rounded px-3 py-2 w-full"
-                    disabled={isUploading}
+              <FormField
+                type="image"
+                label="대표 이미지 업로드"
+                name="mainImageUrl"
+                value={watch("mainImageUrl") || ""}
+                onChange={async (value) => {
+                  if (value === null) {
+                    setValue("mainImageUrl", "");
+                    setPreviewUrl("");
+                    setFileName("");
+                    return;
+                  }
+                  if (value instanceof File) {
+                    const s3Url = await handleImageUpload(value);
+                    if (s3Url) {
+                      setValue("mainImageUrl", s3Url);
+                    }
+                  }
+                }}
+                error={errors.mainImageUrl}
+                fileName={fileName}
+              />
+              <div
+                className="flex justify-center items-center border border-input rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
+                style={{ minHeight: 180 }}
+              >
+                {previewUrl || watch("mainImageUrl") ? (
+                  <img
+                    src={previewUrl || watch("mainImageUrl")}
+                    alt="미리보기"
+                    className="object-contain w-full h-auto"
                   />
-                </div>
-                <div
-                  className="flex justify-center items-center border border-gray-300 rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
-                  style={{ minHeight: 180 }}
-                >
-                  {watch("mainImageUrl") ? (
-                    <img
-                      src={watch("mainImageUrl") || ""}
-                      alt="미리보기"
-                      className="object-contain w-full h-full"
-                      style={{ maxWidth: "100%", maxHeight: "100%" }}
-                    />
-                  ) : (
-                    <span className="text-gray-400 text-sm">이미지 미리보기</span>
-                  )}
-                </div>
-                {errors.mainImageUrl && (
-                  <p className="text-sm text-red-500">{errors.mainImageUrl}</p>
+                ) : (
+                  <span className="text-gray-300 text-sm">이미지 미리보기</span>
                 )}
               </div>
             </fieldset>
@@ -191,7 +201,7 @@ export default function StoreRegisterForm() {
                 onChange={(e) => setAddressSearch(e.target.value)}
                 rightElement={
                   <div className="flex items-center gap-2">
-                    <Button type="button" onClick={() => openPostcode(addressSearch)}>
+                    <Button type="button" onClick={() => openPostcode(addressSearch)} className="min-h-[42px]">
                       검색
                     </Button>
                   </div>
@@ -208,7 +218,8 @@ export default function StoreRegisterForm() {
                 type="input"
                 label="건물명"
                 name="buildingName"
-                {...register("buildingName")}
+                value={watch("buildingName")}
+                onChange={(e) => setValue("buildingName", e.target.value)}
               />
               <FormField
                 type="multiSelect"
@@ -221,7 +232,7 @@ export default function StoreRegisterForm() {
 
               <FormField
                 type="tagInput"
-                label="음식 카테고리 (Enter로 구분)"
+                label="음식 카테고리 (Enter 구분)"
                 name="foodCategory"
                 value={watch("foodCategory")}
                 onChange={(value: string[]) => setValue("foodCategory", value)}
@@ -247,7 +258,7 @@ export default function StoreRegisterForm() {
             <Button 
               type="button" 
               onClick={prevStep} 
-              className="flex-1"
+              className="flex-1 min-h-[42px]"
               disabled={isUploading}
             >
               이전
@@ -256,8 +267,11 @@ export default function StoreRegisterForm() {
           {step < 3 ? (
             <Button 
               type="button" 
-              onClick={nextStep} 
-              className={step > 1 ? "flex-1" : "w-full"}
+              onClick={(e) => {
+                e.preventDefault();
+                nextStep();
+              }} 
+              className={step > 1 ? "flex-1 min-h-[42px]" : "w-full min-h-[42px]"}
               disabled={isUploading}
             >
               {isUploading ? (
@@ -272,7 +286,7 @@ export default function StoreRegisterForm() {
           ) : (
             <Button 
               type="submit" 
-              className="flex-1"
+              className="flex-1 min-h-[42px]"
               disabled={createStoreMutation.isPending || isUploading}
             >
               {createStoreMutation.isPending || isUploading ? (

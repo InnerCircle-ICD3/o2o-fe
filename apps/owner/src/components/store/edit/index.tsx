@@ -35,6 +35,8 @@ export default function StoreEdit() {
 
   const queryClient = useQueryClient();
 
+  const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
+
   useEffect(() => {
     if (storeData) {
       const defaultValues = getDefaultStoreFormValues(storeData);
@@ -88,7 +90,7 @@ export default function StoreEdit() {
 
         // 3. S3 URL 추출 (쿼리스트링 제거)
         mainImageUrl = presignedUrl.split("?")[0];
-      } catch (error) {
+      } catch {
         showToast("이미지 업로드 중 오류가 발생했습니다.", true);
         return;
       }
@@ -108,22 +110,6 @@ export default function StoreEdit() {
       },
     );
   };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setPreviewUrl(result);
-        setValue("mainImageUrl", result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
 
   const handleStatusChange = async (checked: boolean) => {
     try {
@@ -163,7 +149,6 @@ export default function StoreEdit() {
     <section className="flex flex-col gap-6 min-h-[600px] max-w-[1200px]" aria-label="매장 수정 폼">
       <div className="flex flex-row items-center w-full">
         <div className="w-full">
-          <div className="mb-2 text-lg font-semibold">매장 영업 상태</div>
           <div className="rounded-lg border p-4 shadow-sm flex flex-row items-center justify-between bg-gray-50">
             <div className="space-y-1.5">
               <div className="font-medium text-base">
@@ -262,35 +247,48 @@ export default function StoreEdit() {
         <div className="flex flex-col gap-4 w-full md:w-1/2">
           <BusinessHoursSection<UpdateStoreRequest> form={form} />
 
-          <div className="flex flex-col gap-2">
-            <label className="font-medium">대표 이미지</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="cursor-pointer border rounded px-3 py-2 w-full"
-            />
-            <div
-              className="flex justify-center items-center border border-gray-300 rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
-              style={{ minHeight: 180 }}
-            >
-              {previewUrl ? (
-                <img
-                  src={previewUrl}
-                  alt="미리보기"
-                  className="object-contain w-full h-full"
-                  style={{ maxWidth: "100%", maxHeight: "100%" }}
-                />
-              ) : (
-                <span className="text-gray-400 text-sm">이미지 미리보기</span>
-              )}
-            </div>
-            {errors.mainImageUrl && <p className="text-sm text-red-500">{errors.mainImageUrl}</p>}
+          <FormField
+            type="image"
+            label="대표 이미지 업로드"
+            name="mainImageUrl"
+            value={watch("mainImageUrl") || ""}
+            onChange={async (value) => {
+              if (value === null) {
+                setValue("mainImageUrl", "");
+                setPreviewUrl("");
+                return;
+              }
+              if (value instanceof File) {
+                setImageFile(value);
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  const result = reader.result as string;
+                  setPreviewUrl(result);
+                  setValue("mainImageUrl", result);
+                };
+                reader.readAsDataURL(value);
+              }
+            }}
+            error={errors.mainImageUrl}
+          />
+          <div
+            className="flex justify-center items-center border border-input rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
+            style={{ minHeight: 180 }}
+          >
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt="미리보기"
+                className="object-contain w-full h-auto"
+              />
+            ) : (
+              <span className="text-gray-300 text-sm">이미지 미리보기</span>
+            )}
           </div>
 
           <Button 
             type="submit" 
-            className="w-full mt-4" 
+            className="w-full mt-4 min-h-[42px]" 
             disabled={updateStoreMutation.isPending || postFileUploadMutation.isPending}
           >
             {updateStoreMutation.isPending || postFileUploadMutation.isPending ? (
