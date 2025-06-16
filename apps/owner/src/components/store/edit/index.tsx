@@ -12,7 +12,7 @@ import usePutOwnerStore from "@/hooks/api/usePutOwnerStore";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
-import { getDefaultStoreFormValues } from "@/utils/stores";
+import { formatContactNumber, getDefaultStoreFormValues } from "@/utils/stores";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -63,17 +63,38 @@ export default function StoreEdit() {
     if (!isValid) return;
 
     let mainImageUrl = data.mainImageUrl;
-    // base64(새로 업로드된 파일)인 경우만 업로드
     if (mainImageUrl?.startsWith("data:") && imageFile) {
-      mainImageUrl = await postFileUploadMutation.mutateAsync({
-        file: imageFile,
-        folderPath: "store",
-      });
-      if (!mainImageUrl) {
-        showToast("이미지 업로드 실패", true);
+      try {
+        // 1. presignedUrl 요청
+        const presignedUrl = await postFileUploadMutation.mutateAsync({
+          file: imageFile,
+          folderPath: "store",
+        });
+        if (!presignedUrl) {
+          showToast("이미지 업로드 실패", true);
+          return;
+        }
+
+        // 2. S3에 PUT 업로드
+        const response = await fetch(presignedUrl, {
+          method: "PUT",
+          headers: { "Content-Type": imageFile.type || "image/jpeg" },
+          body: imageFile,
+        });
+        if (!response.ok) {
+          showToast("S3 업로드 실패", true);
+          return;
+        }
+
+        // 3. S3 URL 추출 (쿼리스트링 제거)
+        mainImageUrl = presignedUrl.split("?")[0];
+      } catch (error) {
+        showToast("이미지 업로드 중 오류가 발생했습니다.", true);
         return;
       }
     }
+
+    // 4. form에 S3 URL 저장 후 업데이트
     updateStoreMutation.mutate(
       { ...data, mainImageUrl },
       {
@@ -140,18 +161,27 @@ export default function StoreEdit() {
 
   return (
     <section className="flex flex-col gap-6 min-h-[600px] max-w-[1200px]" aria-label="매장 수정 폼">
-      <div className="flex flex-row justify-end items-center w-full">
-        <label className="flex items-center gap-2">
-          <span className="ml-2 text-base font-medium select-none">
-            {isOpen ? "영업중" : "영업종료"}
-          </span>
-          <Switch
-            checked={isOpen}
-            onCheckedChange={handleStatusChange}
-            disabled={patchStoreStatusMutation.isPending}
-            aria-label="영업 상태 스위치"
-          />
-        </label>
+      <div className="flex flex-row items-center w-full">
+        <div className="w-full">
+          <div className="mb-2 text-lg font-semibold">매장 영업 상태</div>
+          <div className="rounded-lg border p-4 shadow-sm flex flex-row items-center justify-between bg-gray-50">
+            <div className="space-y-1.5">
+              <div className="font-medium text-base">
+                현재 영업 상태: <span className={isOpen ? 'text-[#35A865]' : 'text-[#E53E3E]'}>{isOpen ? "영업중" : "영업종료"}</span>
+              </div>
+              <div className="text-sm text-gray-500">
+                이 스위치는 매장의 영업 상태를 나타냅니다. <br />
+                <b>영업을 종료하면 고객이 매장을 이용할 수 없습니다.</b>
+              </div>
+            </div>
+            <Switch
+              checked={isOpen}
+              onCheckedChange={handleStatusChange}
+              disabled={patchStoreStatusMutation.isPending}
+              aria-label="영업 상태 스위치"
+            />
+          </div>
+        </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex md:flex-row flex-col gap-8 w-full">
         <div className="flex flex-col gap-4 w-full md:w-1/2">
@@ -168,7 +198,7 @@ export default function StoreEdit() {
             label="연락처"
             name="contact"
             value={watch("contact") ?? ""}
-            onChange={(e) => setValue("contact", e.target.value)}
+            onChange={(e) => setValue("contact", formatContactNumber(e.target.value))}
             error={errors.contact}
           />
           <FormField
@@ -180,7 +210,6 @@ export default function StoreEdit() {
             className="h-30 resize-none"
             error={errors.description}
           />
-
           <FormField
             type="input"
             label="도로명 주소"
@@ -211,7 +240,6 @@ export default function StoreEdit() {
             name="buildingName"
             value={watch("buildingName") ?? ""}
             onChange={(e) => setValue("buildingName", e.target.value)}
-            readOnly
           />
           <FormField
             type="multiSelect"
@@ -260,11 +288,15 @@ export default function StoreEdit() {
             {errors.mainImageUrl && <p className="text-sm text-red-500">{errors.mainImageUrl}</p>}
           </div>
 
-          <Button type="submit" className="w-full mt-4" disabled={updateStoreMutation.isPending}>
-            {updateStoreMutation.isPending ? (
+          <Button 
+            type="submit" 
+            className="w-full mt-4" 
+            disabled={updateStoreMutation.isPending || postFileUploadMutation.isPending}
+          >
+            {updateStoreMutation.isPending || postFileUploadMutation.isPending ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span>수정 중...</span>
+                <span>{"수정 중..."}</span>
               </div>
             ) : (
               "수정하기"

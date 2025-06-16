@@ -64,8 +64,32 @@ export default function StoreRegisterForm() {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const imageUrl = await uploadImage({ file, folderPath: "store" });
-    setValue("mainImageUrl", imageUrl);
+
+    try {
+      // 1. presignedUrl 요청
+      const presignedUrl = await uploadImage({ file, folderPath: "store" });
+      if (!presignedUrl) {
+        showToast("이미지 업로드 실패", true);
+        return;
+      }
+
+      // 2. S3에 PUT 업로드
+      const response = await fetch(presignedUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type || "image/jpeg" },
+        body: file,
+      });
+      if (!response.ok) {
+        showToast("S3 업로드 실패", true);
+        return;
+      }
+
+      // 3. S3 URL 추출 (쿼리스트링 제거)
+      const s3Url = presignedUrl.split("?")[0];
+      setValue("mainImageUrl", s3Url);
+    } catch (error) {
+      showToast("이미지 업로드 중 오류가 발생했습니다.", true);
+    }
   };
 
   const onSubmit = async (data: CreateStoreRequest) => {
@@ -220,17 +244,45 @@ export default function StoreRegisterForm() {
 
         <div className="flex justify-center pt-4 gap-2">
           {step > 1 && (
-            <Button type="button" onClick={prevStep} className="flex-1">
+            <Button 
+              type="button" 
+              onClick={prevStep} 
+              className="flex-1"
+              disabled={isUploading}
+            >
               이전
             </Button>
           )}
           {step < 3 ? (
-            <Button type="button" onClick={nextStep} className={step > 1 ? "flex-1" : "w-full"}>
-              다음
+            <Button 
+              type="button" 
+              onClick={nextStep} 
+              className={step > 1 ? "flex-1" : "w-full"}
+              disabled={isUploading}
+            >
+              {isUploading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>이미지 업로드 중...</span>
+                </div>
+              ) : (
+                "다음"
+              )}
             </Button>
           ) : (
-            <Button type="submit" className="flex-1">
-              등록하기
+            <Button 
+              type="submit" 
+              className="flex-1"
+              disabled={createStoreMutation.isPending || isUploading}
+            >
+              {createStoreMutation.isPending || isUploading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>{isUploading ? "이미지 업로드 중..." : "등록 중..."}</span>
+                </div>
+              ) : (
+                "등록하기"
+              )}
             </Button>
           )}
         </div>
