@@ -1,22 +1,18 @@
 import { getStoreList } from "@/apis/ssr/stores";
 import type { InfiniteQueryResponse, Result } from "@/apis/types";
+import { useGeolocation } from "@/hooks/useGeolocation";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useFilterTab } from "@/stores/useFilterTab";
 import type { StoreListResponse } from "@/types/apis/stores.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-interface Coordinates {
-  lat: number;
-  lng: number;
-}
-
 const SIZE = 10;
 
 export const STORE_LIST_QUERY_KEY = "storeList";
 
-//FIXME 처음 로딩될때 page 2개씩 호출됨
-export const useStoreList = (locations: Coordinates | null) => {
-  const { selectedFoodType, getPickupTimeString, reservable } = useFilterTab();
+export const useStoreList = () => {
+  const locations = useGeolocation();
+  const { selectedFoodType, search, getPickupTimeString, reservable } = useFilterTab();
   const { queryParams, setAllQueryParams } = useQueryParams();
   const pickupTime = getPickupTimeString();
 
@@ -29,7 +25,7 @@ export const useStoreList = (locations: Coordinates | null) => {
     error,
     isError,
   } = useInfiniteQuery<Result<StoreListResponse>, Error, InfiniteQueryResponse<StoreListResponse>>({
-    queryKey: [STORE_LIST_QUERY_KEY, locations, selectedFoodType, pickupTime, reservable],
+    queryKey: [STORE_LIST_QUERY_KEY, locations, search, selectedFoodType, pickupTime, reservable],
     queryFn: ({ pageParam }) => {
       const params: Record<string, string | number | undefined> = {
         size: SIZE,
@@ -40,6 +36,7 @@ export const useStoreList = (locations: Coordinates | null) => {
       if (pickupTime) params.time = pickupTime;
       if (reservable !== undefined) params.onlyReservable = reservable ? "true" : undefined;
       if (pageParam !== undefined) params.lastId = String(pageParam);
+      if (search) params.searchText = search;
 
       const filteredParams = Object.fromEntries(
         Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== ""),

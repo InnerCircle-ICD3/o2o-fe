@@ -6,7 +6,6 @@ import Button from "@/components/common/button";
 import Checkbox from "@/components/common/checkbox";
 import StatusLabel from "@/components/common/statusLabel";
 import TextInput from "@/components/common/textInput";
-import { AutoComplete } from "@/components/ui/autoComplete";
 import Image from "next/image";
 import { useState } from "react";
 import * as style from "./page.css";
@@ -109,13 +108,6 @@ const CommonUi = () => {
           <StatusLabel status={"pending"}>픽업대기중</StatusLabel>
           <StatusLabel status={"completed"}>픽업완료</StatusLabel>
           <StatusLabel status={"canceled"}>주문취소</StatusLabel>
-        </div>
-      </div>
-
-      <div style={{ marginBottom: 100 }}>
-        <h2 className={style.header}>AutoComplete</h2>
-        <div className={style.list}>
-          <AutoComplete />
         </div>
       </div>
     </div>
