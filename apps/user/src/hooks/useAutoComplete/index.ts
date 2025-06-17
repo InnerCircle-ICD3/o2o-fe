@@ -1,27 +1,16 @@
 import { useSearchHistoryStore } from "@/stores/searchHistoryStore";
-import { useMemo, useState } from "react";
+import { useFilterTab } from "@/stores/useFilterTab";
+import { useState } from "react";
 import { useSearchRecommendations } from "../useSearchRecommendations";
 
 export const useAutoComplete = () => {
-  const [inputValue, setInputValue] = useState("");
+  const { search } = useFilterTab();
+  const [inputValue, setInputValue] = useState(search || "");
   const [isFocused, setIsFocused] = useState(false);
 
   const { searchHistory, addSearchHistory, removeSearchHistory, clearSearchHistory } =
     useSearchHistoryStore();
   const { recommendations } = useSearchRecommendations(inputValue);
-
-  const finalSuggestions = useMemo(() => {
-    if (!inputValue.trim()) return searchHistory;
-
-    const filteredHistory = searchHistory.filter((item) =>
-      item.toLowerCase().includes(inputValue.toLowerCase()),
-    );
-    const dedupedRecommendations = recommendations.filter(
-      (item) => !filteredHistory.includes(item),
-    );
-
-    return [...filteredHistory, ...dedupedRecommendations].slice(0, 10);
-  }, [inputValue, searchHistory, recommendations]);
 
   const handleSelect = (value: string) => {
     addSearchHistory(value);
@@ -43,7 +32,7 @@ export const useAutoComplete = () => {
     setInputValue,
     isFocused,
     setIsFocused,
-    finalSuggestions,
+    finalSuggestions: [...recommendations].slice(0, 5),
     searchHistory,
     handleSelect,
     handleKeyDown,

@@ -1,51 +1,31 @@
-import { baseUrl } from "@/mocks/utils";
-import { useEffect, useRef, useState } from "react";
+import { apiClient } from "@/apis/client";
+import type { Recommendation, SearchResult } from "@/types/apis/search.type";
+import { useEffect, useState } from "react";
+import { useQuery } from "../api/utils/useQuery";
 
 interface UseSearchRecommendationsResult {
-  recommendations: string[];
+  recommendations: Recommendation[];
 }
 
+const searchRecommendations = (searchTerm: string) => {
+  return apiClient.get<SearchResult>(`search/suggestions?keyword=${searchTerm}`);
+};
+
 export const useSearchRecommendations = (searchTerm: string): UseSearchRecommendationsResult => {
-  const [recommendations, setRecommendations] = useState<string[]>([]);
-  const latestSearchTermRef = useRef<string>("");
-  const controllerRef = useRef<AbortController | null>(null);
+  const [search, setSearch] = useState<string>("");
+  const { data: searchValue } = useQuery<SearchResult>({
+    queryKey: ["searchRecommendations", search],
+    queryFn: () => searchRecommendations(search),
+    enabled: !!search,
+  });
 
   useEffect(() => {
-    if (!searchTerm.trim()) {
-      setRecommendations([]);
-      return;
-    }
-
-    latestSearchTermRef.current = searchTerm;
-
-    controllerRef.current?.abort();
-    const controller = new AbortController();
-    controllerRef.current = controller;
-
-    const timer = setTimeout(async () => {
-      try {
-        const res = await fetch(`${baseUrl}/recommendations?searchTerm=${searchTerm}`, {
-          signal: controller.signal,
-        });
-
-        const data: string[] = await res.json();
-
-        // 중복 제거
-        const uniqueRecommendations = Array.from(new Set(data));
-
-        if (latestSearchTermRef.current === searchTerm) {
-          setRecommendations(uniqueRecommendations);
-        }
-      } catch (err: unknown) {
-        if (!(err instanceof DOMException && err.name === "AbortError")) {
-          console.error("fetch failed:", err);
-          setRecommendations([]);
-        }
-      }
+    const timer = setTimeout(() => {
+      setSearch(searchTerm);
     }, 300);
 
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  return { recommendations };
+  return { recommendations: searchValue?.success ? searchValue.data.suggestionList : [] };
 };
