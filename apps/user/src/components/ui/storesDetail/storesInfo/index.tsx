@@ -54,7 +54,16 @@ const StoresInfo = (props: StoreInfoProps) => {
           <div className={style.metaRow}>
             <p className={style.metaLabel}>주소</p>
             <p className={style.metaValue}>{storesDetail.address.roadNameAddress}</p>
-            <Link href={"#"} style={{ textDecoration: "underline" }}>
+            <Link
+              href={{
+                pathname: "/locations/store-location",
+                query: {
+                  lat: storesDetail.address.coordinate.latitude,
+                  lng: storesDetail.address.coordinate.longitude,
+                },
+              }}
+              style={{ textDecoration: "underline" }}
+            >
               지도보기
             </Link>
           </div>
