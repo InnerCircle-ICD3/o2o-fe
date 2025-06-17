@@ -1,5 +1,6 @@
 "use client";
 
+import { cancelOrder, confirmOrder } from "@/apis/ssr/orders";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,12 +10,68 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
+import { useToastMessage } from "@/hooks/useToastMessage";
 import { useOrderModalStore } from "@/stores/orderModalStore";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
+import { useState } from "react";
 
 export default function OrderAlertModal() {
   const { isOpen, orderData, closeModal } = useOrderModalStore();
+  const { owner } = useOwnerStore();
+  const { data: storeData } = useGetOwnerStore(owner?.userId);
+  const { showToast } = useToastMessage();
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!orderData) return null;
+
+  const handleConfirmOrder = async () => {
+    if (!storeData?.id || !orderData.orderId) {
+      showToast("매장 정보 또는 주문 정보가 없습니다.", true);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await confirmOrder(storeData.id, orderData.orderId);
+      if (result.success) {
+        showToast("주문이 수락되었습니다.", false);
+        closeModal();
+      } else {
+        showToast("주문 수락에 실패했습니다.", true);
+      }
+    } catch (error) {
+      console.error("주문 수락 실패:", error);
+      showToast("주문 수락 중 오류가 발생했습니다.", true);
+    } finally {
+      setIsLoading(false);
+      closeModal();
+    }
+  };
+
+  const handleCancelOrder = async () => {
+    if (!storeData?.id || !orderData.orderId) {
+      showToast("매장 정보 또는 주문 정보가 없습니다.", true);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await cancelOrder(storeData.id, orderData.orderId);
+      if (result.success) {
+        showToast("주문이 취소되었습니다.", false);
+        closeModal();
+      } else {
+        showToast("주문 취소에 실패했습니다.", true);
+      }
+    } catch (error) {
+      console.error("주문 취소 실패:", error);
+      showToast("주문 취소 중 오류가 발생했습니다.", true);
+    } finally {
+      setIsLoading(false);
+      closeModal();
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
@@ -52,16 +109,11 @@ export default function OrderAlertModal() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={closeModal}>
-            닫기
+          <Button variant="outline" onClick={handleCancelOrder} disabled={isLoading}>
+            주문 취소
           </Button>
-          <Button
-            onClick={() => {
-              // TODO: 주문 상세 페이지로 이동 또는 주문 처리 로직
-              closeModal();
-            }}
-          >
-            주문 확인
+          <Button onClick={handleConfirmOrder} disabled={isLoading}>
+            주문 수락
           </Button>
         </DialogFooter>
       </DialogContent>

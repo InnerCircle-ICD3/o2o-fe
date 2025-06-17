@@ -103,7 +103,7 @@ export default function SseTestPanel() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 left-4 z-50">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-lg">
         <h3 className="text-sm font-semibold text-blue-800 mb-3">SSE 테스트 패널</h3>
 
