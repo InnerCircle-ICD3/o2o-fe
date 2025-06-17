@@ -42,3 +42,9 @@ export const patchStoreStatus = async (
     }),
   );
 };
+
+export const deleteStore = async (storeId: number) => {
+  return await toSafeResult(() =>
+    api.delete(`stores/${storeId}`),
+  );
+};
