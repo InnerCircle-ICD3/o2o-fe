@@ -1,7 +1,7 @@
 import { useSearchHistoryStore } from "@/stores/searchHistoryStore";
 import { useFilterTab } from "@/stores/useFilterTab";
 import { useState } from "react";
-import { useSearchRecommendations } from "../useSearchRecommendations";
+import { useSearchRecommendations } from "../api/useSearchRecommendations";
 
 export const useAutoComplete = () => {
   const { search } = useFilterTab();

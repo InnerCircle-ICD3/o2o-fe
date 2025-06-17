@@ -1,7 +1,7 @@
 import { apiClient } from "@/apis/client";
 import type { Recommendation, SearchResult } from "@/types/apis/search.type";
 import { useEffect, useState } from "react";
-import { useQuery } from "../api/utils/useQuery";
+import { useQuery } from "../utils/useQuery";
 
 interface UseSearchRecommendationsResult {
   recommendations: Recommendation[];
