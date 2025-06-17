@@ -10,8 +10,8 @@ export const ADDRESS_TYPES = ["HOME", "WORK"] as const;
 export const CLUSTERER_STYLE = {
   width: "40px",
   height: "40px",
-  background: "rgba(53, 168, 101, 0.6)",
-  boxShadow: "0 0 0 12px rgba(53, 168, 101, 0.25)",
+  background: "rgba(53, 168, 101, 0.8)",
+  boxShadow: "0 0 0 12px rgba(53, 168, 101, 0.5)",
   borderRadius: "50%",
   color: "#fff",
   textAlign: "center",

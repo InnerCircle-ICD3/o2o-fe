@@ -3,6 +3,7 @@ import type { StoresDetail } from "@/types/apis/stores.type";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
+import { StoreReview } from "../storeReview";
 import * as style from "./storesInfo.css";
 
 interface StoreInfoProps {
@@ -29,12 +30,12 @@ const StoresInfo = (props: StoreInfoProps) => {
           </span>
         </h2>
         <div className={style.reviewAndDistanceWrapper}>
-          <Image src={"/icons/review.svg"} alt={""} width={16} height={16} />
+          <Image src={"/icons/star.svg"} alt={""} width={16} height={16} />
           <span>
             <strong>4.5</strong> (123) 1km
           </span>
         </div>
-
+        <StoreReview id={storesDetail.id.toString()} />
         <div className={classNames(style.metaSection, globalStyle.grayBackground)}>
           <div className={style.metaRow}>
             <p className={style.metaLabel}>픽업 시간</p>
@@ -49,7 +50,6 @@ const StoresInfo = (props: StoreInfoProps) => {
             </span>
           </div>
         </div>
-
         <div className={classNames(style.metaSection, globalStyle.grayBackground)}>
           <div className={style.metaRow}>
             <p className={style.metaLabel}>주소</p>

@@ -1,6 +1,9 @@
+"use client";
+
 import Button from "@/components/common/button";
 import * as styles from "@/components/ui/locations/myLocation/myLocation.css";
 import { ADDRESS_TYPES } from "@/constants/locations";
+import { useToastStore } from "@/stores/toastStore";
 import type {
   AddressType,
   CustomerAddressRequest,
@@ -27,6 +30,7 @@ export default function AddressSelector({
   clearSelectedAddress,
 }: AddressSelectorProps) {
   const router = useRouter();
+  const { showToast } = useToastStore();
   const addressMap: Record<AddressType, CustomerAddressResponse | undefined> = {
     HOME: customerAddress?.find((addr) => addr.customerAddressType === "HOME"),
     WORK: customerAddress?.find((addr) => addr.customerAddressType === "WORK"),
@@ -69,11 +73,18 @@ export default function AddressSelector({
                 alt="close"
                 width={14}
                 height={14}
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.stopPropagation();
-                  tempAddr
-                    ? clearSelectedAddress(type)
-                    : deleteCustomerAddress({ customerId, addressId });
+                  if (tempAddr) {
+                    clearSelectedAddress(type);
+                  } else {
+                    try {
+                      await deleteCustomerAddress({ customerId, addressId });
+                      showToast("주소가 삭제되었습니다.");
+                    } catch {
+                      showToast("주소 삭제에 실패했습니다.", true);
+                    }
+                  }
                 }}
               />
             </div>

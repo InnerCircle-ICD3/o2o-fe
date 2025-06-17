@@ -7,6 +7,7 @@ import { formatCurrency } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as style from "./orderItem.css";
 
 interface OrderItemProps {
@@ -21,6 +22,7 @@ const ORDER_STATUS_INFO = {
 
 const OrderItem = (props: OrderItemProps) => {
   const { order } = props;
+  const router = useRouter();
 
   const orderStatus = ORDER_STATUS[order.status];
   const isCompleted = orderStatus === ORDER_STATUS.DONE;
@@ -63,9 +65,16 @@ const OrderItem = (props: OrderItemProps) => {
         </div>
       </Link>
 
-      {isCompleted && (
-        <Button status={"primary"}>리뷰 {order.hasReview ? "확인하기" : "작성하기"}</Button>
-      )}
+      {isCompleted &&
+        (order.hasReview ? (
+          <Button status="primary" onClick={() => router.push(`/review/${order.id}`)}>
+            리뷰 확인하기
+          </Button>
+        ) : (
+          <Link href={`/review/register?id=${order.id}`}>
+            <Button status={"primary"}>리뷰 작성하기</Button>
+          </Link>
+        ))}
     </div>
   );
 };

@@ -2,20 +2,26 @@
 
 import { getCustomer } from "@/apis/ssr/customers";
 import type { Result } from "@/apis/types";
-import ErrorUi from "@/components/common/errorUi";
 import LoginLink from "@/components/ui/mypage/loginLink";
+import usePostLogout from "@/hooks/api/usePostLogout";
+import { useToastStore } from "@/stores/toastStore";
 import { userInfoStore } from "@/stores/userInfoStore";
 import type { Customer } from "@/types/apis/accounts.type";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as style from "./mypage.css";
 
 const Page = () => {
   const { user } = userInfoStore();
   const isLogin = !!user;
+  const router = useRouter();
 
   const [userInfo, setUserInfo] = useState<Result<Customer> | null>(null);
+  const { showToast } = useToastStore();
+
+  const logoutMutation = usePostLogout();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -28,7 +34,15 @@ const Page = () => {
     fetchUserInfo();
   }, [user?.customerId]);
 
-  if (!userInfo) return <ErrorUi message={"사용자 정보를 불러오는데 실패했습니다."} />;
+  const handleLogout = async () => {
+    const result = await logoutMutation.mutateAsync({});
+    if (result.success) {
+      showToast("로그아웃되었습니다.");
+      router.push("/");
+    } else {
+      showToast("로그아웃에 실패했습니다.", true);
+    }
+  };
 
   return (
     <div className={style.container}>
@@ -37,7 +51,7 @@ const Page = () => {
       <section className={style.wrapper}>
         <LoginLink userInfo={userInfo} />
 
-        {isLogin && (
+        {isLogin && userInfo && (
           <>
             <div className={style.shortcuts}>
               <Link href="/subscribes" className={style.shortcutItem}>
@@ -72,10 +86,15 @@ const Page = () => {
           </>
         )}
       </section>
-      {isLogin && (
+      {isLogin && userInfo && (
         <div className={style.bottomButtons}>
-          <button className={style.bottomButton} type={"button"}>
-            로그아웃
+          <button
+            className={style.bottomButton}
+            type={"button"}
+            onClick={handleLogout}
+            disabled={logoutMutation.isPending}
+          >
+            {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
           </button>
           |
           <button className={style.bottomButton} type={"button"}>

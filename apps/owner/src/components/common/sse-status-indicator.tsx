@@ -1,6 +1,7 @@
 "use client";
 
 import { useOwnerStore } from "@/stores/ownerInfoStore";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type SseStatus = "disconnected" | "connecting" | "connected" | "error";
@@ -10,9 +11,17 @@ export default function SseStatusIndicator() {
   const [lastMessage, setLastMessage] = useState<string>("");
   const [messageCount, setMessageCount] = useState(0);
   const owner = useOwnerStore((state) => state.owner);
+  const pathname = usePathname();
   const storeId = owner?.userId;
 
   useEffect(() => {
+    // 로그인하지 않았거나 로그인 페이지에 있는 경우 SSE 연결 시도하지 않음
+    if (!owner || pathname.startsWith("/store/login")) {
+      setStatus("disconnected");
+      console.log("❌ SSE Status: 로그인 전이거나 로그인 페이지에서는 SSE 연결을 시도하지 않음");
+      return;
+    }
+
     if (!storeId) {
       setStatus("disconnected");
       return;
@@ -51,7 +60,7 @@ export default function SseStatusIndicator() {
       eventSource.close();
       setStatus("disconnected");
     };
-  }, [storeId]);
+  }, [storeId, owner, pathname]);
 
   const getStatusDisplay = () => {
     switch (status) {
@@ -69,29 +78,15 @@ export default function SseStatusIndicator() {
   const statusDisplay = getStatusDisplay();
 
   return (
-    <div className="fixed top-4 right-4 z-50">
-      <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-lg max-w-xs">
-        <div className="flex items-center gap-2 mb-2">
-          <span className={`w-3 h-3 rounded-full ${statusDisplay.color}`} />
-          <span className="text-sm font-medium">SSE {statusDisplay.text}</span>
-        </div>
-
-        {storeId && (
-          <div className="text-xs text-gray-600 mb-1">
-            Store ID: {storeId} | 메시지: {messageCount}개
-          </div>
-        )}
-
-        {lastMessage && (
-          <div className="text-xs text-gray-500 break-all">
-            마지막 메시지: {lastMessage.substring(0, 50)}...
-          </div>
-        )}
-
-        <div className="text-xs text-gray-400 mt-2">
-          개발자 도구 Console에서 자세한 로그 확인 가능
-        </div>
-      </div>
+    <div className="flex items-center space-x-2 text-sm">
+      <div className={`w-2 h-2 rounded-full ${statusDisplay.color}`} />
+      <span className="text-gray-600">
+        {statusDisplay.icon} SSE {statusDisplay.text}
+      </span>
+      {messageCount > 0 && <span className="text-xs text-gray-500">({messageCount}개 메시지)</span>}
+      {lastMessage && (
+        <span className="text-xs text-gray-400 max-w-[200px] truncate">마지막: {lastMessage}</span>
+      )}
     </div>
   );
 }

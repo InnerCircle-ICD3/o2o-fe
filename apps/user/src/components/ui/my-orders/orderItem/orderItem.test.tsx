@@ -1,15 +1,31 @@
 import type { OrderDetail } from "@/types/apis/order.type";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { AnchorHTMLAttributes, ImgHTMLAttributes } from "react";
 import { vi } from "vitest";
 import OrderItem from ".";
+
+const mockPush = vi.fn();
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: (url: string) => mockPush(url),
+  }),
+}));
 
 vi.mock("next/image", () => ({
   default: (props: ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt={""} />,
 }));
 
 vi.mock("next/link", () => ({
-  default: (props: AnchorHTMLAttributes<HTMLAnchorElement>) => <a {...props} />,
+  default: ({
+    children,
+    href,
+    ...props
+  }: AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
 }));
 
 describe("OrderItem Test", () => {
@@ -78,6 +94,7 @@ describe("OrderItem Test", () => {
 
   afterEach(() => {
     cleanup();
+    mockPush.mockClear();
   });
 
   it("주문 내역은 스토어 이름과 가격이 렌더링된다.", () => {
@@ -106,5 +123,30 @@ describe("OrderItem Test", () => {
   it("주문 취소 상태일 경우 상태 라벨이 '주문 취소'로 출력된다.", () => {
     render(<OrderItem order={mockOrder.cancelled} />);
     expect(screen.getByText("주문 취소")).toBeInTheDocument();
+  });
+
+  it("픽업 완료 상태이고 리뷰가 있는 경우, 리뷰 확인하기 버튼을 클릭하면 해당 리뷰 페이지로 이동한다.", () => {
+    const orderWithReview = {
+      ...mockOrder.success,
+      hasReview: true,
+    };
+    render(<OrderItem order={orderWithReview} />);
+
+    const reviewButton = screen.getByText("리뷰 확인하기");
+    fireEvent.click(reviewButton);
+
+    expect(mockPush).toHaveBeenCalledWith("/review/2");
+  });
+
+  it("픽업 완료 상태이고 리뷰가 없는 경우, 리뷰 작성하기 버튼이 렌더링된다.", () => {
+    const orderWithoutReview = {
+      ...mockOrder.success,
+      hasReview: false,
+    };
+    render(<OrderItem order={orderWithoutReview} />);
+
+    const reviewButton = screen.getByText("리뷰 작성하기");
+    expect(reviewButton).toBeInTheDocument();
+    expect(reviewButton.closest("a")?.getAttribute("href")).toBe("/review/register?id=2");
   });
 });
