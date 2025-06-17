@@ -6,7 +6,7 @@ const useGetOwnerStore = (userId?: number) => {
   const { data, isLoading, isError, error } = useQuery<StoreResponse[]>({
     queryKey: ["OwnerStore", userId],
     queryFn: async () => {
-      if (!userId) throw new Error("사
+      if (!userId) throw new Error("사용자 정보가 없습니다");
       const result = await getStore();
       if (!result.success) {
         throw new Error(result.message || "매장 정보를 불러오지 못했습니다.");

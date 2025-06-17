@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "../register/businessHoursSection";
 
-export default function StoreEditForm() {
+export default function StoreEdit() {
   const router = useRouter();
   const { owner } = useOwnerStore();
 
