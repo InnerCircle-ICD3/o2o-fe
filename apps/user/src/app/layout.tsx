@@ -2,7 +2,7 @@ import Providers from "@/providers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/styles/reset.css";
-import { UserInfoProvider } from "@/providers/userInfo";
+import { ToastMessage } from "@/components/common/toastMessage";
 import classNames from "classnames";
 import * as style from "./layout.css";
 
@@ -35,9 +35,9 @@ export default async function RootLayout({
     <html lang="en">
       <body className={classNames(pretendard.variable, style.container)}>
         <Providers>
-          <UserInfoProvider />
           <div className={style.main}>{children}</div>
           <div id="bottom-sheet" />
+          <ToastMessage />
         </Providers>
       </body>
     </html>

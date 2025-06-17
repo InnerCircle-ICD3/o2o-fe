@@ -1,7 +1,12 @@
 import { apiClient } from "@/apis/client";
 import { ownerApiClient } from "@/apis/ownerClient";
 import { toSafeResult } from "@/apis/utils/result";
-import type { Product, StoreListResponse, StoresDetail } from "@/types/apis/stores.type";
+import type {
+  Product,
+  StoreListResponse,
+  StoreReviewListResponse,
+  StoresDetail,
+} from "@/types/apis/stores.type";
 
 export const getStoresDetail = async (id: string) => {
   return await toSafeResult(() => apiClient.get<StoresDetail>(`stores/${id}`));
@@ -19,4 +24,8 @@ export const getSearchStoreList = async (keyword: string, size: number, page: nu
   return await toSafeResult(() =>
     apiClient.get<StoreListResponse>(`search/store?keyword=${keyword}&size=${size}&page=${page}`),
   );
+};
+
+export const getStoreReviews = async (id: string) => {
+  return await toSafeResult(() => apiClient.get<StoreReviewListResponse>(`stores/${id}/reviews`));
 };

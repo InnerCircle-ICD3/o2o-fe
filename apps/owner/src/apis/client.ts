@@ -26,6 +26,7 @@ const apiInstance = ky.create({
 });
 
 /**
+ * @deprecated
  * Product API 클라이언트 인스턴스
  * Base URL: 도메인만 (예: https://api.example.com)
  * 환경변수에서 /api/v1 부분을 제거하여 도메인만 사용
@@ -67,7 +68,7 @@ const createApiClient = (kyInstance: typeof ky) => ({
    * @param data - 전송할 데이터
    * @param options - ky Options (headers, timeout 등, json은 자동으로 설정됨)
    */
-  post: async <T>(url: string, data: unknown, options: Options = {}) => {
+  post: async <T>(url: string, data?: unknown, options: Options = {}) => {
     return toResult<T>(() => kyInstance.post(url, { json: data, ...options }).json());
   },
 
@@ -105,4 +106,8 @@ const createApiClient = (kyInstance: typeof ky) => ({
 // Export API 클라이언트들
 // ========================
 export const api = createApiClient(apiInstance);
+
+/**
+ * @deprecated
+ */
 export const productApi = createApiClient(productApiInstance);

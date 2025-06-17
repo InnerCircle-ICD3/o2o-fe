@@ -152,7 +152,7 @@ export const getFullAddressByCoords = (
             roadNameAddress: r.road_address?.address_name ?? null,
             lotNumberAddress: r.address?.address_name ?? "",
             buildingName: r.road_address?.building_name ?? null,
-            zipCode: r.road_address?.zone_no ?? "",
+            zipCode: r.road_address?.zone_no ?? "00000",
             region1DepthName: r.address?.region_1depth_name ?? "",
             region2DepthName: r.address?.region_2depth_name ?? "",
             region3DepthName: r.address?.region_3depth_name ?? "",

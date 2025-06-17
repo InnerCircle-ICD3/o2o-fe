@@ -52,7 +52,13 @@ export const StoreInfoCard = ({ storeId }: { storeId: number }) => {
         width={500}
         height={120}
       />
-      <div className={styles.statusBadge}>판매중</div>
+      <div
+        className={`${styles.statusBadge} ${
+          storeDetail.status === "OPEN" ? styles.openStatus : styles.closedStatus
+        }`}
+      >
+        {storeDetail.status === "OPEN" ? "영업중" : "영업종료"}
+      </div>
       <div className={styles.likeButton}>
         <Image src="/icons/favorite.svg" alt="like" width={16} height={16} />
       </div>
@@ -63,7 +69,9 @@ export const StoreInfoCard = ({ storeId }: { storeId: number }) => {
             <h3 className={styles.storeCardTitle}>{storeDetail.name}</h3>
             <div className={styles.categoryText}>{storeDetail.foodCategory.join(" / ")}</div>
           </div>
-          {/* <div className={styles.originPrice}>{formatCurrency(storeDetail.minPrice * 2)}</div> */}
+          <div className={styles.flexRow}>
+            <span className={styles.pickupTime}>픽업 시간</span>
+          </div>
         </div>
         <div className={styles.ratingRow}>
           <div className={styles.flexRow}>
@@ -71,7 +79,16 @@ export const StoreInfoCard = ({ storeId }: { storeId: number }) => {
             <span>{storeDetail.ratingAverage}</span>
             <span>({storeDetail.ratingCount})</span>
           </div>
-          <div className={styles.salePrice}>{storeDetail.status}</div>
+          <div className={styles.flexRow}>
+            {storeDetail.todayPickupStartTime && storeDetail.todayPickupEndTime ? (
+              <>
+                {storeDetail.todayPickupStartTime.slice(0, 5)} ~{" "}
+                {storeDetail.todayPickupEndTime.slice(0, 5)}
+              </>
+            ) : (
+              "픽업 시간 정보 없음"
+            )}
+          </div>
         </div>
       </div>
     </div>

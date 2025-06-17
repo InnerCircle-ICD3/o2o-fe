@@ -29,9 +29,11 @@ const Page = () => {
     <div className={style.container}>
       <h2 className={style.title}>나의 주문 내역</h2>
       {isLoading ? (
-        <SkeletonStoreCard imagePosition="left" />
+        Array.from({ length: 5 }).map((_, i) => (
+          <SkeletonStoreCard imagePosition="left" key={`skeleton-${i}-${Date.now()}`} />
+        ))
       ) : contents.length === 0 ? (
-        <ErrorUi type={"order"} message="아직 주문하신 상품이 없어요" />
+        <ErrorUi isButton={false} type={"order"} message="아직 주문하신 상품이 없어요" />
       ) : (
         <VirtualScroll
           overscan={3}

@@ -1,1 +1,1 @@
-export const baseUrl = "https://api.example.com";
+export const baseUrl = "http://localhost:3000";
