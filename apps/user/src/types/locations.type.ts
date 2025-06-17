@@ -1,7 +1,7 @@
 export interface MapStore {
   storeId: number;
   storeName: string;
-  coordinates: {
+  coordinate: {
     latitude: number;
     longitude: number;
   };
@@ -56,10 +56,10 @@ export interface CustomerAddressResponse {
 
 export interface SearchAddressResult {
   address: string;
-  location: Coordinates;
+  location: Coordinate;
 }
 
-export interface Coordinates {
+export interface Coordinate {
   lat: number;
   lng: number;
 }

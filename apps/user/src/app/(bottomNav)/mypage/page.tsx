@@ -1,16 +1,15 @@
 "use client";
 
-import { getCustomer } from "@/apis/ssr/customers";
-import type { Result } from "@/apis/types";
+import ErrorUi from "@/components/common/errorUi";
 import LoginLink from "@/components/ui/mypage/loginLink";
+import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
+import useGetCustomer from "@/hooks/api/useGetCustomer";
 import usePostLogout from "@/hooks/api/usePostLogout";
 import { useToastStore } from "@/stores/toastStore";
 import { userInfoStore } from "@/stores/userInfoStore";
-import type { Customer } from "@/types/apis/accounts.type";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import * as style from "./mypage.css";
 
 const Page = () => {
@@ -18,21 +17,11 @@ const Page = () => {
   const isLogin = !!user;
   const router = useRouter();
 
-  const [userInfo, setUserInfo] = useState<Result<Customer> | null>(null);
   const { showToast } = useToastStore();
 
   const logoutMutation = usePostLogout();
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (!user?.customerId) return;
-      const result = await getCustomer(user.customerId);
-      if (result.success) {
-        setUserInfo(result);
-      }
-    };
-    fetchUserInfo();
-  }, [user?.customerId]);
+  const { data: userInfo, isLoading } = useGetCustomer();
 
   const handleLogout = async () => {
     const result = await logoutMutation.mutateAsync({});
@@ -43,6 +32,13 @@ const Page = () => {
       showToast("로그아웃에 실패했습니다.", true);
     }
   };
+
+  if (isLoading) {
+    return <SkeletonStoreCard imagePosition="left" />;
+  }
+  if (!userInfo?.success) {
+    return <ErrorUi message={"유저 정보를 가져오지 못했습니다."} />;
+  }
 
   return (
     <div className={style.container}>

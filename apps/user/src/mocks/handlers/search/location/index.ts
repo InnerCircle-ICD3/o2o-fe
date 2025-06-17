@@ -6,7 +6,7 @@ const storeList: MapStore[] = [
   {
     storeId: 101,
     storeName: "카페 도치",
-    coordinates: {
+    coordinate: {
       latitude: 37.566826,
       longitude: 126.9786567,
     },
@@ -14,7 +14,7 @@ const storeList: MapStore[] = [
   {
     storeId: 105,
     storeName: "025BAKERY",
-    coordinates: {
+    coordinate: {
       latitude: 37.541199,
       longitude: 127.051778,
     },
@@ -22,7 +22,7 @@ const storeList: MapStore[] = [
   {
     storeId: 107,
     storeName: "한양대 CAFE",
-    coordinates: {
+    coordinate: {
       latitude: 37.554915,
       longitude: 127.044838,
     },
@@ -30,7 +30,7 @@ const storeList: MapStore[] = [
   {
     storeId: 108,
     storeName: "뚝섬 CAFE",
-    coordinates: {
+    coordinate: {
       latitude: 37.547976,
       longitude: 127.04712,
     },
@@ -38,7 +38,7 @@ const storeList: MapStore[] = [
   {
     storeId: 109,
     storeName: "카페 도치",
-    coordinates: {
+    coordinate: {
       latitude: 37.555918,
       longitude: 127.058035,
     },
@@ -46,7 +46,7 @@ const storeList: MapStore[] = [
   {
     storeId: 110,
     storeName: "밀도 BAKERY",
-    coordinates: {
+    coordinate: {
       latitude: 37.5432,
       longitude: 127.0491,
     },
@@ -54,7 +54,7 @@ const storeList: MapStore[] = [
   {
     storeId: 111,
     storeName: "빵집 오월",
-    coordinates: {
+    coordinate: {
       latitude: 37.5467,
       longitude: 127.0533,
     },
@@ -62,7 +62,7 @@ const storeList: MapStore[] = [
   {
     storeId: 112,
     storeName: "브레드 앤 커피",
-    coordinates: {
+    coordinate: {
       latitude: 37.5446,
       longitude: 127.0571,
     },
@@ -70,7 +70,7 @@ const storeList: MapStore[] = [
   {
     storeId: 113,
     storeName: "소금빵연구소",
-    coordinates: {
+    coordinate: {
       latitude: 37.5409,
       longitude: 127.0502,
     },
@@ -78,7 +78,7 @@ const storeList: MapStore[] = [
   {
     storeId: 114,
     storeName: "베이커리 도토루",
-    coordinates: {
+    coordinate: {
       latitude: 37.5484,
       longitude: 127.0568,
     },
@@ -121,8 +121,8 @@ const searchMapHandlers = [
       const distance = getDistanceInMeters(
         latitude,
         longitude,
-        store.coordinates.latitude,
-        store.coordinates.longitude,
+        store.coordinate.latitude,
+        store.coordinate.longitude,
       );
       return distance <= 1000;
     });

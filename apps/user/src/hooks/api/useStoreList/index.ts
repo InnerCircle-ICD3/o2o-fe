@@ -3,19 +3,15 @@ import type { InfiniteQueryResponse, Result } from "@/apis/types";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useFilterTab } from "@/stores/useFilterTab";
 import type { StoreListResponse } from "@/types/apis/stores.type";
+import type { Coordinate } from "@/types/locations.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
-
-interface Coordinates {
-  lat: number;
-  lng: number;
-}
 
 const SIZE = 10;
 
 export const STORE_LIST_QUERY_KEY = "storeList";
 
 //FIXME 처음 로딩될때 page 2개씩 호출됨
-export const useStoreList = (locations: Coordinates | null) => {
+export const useStoreList = (locations: Coordinate | null) => {
   const { selectedFoodType, getPickupTimeString, reservable } = useFilterTab();
   const { queryParams, setAllQueryParams } = useQueryParams();
   const pickupTime = getPickupTimeString();
