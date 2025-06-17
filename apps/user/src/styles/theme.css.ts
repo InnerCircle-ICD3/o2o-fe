@@ -56,6 +56,7 @@ export const globalTheme = createThemeContract({
         color: null,
       },
     },
+    danger: null,
   },
 });
 
@@ -113,5 +114,6 @@ export const theme = createGlobalTheme(":root", globalTheme, {
         color: "#666666",
       },
     },
+    danger: "#F15937",
   },
 });
