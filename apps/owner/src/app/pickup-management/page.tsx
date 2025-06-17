@@ -69,9 +69,9 @@ export default function PickupManagementList() {
             <TableBody>
               {paginatedData.map((order) => (
                 <TableRow key={order.orderId}>
-                  {/*<TableCell>{order.orderId}</TableCell>*/}
-                  {/*<TableCell>{order.orderItems[0].productName}</TableCell>*/}
-                  {/*<TableCell>{order.customer.name}</TableCell>*/}
+                  <TableCell>{order.orderId}</TableCell>
+                  <TableCell>{order.items.map((item) => item.productName).join(", ")}</TableCell>
+                  <TableCell>{order.customerName}</TableCell>
                   <TableCell>{order.orderStatus}</TableCell>
                 </TableRow>
               ))}
