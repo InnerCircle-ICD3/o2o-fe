@@ -27,7 +27,7 @@ export const listStyle = style({
   justifyContent: "flex-start",
   alignItems: "center",
   gap: 10,
-  padding: "14px 20px",
+  padding: "14px 0",
 });
 
 export const listItemText = style({
