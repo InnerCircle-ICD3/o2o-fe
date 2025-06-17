@@ -13,19 +13,10 @@ type ViewPoint = {
 };
 
 export interface CustomerAddress {
-  address: {
-    roadNameAddress: string;
-    lotNumberAddress: string;
-    buildingName: string;
-    zipCode: string;
-    region1DepthName: string;
-    region2DepthName: string;
-    region3DepthName: string;
-    coordinate: {
-      latitude: number;
-      longitude: number;
-    };
-  };
+  id: number;
+  region3DepthName: string;
+  latitude: number;
+  longitude: number;
   customerAddressType: string;
   description: string;
 }

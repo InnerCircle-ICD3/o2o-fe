@@ -1,11 +1,11 @@
-import type { FoodType, Location, PickupTime } from "@/components/ui/filterTab/type";
+import type { FoodType, PickupTime } from "@/components/ui/filterTab/type";
 import { create } from "zustand";
 
 interface FilterTabState {
   selectedFoodType?: FoodType;
   selectedPickupTime?: PickupTime;
   reservable: boolean;
-  location?: Location;
+  location?: string;
   search: string;
   onSelectedFoodType: (foodType?: FoodType) => void;
   onResetFoodType: () => void;
@@ -13,7 +13,7 @@ interface FilterTabState {
   onResetPickupTime: () => void;
   onToggleReservable: () => void;
   getPickupTimeString: () => string;
-  onLocationChange: (location: Location) => void;
+  onLocationChange: (location: string) => void;
   onResetLocation: () => void;
   onSearchChange: (search: string) => void;
 }
@@ -56,7 +56,7 @@ export const useFilterTab = create<FilterTabState>((set, get) => {
       set({ selectedPickupTime: undefined });
     },
     getPickupTimeString,
-    onLocationChange: (location: Location) => {
+    onLocationChange: (location: string) => {
       set({ location });
     },
     onResetLocation: () => {

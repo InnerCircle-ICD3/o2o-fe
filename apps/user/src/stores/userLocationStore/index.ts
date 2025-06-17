@@ -8,6 +8,7 @@ export interface Coordinates {
 
 interface UserLocationStore extends Coordinates {
   updateLocations: (locations: Coordinates) => void;
+  resetLocations: () => void;
   getLocations: () => Coordinates;
 }
 
@@ -18,6 +19,7 @@ export const useUserLocation = create<UserLocationStore>()(
       lng: 0,
       updateLocations: (locations: Coordinates) => set(locations),
       getLocations: () => ({ lat: get().lat, lng: get().lng }),
+      resetLocations: () => set({ lat: 0, lng: 0 }),
     }),
     {
       name: "userLocation",

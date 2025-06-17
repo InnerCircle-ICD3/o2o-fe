@@ -36,6 +36,7 @@ export default function PickUpTimeFilter({ isOpen, onClose }: PickUpTimeFilterPr
     minuteRef.current?.scrollTo({ top: 0 });
     setTempPickupTime(pickupTimeDefaultValue);
     onResetPickupTime();
+    onClose();
   };
 
   return (
@@ -94,11 +95,11 @@ export default function PickUpTimeFilter({ isOpen, onClose }: PickUpTimeFilterPr
         </ul>
       </div>
       <div className={styles.filterButtonContainer}>
-        <Button status="common" onClick={handleResetPickupTime}>
-          초기화
-        </Button>
         <Button status="primary" onClick={handlePickupTimeClick}>
           시간 적용
+        </Button>
+        <Button status="common" onClick={handleResetPickupTime}>
+          초기화
         </Button>
       </div>
     </BottomSheet>
