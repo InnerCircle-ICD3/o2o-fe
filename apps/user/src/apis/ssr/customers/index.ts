@@ -12,7 +12,6 @@ export const getCustomer = async (customerId: number) => {
   return await toSafeResult(() => apiClient.get<Customer>(`customers/me?customerId=${customerId}`));
 };
 
-
 export const deleteCustomer = async () => {
   return await toSafeResult(() => apiClient.delete("customers/sign-out"));
 };

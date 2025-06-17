@@ -15,12 +15,8 @@ export const postStore = async (storeOwnerId: number, data: CreateStoreRequest) 
   );
 };
 
-export const getStore = async (storeOwnerId: number) => {
-  return await toSafeResult(() =>
-    api.get<StoreResponse[]>("stores", {
-      searchParams: { storeOwnerId },
-    }),
-  );
+export const getStore = async () => {
+  return await toSafeResult(() => api.get<StoreResponse[]>("stores"));
 };
 
 export const putStore = async (storeOwnerId: number, storeId: number, data: UpdateStoreRequest) => {
@@ -48,3 +44,4 @@ export const deleteStore = async (storeId: number) => {
     api.delete(`stores/${storeId}`),
   );
 };
+
