@@ -44,9 +44,9 @@ const Categories = () => {
           <Image
             src={"/images/all.png"}
             alt={""}
-            fill
+            width={72}
+            height={72}
             className={style.buttonImage}
-            sizes={"150px"}
           />
         </span>
 
@@ -63,9 +63,9 @@ const Categories = () => {
             <Image
               src={`/images/${food.value.toLowerCase()}.png`}
               alt={""}
-              fill
+              width={72}
+              height={72}
               className={style.buttonImage}
-              sizes={"150px"}
             />
           </span>
 
@@ -78,9 +78,9 @@ const Categories = () => {
           <Image
             src={"/images/subscribe.png"}
             alt={""}
-            fill
+            width={72}
+            height={72}
             className={style.buttonImage}
-            sizes={"150px"}
           />
         </span>
 
@@ -98,9 +98,9 @@ const Categories = () => {
             <Image
               src={`/images/${food.value.toLowerCase()}.png`}
               alt={""}
-              fill
+              width={72}
+              height={72}
               className={style.buttonImage}
-              sizes={"150px"}
             />
           </span>
 

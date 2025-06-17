@@ -27,6 +27,8 @@ export const buttonInner = style({
 });
 
 export const buttonImage = style({
+  width: "100%",
+  height: "100%",
   borderRadius: 20,
   backgroundColor: globalTheme.color.gray.background,
 });

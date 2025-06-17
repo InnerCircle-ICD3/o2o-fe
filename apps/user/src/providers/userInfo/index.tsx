@@ -1,11 +1,13 @@
 "use client";
 
 import { userInfoStore } from "@/stores/userInfoStore";
-import { useEffect } from "react";
+import { type PropsWithChildren, useEffect, useState } from "react";
 
-export function UserInfoProvider() {
+export function UserInfoProvider(props: PropsWithChildren) {
+  const { children } = props;
   const setUser = userInfoStore((state) => state.setUser);
   const clearUser = userInfoStore((state) => state.clearUser);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/me", { credentials: "include" })
@@ -19,8 +21,11 @@ export function UserInfoProvider() {
       })
       .catch(() => {
         clearUser();
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [clearUser, setUser]);
 
-  return null;
+  return loading ? null : children;
 }

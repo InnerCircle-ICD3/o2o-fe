@@ -34,19 +34,27 @@ const Page = () => {
   return (
     <div className={style.container}>
       {isLoading ? (
-        <SkeletonStoreCard imagePosition="left" />
+        Array.from({ length: 5 }).map((_, i) => (
+          <SkeletonStoreCard key={`skeleton-${i}-${Date.now()}`} imagePosition="left" />
+        ))
       ) : contents.length === 0 ? (
-        <ErrorUi type={"subscribe"} message="찜한 상품이 없습니다." />
+        <ErrorUi isButton={false} type={"subscribe"} message="찜한 상품이 없습니다." />
       ) : (
         <VirtualScroll
           overscan={3}
           heights={{
+            "store-title": {
+              height: 48,
+            },
             "subscribe-item": {
               aspectRatio: 388 / 190,
             },
           }}
           onScrollEnd={fetchNextPage}
         >
+          <VirtualItem name={"store-title"}>
+            <h2 className={style.title}>우리가 좋아하는 것들이 잔뜩 있어요!</h2>
+          </VirtualItem>
           {contents.map((subscribe) => (
             <VirtualItem key={subscribe.id} name={"subscribe-item"}>
               <SubscribeItem subscribe={subscribe} />

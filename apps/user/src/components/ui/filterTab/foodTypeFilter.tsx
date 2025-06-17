@@ -1,5 +1,4 @@
 import BottomSheet from "@/components/common/bottomSheet";
-import Button from "@/components/common/button";
 import { useFilterTab } from "@/stores/useFilterTab";
 import { foodTypeList } from "./constant";
 import * as styles from "./filterTab.css";
@@ -20,11 +19,23 @@ export default function FoodTypeFilter({ isOpen, onClose }: FoodTypeFilterProps)
 
   const handleResetFoodType = () => {
     onResetFoodType();
+    onClose();
   };
 
   return (
     <BottomSheet type="shadow" isShow={isOpen} title="음식 종류" onClose={onClose}>
       <ul className={styles.filterListStyle}>
+        <li
+          className={!selectedFoodType ? styles.filterListItemSelected : styles.filterListItemHover}
+        >
+          <button
+            className={styles.filterListItemButtonStyle}
+            type="button"
+            onClick={handleResetFoodType}
+          >
+            <span>전체</span>
+          </button>
+        </li>
         {foodTypeList.map((item) => (
           <li
             className={
@@ -45,11 +56,6 @@ export default function FoodTypeFilter({ isOpen, onClose }: FoodTypeFilterProps)
           </li>
         ))}
       </ul>
-      <div className={styles.filterButtonContainer}>
-        <Button status="common" onClick={handleResetFoodType}>
-          초기화
-        </Button>
-      </div>
     </BottomSheet>
   );
 }
