@@ -12,7 +12,7 @@ export const STORE_LIST_QUERY_KEY = "storeList";
 
 export const useStoreList = () => {
   const locations = useGeolocation();
-  const { selectedFoodType, getPickupTimeString, reservable } = useFilterTab();
+  const { selectedFoodType, search, getPickupTimeString, reservable } = useFilterTab();
   const { queryParams, setAllQueryParams } = useQueryParams();
   const pickupTime = getPickupTimeString();
 
