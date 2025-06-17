@@ -5,14 +5,12 @@ import VirtualScroll, { VirtualItem } from "@/components/common/virtualScroll";
 import { StoreCard } from "@/components/ui/storeList/storeCard";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import { useStoreList } from "@/hooks/api/useStoreList";
-import { useGeolocation } from "@/hooks/useGeolocation";
 import type { StoreList } from "@/types/apis/stores.type";
 import Categories from "../categories";
 import * as style from "./storeListContainer.css";
 
 const StoreListContainer = () => {
-  const locations = useGeolocation();
-  const { stores, isLoading, fetchNextPage, isError, error } = useStoreList(locations);
+  const { stores, isLoading, fetchNextPage, isError, error } = useStoreList();
 
   if (isError) {
     return <ErrorUi message={error?.message} />;

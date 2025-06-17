@@ -11,6 +11,12 @@ export const container = style({
   padding: "10px 15px",
 });
 
+export const subscribeButton = style({
+  position: "absolute",
+  top: "0px",
+  right: "0px",
+});
+
 export const wrapper = style({
   display: "flex",
   flexDirection: "column",
@@ -33,6 +39,8 @@ export const title = style({
 });
 
 export const infoBox = style({
+  position: "relative",
+
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-start",
