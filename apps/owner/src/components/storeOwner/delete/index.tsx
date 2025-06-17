@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,19 +11,13 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
-import { deleteStore } from "@/apis/ssr/stores";
-import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
-import { useOwnerStore } from "@/stores/ownerInfoStore";
-import { STORE_DELETE_NOTICE } from "@/constants/notice";
+import { deleteStoreOwner } from "@/apis/ssr/store-owner";
+import { OWNER_DELETE_NOTICE } from "@/constants/notice";
 
-export default function StoreDeleteForm() {
+export default function OwnerDeleteForm() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
-  const { owner } = useOwnerStore();
-
-  const { data: storeData, isLoading } = useGetOwnerStore(owner?.userId);
 
   const handleDelete = () => {
     if (!agreed) return;
@@ -30,30 +25,17 @@ export default function StoreDeleteForm() {
   };
 
   const handleConfirmDelete = async () => {
-    if (!storeData?.id) return;
-    const result = await deleteStore(storeData.id);
-
+    const result = await deleteStoreOwner();
     if (result.success) {
       setOpen(false);
       router.push("/store/login");
     }
   };
 
-  if (!storeData) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[600px] gap-4">
-        <p className="text-gray-600">매장 정보를 불러올 수 없습니다. 다시 로그인해주세요.</p>
-        <Button onClick={() => router.push("/store/login")} variant="default">
-          로그인 하러 가기
-        </Button>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-6 max-w-xl mx-auto">
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-sm text-gray-700 whitespace-pre-line">
-        {STORE_DELETE_NOTICE}
+        {OWNER_DELETE_NOTICE}
       </div>
       <label className="flex items-center gap-2 cursor-pointer select-none">
         <input
@@ -63,7 +45,7 @@ export default function StoreDeleteForm() {
           className="w-5 h-5 accent-red-500"
         />
         <span>
-          위 내용을 모두 확인하였으며, <span className="font-semibold text-red-600">매장 삭제에 동의합니다.</span>
+          위 내용을 모두 확인하였으며, <span className="font-semibold text-red-600">계정 삭제에 동의합니다.</span>
         </span>
       </label>
       <Button
@@ -72,15 +54,15 @@ export default function StoreDeleteForm() {
         onClick={handleDelete}
         className="w-full"
       >
-        매장 삭제하기
+        점주 계정 삭제하기
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>매장 삭제 확인</DialogTitle>
+            <DialogTitle>점주 계정 삭제 확인</DialogTitle>
             <DialogDescription>
-              정말로 매장을 삭제하시겠습니까? <br />
+              정말로 계정을 삭제하시겠습니까? <br />
               삭제 시 모든 정보가 영구적으로 삭제되며 복구가 불가합니다.
             </DialogDescription>
           </DialogHeader>
@@ -96,4 +78,4 @@ export default function StoreDeleteForm() {
       </Dialog>
     </div>
   );
-}
+} 
