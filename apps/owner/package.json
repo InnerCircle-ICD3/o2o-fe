@@ -38,7 +38,7 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.5",
-    "use-form-light": "^1.2.0",
+    "use-form-light": "^1.2.1",
     "zod": "^3.25.51",
     "zustand": "^5.0.3"
   },
