@@ -3,6 +3,7 @@
 import SearchInput from "@/app/(topNav)/search/ui/searchInput";
 import SearchResult from "@/app/(topNav)/search/ui/searchResult";
 import { useAutoComplete } from "@/hooks/useAutoComplete";
+import type { Recommendation } from "@/types/apis/search.type";
 import { type ReactNode, createContext, useContext } from "react";
 
 interface SearchContextType {
@@ -10,7 +11,7 @@ interface SearchContextType {
   setInputValue: (value: string) => void;
   isFocused: boolean;
   setIsFocused: (value: boolean) => void;
-  finalSuggestions: string[];
+  finalSuggestions: Recommendation[];
   searchHistory: string[];
   handleSelect: (value: string) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
