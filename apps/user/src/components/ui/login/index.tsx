@@ -30,7 +30,7 @@ export default function Login() {
           className={styles.kakaoButton}
           onClick={() => handleSocialLogin(provider as Provider)}
         >
-          <Image src={iconSrc} alt={`${label} 아이콘`} width={20} height={20} />
+          <Image src={`/icons/${iconSrc}`} alt={`${label} 아이콘`} width={20} height={20} />
           {label}
         </button>
       ))}
