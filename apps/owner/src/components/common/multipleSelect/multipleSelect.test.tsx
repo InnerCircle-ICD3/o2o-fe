@@ -19,7 +19,14 @@ describe("MultiSelect UI 요소 상세 테스트", () => {
     // 1. 메인 버튼 검증
     const mainButton = screen.getByRole("button");
     expect(mainButton).toBeInTheDocument();
-    expect(mainButton).toHaveClass("inline-flex", "items-center", "whitespace-nowrap", "rounded-md", "text-sm", "font-medium");
+    expect(mainButton).toHaveClass(
+      "inline-flex",
+      "items-center",
+      "whitespace-nowrap",
+      "rounded-md",
+      "text-sm",
+      "font-medium",
+    );
     expect(mainButton).toHaveAttribute("aria-expanded", "false");
 
     // 2. 드롭다운 아이콘 검증

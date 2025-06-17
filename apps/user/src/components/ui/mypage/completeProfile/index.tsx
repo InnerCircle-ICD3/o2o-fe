@@ -2,12 +2,11 @@
 
 import { patchCustomer as defaultPatchCustomer } from "@/apis/ssr/customers";
 import Button from "@/components/common/button";
-import ErrorUi from "@/components/common/errorUi";
+import { useToastStore } from "@/stores/toastStore";
 import { userInfoStore as defaultUseUserStore } from "@/stores/userInfoStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as styles from "./completeProfile.css";
-import { useToastStore } from "@/stores/toastStore";
 
 export default function CompleteProfile({
   useUserStore = defaultUseUserStore,
@@ -18,7 +17,6 @@ export default function CompleteProfile({
 } = {}) {
   const { user } = useUserStore();
   const [nickname, setNickname] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const { showToast } = useToastStore();
   const router = useRouter();
 
@@ -33,8 +31,6 @@ export default function CompleteProfile({
       showToast("닉네임 변경 실패", true);
     }
   };
-
-  if (error) return <ErrorUi message={error} />;
 
   return (
     <div className={styles.completeProfileContainer}>

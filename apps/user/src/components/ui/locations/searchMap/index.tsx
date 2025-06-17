@@ -136,7 +136,7 @@ export default function SearchMap() {
 
     const center = map.getCenter();
     const result = await getStoresByCenterRefresh(center);
-    if (!result.success) return;
+    if (!result || !result.success) return;
     storeListRef.current = result.data.storeList;
 
     // 새로운 마커 추가

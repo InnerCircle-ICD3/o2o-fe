@@ -22,7 +22,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: {
-        userId: payload.sub,
+        storeOwnerId: payload.storeOwnerId,
         roles: payload.roles,
         nickname: payload.nickname,
         customerId: payload.customerId,

@@ -129,7 +129,11 @@ export function FormField(props: FormFieldProps) {
     return (
       <div className="space-y-3">
         <div className="flex items-center gap-4">
-          <Label htmlFor={name} className="w-[80px] whitespace-pre-line" style={{ wordBreak: "keep-all" }}>
+          <Label
+            htmlFor={name}
+            className="w-[80px] whitespace-pre-line"
+            style={{ wordBreak: "keep-all" }}
+          >
             {label}
           </Label>
           <div className="flex-1 flex gap-2">
@@ -198,7 +202,11 @@ export function FormField(props: FormFieldProps) {
   return (
     <div className="">
       <div className="flex items-center gap-4">
-        <Label htmlFor={name} className="w-[80px] whitespace-pre-line" style={{ wordBreak: "keep-all" }}>
+        <Label
+          htmlFor={name}
+          className="w-[80px] whitespace-pre-line"
+          style={{ wordBreak: "keep-all" }}
+        >
           {label}
         </Label>
         <div className="flex-1 flex gap-2">
@@ -210,9 +218,9 @@ export function FormField(props: FormFieldProps) {
           {rightElement && <div className="flex items-center">{rightElement}</div>}
         </div>
       </div>
-        <p className="text-xs text-red-500 ml-[110px] pt-0.5 break-words whitespace-pre-line max-w-[250px] h-[2px]">
-          {error && error}
-        </p>
+      <p className="text-xs text-red-500 ml-[110px] pt-0.5 break-words whitespace-pre-line max-w-[250px] h-[2px]">
+        {error && error}
+      </p>
     </div>
   );
 }

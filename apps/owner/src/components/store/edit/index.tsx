@@ -10,20 +10,15 @@ import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
 import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePutOwnerStore from "@/hooks/api/usePutOwnerStore";
 import { useToastMessage } from "@/hooks/useToastMessage";
-import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
 import { formatContactNumber, getDefaultStoreFormValues } from "@/utils/stores";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "../register/businessHoursSection";
 
 export default function StoreEdit() {
-  const router = useRouter();
-  const { owner } = useOwnerStore();
-
-  const { data: storeData, isLoading } = useGetOwnerStore(owner?.userId);
+  const { data: storeData, isLoading } = useGetOwnerStore();
 
   const [isOpen, setIsOpen] = useState(true); // true: 영업중, false: 영업종료
   const [previewUrl, setPreviewUrl] = useState<string>("");
@@ -56,8 +51,8 @@ export default function StoreEdit() {
 
   const { errors, handleSubmit, watch, setValue } = form;
 
-  const updateStoreMutation = usePutOwnerStore(owner?.userId, storeData?.id);
-  const patchStoreStatusMutation = usePatchOwnerStoreStatus(owner?.userId, storeData?.id);
+  const updateStoreMutation = usePutOwnerStore(storeData?.id);
+  const patchStoreStatusMutation = usePatchOwnerStoreStatus(storeData?.id);
   const postFileUploadMutation = usePostFileUpload();
 
   const onSubmit = async (data: UpdateStoreRequest) => {
@@ -123,17 +118,6 @@ export default function StoreEdit() {
     }
   };
 
-  if (!owner?.userId) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[600px] gap-4">
-        <p className="text-gray-600">유저 정보를 불러올 수 없습니다. 다시 로그인해주세요.</p>
-        <Button onClick={() => router.push("/store/login")} variant="default">
-          로그인 하러 가기
-        </Button>
-      </div>
-    );
-  }
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[600px]">
@@ -152,7 +136,10 @@ export default function StoreEdit() {
           <div className="rounded-lg border p-4 shadow-sm flex flex-row items-center justify-between bg-gray-50">
             <div className="space-y-1.5">
               <div className="font-medium text-base">
-                현재 영업 상태: <span className={isOpen ? 'text-[#35A865]' : 'text-[#E53E3E]'}>{isOpen ? "영업중" : "영업종료"}</span>
+                현재 영업 상태:{" "}
+                <span className={isOpen ? "text-[#35A865]" : "text-[#E53E3E]"}>
+                  {isOpen ? "영업중" : "영업종료"}
+                </span>
               </div>
               <div className="text-sm text-gray-500">
                 이 스위치는 매장의 영업 상태를 나타냅니다. <br />
@@ -276,19 +263,15 @@ export default function StoreEdit() {
             style={{ minHeight: 180 }}
           >
             {previewUrl ? (
-              <img
-                src={previewUrl}
-                alt="미리보기"
-                className="object-contain w-full h-auto"
-              />
+              <img src={previewUrl} alt="미리보기" className="object-contain w-full h-auto" />
             ) : (
               <span className="text-gray-300 text-sm">이미지 미리보기</span>
             )}
           </div>
 
-          <Button 
-            type="submit" 
-            className="w-full mt-4 min-h-[42px]" 
+          <Button
+            type="submit"
+            className="w-full mt-4 min-h-[42px]"
             disabled={updateStoreMutation.isPending || postFileUploadMutation.isPending}
           >
             {updateStoreMutation.isPending || postFileUploadMutation.isPending ? (

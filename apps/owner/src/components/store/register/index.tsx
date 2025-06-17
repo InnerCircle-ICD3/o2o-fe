@@ -9,7 +9,6 @@ import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePostOwnerStore from "@/hooks/api/usePostOwnerStore";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
 import { useToastMessage } from "@/hooks/useToastMessage";
-import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
 import type { CreateStoreRequest } from "@/types/store";
 import { formatContactNumber } from "@/utils/stores";
@@ -23,11 +22,10 @@ const STEP_LABELS = ["가게 등록", "상세 설정", "픽업 설정"];
 export default function StoreRegisterForm() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
-  const { owner } = useOwnerStore();
   const router = useRouter();
 
   const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
-  const createStoreMutation = usePostOwnerStore(owner?.userId);
+  const createStoreMutation = usePostOwnerStore();
   const { mutateAsync: uploadImage, isPending: isUploading } = usePostFileUpload();
   const form = useForm<CreateStoreRequest>({
     defaultValues: initialCreateStoreFormData,
@@ -113,12 +111,15 @@ export default function StoreRegisterForm() {
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
       <Stepper step={step} labels={STEP_LABELS} />
 
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        if (step === 3) {
-          handleSubmit(onSubmit)(e);
-        }
-      }} className="flex flex-col justify-between flex-1">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (step === 3) {
+            handleSubmit(onSubmit)(e);
+          }
+        }}
+        className="flex flex-col justify-between flex-1"
+      >
         <div className="flex flex-col">
           {step === 1 && (
             <fieldset className="space-y-6" aria-label="기본 정보">
@@ -201,7 +202,11 @@ export default function StoreRegisterForm() {
                 onChange={(e) => setAddressSearch(e.target.value)}
                 rightElement={
                   <div className="flex items-center gap-2">
-                    <Button type="button" onClick={() => openPostcode(addressSearch)} className="min-h-[42px]">
+                    <Button
+                      type="button"
+                      onClick={() => openPostcode(addressSearch)}
+                      className="min-h-[42px]"
+                    >
                       검색
                     </Button>
                   </div>
@@ -255,9 +260,9 @@ export default function StoreRegisterForm() {
 
         <div className="flex justify-center pt-4 gap-2">
           {step > 1 && (
-            <Button 
-              type="button" 
-              onClick={prevStep} 
+            <Button
+              type="button"
+              onClick={prevStep}
               className="flex-1 min-h-[42px]"
               disabled={isUploading}
             >
@@ -265,12 +270,12 @@ export default function StoreRegisterForm() {
             </Button>
           )}
           {step < 3 ? (
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               onClick={(e) => {
                 e.preventDefault();
                 nextStep();
-              }} 
+              }}
               className={step > 1 ? "flex-1 min-h-[42px]" : "w-full min-h-[42px]"}
               disabled={isUploading}
             >
@@ -284,8 +289,8 @@ export default function StoreRegisterForm() {
               )}
             </Button>
           ) : (
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="flex-1 min-h-[42px]"
               disabled={createStoreMutation.isPending || isUploading}
             >

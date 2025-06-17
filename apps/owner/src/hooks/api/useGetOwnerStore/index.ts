@@ -2,18 +2,16 @@ import { getStore } from "@/apis/ssr/stores";
 import { useQuery } from "@/hooks/api/utils/useQuery";
 import type { StoreResponse } from "@/types/store";
 
-const useGetOwnerStore = (userId?: number) => {
+const useGetOwnerStore = () => {
   const { data, isLoading, isError, error } = useQuery<StoreResponse[]>({
-    queryKey: ["OwnerStore", userId],
+    queryKey: ["OwnerStore"],
     queryFn: async () => {
-      if (!userId) throw new Error("사용자 정보가 없습니다");
-      const result = await getStore(userId);
+      const result = await getStore();
       if (!result.success) {
         throw new Error(result.message || "매장 정보를 불러오지 못했습니다.");
       }
       return result;
     },
-    enabled: !!userId,
     retry: false,
   });
 
