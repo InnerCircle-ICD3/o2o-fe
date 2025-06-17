@@ -6,7 +6,6 @@ import { LayoutContent } from "@/components/common/layout-content";
 import OrderAlertModal from "@/components/common/order-alert-modal";
 import OrderSseListenerWrapper from "@/components/common/order-sse-listener-wrapper";
 import SsePanelWrapper from "@/components/common/sse-panel-wrapper";
-import SseTestPanel from "@/components/common/sse-test-panel";
 import { OwnerInfoProvider } from "@/providers/ownerInfo";
 
 if (process.env.NEXT_RUNTIME === "nodejs" && process.env.NODE_ENV === "development") {
@@ -46,7 +45,6 @@ export default function RootLayout({
           <OrderAlertModal />
           <OrderSseListenerWrapper />
           <SsePanelWrapper />
-          {process.env.NODE_ENV === "development" && <SseTestPanel />}
           <LayoutContent>{children}</LayoutContent>
         </Providers>
       </body>
