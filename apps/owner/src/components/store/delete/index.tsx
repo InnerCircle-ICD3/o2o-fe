@@ -31,12 +31,23 @@ export default function StoreDeleteForm() {
   const handleConfirmDelete = async () => {
     if (!storeData?.id) return;
     const result = await deleteStore(storeData.id);
-    
+
     if (result.success) {
       setOpen(false);
       router.push("/store/login");
     }
   };
+
+  if (!storeData) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[600px] gap-4">
+        <p className="text-gray-600">매장 정보를 불러올 수 없습니다. 다시 로그인해주세요.</p>
+        <Button onClick={() => router.push("/store/login")} variant="default">
+          로그인 하러 가기
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6 max-w-xl mx-auto">
