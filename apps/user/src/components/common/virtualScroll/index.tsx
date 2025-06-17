@@ -83,7 +83,7 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
   return (
     <VirtualScrollContext.Provider value={{ containerRef }}>
       <div ref={containerRef} className={containerStyle}>
-        <div style={{ height: totalHeight }}>
+        <div style={{ height: totalHeight + 20 }}>
           {containerSize.height !== 0 && containerSize.width !== 0 && (
             <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
           )}

@@ -13,7 +13,7 @@ export default function MainHeader() {
   const { user } = userInfoStore();
   const isLogin = !!user;
 
-  const { data: addressData, isError } = useAddressList();
+  const { data: locationList, isError } = useAddressList(isLogin);
   const { location } = useFilterTab();
 
   const { showBottomSheet, handleShowBottomSheet, handleCloseBottomSheet } = useBottomSheet();
@@ -23,13 +23,13 @@ export default function MainHeader() {
       <header className={styles.mainHeader}>
         <button
           className={styles.mainHeaderLeft}
-          disabled={isLogin || isError}
+          disabled={!isLogin || isError}
           onClick={() => handleShowBottomSheet("location")}
           type="button"
         >
           <Image src="/icons/store.svg" alt="store" width={24} height={24} />
           <h1 className={styles.mainTitle}>
-            {location ? `${location.label}의 가게` : "모든 지역의 가게"}
+            {location ? `${location}의 가게` : "모든 지역의 가게"}
           </h1>
         </button>
         <div className={styles.mainHeaderRight}>
@@ -42,10 +42,10 @@ export default function MainHeader() {
         </div>
       </header>
 
-      {addressData?.success && (
+      {locationList?.success && (
         <LocationFilter
           isOpen={showBottomSheet.has("location")}
-          addressList={addressData.data}
+          locationList={locationList.data}
           onClose={() => handleCloseBottomSheet("location")}
         />
       )}

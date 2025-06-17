@@ -1,30 +1,44 @@
+"use client";
+
 import type { CustomerAddress } from "@/apis/ssr/locations";
 import BottomSheet from "@/components/common/bottomSheet";
 import { useFilterTab } from "@/stores/useFilterTab";
+import { useUserLocation } from "@/stores/userLocationStore";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import * as styles from "./mainHeader.css";
 
 interface LocationFilterProps {
   isOpen: boolean;
-  addressList: CustomerAddress[];
+  locationList: CustomerAddress[];
   onClose: () => void;
 }
 
-export default function LocationFilter({ isOpen, addressList, onClose }: LocationFilterProps) {
+export default function LocationFilter({ isOpen, locationList, onClose }: LocationFilterProps) {
   const { onLocationChange, onResetLocation } = useFilterTab();
+  const { updateLocations, resetLocations } = useUserLocation();
 
-  const handleSelectLocation = (address: CustomerAddress) => {
-    const location = {
-      label: address.description,
-      coordinate: address.address.coordinate,
+  const router = useRouter();
+
+  const handleSelectLocation = (selectedLocation: CustomerAddress) => {
+    const coordinate = {
+      lat: selectedLocation.latitude,
+      lng: selectedLocation.longitude,
     };
 
-    onLocationChange(location);
+    updateLocations(coordinate);
+    onLocationChange(selectedLocation.region3DepthName);
+    onClose();
   };
 
   const handleAddLocation = () => {
-    // TODO: 자주가는 장소 등록 로직
-    console.log("자주가는 장소 등록");
+    router.push("/locations/my-location");
+  };
+
+  const handleResetLocation = () => {
+    onResetLocation();
+    resetLocations();
+    onClose();
   };
 
   return (
@@ -34,25 +48,25 @@ export default function LocationFilter({ isOpen, addressList, onClose }: Locatio
           <button
             className={styles.bottomSheetListItemButtonStyle}
             type="button"
-            onClick={onResetLocation}
+            onClick={handleResetLocation}
           >
             <Image src="/icons/pin.svg" alt="store" width={30} height={30} />
             <span>모든 지역</span>
           </button>
         </li>
-        {addressList.map((address, idx) => (
-          <li className={styles.bottomSheetListItemStyle} key={`${address.address}-${idx}`}>
+        {locationList.map((location) => (
+          <li className={styles.bottomSheetListItemStyle} key={location.id}>
             <button
               className={styles.bottomSheetListItemButtonStyle}
               type="button"
-              onClick={() => handleSelectLocation(address)}
+              onClick={() => handleSelectLocation(location)}
             >
               <Image src="/icons/pin.svg" alt="store" width={30} height={30} />
-              <span>{address.description}</span>
+              <span>{location.region3DepthName}</span>
             </button>
           </li>
         ))}
-        {addressList.length < 2 && (
+        {locationList.length < 2 && (
           <li className={styles.bottomSheetListItemStyle}>
             <button
               className={styles.bottomSheetListItemButtonStyle}
