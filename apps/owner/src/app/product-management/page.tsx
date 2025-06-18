@@ -69,7 +69,7 @@ export default function LuckyBagList() {
               <TableRow>
                 <TableHead className="w-1/4">이름</TableHead>
                 <TableHead>원가</TableHead>
-                <TableHead>할인가</TableHead>
+                <TableHead>할인율</TableHead>
                 <TableHead>수량</TableHead>
                 <TableHead>사이즈</TableHead>
                 <TableHead>상태</TableHead>
@@ -82,13 +82,15 @@ export default function LuckyBagList() {
                   <TableCell className="text-muted-foreground">
                     {bag.price.originalPrice.toLocaleString()}원
                   </TableCell>
-                  <TableCell>{bag.price.discountRate.toLocaleString()}원</TableCell>
+                  <TableCell>
+                    {(
+                      (bag.price.discountRate * 100).toFixed(0) as unknown as number
+                    ).toLocaleString()}
+                    %
+                  </TableCell>
                   <TableCell>{bag.inventory.quantity}개</TableCell>
                   <TableCell>{bag.size}</TableCell>
-                  <TableCell className="text-right space-x-2">
-                    <Button variant="destructive" size="sm">
-                      수정
-                    </Button>
+                  <TableCell className="space-x-2">
                     <Button
                       variant="outline"
                       size="sm"

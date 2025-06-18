@@ -14,10 +14,9 @@ export interface ProductFormData {
     discountRate: number;
     finalPrice?: number;
   };
+  size: "S" | "M" | "L";
   inventory: { quantity: number; stock?: number };
   foodType: string[];
-  size: "S" | "M" | "L";
-  quantity: number;
   image: string;
   status: "ACTIVE" | "INACTIVE";
 }
