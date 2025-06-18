@@ -8,136 +8,134 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { VALIDATION_PRODUCT_RULES } from "@/constants/product";
 import type { FileUploadResponse } from "@/types/file-upload";
+import type { UseFormOptions } from "@/types/form";
+import type { ProductFormData } from "@/types/product";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "use-form-light";
 
-interface ProductFormData {
+interface FormData {
   name: string;
   description: string;
-  foodType: string[];
+  foodType: string;
   size: "S" | "M" | "L";
   quantity: number;
   originalPrice: number;
   discountRate: number;
-  image: string;
+  image: File | string;
 }
-
-const initialFormData: ProductFormData = {
-  name: "",
-  description: "",
-  foodType: [],
-  size: "M",
-  quantity: 1,
-  originalPrice: 1000,
-  discountRate: 0.5,
-  image: "",
-};
 
 export default function LuckyBagRegister() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [previewUrl, setPreviewUrl] = useState<{
+    origin: File;
+    preview: string;
+  } | null>(null);
 
-  const form = useForm<ProductFormData>({
-    defaultValues: initialFormData,
-  });
+  const { register, handleSubmit, errors, validate, watch, setValue } = useForm<FormData>({
+    defaultValues: {
+      name: "",
+      description: "",
+      originalPrice: 10000,
+      quantity: 1,
+      discountRate: 0.5,
+      size: "M",
+      foodType: "",
+      image: "",
+    },
+    validationRules: {
+      name: {
+        pattern: /^.{2,}$/,
+        message: "2자 이상 10자 이하로 입력해주세요",
+      },
+      description: {
+        pattern: /^.{10,100}$/,
+        message: "10자 이상 100자 이하로 입력해주세요",
+      },
+      foodType: {
+        pattern: /^.{1,}$/,
+        message: "음식 종류를 1개 이상 입력해주세요",
+      },
+    },
+  } as UseFormOptions<FormData>);
 
-  const { errors, handleSubmit, register, watch, setValue } = form;
+  const getS3UploadUrl = async () => {
+    const file = previewUrl?.origin;
+    if (!file || typeof file === "string") {
+      throw new Error("파일이 없습니다.");
+    }
+    const realFile = file as File; // Type assertion here
 
-  const handleFoodTypeChange = (value: string) => {
-    const foodTypes = value.split(",").map((item) => item.trim());
-    setValue("foodType", foodTypes);
+    const result = await uploadFile({
+      fileName: realFile.name,
+      contentType: realFile.type,
+      folderPath: "product",
+    });
+
+    if (!result.success) {
+      alert("파일 업로드에 실패했습니다.");
+      return;
+    }
+
+    const data = result.data as FileUploadResponse;
+    const presignedUrl = data.preSignedUrl;
+    const s3Key = data.s3Key;
+    const baseUrl = presignedUrl.split("/product")[0];
+    return `${baseUrl}/${s3Key}`;
   };
 
-  const validateForm = () => {
-    const name = watch("name");
-    const foodType = watch("foodType");
-    const quantity = watch("quantity");
-    const originalPrice = watch("originalPrice");
-    let isValid = true;
-
-    // 이름 검증
-    if (!name || name.length < 2 || name.length > 50) {
-      setValue("name", name);
-      form.errors.name = VALIDATION_PRODUCT_RULES.name.message;
-      isValid = false;
-    }
-
-    // 음식 종류 검증
-    if (!foodType.length) {
-      setValue("foodType", foodType);
-      form.errors.foodType = VALIDATION_PRODUCT_RULES.foodType.message;
-      isValid = false;
-    }
-
-    // 수량 검증
-    if (!quantity || quantity < 1) {
-      setValue("quantity", quantity);
-      form.errors.quantity = VALIDATION_PRODUCT_RULES.quantity.message;
-      isValid = false;
-    }
-
-    // 가격 검증
-    if (!originalPrice || originalPrice < 1) {
-      setValue("originalPrice", originalPrice);
-      form.errors.originalPrice = VALIDATION_PRODUCT_RULES.originalPrice.message;
-      isValid = false;
-    }
-
-    if (watch("image") === "") {
-      setValue("image", watch("image"));
-      form.errors.image = VALIDATION_PRODUCT_RULES.image.message;
-      isValid = false;
-    }
-
-    return isValid;
-  };
-
-  const onSubmit = async (data: ProductFormData) => {
-    if (!validateForm()) {
+  const onSubmit = async (data: FormData) => {
+    const isValid = validate();
+    if (!isValid) {
       return;
     }
 
     setIsLoading(true);
     try {
-      const fileResult = await uploadFile({
-        fileName: data.image,
-        contentType: "image/jpeg",
-        folderPath: "product",
-      });
-
-      if (!fileResult.success) {
-        alert("파일 업로드 실패");
-        console.error("파일 업로드 실패:", fileResult);
-        return;
-      }
-
-      const result = await createProduct(1, {
+      const fileResult = await getS3UploadUrl();
+      const formatData: ProductFormData = {
         ...data,
-        image: (fileResult.data as FileUploadResponse).preSignedUrl,
-      });
+        price: {
+          originalPrice: data.originalPrice,
+          discountRate: data.discountRate,
+        },
+        inventory: {
+          quantity: data.quantity,
+        },
+        status: "ACTIVE",
+        image: fileResult || "",
+        foodType: data.foodType
+          .split(",")
+          .map((item) => item.trim())
+          .filter((item) => item.length > 0),
+      };
+
+      const result = await createProduct(1, formatData);
       if (result.success) {
         router.push("/product-management");
       } else {
-        console.error("상품 등록 실패:", result);
+        throw new Error(result.message);
       }
+    } catch (error) {
+      alert(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
-        setPreviewUrl(result);
-        setValue("image", result);
+        setPreviewUrl({
+          origin: file,
+          preview: result,
+        });
       };
       reader.readAsDataURL(file);
     }
@@ -157,7 +155,7 @@ export default function LuckyBagRegister() {
                 id="name"
                 {...register("name")}
                 className={errors.name ? "border-destructive" : ""}
-                placeholder="담기는 음식을 고려하여 알맞은 가방 이름을 지어주세요!"
+                placeholder="최소 2자 이상, 최대 10자 이하"
               />
               {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
             </div>
@@ -166,10 +164,12 @@ export default function LuckyBagRegister() {
               <Label htmlFor="food">음식 종류</Label>
               <Input
                 id="food"
-                value={watch("foodType").join(", ")}
-                onChange={(e) => handleFoodTypeChange(e.target.value)}
+                value={watch("foodType")}
+                onChange={(e) => {
+                  setValue("foodType", e.target.value);
+                }}
                 className={errors.foodType ? "border-destructive" : ""}
-                placeholder="주로 남는 음식을 작성해주세요 (최소 1개 이상, 콤마(,)로 구분)"
+                placeholder="1개 이상, 콤마(,)로 구분"
               />
               {errors.foodType && <p className="text-sm text-destructive">{errors.foodType}</p>}
             </div>
@@ -199,7 +199,7 @@ export default function LuckyBagRegister() {
                   onValueChange={([value]) => {
                     setValue("quantity", value);
                   }}
-                  className="flex-1"
+                  className="flex-1 [&>span]:cursor-grab [&>span]:active:cursor-grabbing [&>span]:touch-none"
                 />
                 <div className="font-bold text-lg min-w-[60px] text-center">
                   {watch("quantity")}개
@@ -216,9 +216,12 @@ export default function LuckyBagRegister() {
               <Textarea
                 id="description"
                 {...register("description")}
-                className="min-h-[100px]"
+                className={`min-h-[100px] ${errors.description ? "border-destructive" : ""}`}
                 placeholder="잇고백에 대한 설명을 입력해주세요"
               />
+              {errors.description && (
+                <p className="text-sm text-destructive">{errors.description}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -233,7 +236,7 @@ export default function LuckyBagRegister() {
                     onValueChange={([value]) => {
                       setValue("originalPrice", value);
                     }}
-                    className="flex-1"
+                    className="flex-1 [&>span]:cursor-grab [&>span]:active:cursor-grabbing [&>span]:touch-none"
                   />
                   <div className="font-bold text-lg min-w-[100px] text-center">
                     {watch("originalPrice").toLocaleString()}원
@@ -264,10 +267,10 @@ export default function LuckyBagRegister() {
                   onChange={handleImageChange}
                   className="cursor-pointer"
                 />
-                {(previewUrl || watch("image")) && (
+                {previewUrl && (
                   <div className="relative w-[200px] h-[200px] border rounded-lg overflow-hidden">
                     <Image
-                      src={previewUrl || watch("image")}
+                      src={previewUrl.preview}
                       alt="Product preview"
                       fill
                       className="object-cover"
@@ -277,7 +280,17 @@ export default function LuckyBagRegister() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={
+                isLoading ||
+                !watch("name") ||
+                !watch("description") ||
+                !watch("foodType") ||
+                !previewUrl
+              }
+            >
               {isLoading ? "등록 중..." : "등록하기"}
             </Button>
           </div>
