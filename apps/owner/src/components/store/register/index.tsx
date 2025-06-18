@@ -79,13 +79,13 @@ export default function StoreRegisterForm() {
     }
   };
 
-  const handleImageUpload = async (imageFile: File) => {
+  const handleImageUpload = async (imageFile: File): Promise<string | null> => {
     try {
       // 1. presignedUrl 요청
       const presignedUrl = await uploadImage({ file: imageFile, folderPath: "store" });
       if (!presignedUrl) {
         showToast("이미지 업로드 실패", true);
-        return;
+        return null;
       }
 
       // 2. S3에 PUT 업로드
@@ -96,7 +96,7 @@ export default function StoreRegisterForm() {
       });
       if (!response.ok) {
         showToast("S3 업로드 실패", true);
-        return;
+        return null;
       }
 
       // 3. S3 URL 추출 (쿼리스트링 제거)
@@ -104,7 +104,7 @@ export default function StoreRegisterForm() {
       return mainImageUrl;
     } catch {
       showToast("이미지 업로드 중 오류가 발생했습니다.", true);
-      return;
+      return null;
     }
   };
 
@@ -114,21 +114,27 @@ export default function StoreRegisterForm() {
 
     let mainImageUrl = data.mainImageUrl;
     if (mainImageUrl?.startsWith("data:") && imageFile) {
+      console.log("imageFile", imageFile);
       const newMainImageUrl = await handleImageUpload(imageFile);
-      if (newMainImageUrl) {
-        mainImageUrl = newMainImageUrl;
+      console.log(newMainImageUrl);
+      if (!newMainImageUrl) {
+        return;
       }
+      mainImageUrl = newMainImageUrl;
     }
 
     // 4. form에 S3 URL 저장 후 등록
-    createStoreMutation.mutate(data, {
-      onSuccess: () => {
-        showToast("매장 등록이 완료되었습니다.", false, () => router.push("/store-management"));
-      },
-      onError: () => {
-        showToast("매장 등록에 실패했습니다.", true);
-      },
-    });
+    createStoreMutation.mutate(
+      { ...data, mainImageUrl },
+      {
+        onSuccess: () => {
+          showToast("매장 등록이 완료되었습니다.", false, () => router.push("/store-management"));
+        },
+        onError: () => {
+          showToast("매장 등록에 실패했습니다.", true);
+        },
+      }
+    );
   };
 
   return (
