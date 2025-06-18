@@ -11,10 +11,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { OWNER_DELETE_NOTICE } from "@/constants/notice";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function OwnerDeleteForm() {
+  const { clearOwner, clearStore } = useOwnerStore();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -27,6 +29,8 @@ export default function OwnerDeleteForm() {
   const handleConfirmDelete = async () => {
     const result = await deleteStoreOwner();
     if (result.success) {
+      clearOwner();
+      clearStore();
       setOpen(false);
       router.push("/store/login");
     }
@@ -35,6 +39,8 @@ export default function OwnerDeleteForm() {
   return (
     <div className="flex flex-col gap-6 max-w-xl mx-auto">
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-sm text-gray-700 whitespace-pre-line">
+        <span className="font-bold">점주 계정 삭제 전에 꼭 확인하세요.</span>
+        <br />
         {OWNER_DELETE_NOTICE}
       </div>
       <label className="flex items-center gap-2 cursor-pointer select-none">
