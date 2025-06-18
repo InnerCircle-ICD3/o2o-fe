@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import type { FileUploadResponse } from "@/types/file-upload";
 import type { UseFormOptions } from "@/types/form";
 import type { ProductFormData } from "@/types/product";
@@ -29,6 +30,7 @@ interface FormData {
 
 export default function LuckyBagRegister() {
   const router = useRouter();
+  const { data: storeData } = useGetOwnerStore();
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<{
     origin: File;
@@ -89,7 +91,7 @@ export default function LuckyBagRegister() {
 
   const onSubmit = async (data: FormData) => {
     const isValid = validate();
-    if (!isValid) {
+    if (!isValid || !storeData?.id) {
       return;
     }
 
@@ -113,7 +115,7 @@ export default function LuckyBagRegister() {
           .filter((item) => item.length > 0),
       };
 
-      const result = await createProduct(1, formatData);
+      const result = await createProduct(storeData?.id, formatData);
       if (result.success) {
         router.push("/product-management");
       } else {

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { FileUploadResponse } from "@/types/file-upload";
 import type { UseFormOptions } from "@/types/form";
@@ -30,6 +31,7 @@ interface FormData {
 
 export default function LuckyBagDetail() {
   const { id } = useParams();
+  const { data: storeData } = useGetOwnerStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<{
@@ -65,8 +67,9 @@ export default function LuckyBagDetail() {
     },
   } as UseFormOptions<FormData>);
 
-  const fetchProduct = useCallback(async () => {
-    const result = await getProduct(owner?.storeOwnerId || 1, Number(id));
+  const fetchAndSetProduct = useCallback(async () => {
+    if (!owner?.storeOwnerId || !id) return;
+    const result = await getProduct(owner?.storeOwnerId, Number(id));
     if (result.success) {
       const product = result.data;
       setValue("name", product.name);
@@ -80,11 +83,11 @@ export default function LuckyBagDetail() {
     } else {
       console.error("상품 조회 실패:", result);
     }
-  }, [setValue, owner?.storeOwnerId, id]);
+  }, [owner?.storeOwnerId, id, setValue]);
 
   useEffect(() => {
-    fetchProduct();
-  }, [fetchProduct]);
+    fetchAndSetProduct();
+  }, [fetchAndSetProduct]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -92,7 +95,7 @@ export default function LuckyBagDetail() {
 
   const handleCancel = () => {
     setIsEditing(false);
-    fetchProduct();
+    fetchAndSetProduct();
   };
 
   const getS3UploadUrl = async () => {
@@ -121,7 +124,7 @@ export default function LuckyBagDetail() {
 
   const onSubmit = async (data: FormData) => {
     const isValid = validate();
-    if (!isValid) {
+    if (!isValid || !storeData?.id) {
       return;
     }
 
@@ -145,11 +148,11 @@ export default function LuckyBagDetail() {
           .filter((item) => item.length > 0),
       };
 
-      const result = await updateProduct(1, Number(id), formatData as Product);
+      const result = await updateProduct(storeData?.id, Number(id), formatData as Product);
 
       if (result.success) {
         setIsEditing(false);
-        fetchProduct();
+        fetchAndSetProduct();
       } else {
         throw new Error(result.message);
       }
