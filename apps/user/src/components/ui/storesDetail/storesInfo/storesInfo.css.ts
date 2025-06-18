@@ -70,9 +70,5 @@ export const metaValue = style({
 });
 
 export const description = style({
-  overflow: "hidden",
   color: "#32343E",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-  textTransform: "uppercase",
 });
