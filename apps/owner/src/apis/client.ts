@@ -2,16 +2,12 @@ import ky, { type Options } from "ky";
 import { toResult } from "./utils/result";
 
 /**
- * API 클라이언트 설정 파일
+ * CSR 전용 API 클라이언트 설정
  *
- * 두 개의 다른 base URL을 가진 API 클라이언트를 제공합니다:
- * 1. api: 일반 API 호출용 (도메인/api/v1)
- * 2. productApi: Product 관련 API 호출용 (도메인만)
+ * - 프록시를 통한 API 호출 (/api 경로)
+ * - 브라우저 쿠키 자동 포함
+ * - Client Component에서만 사용
  */
-
-// ========================
-// API 인스턴스 생성
-// ========================
 
 /**
  * 일반 API 클라이언트 인스턴스
@@ -45,7 +41,7 @@ const productApiInstance = ky.create({
 // ========================
 
 /**
- * API 클라이언트 생성 함수
+ * CSR 전용 API 클라이언트 생성 함수
  *
  * @param kyInstance - ky 인스턴스
  * @returns HTTP 메서드별 API 클라이언트 객체
