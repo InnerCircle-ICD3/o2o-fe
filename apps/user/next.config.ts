@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/api/stores/:id/products",
+        destination: "https://store-owner.eatngo.org/api/v1/stores/:id/products",
+      },
+      {
         source: "/api/:path*",
         destination: "https://customer.eatngo.org/api/v1/:path*",
       },
