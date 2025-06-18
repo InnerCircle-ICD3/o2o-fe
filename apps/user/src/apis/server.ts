@@ -1,5 +1,4 @@
 import ky, { type Options } from "ky";
-import { cookies } from "next/headers";
 import { toResult } from "./utils/result";
 
 /**
@@ -19,7 +18,7 @@ const getServerAuthHeaders = async () => {
   };
 
   try {
-    // SSR 전용 파일이므로 최상단에서 정적 import 사용
+    const { cookies } = await import("next/headers");
     const cookieStore = await cookies();
     const token = cookieStore.get("access_token")?.value;
 
@@ -38,7 +37,7 @@ const getServerAuthHeaders = async () => {
  * 직접 백엔드 API 호출 (환경변수에서 실제 백엔드 URL 사용)
  */
 const serverApiInstance = ky.create({
-  prefixUrl: "https://customer.eatngo.org/api/v1", // 실제 백엔드 URL
+  prefixUrl: "/api",
 });
 
 /**
@@ -51,6 +50,7 @@ export const serverApiClient = {
       ...options,
       headers: { ...authHeaders, ...options.headers },
     };
+    console.log(mergedOptions, "mergedOptions");
     return toResult<T>(() => serverApiInstance.get(url, mergedOptions).json());
   },
 
