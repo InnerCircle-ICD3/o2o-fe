@@ -1,6 +1,4 @@
 "use client";
-
-import { uploadFile } from "@/apis/ssr/file-upload";
 import { getProduct, updateProduct } from "@/apis/ssr/product";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,9 +8,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
-import type { FileUploadResponse } from "@/types/file-upload";
 import type { UseFormOptions } from "@/types/form";
 import type { Product, ProductFormData } from "@/types/product";
+import { getS3UploadUrl } from "@/utils/imageUpload";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -83,7 +81,7 @@ export default function LuckyBagDetail() {
     } else {
       console.error("상품 조회 실패:", result);
     }
-  }, [owner?.storeOwnerId, id, setValue]);
+  }, [owner, id]);
 
   useEffect(() => {
     fetchAndSetProduct();
@@ -98,39 +96,15 @@ export default function LuckyBagDetail() {
     fetchAndSetProduct();
   };
 
-  const getS3UploadUrl = async () => {
-    const file = previewUrl?.origin;
-    if (!file || typeof file === "string") {
-      throw new Error("파일이 없습니다.");
-    }
-    const realFile = file as File;
-
-    const result = await uploadFile({
-      fileName: realFile.name,
-      contentType: realFile.type,
-      folderPath: "product",
-    });
-
-    if (!result.success) {
-      return;
-    }
-
-    const data = result.data as FileUploadResponse;
-    const presignedUrl = data.preSignedUrl;
-    const s3Key = data.s3Key;
-    const baseUrl = presignedUrl.split("/product")[0];
-    return `${baseUrl}/${s3Key}`;
-  };
-
   const onSubmit = async (data: FormData) => {
     const isValid = validate();
-    if (!isValid || !storeData?.id) {
+    if (!isValid || !storeData?.id || !previewUrl?.origin) {
       return;
     }
 
     setIsLoading(true);
     try {
-      const fileResult = await getS3UploadUrl();
+      const fileResult = await getS3UploadUrl(previewUrl?.origin, "product");
       const formatData: ProductFormData = {
         ...data,
         price: {
