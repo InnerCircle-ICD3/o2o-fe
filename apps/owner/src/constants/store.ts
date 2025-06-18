@@ -8,7 +8,7 @@ import type {
 export const VALIDATION_RULES: ValidationRules<CreateStoreRequest> = {
   name: {
     pattern: /^\S.{0,49}$/,
-    message: "1~50자 사이의 공백 없는 이름을 입력해주세요.",
+    message: "1~50자 이내로 입력해주세요.",
   },
   businessNumber: {
     pattern: /^\d{10}$/,

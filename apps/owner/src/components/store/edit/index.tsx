@@ -10,6 +10,7 @@ import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
 import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePutOwnerStore from "@/hooks/api/usePutOwnerStore";
 import { useToastMessage } from "@/hooks/useToastMessage";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UpdateStoreRequest } from "@/types/store";
 import { formatContactNumber, getDefaultStoreFormValues } from "@/utils/stores";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,10 +20,12 @@ import { BusinessHoursSection } from "../register/businessHoursSection";
 
 export default function StoreEdit() {
   const { data: storeData, isLoading } = useGetOwnerStore();
+  const storeFromZustand = useOwnerStore((state) => state.store);
 
   const [isOpen, setIsOpen] = useState(true); // true: 영업중, false: 영업종료
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState<string>("");
 
   const form = useForm<UpdateStoreRequest>({
     defaultValues: initialUpdateStoreFormData,
@@ -32,9 +35,12 @@ export default function StoreEdit() {
 
   const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
 
+  // Zustand store에서 매장 정보를 우선 사용하고, 없으면 API 데이터 사용
+  const currentStoreData = storeFromZustand || storeData;
+
   useEffect(() => {
-    if (storeData) {
-      const defaultValues = getDefaultStoreFormValues(storeData);
+    if (currentStoreData) {
+      const defaultValues = getDefaultStoreFormValues(currentStoreData);
 
       for (const key of Object.keys(defaultValues) as (keyof typeof defaultValues)[]) {
         if (key !== "status" && key !== "businessNumber") {
@@ -47,47 +53,75 @@ export default function StoreEdit() {
         setPreviewUrl(defaultValues.mainImageUrl);
       }
     }
-  }, [storeData]);
+  }, [currentStoreData]);
 
   const { errors, handleSubmit, watch, setValue } = form;
 
-  const updateStoreMutation = usePutOwnerStore(storeData?.id);
-  const patchStoreStatusMutation = usePatchOwnerStoreStatus(storeData?.id);
+  const updateStoreMutation = usePutOwnerStore(currentStoreData?.id);
+  const patchStoreStatusMutation = usePatchOwnerStoreStatus(currentStoreData?.id);
   const postFileUploadMutation = usePostFileUpload();
 
+  const handleImagePreview = async (value: string | File | null) => {
+    if (value === null) {
+      setValue("mainImageUrl", "");
+      setPreviewUrl("");
+      setFileName("");
+      return;
+    }
+    if (value instanceof File) {
+      setImageFile(value);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setPreviewUrl(result);
+        setValue("mainImageUrl", result);
+        setFileName(value.name);
+      };
+      reader.readAsDataURL(value);
+    }
+  }
+
+  const handleImageUpload = async (imageFile: File) => {
+    try {
+      // 1. presignedUrl 요청
+      const presignedUrl = await postFileUploadMutation.mutateAsync({
+        file: imageFile,
+        folderPath: "store",
+      });
+      if (!presignedUrl) {
+        showToast("이미지 업로드 실패", true);
+        return;
+      }
+
+      // 2. S3에 PUT 업로드
+      const response = await fetch(presignedUrl, {
+        method: "PUT",
+        headers: { "Content-Type": imageFile.type || "image/jpeg" },
+        body: imageFile,
+      });
+      if (!response.ok) {
+        showToast("S3 업로드 실패", true);
+        return;
+      }
+
+      // 3. S3 URL 추출 (쿼리스트링 제거)
+      const mainImageUrl = presignedUrl.split("?")[0];
+      return mainImageUrl;
+    } catch {
+      showToast("이미지 업로드 중 오류가 발생했습니다.", true);
+      return;
+    }
+  }
+  
   const onSubmit = async (data: UpdateStoreRequest) => {
     const isValid = await form.validate();
     if (!isValid) return;
 
     let mainImageUrl = data.mainImageUrl;
     if (mainImageUrl?.startsWith("data:") && imageFile) {
-      try {
-        // 1. presignedUrl 요청
-        const presignedUrl = await postFileUploadMutation.mutateAsync({
-          file: imageFile,
-          folderPath: "store",
-        });
-        if (!presignedUrl) {
-          showToast("이미지 업로드 실패", true);
-          return;
-        }
-
-        // 2. S3에 PUT 업로드
-        const response = await fetch(presignedUrl, {
-          method: "PUT",
-          headers: { "Content-Type": imageFile.type || "image/jpeg" },
-          body: imageFile,
-        });
-        if (!response.ok) {
-          showToast("S3 업로드 실패", true);
-          return;
-        }
-
-        // 3. S3 URL 추출 (쿼리스트링 제거)
-        mainImageUrl = presignedUrl.split("?")[0];
-      } catch {
-        showToast("이미지 업로드 중 오류가 발생했습니다.", true);
-        return;
+      const newMainImageUrl = await handleImageUpload(imageFile);
+      if (newMainImageUrl) {
+        mainImageUrl = newMainImageUrl;
       }
     }
 
@@ -118,7 +152,8 @@ export default function StoreEdit() {
     }
   };
 
-  if (isLoading) {
+  // 로딩 중이거나 매장 데이터가 없는 경우 (Provider에서 리다이렉트 처리됨)
+  if (isLoading || !currentStoreData) {
     return (
       <div className="flex justify-center items-center min-h-[600px]">
         <div className="flex flex-col items-center gap-4">
@@ -239,23 +274,8 @@ export default function StoreEdit() {
             label="대표 이미지 업로드"
             name="mainImageUrl"
             value={watch("mainImageUrl") || ""}
-            onChange={async (value) => {
-              if (value === null) {
-                setValue("mainImageUrl", "");
-                setPreviewUrl("");
-                return;
-              }
-              if (value instanceof File) {
-                setImageFile(value);
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  const result = reader.result as string;
-                  setPreviewUrl(result);
-                  setValue("mainImageUrl", result);
-                };
-                reader.readAsDataURL(value);
-              }
-            }}
+            onChange={handleImagePreview}
+            fileName={fileName}
             error={errors.mainImageUrl}
           />
           <div

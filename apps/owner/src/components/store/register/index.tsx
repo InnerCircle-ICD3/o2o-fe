@@ -38,6 +38,7 @@ export default function StoreRegisterForm() {
   const { errors, handleSubmit, register, watch, setValue } = form;
   const { openPostcode, addressType } = useStoreAddress(form);
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
 
@@ -51,45 +52,59 @@ export default function StoreRegisterForm() {
   };
 
   const handleBlur =
-    (field: keyof CreateStoreRequest) =>
-    (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (field: keyof CreateStoreRequest) => (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
       const error = validateSingleField(field, value);
       setValue(field, value);
       errors[field] = error;
     };
 
-  const handleImageUpload = async (file: File) => {
+  const handleImagePreview = async (value: string | File | null) => {
+    if (value === null) {
+      setValue("mainImageUrl", "");
+      setPreviewUrl("");
+      setFileName("");
+      return;
+    }
+    if (value instanceof File) {
+      setImageFile(value);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setPreviewUrl(result);
+        setValue("mainImageUrl", result);
+        setFileName(value.name);
+      };
+      reader.readAsDataURL(value);
+    }
+  };
+
+  const handleImageUpload = async (imageFile: File) => {
     try {
-      setFileName(file.name);
       // 1. presignedUrl 요청
-      const presignedUrl = await uploadImage({ file, folderPath: "store" });
+      const presignedUrl = await uploadImage({ file: imageFile, folderPath: "store" });
       if (!presignedUrl) {
         showToast("이미지 업로드 실패", true);
-        setFileName("");
-        return "";
+        return;
       }
 
       // 2. S3에 PUT 업로드
       const response = await fetch(presignedUrl, {
         method: "PUT",
-        headers: { "Content-Type": file.type || "image/jpeg" },
-        body: file,
+        headers: { "Content-Type": imageFile.type || "image/jpeg" },
+        body: imageFile,
       });
       if (!response.ok) {
         showToast("S3 업로드 실패", true);
-        setFileName("");
-        return "";
+        return;
       }
 
       // 3. S3 URL 추출 (쿼리스트링 제거)
-      const s3Url = presignedUrl.split("?")[0];
-      setPreviewUrl(s3Url);
-      return s3Url;
+      const mainImageUrl = presignedUrl.split("?")[0];
+      return mainImageUrl;
     } catch {
       showToast("이미지 업로드 중 오류가 발생했습니다.", true);
-      setFileName("");
-      return "";
+      return;
     }
   };
 
@@ -97,6 +112,15 @@ export default function StoreRegisterForm() {
     const isValid = await form.validate();
     if (!isValid) return;
 
+    let mainImageUrl = data.mainImageUrl;
+    if (mainImageUrl?.startsWith("data:") && imageFile) {
+      const newMainImageUrl = await handleImageUpload(imageFile);
+      if (newMainImageUrl) {
+        mainImageUrl = newMainImageUrl;
+      }
+    }
+
+    // 4. form에 S3 URL 저장 후 등록
     createStoreMutation.mutate(data, {
       onSuccess: () => {
         showToast("매장 등록이 완료되었습니다.", false, () => router.push("/store-management"));
@@ -108,8 +132,14 @@ export default function StoreRegisterForm() {
   };
 
   return (
-    <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
-      <Stepper step={step} labels={STEP_LABELS} />
+    <section
+      className="flex flex-col gap-6 min-h-[600px]"
+      aria-label="매장 등록 폼"
+    >
+      <Stepper
+        step={step}
+        labels={STEP_LABELS}
+      />
 
       <form
         onSubmit={(e) => {
@@ -122,7 +152,10 @@ export default function StoreRegisterForm() {
       >
         <div className="flex flex-col">
           {step === 1 && (
-            <fieldset className="space-y-6" aria-label="기본 정보">
+            <fieldset
+              className="space-y-6"
+              aria-label="기본 정보"
+            >
               <FormField
                 type="input"
                 label="매장명"
@@ -155,22 +188,9 @@ export default function StoreRegisterForm() {
                 label="대표 이미지 업로드"
                 name="mainImageUrl"
                 value={watch("mainImageUrl") || ""}
-                onChange={async (value) => {
-                  if (value === null) {
-                    setValue("mainImageUrl", "");
-                    setPreviewUrl("");
-                    setFileName("");
-                    return;
-                  }
-                  if (value instanceof File) {
-                    const s3Url = await handleImageUpload(value);
-                    if (s3Url) {
-                      setValue("mainImageUrl", s3Url);
-                    }
-                  }
-                }}
-                error={errors.mainImageUrl}
+                onChange={handleImagePreview}
                 fileName={fileName}
+                error={errors.mainImageUrl}
               />
               <div
                 className="flex justify-center items-center border border-input rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
@@ -190,7 +210,10 @@ export default function StoreRegisterForm() {
           )}
 
           {step === 2 && (
-            <fieldset className="space-y-6" aria-label="주소 및 카테고리 정보">
+            <fieldset
+              className="space-y-6"
+              aria-label="주소 및 카테고리 정보"
+            >
               <FormField
                 type="input"
                 label="주소 검색"
