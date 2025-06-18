@@ -100,7 +100,7 @@ describe("locationUtils", () => {
       const mockStore: MapStore = {
         storeId: 1,
         storeName: "테스트 가게",
-        coordinates: {
+        coordinate: {
           latitude: 37.5665,
           longitude: 126.978,
         },
@@ -130,7 +130,7 @@ describe("locationUtils", () => {
       const mockStore: MapStore = {
         storeId: 1,
         storeName: "테스트 가게",
-        coordinates: {
+        coordinate: {
           latitude: 37.5665,
           longitude: 126.978,
         },

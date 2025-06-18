@@ -7,34 +7,18 @@ import type {
   UpdateStoreRequest,
 } from "@/types/store";
 
-export const postStore = async (storeOwnerId: number, data: CreateStoreRequest) => {
-  return await toSafeResult(() =>
-    api.post<CreateStoreRequest>("stores", data, {
-      searchParams: { storeOwnerId },
-    }),
-  );
+export const postStore = async (data: CreateStoreRequest) => {
+  return await toSafeResult(() => api.post<CreateStoreRequest>("stores", data));
 };
 
 export const getStore = async () => {
   return await toSafeResult(() => api.get<StoreResponse[]>("stores"));
 };
 
-export const putStore = async (storeOwnerId: number, storeId: number, data: UpdateStoreRequest) => {
-  return await toSafeResult(() =>
-    api.put(`stores/${storeId}`, data, {
-      searchParams: { storeOwnerId },
-    }),
-  );
+export const putStore = async (storeId: number, data: UpdateStoreRequest) => {
+  return await toSafeResult(() => api.put(`stores/${storeId}`, data));
 };
 
-export const patchStoreStatus = async (
-  storeOwnerId: number,
-  storeId: number,
-  data: StoreStatus,
-) => {
-  return await toSafeResult(() =>
-    api.patch(`stores/${storeId}/status`, data, {
-      searchParams: { storeOwnerId },
-    }),
-  );
+export const patchStoreStatus = async (storeId: number, data: StoreStatus) => {
+  return await toSafeResult(() => api.patch(`stores/${storeId}/status`, data));
 };

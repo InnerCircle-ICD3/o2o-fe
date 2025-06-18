@@ -4,7 +4,7 @@ import Button from "@/components/common/button";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { useSelectedAddressStore } from "@/stores/selectedAddressStore";
-import type { Coordinates, SearchAddressResult } from "@/types/locations.type";
+import type { Coordinate, SearchAddressResult } from "@/types/locations.type";
 import { getFullAddressByCoords, searchAddress } from "@/utils/locations";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -34,7 +34,7 @@ export default function LocationSearchPage() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const handleSelect = async (location: Coordinates) => {
+  const handleSelect = async (location: Coordinate) => {
     if (!location || !isLoaded) return;
 
     try {

@@ -69,7 +69,11 @@ describe("Mypage Test", () => {
   it("로그인 정보가 없다면 shortcut, menus 메뉴가 나타나지 않는다.", async () => {
     // 비로그인 상태로 mockUser 설정
     mockUser = null;
-    // getCustomer는 호출되지 않으므로 mock 필요 없음
+    // getCustomer가 비로그인 상황임을 명확히 반환
+    (getCustomer as ReturnType<typeof vi.fn>).mockResolvedValue({
+      success: false,
+      data: null,
+    });
 
     const { container, getByText } = renderWithQueryClient(<Page />);
     await waitFor(() => {

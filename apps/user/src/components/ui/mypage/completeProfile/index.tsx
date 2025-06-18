@@ -2,7 +2,7 @@
 
 import { patchCustomer as defaultPatchCustomer } from "@/apis/ssr/customers";
 import Button from "@/components/common/button";
-import ErrorUi from "@/components/common/errorUi";
+import { useToastStore } from "@/stores/toastStore";
 import { userInfoStore as defaultUseUserStore } from "@/stores/userInfoStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -17,8 +17,7 @@ export default function CompleteProfile({
 } = {}) {
   const { user } = useUserStore();
   const [nickname, setNickname] = useState("");
-  const [error, setError] = useState<string | null>(null);
-
+  const { showToast } = useToastStore();
   const router = useRouter();
 
   const handleCompleteProfile = async () => {
@@ -26,13 +25,12 @@ export default function CompleteProfile({
     const result = await patchCustomer(user.customerId, nickname);
 
     if (result.success) {
-      router.push("/");
+      showToast("닉네임 변경 완료");
+      router.push("/mypage");
     } else {
-      setError(result.message);
+      showToast("닉네임 변경 실패", true);
     }
   };
-
-  if (error) return <ErrorUi message={error} />;
 
   return (
     <div className={styles.completeProfileContainer}>

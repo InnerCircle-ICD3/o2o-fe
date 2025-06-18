@@ -82,6 +82,6 @@ describe("BusinessHoursSection", () => {
 
     const mondayButton = screen.getByText("월");
     fireEvent.click(mondayButton);
-    expect(mondayButton).toHaveClass("bg-primary");
+    expect(mondayButton).toHaveClass("bg-[#35a865]");
   });
 });

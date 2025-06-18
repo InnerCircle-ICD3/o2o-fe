@@ -40,7 +40,8 @@ type MultiSelectFieldProps = {
 type ImageFieldProps = {
   type: "image";
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | File | null) => void;
+  fileName?: string;
 } & BaseProps;
 
 type FormFieldProps =
@@ -103,11 +104,11 @@ export function FormField(props: FormFieldProps) {
     const { type, label, name, rightElement, error, ...textareaProps } = props;
     return (
       <div className="space-y-3">
-        <div className="flex items-center gap-4">
-          <Label htmlFor={name} className="w-[90px]">
+        <div className="flex items-start gap-4">
+          <Label htmlFor={name} className="w-[90px] pt-2">
             {label}
           </Label>
-          <div className="flex-1 flex gap-2">
+          <div className="flex-1 flex gap-2 min-w-0">
             <Textarea
               id={name}
               aria-label={label}
@@ -128,28 +129,58 @@ export function FormField(props: FormFieldProps) {
     return (
       <div className="space-y-3">
         <div className="flex items-center gap-4">
-          <Label htmlFor={name} className="w-[90px]">
+          <Label
+            htmlFor={name}
+            className="w-[90px] whitespace-pre-line"
+            style={{ wordBreak: "keep-all" }}
+          >
             {label}
           </Label>
           <div className="flex-1 flex gap-2">
-            <input
-              id={name}
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    props.onChange(reader.result as string);
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-              className="cursor-pointer border rounded px-3 py-2 w-full"
-            />
-            {rightElement && <div className="flex items-center">{rightElement}</div>}
+            <div className="relative w-full">
+              <input
+                id={name}
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    props.onChange(file);
+                  }
+                }}
+                className="hidden"
+              />
+              <Input
+                type="text"
+                readOnly
+                value={props.fileName || ""}
+                placeholder="파일을 선택하세요"
+                className="w-full pr-8 cursor-pointer placeholder:text-gray-300"
+                onClick={() => {
+                  const fileInput = document.getElementById(name) as HTMLInputElement;
+                  fileInput?.click();
+                }}
+              />
+              {props.fileName && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    props.onChange(null);
+                    const fileInput = document.getElementById(name) as HTMLInputElement;
+                    if (fileInput) {
+                      fileInput.value = "";
+                    }
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
+          {rightElement && <div className="flex items-center">{rightElement}</div>}
         </div>
         {error && (
           <p className="text-xs text-red-500 ml-[124px] break-words whitespace-pre-line max-w-[250px]">
@@ -169,9 +200,13 @@ export function FormField(props: FormFieldProps) {
     ...inputProps
   } = props;
   return (
-    <div className="space-y-3">
+    <div>
       <div className="flex items-center gap-4">
-        <Label htmlFor={name} className="w-[90px]">
+        <Label
+          htmlFor={name}
+          className="w-[90px] whitespace-pre-line"
+          style={{ wordBreak: "keep-all" }}
+        >
           {label}
         </Label>
         <div className="flex-1 flex gap-2">
@@ -183,11 +218,9 @@ export function FormField(props: FormFieldProps) {
           {rightElement && <div className="flex items-center">{rightElement}</div>}
         </div>
       </div>
-      {error && (
-        <p className="text-xs text-red-500 ml-[124px] break-words whitespace-pre-line max-w-[250px]">
-          {error}
-        </p>
-      )}
+      <p className="text-xs text-red-500 ml-[110px] pt-0.5 break-words whitespace-pre-line max-w-[250px] h-[2px]">
+        {error && error}
+      </p>
     </div>
   );
 }

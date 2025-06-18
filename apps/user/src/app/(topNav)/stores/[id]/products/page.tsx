@@ -1,19 +1,35 @@
+"use client";
+
 import { getStoresDetailProducts } from "@/apis/ssr/stores";
 import StoresProducts from "@/components/ui/storesDetail/storesProducts";
-import { Suspense } from "react";
+import type { Product } from "@/types/apis/stores.type";
+import { useParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
+const Page = () => {
+  const { id } = useParams();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isError, setIsError] = useState(false);
 
-const Page = async (props: PageProps) => {
-  const { params } = props;
-  const { id } = await params;
-
-  const productsResponse = await getStoresDetailProducts(id);
-
-  const isError = !productsResponse.success;
-  const productsData = isError ? [] : productsResponse.data;
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        const storesResponse = await getStoresDetailProducts(id as string);
+        if (storesResponse.success) {
+          setProducts(storesResponse.data);
+          setIsError(false);
+        } else {
+          setIsError(true);
+          throw storesResponse;
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsError(false);
+      }
+    };
+    fetchProductDetails();
+  }, [id]);
 
   return (
     <Suspense fallback={<div>로딩 중...</div>}>
@@ -23,7 +39,7 @@ const Page = async (props: PageProps) => {
           <p>잠시 후 다시 시도해 주세요.</p>
         </div>
       ) : (
-        <StoresProducts storesProducts={productsData} />
+        <StoresProducts storesProducts={products} />
       )}
     </Suspense>
   );
