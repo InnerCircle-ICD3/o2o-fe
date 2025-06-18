@@ -2,6 +2,7 @@ import Subscribe from "@/components/common/subscribe";
 import { userInfoStore } from "@/stores/userInfoStore";
 import * as globalStyle from "@/styles/global.css";
 import type { StoresDetail } from "@/types/apis/stores.type";
+import { formatTimeToHourMinute } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,7 +51,7 @@ const StoresInfo = (props: StoreInfoProps) => {
         <div className={style.reviewAndDistanceWrapper}>
           <Image src={"/icons/star.svg"} alt={"star"} width={16} height={16} />
           <span>
-            <strong>4.5</strong> (123) 1km
+            <strong>{storesDetail.ratingAverage}</strong> ({storesDetail.ratingCount})
           </span>
         </div>
         <StoreReview id={storesDetail.id.toString()} />
@@ -58,7 +59,8 @@ const StoresInfo = (props: StoreInfoProps) => {
           <div className={style.metaRow}>
             <p className={style.metaLabel}>픽업 시간</p>
             <strong className={classNames(style.metaValue, globalStyle.primaryColor)}>
-              {storesDetail.todayPickupStartTime} ~ {storesDetail.todayPickupEndTime}
+              {formatTimeToHourMinute(storesDetail.todayPickupStartTime)} ~{" "}
+              {formatTimeToHourMinute(storesDetail.todayPickupEndTime)}
             </strong>
           </div>
           <div className={style.metaRow}>

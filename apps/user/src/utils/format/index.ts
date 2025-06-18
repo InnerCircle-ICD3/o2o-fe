@@ -91,3 +91,12 @@ export const formatDistance = (distance: number): string => {
   const roundedDistance = Math.max(Math.round(distance * 10) / 10, 0.1);
   return `${roundedDistance}km`;
 };
+
+/**
+ * 시간 문자열(예: '17:00:00')에서 '17:00' 형식으로 잘라 반환합니다.
+ */
+export function formatTimeToHourMinute(time: string): string {
+  if (!time) return "";
+  // 'HH:mm:ss' 또는 'HH:mm' 형식 지원
+  return time.split(":").slice(0, 2).join(":");
+}
