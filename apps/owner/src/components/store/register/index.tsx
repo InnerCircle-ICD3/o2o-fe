@@ -4,19 +4,16 @@ import { FormField } from "@/components/common/formField";
 import { Stepper } from "@/components/common/stepper";
 import { ToastMessage } from "@/components/common/toastMessage";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { STORE_CATEGORIES, VALIDATION_RULES, initialCreateStoreFormData } from "@/constants/store";
 import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePostOwnerStore from "@/hooks/api/usePostOwnerStore";
 import { useStoreAddress } from "@/hooks/useStoreAddress";
 import { useToastMessage } from "@/hooks/useToastMessage";
-import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { UseFormOptions } from "@/types/form";
 import type { CreateStoreRequest } from "@/types/store";
 import { formatContactNumber } from "@/utils/stores";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import React from "react";
 import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
 
@@ -25,12 +22,10 @@ const STEP_LABELS = ["가게 등록", "상세 설정", "픽업 설정"];
 export default function StoreRegisterForm() {
   const [step, setStep] = useState(1);
   const [addressSearch, setAddressSearch] = useState("");
-  const { owner } = useOwnerStore();
   const router = useRouter();
 
   const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
-  const createStoreMutation = usePostOwnerStore(owner?.userId);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const createStoreMutation = usePostOwnerStore();
   const { mutateAsync: uploadImage, isPending: isUploading } = usePostFileUpload();
   const form = useForm<CreateStoreRequest>({
     defaultValues: initialCreateStoreFormData,
@@ -42,6 +37,10 @@ export default function StoreRegisterForm() {
 
   const { errors, handleSubmit, register, watch, setValue } = form;
   const { openPostcode, addressType } = useStoreAddress(form);
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
@@ -61,32 +60,98 @@ export default function StoreRegisterForm() {
       errors[field] = error;
     };
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const imageUrl = await uploadImage({ file, folderPath: "store" });
-    setValue("mainImageUrl", imageUrl);
+  const handleImagePreview = async (value: string | File | null) => {
+    if (value === null) {
+      setValue("mainImageUrl", "");
+      setPreviewUrl("");
+      setFileName("");
+      return;
+    }
+    if (value instanceof File) {
+      setImageFile(value);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setPreviewUrl(result);
+        setValue("mainImageUrl", result);
+        setFileName(value.name);
+      };
+      reader.readAsDataURL(value);
+    }
+  };
+
+  const handleImageUpload = async (imageFile: File): Promise<string | null> => {
+    try {
+      // 1. presignedUrl 요청
+      const presignedUrl = await uploadImage({ file: imageFile, folderPath: "store" });
+      if (!presignedUrl) {
+        showToast("이미지 업로드 실패", true);
+        return null;
+      }
+
+      // 2. S3에 PUT 업로드
+      const response = await fetch(presignedUrl, {
+        method: "PUT",
+        headers: { "Content-Type": imageFile.type || "image/jpeg" },
+        body: imageFile,
+      });
+      if (!response.ok) {
+        showToast("S3 업로드 실패", true);
+        return null;
+      }
+
+      // 3. S3 URL 추출 (쿼리스트링 제거)
+      const mainImageUrl = presignedUrl.split("?")[0];
+      return mainImageUrl;
+    } catch {
+      showToast("이미지 업로드 중 오류가 발생했습니다.", true);
+      return null;
+    }
   };
 
   const onSubmit = async (data: CreateStoreRequest) => {
     const isValid = await form.validate();
-    if (!isValid) return;
+    if (!isValid) {
+      showToast("입력 정보를 확인해주세요.", true);
+      return;
+    }
 
-    createStoreMutation.mutate(data, {
-      onSuccess: () => {
-        showToast("매장 등록이 완료되었습니다.", false, () => router.push("/store-management"));
+    let mainImageUrl = data.mainImageUrl;
+    if (mainImageUrl?.startsWith("data:") && imageFile) {
+      const newMainImageUrl = await handleImageUpload(imageFile);
+      if (!newMainImageUrl) {
+        return;
+      }
+      mainImageUrl = newMainImageUrl;
+    }
+
+    // 4. form에 S3 URL 저장 후 등록
+    createStoreMutation.mutate(
+      { ...data, mainImageUrl },
+      {
+        onSuccess: () => {
+          showToast("매장 등록이 완료되었습니다.", false, () => router.push("/"));
+        },
+        onError: () => {
+          showToast("매장 등록에 실패했습니다.", true);
+        },
       },
-      onError: () => {
-        showToast("매장 등록에 실패했습니다.", true);
-      },
-    });
+    );
   };
 
   return (
     <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
       <Stepper step={step} labels={STEP_LABELS} />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (step === 3) {
+            handleSubmit(onSubmit)(e);
+          }
+        }}
+        className="flex flex-col justify-between flex-1"
+      >
         <div className="flex flex-col">
           {step === 1 && (
             <fieldset className="space-y-6" aria-label="기본 정보">
@@ -112,43 +177,31 @@ export default function StoreRegisterForm() {
                 type="input"
                 label="연락처"
                 name="contact"
-                onBlur={handleBlur("contact")}
                 value={watch("contact")}
                 onChange={(e) => setValue("contact", formatContactNumber(e.target.value))}
                 error={errors.contact}
               />
-              <div className="space-y-2">
-                <div className="flex gap-8 items-center">
-                  <Label htmlFor="mainImageUpload" className="w-[90px]">
-                    대표 이미지 업로드
-                  </Label>
-                  <input
-                    id="mainImageUpload"
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleImageChange}
-                    className="cursor-pointer border rounded px-3 py-2 w-full"
-                    disabled={isUploading}
+              <FormField
+                type="image"
+                label="대표 이미지 업로드"
+                name="mainImageUrl"
+                value={watch("mainImageUrl") || ""}
+                onChange={handleImagePreview}
+                fileName={fileName}
+                error={errors.mainImageUrl}
+              />
+              <div
+                className="flex justify-center items-center border border-input rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
+                style={{ minHeight: 180 }}
+              >
+                {previewUrl || watch("mainImageUrl") ? (
+                  <img
+                    src={previewUrl || watch("mainImageUrl")}
+                    alt="미리보기"
+                    className="object-contain w-full h-auto"
                   />
-                </div>
-                <div
-                  className="flex justify-center items-center border border-gray-300 rounded-lg w-full h-[240px] bg-white overflow-hidden mt-2"
-                  style={{ minHeight: 180 }}
-                >
-                  {watch("mainImageUrl") ? (
-                    <img
-                      src={watch("mainImageUrl") || ""}
-                      alt="미리보기"
-                      className="object-contain w-full h-full"
-                      style={{ maxWidth: "100%", maxHeight: "100%" }}
-                    />
-                  ) : (
-                    <span className="text-gray-400 text-sm">이미지 미리보기</span>
-                  )}
-                </div>
-                {errors.mainImageUrl && (
-                  <p className="text-sm text-red-500">{errors.mainImageUrl}</p>
+                ) : (
+                  <span className="text-gray-300 text-sm">이미지 미리보기</span>
                 )}
               </div>
             </fieldset>
@@ -167,7 +220,11 @@ export default function StoreRegisterForm() {
                 onChange={(e) => setAddressSearch(e.target.value)}
                 rightElement={
                   <div className="flex items-center gap-2">
-                    <Button type="button" onClick={() => openPostcode(addressSearch)}>
+                    <Button
+                      type="button"
+                      onClick={() => openPostcode(addressSearch)}
+                      className="min-h-[42px]"
+                    >
                       검색
                     </Button>
                   </div>
@@ -184,7 +241,8 @@ export default function StoreRegisterForm() {
                 type="input"
                 label="건물명"
                 name="buildingName"
-                {...register("buildingName")}
+                value={watch("buildingName")}
+                onChange={(e) => setValue("buildingName", e.target.value)}
               />
               <FormField
                 type="multiSelect"
@@ -197,7 +255,7 @@ export default function StoreRegisterForm() {
 
               <FormField
                 type="tagInput"
-                label="음식 카테고리 (Enter로 구분)"
+                label="음식 카테고리 (Enter 구분)"
                 name="foodCategory"
                 value={watch("foodCategory")}
                 onChange={(value: string[]) => setValue("foodCategory", value)}
@@ -210,7 +268,7 @@ export default function StoreRegisterForm() {
                 onBlur={handleBlur("description")}
                 value={watch("description")}
                 onChange={(e) => setValue("description", e.target.value)}
-                className="h-30 resize-none"
+                className="h-30 resize-none w-[278px]"
               />
             </fieldset>
           )}
@@ -220,17 +278,48 @@ export default function StoreRegisterForm() {
 
         <div className="flex justify-center pt-4 gap-2">
           {step > 1 && (
-            <Button type="button" onClick={prevStep} className="flex-1">
+            <Button
+              type="button"
+              onClick={prevStep}
+              className="flex-1 min-h-[42px]"
+              disabled={isUploading}
+            >
               이전
             </Button>
           )}
           {step < 3 ? (
-            <Button type="button" onClick={nextStep} className={step > 1 ? "flex-1" : "w-full"}>
-              다음
+            <Button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                nextStep();
+              }}
+              className={step > 1 ? "flex-1 min-h-[42px]" : "w-full min-h-[42px]"}
+              disabled={isUploading}
+            >
+              {isUploading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>이미지 업로드 중...</span>
+                </div>
+              ) : (
+                "다음"
+              )}
             </Button>
           ) : (
-            <Button type="submit" className="flex-1">
-              등록하기
+            <Button
+              type="submit"
+              className="flex-1 min-h-[42px]"
+              disabled={createStoreMutation.isPending || isUploading}
+            >
+              {createStoreMutation.isPending || isUploading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>{isUploading ? "이미지 업로드 중..." : "등록 중..."}</span>
+                </div>
+              ) : (
+                "등록하기"
+              )}
             </Button>
           )}
         </div>
