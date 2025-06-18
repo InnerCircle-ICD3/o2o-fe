@@ -1,3 +1,5 @@
+import Subscribe from "@/components/common/subscribe";
+import { userInfoStore } from "@/stores/userInfoStore";
 import * as globalStyle from "@/styles/global.css";
 import type { StoresDetail } from "@/types/apis/stores.type";
 import classNames from "classnames";
@@ -12,6 +14,8 @@ interface StoreInfoProps {
 
 const StoresInfo = (props: StoreInfoProps) => {
   const { storesDetail } = props;
+  const { user } = userInfoStore();
+  const isLogin = !!user;
 
   const joinCategories = (categories: string[]) => {
     return categories.join(" / ");
@@ -26,6 +30,15 @@ const StoresInfo = (props: StoreInfoProps) => {
           fill
           style={{ objectFit: "contain" }}
         />
+        {isLogin && (
+          <div className={style.subscribeButton}>
+            <Subscribe
+              isFavorite={storesDetail.isFavorite}
+              storeId={storesDetail.id}
+              customerId={user.customerId}
+            />
+          </div>
+        )}
       </div>
       <article className={globalStyle.innerPadding}>
         <h2 className={style.title}>
