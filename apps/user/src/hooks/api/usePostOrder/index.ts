@@ -1,23 +1,10 @@
 import { apiClient } from "@/apis/client";
+import type { CreateOrderRequest, CreateOrderResponse } from "@/types/apis/order.type";
 import { useRouter } from "next/navigation";
 import { useMutation } from "../utils/useMutation";
 
-interface OrderBody {
-  storeId: string;
-  orderItems: {
-    productId: string;
-    productName: string;
-    price: number;
-    quantity: number;
-  }[];
-}
-
-interface OrderResponse {
-  orderId: string;
-}
-
-const createOrder = (body: OrderBody) => {
-  return apiClient.post<OrderResponse>("orders", body);
+const createOrder = (body: CreateOrderRequest) => {
+  return apiClient.post<CreateOrderResponse>("orders", body);
 };
 
 const usePostOrder = () => {
@@ -26,10 +13,10 @@ const usePostOrder = () => {
   });
   const router = useRouter();
 
-  const submitOrder = (body: OrderBody) => {
+  const submitOrder = (body: CreateOrderRequest) => {
     return mutation.mutate(body, {
       onSuccess: (res) => {
-        router.push(`/orders/${res.data.orderId}`);
+        router.push(`/orders/${res.data.id}`);
       },
       onError: (error) => {
         console.error("Order submission failed:", error);
