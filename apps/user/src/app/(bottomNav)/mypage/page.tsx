@@ -20,7 +20,7 @@ const Page = () => {
 
   const logoutMutation = usePostLogout();
 
-  const { data: userInfo, isLoading } = useGetCustomer();
+  const { data: userInfo, isLoading } = useGetCustomer(isLogin);
 
   const handleLogout = async () => {
     const result = await logoutMutation.mutateAsync({});

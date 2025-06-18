@@ -5,10 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 
 const CUSTOMER_QUERY_KEY = "customer";
 
-const useGetCustomer = () => {
+const useGetCustomer = (isLogin: boolean) => {
   const { data, isLoading, isError, error } = useQuery<Result<Customer>>({
     queryKey: [CUSTOMER_QUERY_KEY],
     queryFn: getCustomer,
+    enabled: isLogin,
   });
 
   return {
