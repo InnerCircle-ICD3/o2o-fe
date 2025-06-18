@@ -39,7 +39,6 @@ const getServerAuthHeaders = async () => {
  */
 const serverApiInstance = ky.create({
   prefixUrl: "https://store-owner.eatngo.org/api/v1", // 실제 백엔드 URL
-  timeout: 10000, // SSR에서는 timeout 설정 권장
 });
 
 /**
