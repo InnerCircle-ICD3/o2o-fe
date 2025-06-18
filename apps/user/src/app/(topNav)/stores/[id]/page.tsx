@@ -1,18 +1,33 @@
+"use client";
+
 import { getStoresDetail } from "@/apis/ssr/stores";
 import { BottomButton } from "@/components/ui/storesDetail/bottomButton";
 import StoresInfo from "@/components/ui/storesDetail/storesInfo";
+import type { StoresDetail } from "@/types/apis/stores.type";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
+const Page = () => {
+  const { id } = useParams();
+  const [storeDetails, setStoreDetails] = useState<StoresDetail | null>(null);
 
-const Page = async (props: PageProps) => {
-  const { params } = props;
-  const { id } = await params;
+  useEffect(() => {
+    const fetchStoresDetail = async () => {
+      try {
+        const storesResponse = await getStoresDetail(id as string);
+        if (storesResponse.success) {
+          setStoreDetails(storesResponse.data);
+        } else {
+          throw storesResponse;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchStoresDetail();
+  }, [id]);
 
-  const storesResponse = await getStoresDetail(id);
-
-  if (!storesResponse.success) {
+  if (!storeDetails) {
     return (
       <div>
         <h2>매장 정보를 불러오는 데 실패했습니다.</h2>
@@ -20,12 +35,10 @@ const Page = async (props: PageProps) => {
     );
   }
 
-  const { data: storesData } = storesResponse;
-
   return (
     <>
-      <StoresInfo storesDetail={storesData} />
-      <BottomButton buttonText="잇고백 상세보기" href={`/stores/${storesData.id}/products`} />
+      <StoresInfo storesDetail={storeDetails} />
+      <BottomButton buttonText="잇고백 상세보기" href={`/stores/${storeDetails.id}/products`} />
     </>
   );
 };
