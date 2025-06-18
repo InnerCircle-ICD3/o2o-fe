@@ -52,7 +52,8 @@ export default function StoreRegisterForm() {
   };
 
   const handleBlur =
-    (field: keyof CreateStoreRequest) => (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (field: keyof CreateStoreRequest) =>
+    (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
       const error = validateSingleField(field, value);
       setValue(field, value);
@@ -134,19 +135,13 @@ export default function StoreRegisterForm() {
         onError: () => {
           showToast("매장 등록에 실패했습니다.", true);
         },
-      }
+      },
     );
   };
 
   return (
-    <section
-      className="flex flex-col gap-6 min-h-[600px]"
-      aria-label="매장 등록 폼"
-    >
-      <Stepper
-        step={step}
-        labels={STEP_LABELS}
-      />
+    <section className="flex flex-col gap-6 min-h-[600px]" aria-label="매장 등록 폼">
+      <Stepper step={step} labels={STEP_LABELS} />
 
       <form
         onSubmit={(e) => {
@@ -159,10 +154,7 @@ export default function StoreRegisterForm() {
       >
         <div className="flex flex-col">
           {step === 1 && (
-            <fieldset
-              className="space-y-6"
-              aria-label="기본 정보"
-            >
+            <fieldset className="space-y-6" aria-label="기본 정보">
               <FormField
                 type="input"
                 label="매장명"
@@ -216,10 +208,7 @@ export default function StoreRegisterForm() {
           )}
 
           {step === 2 && (
-            <fieldset
-              className="space-y-6"
-              aria-label="주소 및 카테고리 정보"
-            >
+            <fieldset className="space-y-6" aria-label="주소 및 카테고리 정보">
               <FormField
                 type="input"
                 label="주소 검색"

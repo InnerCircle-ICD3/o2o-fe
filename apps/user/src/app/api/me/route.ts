@@ -29,6 +29,6 @@ export async function GET() {
       },
     });
   } catch {
-    return NextResponse.redirect(new URL('/login'));
+    return NextResponse.redirect(new URL("/login"));
   }
 }

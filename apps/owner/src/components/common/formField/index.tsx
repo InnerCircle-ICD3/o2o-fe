@@ -129,11 +129,15 @@ export function FormField(props: FormFieldProps) {
     return (
       <div className="space-y-3">
         <div className="flex items-center gap-4">
-          <Label htmlFor={name} className="w-[90px] whitespace-pre-line" style={{ wordBreak: "keep-all" }}>
+          <Label
+            htmlFor={name}
+            className="w-[90px] whitespace-pre-line"
+            style={{ wordBreak: "keep-all" }}
+          >
             {label}
           </Label>
           <div className="flex-1 flex gap-2">
-          <div className="relative w-full">
+            <div className="relative w-full">
               <input
                 id={name}
                 type="file"
@@ -176,7 +180,7 @@ export function FormField(props: FormFieldProps) {
               )}
             </div>
           </div>
-            {rightElement && <div className="flex items-center">{rightElement}</div>}
+          {rightElement && <div className="flex items-center">{rightElement}</div>}
         </div>
         {error && (
           <p className="text-xs text-red-500 ml-[124px] break-words whitespace-pre-line max-w-[250px]">
@@ -198,7 +202,11 @@ export function FormField(props: FormFieldProps) {
   return (
     <div>
       <div className="flex items-center gap-4">
-        <Label htmlFor={name} className="w-[90px] whitespace-pre-line" style={{ wordBreak: "keep-all" }}>
+        <Label
+          htmlFor={name}
+          className="w-[90px] whitespace-pre-line"
+          style={{ wordBreak: "keep-all" }}
+        >
           {label}
         </Label>
         <div className="flex-1 flex gap-2">

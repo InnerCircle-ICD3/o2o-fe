@@ -16,11 +16,11 @@ const useGetOwnerStore = () => {
   });
 
   // 빈 배열이면 null 반환, 있으면 첫 번째 요소 반환
-  return { 
-    data: data?.data.length === 0 ? null : data?.data[0], 
-    isLoading, 
-    isError, 
-    error 
+  return {
+    data: data?.data.length === 0 ? null : data?.data[0],
+    isLoading,
+    isError,
+    error,
   };
 };
 

@@ -73,7 +73,8 @@ export default function StoreEdit() {
   };
 
   const handleBlur =
-    (field: keyof UpdateStoreRequest) => (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (field: keyof UpdateStoreRequest) =>
+    (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
       const error = validateSingleField(field, value);
       setValue(field, value);
@@ -98,7 +99,7 @@ export default function StoreEdit() {
       };
       reader.readAsDataURL(value);
     }
-  }
+  };
 
   const handleImageUpload = async (imageFile: File) => {
     try {
@@ -130,8 +131,8 @@ export default function StoreEdit() {
       showToast("이미지 업로드 중 오류가 발생했습니다.", true);
       return;
     }
-  }
-  
+  };
+
   const onSubmit = async (data: UpdateStoreRequest) => {
     const isValid = await form.validate();
     if (!isValid) {
