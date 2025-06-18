@@ -24,8 +24,5 @@ export const patchStoreStatus = async (storeId: number, data: StoreStatus) => {
 };
 
 export const deleteStore = async (storeId: number) => {
-  return await toSafeResult(() =>
-    api.delete(`stores/${storeId}`),
-  );
+  return await toSafeResult(() => api.delete(`stores/${storeId}`));
 };
-

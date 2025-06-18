@@ -1,28 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { deleteStore } from "@/apis/ssr/stores";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
-import { deleteStore } from "@/apis/ssr/stores";
-import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
-import { useOwnerStore } from "@/stores/ownerInfoStore";
 import { STORE_DELETE_NOTICE } from "@/constants/notice";
+import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function StoreDeleteForm() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
-  const { owner } = useOwnerStore();
 
-  const { data: storeData, isLoading } = useGetOwnerStore(owner?.userId);
+  const { data: storeData } = useGetOwnerStore();
 
   const handleDelete = () => {
     if (!agreed) return;
@@ -59,11 +57,12 @@ export default function StoreDeleteForm() {
         <input
           type="checkbox"
           checked={agreed}
-          onChange={e => setAgreed(e.target.checked)}
+          onChange={(e) => setAgreed(e.target.checked)}
           className="w-5 h-5 accent-red-500"
         />
         <span>
-          위 내용을 모두 확인하였으며, <span className="font-semibold text-red-600">매장 삭제에 동의합니다.</span>
+          위 내용을 모두 확인하였으며,{" "}
+          <span className="font-semibold text-red-600">매장 삭제에 동의합니다.</span>
         </span>
       </label>
       <Button

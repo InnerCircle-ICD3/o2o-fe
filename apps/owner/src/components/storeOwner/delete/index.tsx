@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { deleteStoreOwner } from "@/apis/ssr/store-owner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { deleteStoreOwner } from "@/apis/ssr/store-owner";
 import { OWNER_DELETE_NOTICE } from "@/constants/notice";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function OwnerDeleteForm() {
   const router = useRouter();
@@ -41,11 +41,12 @@ export default function OwnerDeleteForm() {
         <input
           type="checkbox"
           checked={agreed}
-          onChange={e => setAgreed(e.target.checked)}
+          onChange={(e) => setAgreed(e.target.checked)}
           className="w-5 h-5 accent-red-500"
         />
         <span>
-          위 내용을 모두 확인하였으며, <span className="font-semibold text-red-600">계정 삭제에 동의합니다.</span>
+          위 내용을 모두 확인하였으며,{" "}
+          <span className="font-semibold text-red-600">계정 삭제에 동의합니다.</span>
         </span>
       </label>
       <Button
@@ -78,4 +79,4 @@ export default function OwnerDeleteForm() {
       </Dialog>
     </div>
   );
-} 
+}

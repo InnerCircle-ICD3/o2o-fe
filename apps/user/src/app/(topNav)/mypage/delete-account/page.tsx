@@ -1,7 +1,7 @@
-import * as globalStyle from "@/styles/global.css";
-import * as style from "./delete-account.css";
-import classNames from "classnames";
 import DeleteAccount from "@/components/ui/mypage/deleteAccount";
+import * as globalStyle from "@/styles/global.css";
+import classNames from "classnames";
+import * as style from "./delete-account.css";
 
 const mockTerms = ` 
 회원 탈퇴 전에 꼭 확인하세요.

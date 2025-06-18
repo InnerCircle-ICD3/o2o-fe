@@ -1,4 +1,4 @@
-import { style, keyframes } from "@vanilla-extract/css";
+import { keyframes, style } from "@vanilla-extract/css";
 
 export const container = style({
   marginTop: 30,
@@ -39,34 +39,34 @@ const fadeIn = keyframes({
 });
 
 const slideIn = keyframes({
-  from: { transform: 'translate(-50%, -48%)', opacity: 0 },
-  to: { transform: 'translate(-50%, -50%)', opacity: 1 },
+  from: { transform: "translate(-50%, -48%)", opacity: 0 },
+  to: { transform: "translate(-50%, -50%)", opacity: 1 },
 });
 
 export const modalOverlay = style({
-  position: 'fixed',
+  position: "fixed",
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  backgroundColor: "rgba(0, 0, 0, 0.4)",
   animation: `${fadeIn} 150ms ease-out`,
   zIndex: 1000,
 });
 
 export const modalContent = style({
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  backgroundColor: 'white',
+  position: "fixed",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  backgroundColor: "white",
   borderRadius: 8,
   padding: 24,
-  width: '90%',
+  width: "90%",
   maxWidth: 450,
   animation: `${slideIn} 150ms ease-out`,
   zIndex: 1001,
-  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
 });
 
 export const modalTitle = style({
@@ -77,15 +77,15 @@ export const modalTitle = style({
 });
 
 export const modalDescription = style({
-  margin: '0 0 24px',
+  margin: "0 0 24px",
   fontSize: 14,
   lineHeight: 1.5,
-  color: '#4B5563',
-  whiteSpace: 'pre-line',
+  color: "#4B5563",
+  whiteSpace: "pre-line",
 });
 
 export const modalButtons = style({
-  display: 'flex',
-  justifyContent: 'flex-end',
+  display: "flex",
+  justifyContent: "flex-end",
   gap: 12,
 });
