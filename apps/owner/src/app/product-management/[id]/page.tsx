@@ -8,68 +8,83 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { FileUploadRequest, FileUploadResponse } from "@/types/file-upload";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
+import type { FileUploadResponse } from "@/types/file-upload";
+import type { UseFormOptions } from "@/types/form";
 import type { Product, ProductFormData } from "@/types/product";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "use-form-light";
 
-const storeId = 1; // TODO: 스토어 아이디 받아오기(로그인해야 가능)
-
-const initialFormData: ProductFormData = {
-  name: "",
-  description: "",
-  foodType: [],
-  size: "M",
-  quantity: 1,
-  price: {
-    originalPrice: 1000,
-    discountRate: 0.5,
-  },
-  image: "",
-  inventory: {
-    quantity: 1,
-  },
-  status: "ACTIVE",
-};
+interface FormData {
+  name: string;
+  description: string;
+  foodType: string;
+  size: "S" | "M" | "L";
+  quantity: number;
+  originalPrice: number;
+  discountRate: number;
+  image: File | string;
+}
 
 export default function LuckyBagDetail() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [fileUpload, setFileUpload] = useState<FileUploadRequest>({
-    fileName: "",
-    contentType: "",
-    folderPath: "",
-  });
+  const [previewUrl, setPreviewUrl] = useState<{
+    origin: File;
+    preview: string;
+  } | null>(null);
+  const { owner } = useOwnerStore();
 
-  const form = useForm<ProductFormData>({ defaultValues: initialFormData });
-
-  const { errors, handleSubmit, register, watch, setValue } = form;
-
-  const fetchProduct = useCallback(
-    async (storeId: number, productId: number) => {
-      const result = await getProduct(storeId, productId);
-      if (result.success) {
-        const product = result.data;
-        setValue("name", product.name);
-        setValue("description", product.description);
-        setValue("foodType", product.foodType);
-        setValue("size", product.size);
-        setValue("quantity", product.inventory.quantity);
-        setValue("price", product.price);
-        setValue("image", product.image);
-      } else {
-        console.error("상품 조회 실패:", result);
-      }
+  const { register, handleSubmit, errors, validate, watch, setValue } = useForm<FormData>({
+    defaultValues: {
+      name: "",
+      description: "",
+      originalPrice: 10000,
+      quantity: 1,
+      discountRate: 0.5,
+      size: "M",
+      foodType: "",
+      image: "",
     },
-    [setValue],
-  );
+    validationRules: {
+      name: {
+        pattern: /^.{2,}$/,
+        message: "2자 이상 10자 이하로 입력해주세요",
+      },
+      description: {
+        pattern: /^.{10,100}$/,
+        message: "10자 이상 100자 이하로 입력해주세요",
+      },
+      foodType: {
+        pattern: /^.{1,}$/,
+        message: "음식 종류를 1개 이상 입력해주세요",
+      },
+    },
+  } as UseFormOptions<FormData>);
+
+  const fetchProduct = useCallback(async () => {
+    const result = await getProduct(owner?.storeOwnerId || 1, Number(id));
+    if (result.success) {
+      const product = result.data;
+      setValue("name", product.name);
+      setValue("description", product.description);
+      setValue("foodType", product.foodType.join(", "));
+      setValue("size", product.size);
+      setValue("quantity", product.inventory.quantity);
+      setValue("originalPrice", product.price.originalPrice);
+      setValue("discountRate", product.price.discountRate);
+      setValue("image", product.image);
+    } else {
+      console.error("상품 조회 실패:", result);
+    }
+  }, [setValue, owner?.storeOwnerId, id]);
 
   useEffect(() => {
-    fetchProduct(storeId, Number(id));
-  }, [id, fetchProduct]);
+    fetchProduct();
+  }, [fetchProduct]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -77,58 +92,87 @@ export default function LuckyBagDetail() {
 
   const handleCancel = () => {
     setIsEditing(false);
-    fetchProduct(storeId, Number(id)); // 원래 데이터로 복구
+    fetchProduct();
   };
 
-  const onSubmit = async (data: ProductFormData) => {
-    const isValid = await form.validate();
-    if (!isValid) return;
+  const getS3UploadUrl = async () => {
+    const file = previewUrl?.origin;
+    if (!file || typeof file === "string") {
+      throw new Error("파일이 없습니다.");
+    }
+    const realFile = file as File;
+
+    const result = await uploadFile({
+      fileName: realFile.name,
+      contentType: realFile.type,
+      folderPath: "product",
+    });
+
+    if (!result.success) {
+      return;
+    }
+
+    const data = result.data as FileUploadResponse;
+    const presignedUrl = data.preSignedUrl;
+    const s3Key = data.s3Key;
+    const baseUrl = presignedUrl.split("/product")[0];
+    return `${baseUrl}/${s3Key}`;
+  };
+
+  const onSubmit = async (data: FormData) => {
+    const isValid = validate();
+    if (!isValid) {
+      return;
+    }
 
     setIsLoading(true);
     try {
-      const fileResult = await uploadFile(fileUpload);
-      if (!fileResult.success) {
-        alert("파일 업로드 실패");
-        console.error("파일 업로드 실패:", fileResult);
-        return;
-      }
-
-      const productData: Partial<Product> = {
+      const fileResult = await getS3UploadUrl();
+      const formatData: ProductFormData = {
         ...data,
+        price: {
+          originalPrice: data.originalPrice,
+          discountRate: data.discountRate,
+        },
         inventory: {
           quantity: data.quantity,
         },
-        image: (fileResult.data as FileUploadResponse).preSignedUrl,
         status: "ACTIVE",
+        image: fileResult || "",
+        foodType: data.foodType
+          .split(",")
+          .map((item) => item.trim())
+          .filter((item) => item.length > 0),
       };
 
-      const result = await updateProduct(1, Number(id), productData as Product);
+      const result = await updateProduct(1, Number(id), formatData as Product);
 
       if (result.success) {
         setIsEditing(false);
-        fetchProduct(storeId, Number(id));
+        fetchProduct();
       } else {
-        alert("상품 수정 실패");
-        console.error("상품 수정 실패:", result);
+        throw new Error(result.message);
       }
+    } catch (error) {
+      alert(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleFoodTypeChange = (value: string) => {
-    const foodTypes = value.split(",").map((item) => item.trim());
-    setValue("foodType", foodTypes);
-  };
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFileUpload({
-        fileName: file.name,
-        contentType: file.type,
-        folderPath: "product",
-      });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setPreviewUrl({
+          origin: file,
+          preview: result,
+        });
+      };
+      reader.readAsDataURL(file);
+      setValue("image", file);
     }
   };
 
@@ -164,10 +208,10 @@ export default function LuckyBagDetail() {
                     className="cursor-pointer"
                   />
                 ) : null}
-                {watch("image") && (
+                {(previewUrl || watch("image")) && (
                   <div className="relative w-[200px] h-[200px] border rounded-lg overflow-hidden">
                     <Image
-                      src={watch("image")}
+                      src={previewUrl ? previewUrl.preview : (watch("image") as string)}
                       alt="Product preview"
                       fill
                       className="object-cover"
@@ -194,13 +238,15 @@ export default function LuckyBagDetail() {
               <Label htmlFor="food">음식 종류</Label>
               <Input
                 id="food"
-                value={watch("foodType").join(", ")}
-                onChange={(e) => handleFoodTypeChange(e.target.value)}
+                value={watch("foodType")}
+                onChange={(e) => {
+                  setValue("foodType", e.target.value);
+                }}
                 readOnly={!isEditing}
                 className={`${!isEditing ? "bg-gray-50" : ""} ${
                   errors.foodType ? "border-destructive" : ""
                 }`}
-                placeholder="콤마(,)로 구분하여 입력"
+                placeholder="1개 이상, 콤마(,)로 구분"
               />
               {errors.foodType && <p className="text-sm text-destructive">{errors.foodType}</p>}
             </div>
@@ -229,8 +275,10 @@ export default function LuckyBagDetail() {
                   step={1}
                   value={[watch("quantity")]}
                   disabled={!isEditing}
-                  onValueChange={([value]) => setValue("quantity", value)}
-                  className="flex-1"
+                  onValueChange={([value]) => {
+                    setValue("quantity", value);
+                  }}
+                  className="flex-1 [&>span]:cursor-grab [&>span]:active:cursor-grabbing [&>span]:touch-none"
                 />
                 <div className="font-bold text-lg min-w-[60px] text-center">
                   {watch("quantity")}개
@@ -248,8 +296,14 @@ export default function LuckyBagDetail() {
                 id="description"
                 {...register("description")}
                 readOnly={!isEditing}
-                className={`${!isEditing ? "bg-gray-50" : ""} min-h-[100px]`}
+                className={`${!isEditing ? "bg-gray-50" : ""} min-h-[100px] ${
+                  errors.description ? "border-destructive" : ""
+                }`}
+                placeholder="잇고백에 대한 설명을 입력해주세요"
               />
+              {errors.description && (
+                <p className="text-sm text-destructive">{errors.description}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -261,39 +315,44 @@ export default function LuckyBagDetail() {
                     <div className="space-y-1">
                       <Input
                         type="number"
-                        {...register("price.originalPrice" as keyof ProductFormData)}
-                        className={`w-32 ${
-                          errors["price.originalPrice"] ? "border-destructive" : ""
-                        }`}
+                        {...register("originalPrice")}
+                        className={`w-32 ${errors.originalPrice ? "border-destructive" : ""}`}
                       />
-                      {errors["price.originalPrice"] && (
-                        <p className="text-sm text-destructive">{errors["price.originalPrice"]}</p>
+                      {errors.originalPrice && (
+                        <p className="text-sm text-destructive">{errors.originalPrice}</p>
                       )}
                     </div>
                   ) : (
                     <span className="font-semibold">
-                      {watch("price").originalPrice.toLocaleString()}원
+                      {watch("originalPrice").toLocaleString()}원
                     </span>
                   )}
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-500">판매가</span>
                   <span className="text-xl font-semibold text-primary">
-                    {Math.floor(
-                      watch("price").originalPrice * watch("price").discountRate,
-                    ).toLocaleString()}
-                    원
+                    {Math.floor(watch("originalPrice") * watch("discountRate")).toLocaleString()}원
                   </span>
                 </div>
                 <div className="text-sm text-gray-500 mt-2">
-                  정가의 {Math.floor(watch("price").discountRate * 100)}% 가격에 판매됩니다
+                  정가의 {Math.floor(watch("discountRate") * 100)}% 가격에 판매됩니다
                 </div>
               </div>
             </div>
 
             {isEditing && (
               <div className="flex gap-2">
-                <Button type="submit" className="flex-1" disabled={isLoading}>
+                <Button
+                  type="submit"
+                  className="flex-1"
+                  disabled={
+                    isLoading ||
+                    !watch("name") ||
+                    !watch("description") ||
+                    !watch("foodType") ||
+                    !previewUrl
+                  }
+                >
                   {isLoading ? "저장 중..." : "수정하기"}
                 </Button>
               </div>
