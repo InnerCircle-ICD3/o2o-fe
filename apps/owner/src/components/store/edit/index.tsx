@@ -30,7 +30,6 @@ export default function StoreEdit() {
 
   const form = useForm<UpdateStoreRequest>({
     defaultValues: initialUpdateStoreFormData,
-    validationRules: VALIDATION_RULES,
     defaultOptions: {
       transform: (value: string) => value.trim(),
     },
@@ -239,7 +238,7 @@ export default function StoreEdit() {
             onBlur={handleBlur("description")}
             value={watch("description") ?? ""}
             onChange={(e) => setValue("description", e.target.value)}
-            className="h-30 resize-none"
+            className="h-30 resize-none max-w-[600px]"
             error={errors.description}
           />
           <FormField

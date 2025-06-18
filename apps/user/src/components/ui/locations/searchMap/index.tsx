@@ -10,7 +10,7 @@ import type { MapStore } from "@/types/locations.type";
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 
-import { getStoresByCenter } from "@/apis/ssr/locations";
+import { getStoresByCenter, getStoresByCenterRefresh } from "@/apis/ssr/locations";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
 import { CLUSTERER_STYLE } from "@/constants/locations";
@@ -135,7 +135,7 @@ export default function SearchMap() {
     clusterer.clear();
 
     const center = map.getCenter();
-    const result = await getStoresByCenter(center);
+    const result = await getStoresByCenterRefresh(center);
     if (!result || !result.success) return;
     storeListRef.current = result.data.storeList;
 

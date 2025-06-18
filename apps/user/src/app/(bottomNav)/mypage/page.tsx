@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import * as style from "./mypage.css";
 
 const Page = () => {
-  const { user } = userInfoStore();
+  const { user, clearUser } = userInfoStore();
   const isLogin = !!user;
   const router = useRouter();
 
@@ -25,6 +25,7 @@ const Page = () => {
   const handleLogout = async () => {
     const result = await logoutMutation.mutateAsync({});
     if (result.success) {
+      clearUser();
       showToast("로그아웃되었습니다.");
       router.push("/");
     } else {
