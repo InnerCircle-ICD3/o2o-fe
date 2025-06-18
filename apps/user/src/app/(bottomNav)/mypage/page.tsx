@@ -33,6 +33,10 @@ const Page = () => {
     }
   };
 
+  const handleDeleteCustomer = async () => {
+    router.push("/mypage/delete-account");
+  };
+
   if (isLoading) {
     return <SkeletonStoreCard imagePosition="left" />;
   }
@@ -90,7 +94,7 @@ const Page = () => {
             {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
           </button>
           |
-          <button className={style.bottomButton} type={"button"}>
+          <button className={style.bottomButton} type={"button"} onClick={handleDeleteCustomer}>
             회원탈퇴
           </button>
         </div>

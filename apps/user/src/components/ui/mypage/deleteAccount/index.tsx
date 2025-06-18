@@ -2,6 +2,7 @@
 
 import { deleteCustomer } from "@/apis/ssr/customers";
 import Button from "@/components/common/button";
+import { userInfoStore } from "@/stores/userInfoStore";
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,6 +10,7 @@ import * as style from "./deleteAccount.css";
 
 const DeleteAccount = () => {
   const router = useRouter();
+  const { clearUser } = userInfoStore();
   const [agreed, setAgreed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,6 +22,7 @@ const DeleteAccount = () => {
   const handleConfirmDelete = async () => {
     const result = await deleteCustomer();
     if (result.success) {
+      clearUser();
       router.push("/");
     }
     setIsOpen(false);

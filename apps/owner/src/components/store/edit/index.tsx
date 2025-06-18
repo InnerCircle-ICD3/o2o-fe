@@ -1,6 +1,7 @@
 "use client";
 
 import { FormField } from "@/components/common/formField";
+import StoreRegisterLink from "@/components/common/storeRegisterLink";
 import { ToastMessage } from "@/components/common/toastMessage";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -173,6 +174,10 @@ export default function StoreEdit() {
       showToast("상태 변경에 실패했습니다.", true);
     }
   };
+
+  if (!storeData) {
+    return <StoreRegisterLink />;
+  }
 
   // 로딩 중이거나 매장 데이터가 없는 경우 (Provider에서 리다이렉트 처리됨)
   if (isLoading || !currentStoreData) {

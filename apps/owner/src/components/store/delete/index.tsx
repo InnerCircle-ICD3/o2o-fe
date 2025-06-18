@@ -1,6 +1,7 @@
 "use client";
 
 import { deleteStore } from "@/apis/ssr/stores";
+import StoreRegisterLink from "@/components/common/storeRegisterLink";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,11 +13,13 @@ import {
 } from "@/components/ui/dialog";
 import { STORE_DELETE_NOTICE } from "@/constants/notice";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function StoreDeleteForm() {
   const router = useRouter();
+  const { clearOwner, clearStore } = useOwnerStore();
   const [open, setOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
@@ -33,24 +36,24 @@ export default function StoreDeleteForm() {
 
     if (result.success) {
       setOpen(false);
+      clearOwner();
+      clearStore();
       router.push("/store/login");
     }
   };
 
   if (!storeData) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[600px] gap-4">
-        <p className="text-gray-600">매장 정보를 불러올 수 없습니다. 다시 로그인해주세요.</p>
-        <Button onClick={() => router.push("/store/login")} variant="default">
-          로그인 하러 가기
-        </Button>
-      </div>
-    );
+    return <StoreRegisterLink />;
   }
 
   return (
     <div className="flex flex-col gap-6 max-w-xl mx-auto">
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-sm text-gray-700 whitespace-pre-line">
+      <div
+        className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-sm text-gray-700 whitespace-pre-line"
+        style={{ whiteSpace: "pre-line" }}
+      >
+        <span className="font-bold">매장 삭제 전에 꼭 확인하세요.</span>
+        <br />
         {STORE_DELETE_NOTICE}
       </div>
       <label className="flex items-center gap-2 cursor-pointer select-none">
