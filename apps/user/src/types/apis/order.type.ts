@@ -70,3 +70,9 @@ export interface OrderDetailResponse {
   contents: OrderDetail[];
   lastId: number;
 }
+
+export interface ReadyToOrderResponse {
+  orderId: number;
+  userId: number;
+  status: "READY" | "DONE" | "CANCELED";
+}
