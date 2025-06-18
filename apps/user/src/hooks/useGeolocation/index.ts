@@ -1,17 +1,17 @@
 import { useUserLocation } from "@/stores/userLocationStore";
 import { useEffect } from "react";
 
-interface Coordinates {
+interface Coordinate {
   lat: number;
   lng: number;
 }
 
-const FALLBACK_COORDINATES: Readonly<Coordinates> = {
+const FALLBACK_COORDINATES: Readonly<Coordinate> = {
   lat: 37.566535,
   lng: 126.977969,
 };
 
-function isValidCoordinates(coords: Coordinates | undefined | null): coords is Coordinates {
+function isValidCoordinates(coords: Coordinate | undefined | null): coords is Coordinate {
   return (
     !!coords &&
     typeof coords.lat === "number" &&
@@ -20,7 +20,7 @@ function isValidCoordinates(coords: Coordinates | undefined | null): coords is C
   );
 }
 
-export const useGeolocation = (): Coordinates => {
+export const useGeolocation = (): Coordinate => {
   const { updateLocations, getLocations } = useUserLocation();
 
   useEffect(() => {

@@ -94,8 +94,8 @@ export default function SearchMap() {
       const markers: kakao.maps.Marker[] = [];
 
       for (const store of storeListRef.current) {
-        if (!store.coordinates) {
-          console.warn("store.coordinates is null", store);
+        if (!store.coordinate) {
+          console.warn("store.coordinate is null", store);
           continue;
         }
 
@@ -136,7 +136,7 @@ export default function SearchMap() {
 
     const center = map.getCenter();
     const result = await getStoresByCenter(center);
-    if (!result.success) return;
+    if (!result || !result.success) return;
     storeListRef.current = result.data.storeList;
 
     // 새로운 마커 추가

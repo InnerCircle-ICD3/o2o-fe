@@ -1,5 +1,6 @@
 import { apiClient } from "@/apis/client";
 import type { InfiniteQueryResponse, Result } from "@/apis/types";
+import useLoading from "@/hooks/useLoading";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import type { OrderList } from "@/types/apis/order.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -33,6 +34,7 @@ const useGetMyOrder = (id: number, isLogin: boolean) => {
       initialPageParam: undefined,
       enabled: isLogin,
     });
+  const loading = useLoading(isLoading);
 
   return {
     data,
@@ -41,7 +43,7 @@ const useGetMyOrder = (id: number, isLogin: boolean) => {
     isFetchingNextPage,
     error,
     isError,
-    isLoading,
+    isLoading: loading,
   };
 };
 

@@ -20,7 +20,12 @@ const StoresInfo = (props: StoreInfoProps) => {
   return (
     <>
       <div className={style.thumbnail}>
-        <Image src={storesDetail.mainImageUrl} alt={"store thumbnail"} fill />
+        <Image
+          src={storesDetail.mainImageUrl ?? "/images/banner.png"}
+          alt={"store thumbnail"}
+          fill
+          style={{ objectFit: "contain" }}
+        />
       </div>
       <article className={globalStyle.innerPadding}>
         <h2 className={style.title}>
@@ -30,7 +35,7 @@ const StoresInfo = (props: StoreInfoProps) => {
           </span>
         </h2>
         <div className={style.reviewAndDistanceWrapper}>
-          <Image src={"/icons/star.svg"} alt={""} width={16} height={16} />
+          <Image src={"/icons/star.svg"} alt={"star"} width={16} height={16} />
           <span>
             <strong>4.5</strong> (123) 1km
           </span>
@@ -54,7 +59,16 @@ const StoresInfo = (props: StoreInfoProps) => {
           <div className={style.metaRow}>
             <p className={style.metaLabel}>주소</p>
             <p className={style.metaValue}>{storesDetail.address.roadNameAddress}</p>
-            <Link href={"#"} style={{ textDecoration: "underline" }}>
+            <Link
+              href={{
+                pathname: "/locations/store-location",
+                query: {
+                  lat: storesDetail.address.coordinate.latitude,
+                  lng: storesDetail.address.coordinate.longitude,
+                },
+              }}
+              style={{ textDecoration: "underline" }}
+            >
               지도보기
             </Link>
           </div>

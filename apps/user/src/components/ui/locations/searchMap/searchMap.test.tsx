@@ -126,7 +126,7 @@ describe("SearchMap", () => {
     {
       storeId: 1,
       storeName: "Store 1",
-      coordinates: {
+      coordinate: {
         latitude: 37.123456,
         longitude: 127.123456,
       },
@@ -134,7 +134,7 @@ describe("SearchMap", () => {
     {
       storeId: 2,
       storeName: "Store 2",
-      coordinates: {
+      coordinate: {
         latitude: 37.123457,
         longitude: 127.123457,
       },

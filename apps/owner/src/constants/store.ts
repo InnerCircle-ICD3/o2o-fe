@@ -8,7 +8,7 @@ import type {
 export const VALIDATION_RULES: ValidationRules<CreateStoreRequest> = {
   name: {
     pattern: /^\S.{0,49}$/,
-    message: "1~50자 사이의 공백 없는 이름을 입력해주세요.",
+    message: "1~50자 이내로 입력해주세요.",
   },
   businessNumber: {
     pattern: /^\d{10}$/,
@@ -22,9 +22,7 @@ export const VALIDATION_RULES: ValidationRules<CreateStoreRequest> = {
 
 export const STORE_CATEGORIES: StoreCategory[] = [
   { value: "BREAD", label: "빵" },
-  { value: "BAKERY", label: "베이커리" },
   { value: "CAFE", label: "카페" },
-  { value: "DESSERT", label: "디저트" },
   { value: "KOREAN", label: "한식" },
   { value: "FRUIT", label: "과일" },
   { value: "PIZZA", label: "피자" },

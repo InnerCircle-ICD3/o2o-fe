@@ -47,7 +47,7 @@ describe("StoreRegisterForm", () => {
     expect(screen.getByText("주소 검색")).toBeInTheDocument();
     expect(screen.getByText("우편번호")).toBeInTheDocument();
     expect(screen.getByText("건물명")).toBeInTheDocument();
-    expect(screen.getByText("음식 카테고리 (Enter로 구분)")).toBeInTheDocument();
+    expect(screen.getByText("음식 카테고리 (Enter 구분)")).toBeInTheDocument();
     expect(screen.getByText("매장 카테고리")).toBeInTheDocument();
     expect(screen.getByText("설명")).toBeInTheDocument();
   });

@@ -2,13 +2,10 @@ import { postStore } from "@/apis/ssr/stores";
 import { useMutation } from "@/hooks/api/utils/useMutation";
 import type { CreateStoreRequest } from "@/types/store";
 
-const usePostOwnerStore = (ownerId?: number) => {
+const usePostOwnerStore = () => {
   const { mutate, isPending, isError, error, data } = useMutation({
     mutationFn: async (data: CreateStoreRequest) => {
-      if (!ownerId) {
-        throw new Error("ownerId가 없습니다.");
-      }
-      const result = await postStore(ownerId, data);
+      const result = await postStore(data);
 
       if (!result.success) {
         throw new Error(result.message);

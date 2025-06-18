@@ -176,7 +176,7 @@ const createStoreDetailData = (id: number) => ({
   ratingAverage: 3.0 + (id % 3) * 0.5,
   ratingCount: 3 + (id % 10),
   foodCategory: ["호밀빵", "케이크"],
-  storeCategory: [["PIZZA", "BAKERY", "FRUIT", "BREAD", "RICECAKE", "KOREAN", "SALAD"][id % 7]],
+  storeCategory: [["PIZZA", "FRUIT", "BREAD", "RICECAKE", "KOREAN", "SALAD"][id % 7]],
 });
 
 const handlers = [

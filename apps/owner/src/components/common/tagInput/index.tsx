@@ -54,7 +54,7 @@ export function TagInput({ value, onChange, name, placeholder }: TagInputProps) 
         {visibleTags.map((tag, index) => (
           <span
             key={tag}
-            className="bg-[#35A865] text-white text-sm px-2 py-0.5 rounded-md flex items-center gap-1"
+            className="bg-[#35A865] text-white text-xs px-2 py-0.5 rounded-md flex items-center gap-1"
           >
             {tag}
             <button

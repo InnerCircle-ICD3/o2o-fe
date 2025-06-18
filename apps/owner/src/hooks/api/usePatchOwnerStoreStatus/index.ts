@@ -3,15 +3,15 @@ import { useMutation } from "@/hooks/api/utils/useMutation";
 import type { StoreStatus } from "@/types/store";
 import { useQueryClient } from "@tanstack/react-query";
 
-const usePatchOwnerStoreStatus = (ownerId?: number, storeId?: number) => {
+const usePatchOwnerStoreStatus = (storeId?: number) => {
   const queryClient = useQueryClient();
 
   const { mutate, mutateAsync, isPending, isError, error } = useMutation({
     mutationFn: (data: StoreStatus) => {
-      if (!ownerId || !storeId) {
-        throw new Error("ownerId 또는 storeId가 없습니다.");
+      if (!storeId) {
+        throw new Error("storeId가 없습니다.");
       }
-      return patchStoreStatus(ownerId, storeId, data);
+      return patchStoreStatus(storeId, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ownerStore"] });
