@@ -1,5 +1,6 @@
 import { apiClient } from "@/apis/client";
 import { ownerApiClient } from "@/apis/ownerClient";
+import { serverApiClient } from "@/apis/server";
 import { toSafeResult } from "@/apis/utils/result";
 import type {
   Product,
@@ -9,7 +10,7 @@ import type {
 } from "@/types/apis/stores.type";
 
 export const getStoresDetail = async (id: string) => {
-  return await toSafeResult(() => apiClient.get<StoresDetail>(`stores/${id}`));
+  return await toSafeResult(() => serverApiClient.get<StoresDetail>(`stores/${id}`));
 };
 
 export const getStoresDetailProducts = async (id: string) => {
