@@ -1,4 +1,5 @@
 import ky, { type Options } from "ky";
+import { cookies } from "next/headers";
 import { toResult } from "./utils/result";
 
 /**
@@ -18,8 +19,7 @@ const getServerAuthHeaders = async () => {
   };
 
   try {
-    // SSR에서만 사용되므로 동적 import 불필요
-    const { cookies } = await import("next/headers");
+    // SSR 전용 파일이므로 최상단에서 정적 import 사용
     const cookieStore = await cookies();
     const token = cookieStore.get("access_token")?.value;
 
