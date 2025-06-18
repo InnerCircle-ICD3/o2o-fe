@@ -36,6 +36,21 @@ export const getStoresByCenter = async (
   );
 };
 
+export const getStoresByCenterRefresh = async (
+  center: kakao.maps.LatLng,
+): Promise<Result<StoreResponseData>> => {
+  const viewPoint: ViewPoint = {
+    latitude: Number(center.getLat().toFixed(6)),
+    longitude: Number(center.getLng().toFixed(6)),
+  };
+
+  return await toSafeResult(() =>
+    apiClient.get<StoreResponseData>(
+      `search/store/map/refresh?latitude=${viewPoint.latitude}&longitude=${viewPoint.longitude}`,
+    ),
+  );
+};
+
 export const postCustomerAddress = async ({
   customerId,
   address,

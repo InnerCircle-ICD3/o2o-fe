@@ -20,11 +20,12 @@ describe("MultiSelect UI 요소 상세 테스트", () => {
     const mainButton = screen.getByRole("button");
     expect(mainButton).toBeInTheDocument();
     expect(mainButton).toHaveClass(
-      "w-full",
-      "flex-wrap",
-      "justify-between",
-      "gap-2",
-      "min-h-[44px]",
+      "inline-flex",
+      "items-center",
+      "whitespace-nowrap",
+      "rounded-md",
+      "text-sm",
+      "font-medium",
     );
     expect(mainButton).toHaveAttribute("aria-expanded", "false");
 

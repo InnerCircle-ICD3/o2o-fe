@@ -20,7 +20,7 @@ export function MultiSelect({
   options = [],
   value = [],
   onChange,
-  visibleLimit = 2,
+  visibleLimit = 4,
 }: MultiSelectProps) {
   const [open, setOpen] = useState(false);
 
@@ -57,7 +57,7 @@ export function MultiSelect({
         <Button
           variant="outline"
           aria-expanded={open}
-          className="w-full flex-wrap justify-between gap-2 min-h-[44px]"
+          className="w-full flex-wrap justify-between gap-2 min-h-[42px]"
         >
           <div className="flex flex-wrap gap-1 items-center">
             {visibleTags.map((tag) => (
@@ -69,7 +69,23 @@ export function MultiSelect({
               </span>
             ))}
             {hiddenCount > 0 && (
-              <span className="text-xs text-muted-foreground">+{hiddenCount}</span>
+              <div className="relative group">
+                <span className="text-xs text-muted-foreground cursor-pointer hover:underline">
+                  +{hiddenCount}
+                </span>
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-10 hidden group-hover:block">
+                  <div className="bg-white border rounded-md shadow-md px-3 py-2 text-sm whitespace-nowrap">
+                    <div className="flex flex-wrap gap-2 max-w-[240px]">
+                      {selectedOptions.slice(visibleLimit).map((option) => (
+                        <span key={option.value} className="px-2 py-0.5">
+                          {option.label}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="absolute top-1/2 -left-2 w-3 h-3 bg-white border-l border-t rotate-45 -translate-y-1/2" />
+                  </div>
+                </div>
+              </div>
             )}
           </div>
           <ChevronDown className="h-4 w-4 shrink-0 opacity-50 ml-auto" />

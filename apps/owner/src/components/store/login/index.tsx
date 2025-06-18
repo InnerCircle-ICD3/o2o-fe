@@ -31,7 +31,7 @@ export default function Login() {
             variant="ghost"
             onClick={() => handleSocialLogin(provider as Provider)}
           >
-            <Image src={iconSrc} alt={`${label} 아이콘`} width={20} height={20} />
+            <Image src={`/images/${iconSrc}`} alt={`${label} 아이콘`} width={20} height={20} />
             {label}
           </Button>
         ))}

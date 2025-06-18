@@ -9,6 +9,13 @@ vi.mock("next/navigation", () => ({
   useRouter: () => mockRouter,
 }));
 
+const mockShowToast = vi.fn();
+vi.mock("@/stores/toastStore", () => ({
+  useToastStore: () => ({
+    showToast: mockShowToast,
+  }),
+}));
+
 type UserState = {
   user: {
     userId: string;
@@ -40,6 +47,8 @@ const mockPatchCustomer = async (customerId: number, nickname: string) => {
 
 beforeEach(() => {
   patchCustomerCalledWith = [];
+  mockShowToast.mockClear();
+  mockRouter.push.mockClear();
 });
 
 describe("CompleteProfile", () => {
@@ -82,10 +91,10 @@ describe("CompleteProfile", () => {
     const button = getByText("등록하기");
     await fireEvent.click(button);
 
-    expect(mockRouter.push).toHaveBeenCalledWith("/");
+    expect(mockRouter.push).toHaveBeenCalledWith("/mypage");
   });
 
-  it("patchCustomer 실패 시 ErrorUi가 화면에 나타난다", async () => {
+  it("patchCustomer 실패 시 에러 메시지가 표시된다", async () => {
     const failPatchCustomer = async (
       _customerId: number,
       _nickname: string,
@@ -97,7 +106,7 @@ describe("CompleteProfile", () => {
       statusCode: 400,
       timestamp: new Date(),
     });
-    const { getByPlaceholderText, getByText, findByText } = render(
+    const { getByPlaceholderText, getByText } = render(
       <CompleteProfile useUserStore={mockUseUserStore} patchCustomer={failPatchCustomer} />,
     );
     const input = getByPlaceholderText("닉네임을 입력하세요");
@@ -105,7 +114,6 @@ describe("CompleteProfile", () => {
     const button = getByText("등록하기");
     await fireEvent.click(button);
 
-    // ErrorUi에 "에러" 메시지가 나타나는지 확인
-    expect(await findByText("에러")).toBeInTheDocument();
+    expect(mockShowToast).toHaveBeenCalledWith("닉네임 변경 실패", true);
   });
 });

@@ -1,15 +1,11 @@
+import type { Coordinate } from "@/types/locations.type";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export interface Coordinates {
-  lat: number;
-  lng: number;
-}
-
-interface UserLocationStore extends Coordinates {
-  updateLocations: (locations: Coordinates) => void;
+interface UserLocationStore extends Coordinate {
+  updateLocations: (locations: Coordinate) => void;
   resetLocations: () => void;
-  getLocations: () => Coordinates;
+  getLocations: () => Coordinate;
 }
 
 export const useUserLocation = create<UserLocationStore>()(
@@ -17,7 +13,7 @@ export const useUserLocation = create<UserLocationStore>()(
     (set, get) => ({
       lat: 0,
       lng: 0,
-      updateLocations: (locations: Coordinates) => set(locations),
+      updateLocations: (locations: Coordinate) => set(locations),
       getLocations: () => ({ lat: get().lat, lng: get().lng }),
       resetLocations: () => set({ lat: 0, lng: 0 }),
     }),

@@ -18,7 +18,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
-import { useOwnerStore } from "@/stores/ownerInfoStore";
 import type { Order } from "@/types/order";
 import { useEffect, useState } from "react";
 
@@ -27,9 +26,8 @@ const ITEMS_PER_PAGE = 10;
 export default function PickupManagementList() {
   const [page, setPage] = useState(1);
   const [orderList, setOrderList] = useState<Order[]>([]);
-  const { owner } = useOwnerStore();
 
-  const { data: storeData } = useGetOwnerStore(owner?.userId);
+  const { data: storeData } = useGetOwnerStore();
 
   useEffect(() => {
     const fetchOrders = async () => {

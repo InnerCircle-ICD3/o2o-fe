@@ -3,7 +3,7 @@ import { toResult } from "./utils/result";
 
 // ownerApi 설정
 const ownerApi = ky.create({
-  prefixUrl: "/api",
+  prefixUrl: process.env.NEXT_PUBLIC_OWNER_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
