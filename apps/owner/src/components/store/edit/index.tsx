@@ -4,13 +4,14 @@ import { FormField } from "@/components/common/formField";
 import { ToastMessage } from "@/components/common/toastMessage";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { STORE_CATEGORIES, initialUpdateStoreFormData } from "@/constants/store";
+import { STORE_CATEGORIES, VALIDATION_RULES, initialUpdateStoreFormData } from "@/constants/store";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import usePatchOwnerStoreStatus from "@/hooks/api/usePatchOwnerStoreStatus";
 import usePostFileUpload from "@/hooks/api/usePostFileUpload";
 import usePutOwnerStore from "@/hooks/api/usePutOwnerStore";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
+import type { UseFormOptions } from "@/types/form";
 import type { UpdateStoreRequest } from "@/types/store";
 import { formatContactNumber, getDefaultStoreFormValues } from "@/utils/stores";
 import { useQueryClient } from "@tanstack/react-query";
@@ -29,7 +30,11 @@ export default function StoreEdit() {
 
   const form = useForm<UpdateStoreRequest>({
     defaultValues: initialUpdateStoreFormData,
-  });
+    validationRules: VALIDATION_RULES,
+    defaultOptions: {
+      transform: (value: string) => value.trim(),
+    },
+  } as UseFormOptions<UpdateStoreRequest>);
 
   const queryClient = useQueryClient();
 
@@ -60,6 +65,20 @@ export default function StoreEdit() {
   const updateStoreMutation = usePutOwnerStore(currentStoreData?.id);
   const patchStoreStatusMutation = usePatchOwnerStoreStatus(currentStoreData?.id);
   const postFileUploadMutation = usePostFileUpload();
+
+  const validateSingleField = (name: keyof UpdateStoreRequest, value: string): string => {
+    const rule = VALIDATION_RULES[name];
+    if (!rule) return "";
+    return rule.pattern.test(value) ? "" : rule.message;
+  };
+
+  const handleBlur =
+    (field: keyof UpdateStoreRequest) => (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const value = e.target.value;
+      const error = validateSingleField(field, value);
+      setValue(field, value);
+      errors[field] = error;
+    };
 
   const handleImagePreview = async (value: string | File | null) => {
     if (value === null) {
@@ -115,7 +134,10 @@ export default function StoreEdit() {
   
   const onSubmit = async (data: UpdateStoreRequest) => {
     const isValid = await form.validate();
-    if (!isValid) return;
+    if (!isValid) {
+      showToast("입력 정보를 확인해주세요.", true);
+      return;
+    }
 
     let mainImageUrl = data.mainImageUrl;
     if (mainImageUrl?.startsWith("data:") && imageFile) {
@@ -196,6 +218,7 @@ export default function StoreEdit() {
             type="input"
             label="매장명"
             name="name"
+            onBlur={handleBlur("name")}
             value={watch("name") ?? ""}
             onChange={(e) => setValue("name", e.target.value)}
             error={errors.name}
@@ -212,6 +235,7 @@ export default function StoreEdit() {
             type="textarea"
             label="설명"
             name="description"
+            onBlur={handleBlur("description")}
             value={watch("description") ?? ""}
             onChange={(e) => setValue("description", e.target.value)}
             className="h-30 resize-none"

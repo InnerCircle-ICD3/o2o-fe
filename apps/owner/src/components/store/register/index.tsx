@@ -110,13 +110,14 @@ export default function StoreRegisterForm() {
 
   const onSubmit = async (data: CreateStoreRequest) => {
     const isValid = await form.validate();
-    if (!isValid) return;
+    if (!isValid) {
+      showToast("입력 정보를 확인해주세요.", true);
+      return;
+    }
 
     let mainImageUrl = data.mainImageUrl;
     if (mainImageUrl?.startsWith("data:") && imageFile) {
-      console.log("imageFile", imageFile);
       const newMainImageUrl = await handleImageUpload(imageFile);
-      console.log(newMainImageUrl);
       if (!newMainImageUrl) {
         return;
       }
@@ -128,7 +129,7 @@ export default function StoreRegisterForm() {
       { ...data, mainImageUrl },
       {
         onSuccess: () => {
-          showToast("매장 등록이 완료되었습니다.", false, () => router.push("/store-management"));
+          showToast("매장 등록이 완료되었습니다.", false, () => router.push("/"));
         },
         onError: () => {
           showToast("매장 등록에 실패했습니다.", true);
@@ -184,7 +185,6 @@ export default function StoreRegisterForm() {
                 type="input"
                 label="연락처"
                 name="contact"
-                onBlur={handleBlur("contact")}
                 value={watch("contact")}
                 onChange={(e) => setValue("contact", formatContactNumber(e.target.value))}
                 error={errors.contact}
@@ -279,7 +279,7 @@ export default function StoreRegisterForm() {
                 onBlur={handleBlur("description")}
                 value={watch("description")}
                 onChange={(e) => setValue("description", e.target.value)}
-                className="h-30 resize-none"
+                className="h-30 resize-none w-[278px]"
               />
             </fieldset>
           )}

@@ -104,11 +104,11 @@ export function FormField(props: FormFieldProps) {
     const { type, label, name, rightElement, error, ...textareaProps } = props;
     return (
       <div className="space-y-3">
-        <div className="flex items-center gap-4">
-          <Label htmlFor={name} className="w-[90px]">
+        <div className="flex items-start gap-4">
+          <Label htmlFor={name} className="w-[90px] pt-2">
             {label}
           </Label>
-          <div className="flex-1 flex gap-2">
+          <div className="flex-1 flex gap-2 min-w-0">
             <Textarea
               id={name}
               aria-label={label}
