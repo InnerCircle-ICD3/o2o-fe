@@ -1,11 +1,7 @@
-import { apiClient } from "@/apis/client";
-import type { CreateOrderRequest, CreateOrderResponse } from "@/types/apis/order.type";
+import { createOrder } from "@/apis/ssr/orders";
+import type { CreateOrderRequest } from "@/types/apis/order.type";
 import { useRouter } from "next/navigation";
 import { useMutation } from "../utils/useMutation";
-
-const createOrder = (body: CreateOrderRequest) => {
-  return apiClient.post<CreateOrderResponse>("orders", body);
-};
 
 const usePostOrder = () => {
   const mutation = useMutation({
