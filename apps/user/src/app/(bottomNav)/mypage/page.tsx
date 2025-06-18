@@ -1,6 +1,5 @@
 "use client";
 
-import ErrorUi from "@/components/common/errorUi";
 import LoginLink from "@/components/ui/mypage/loginLink";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import useGetCustomer from "@/hooks/api/useGetCustomer";
@@ -35,9 +34,6 @@ const Page = () => {
 
   if (isLoading) {
     return <SkeletonStoreCard imagePosition="left" />;
-  }
-  if (!userInfo?.success) {
-    return <ErrorUi message={"유저 정보를 가져오지 못했습니다."} />;
   }
 
   return (
