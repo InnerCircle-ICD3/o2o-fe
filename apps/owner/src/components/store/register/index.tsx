@@ -18,14 +18,16 @@ import { useForm } from "use-form-light";
 import { BusinessHoursSection } from "./businessHoursSection";
 
 const STEP_LABELS = ["가게 등록", "상세 설정", "픽업 설정"];
+const FIRST_STEP = 1;
 
 export default function StoreRegisterForm() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(FIRST_STEP);
   const [addressSearch, setAddressSearch] = useState("");
+  const [isS3Uploading, setIsS3Uploading] = useState(false);
   const router = useRouter();
 
   const { toastMessage, isToastVisible, isError, showToast, handleToastClose } = useToastMessage();
-  const createStoreMutation = usePostOwnerStore();
+  const { mutate: createStoreMutation, isPending: isCreateStorePending } = usePostOwnerStore();
   const { mutateAsync: uploadImage, isPending: isUploading } = usePostFileUpload();
   const form = useForm<CreateStoreRequest>({
     defaultValues: initialCreateStoreFormData,
@@ -90,11 +92,14 @@ export default function StoreRegisterForm() {
       }
 
       // 2. S3에 PUT 업로드
+      setIsS3Uploading(true);
       const response = await fetch(presignedUrl, {
         method: "PUT",
         headers: { "Content-Type": imageFile.type || "image/jpeg" },
         body: imageFile,
       });
+      setIsS3Uploading(false);
+
       if (!response.ok) {
         showToast("S3 업로드 실패", true);
         return null;
@@ -104,6 +109,7 @@ export default function StoreRegisterForm() {
       const mainImageUrl = presignedUrl.split("?")[0];
       return mainImageUrl;
     } catch {
+      setIsS3Uploading(false);
       showToast("이미지 업로드 중 오류가 발생했습니다.", true);
       return null;
     }
@@ -126,10 +132,10 @@ export default function StoreRegisterForm() {
     }
 
     // 4. form에 S3 URL 저장 후 등록
-    createStoreMutation.mutate(
+    createStoreMutation(
       { ...data, mainImageUrl },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           showToast("매장 등록이 완료되었습니다.", false, () => router.push("/"));
         },
         onError: () => {
@@ -282,7 +288,7 @@ export default function StoreRegisterForm() {
               type="button"
               onClick={prevStep}
               className="flex-1 min-h-[42px]"
-              disabled={isUploading}
+              disabled={isUploading || isS3Uploading || isCreateStorePending}
             >
               이전
             </Button>
@@ -310,12 +316,12 @@ export default function StoreRegisterForm() {
             <Button
               type="submit"
               className="flex-1 min-h-[42px]"
-              disabled={createStoreMutation.isPending || isUploading}
+              disabled={isCreateStorePending || isUploading || isS3Uploading}
             >
-              {createStoreMutation.isPending || isUploading ? (
+              {isCreateStorePending || isUploading || isS3Uploading ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>{isUploading ? "이미지 업로드 중..." : "등록 중..."}</span>
+                  <span>{isUploading || isS3Uploading ? "이미지 업로드 중..." : "등록 중..."}</span>
                 </div>
               ) : (
                 "등록하기"

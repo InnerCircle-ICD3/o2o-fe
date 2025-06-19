@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 export const config = {
-  matcher: ["/orders/:path*", "/locations/my-location"],
+  matcher: ["/orders/:path*", "/locations/my-location", "/mypage/delete-account"],
 };
 
 export function middleware(request: NextRequest) {
