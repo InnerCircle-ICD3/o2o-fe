@@ -9,7 +9,7 @@ export interface OrderItem {
   originPrice: number;
   finalPrice: number;
   quantity: number;
-  imageUrl: number;
+  imageUrl: string;
 }
 export interface OrderDetail {
   id: number;
@@ -28,4 +28,51 @@ export interface OrderDetail {
 export interface OrderList {
   contents: OrderDetail[];
   lastId: number;
+}
+
+export interface CreateOrderRequest {
+  storeId: string;
+  orderItems: {
+    productId: string;
+    productName: string;
+    price: number;
+    quantity: number;
+  }[];
+}
+
+export interface CreateOrderResponse {
+  id: number;
+  orderNumber: number;
+  customerId: number;
+  nickname: string;
+  storeId: number;
+  status: string;
+  orderItems: {
+    id: number;
+    productId: number;
+    productName: string;
+    originPrice: number;
+    finalPrice: number;
+    imageUrl: string;
+    quantity: number;
+  }[];
+  pickupDateTime: string;
+  createdAt: string;
+  updatedAt: string;
+  readiedAt: string | null;
+  canceledAt: string | null;
+  confirmedAt: string | null;
+  doneAt: string | null;
+  hasReview: boolean;
+}
+
+export interface OrderDetailResponse {
+  contents: OrderDetail[];
+  lastId: number;
+}
+
+export interface ReadyToOrderResponse {
+  orderId: number;
+  userId: number;
+  status: "READY" | "DONE" | "CANCELED";
 }
