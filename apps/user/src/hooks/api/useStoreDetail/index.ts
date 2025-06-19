@@ -9,7 +9,7 @@ export const useStoreDetail = (storeId: string) => {
     queryFn: async () => {
       const result = await getStoresDetail(storeId);
       if (!result.success) {
-        throw new Error(result.message || "매장 상세 정보를 불러오지 못했습니다.");
+        throw result;
       }
       return result;
     },
