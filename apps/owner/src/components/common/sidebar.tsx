@@ -3,14 +3,29 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { Home, List, MessageCircle, Package, Plus, ShoppingCart } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  Home,
+  List,
+  MessageCircle,
+  Package,
+  Plus,
+  ShoppingCart,
+  Store,
+  Trash,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 type MenuItem = {
   title: string;
   icon: React.ElementType;
-  submenu: {
+  href?: string;
+  submenu?: {
     title: string;
     href: string;
     icon: React.ElementType;
@@ -19,13 +34,23 @@ type MenuItem = {
 
 const menuConfig: Record<string, MenuItem> = {
   dashboard: {
-    title: "매장 관리",
+    title: "홈",
+    href: "/",
     icon: Home,
+  },
+  storeManagement: {
+    title: "매장 관리",
+    icon: Store,
     submenu: [
       {
         title: "매장 정보 수정",
         href: "/store-management/edit",
         icon: List,
+      },
+      {
+        title: "매장 삭제",
+        href: "/store-management/delete",
+        icon: Trash,
       },
     ],
   },
@@ -72,61 +97,124 @@ const menuConfig: Record<string, MenuItem> = {
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
   const isSubmenuActive = (menuId: string) => {
     const menu = menuConfig[menuId];
-    return menu.submenu.some((submenu) => pathname.startsWith(submenu.href));
+    return menu.submenu?.some((submenu) => pathname.startsWith(submenu.href));
+  };
+
+  const handleSubmenuToggle = (menuId: string) => {
+    setOpenSubmenu((prev) => (prev === menuId ? null : menuId));
   };
 
   return (
-    <div className="flex h-full w-[240px] flex-col border-r bg-background">
-      <div className="p-6">
-        <h2 className="text-lg font-semibold">잇고잇고</h2>
+    <div
+      className={cn(
+        "flex min-h-screen flex-col border-r bg-background/95 shadow-lg transition-all duration-200",
+        isCollapsed ? "w-16" : "w-[240px]",
+      )}
+    >
+      <div className={cn("flex items-center p-6", isCollapsed && "justify-center p-4")}>
+        <h2 className={cn("text-lg font-semibold transition-all", isCollapsed && "sr-only")}>
+          잇고잇고
+        </h2>
+        <button
+          type="button"
+          onClick={() => setIsCollapsed((prev) => !prev)}
+          className={cn(
+            "ml-auto text-gray-400 hover:text-primary transition-colors p-1 rounded",
+            isCollapsed && "ml-0",
+          )}
+          aria-label={isCollapsed ? "사이드바 펼치기" : "사이드바 접기"}
+        >
+          {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </button>
       </div>
-      <ScrollArea className="flex-1 px-3">
+      <ScrollArea className={cn("flex-1 px-3", isCollapsed && "px-0")}>
         <div className="space-y-1 p-2">
           {Object.entries(menuConfig).map(([menuId, menu]) => {
-            const hasActiveSubmenu = isSubmenuActive(menuId);
+            if (!menu.submenu) {
+              if (!menu.href) return null;
+              return (
+                <Button
+                  key={menuId}
+                  variant={pathname === menu.href ? "secondary" : "ghost"}
+                  className={cn(
+                    "w-full justify-start transition-all duration-200",
+                    pathname === menu.href && "bg-secondary",
+                    isCollapsed && "px-0 justify-center",
+                  )}
+                  asChild
+                >
+                  <Link
+                    href={menu.href}
+                    className="w-full text-left flex items-center justify-center"
+                  >
+                    <menu.icon className="h-5 w-5" />
+                    {!isCollapsed && <span className="ml-2">{menu.title}</span>}
+                  </Link>
+                </Button>
+              );
+            }
 
+            const hasActiveSubmenu = isSubmenuActive(menuId);
+            const isOpen = openSubmenu === menuId || hasActiveSubmenu;
             return (
               <div key={menuId}>
                 <Button
                   variant={hasActiveSubmenu ? "secondary" : "ghost"}
-                  className={cn("w-full justify-start", hasActiveSubmenu && "bg-secondary")}
+                  className={cn(
+                    "w-full justify-start transition-all duration-200 group",
+                    hasActiveSubmenu && "bg-secondary",
+                    isCollapsed && "px-0 justify-center",
+                  )}
                   asChild
                 >
                   <button
                     type="button"
                     onClick={() => {
-                      router.push(menu.submenu[0].href);
+                      if (isCollapsed) {
+                        if (menu.submenu && menu.submenu.length > 0) {
+                          router.push(menu.submenu[0].href);
+                        }
+                      } else {
+                        handleSubmenuToggle(menuId);
+                      }
                     }}
-                    className="w-full text-left"
+                    className="w-full text-left flex items-center justify-center"
                   >
-                    <div className="flex items-center">
-                      <menu.icon className="mr-2 h-4 w-4" />
-                      {menu.title}
-                    </div>
+                    <menu.icon className="h-5 w-5" />
+                    {!isCollapsed && <span className="ml-2 flex-1 text-left">{menu.title}</span>}
+                    {!isCollapsed && (
+                      <span className="ml-auto">
+                        {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      </span>
+                    )}
                   </button>
                 </Button>
 
-                <div className="ml-6 mt-1 space-y-1">
-                  {menu.submenu.map((submenu) => (
-                    <Button
-                      key={submenu.href}
-                      variant={pathname === submenu.href ? "secondary" : "ghost"}
-                      className={cn(
-                        "w-full justify-start text-sm",
-                        pathname === submenu.href && "bg-secondary",
-                      )}
-                      asChild
-                    >
-                      <Link href={submenu.href}>
-                        <submenu.icon className="mr-2 h-4 w-4" />
-                        {submenu.title}
-                      </Link>
-                    </Button>
-                  ))}
-                </div>
+                {menu.submenu && menu.submenu.length > 0 && !isCollapsed && isOpen && (
+                  <div className="ml-6 mt-1 space-y-1">
+                    {menu.submenu.map((submenu) => (
+                      <Button
+                        key={submenu.href}
+                        variant={pathname === submenu.href ? "secondary" : "ghost"}
+                        className={cn(
+                          "w-full justify-start text-sm",
+                          pathname === submenu.href && "bg-secondary",
+                        )}
+                        asChild
+                      >
+                        <Link href={submenu.href}>
+                          <submenu.icon className="mr-2 h-4 w-4" />
+                          {submenu.title}
+                        </Link>
+                      </Button>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })}

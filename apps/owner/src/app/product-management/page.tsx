@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import type { Product } from "@/types/product";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -25,13 +26,15 @@ import { useEffect, useState } from "react";
 const ITEMS_PER_PAGE = 5;
 
 export default function LuckyBagList() {
+  const { data: storeData } = useGetOwnerStore();
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState<Product[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const result = await getProducts(1);
+      if (!storeData?.id) return;
+      const result = await getProducts(storeData.id);
       if (result.success) {
         console.log(result.data);
         setProducts(result.data);
@@ -40,14 +43,15 @@ export default function LuckyBagList() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [storeData]);
 
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
 
   const paginatedData = products.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   const handleDelete = async (id: number) => {
-    const result = await deleteProduct(1, id);
+    if (!storeData?.id) return;
+    const result = await deleteProduct(storeData.id, id);
     if (confirm("정말 삭제하시겠습니까?")) {
       if (result.success) {
         console.log("상품 삭제 성공");

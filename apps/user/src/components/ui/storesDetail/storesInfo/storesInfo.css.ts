@@ -9,6 +9,12 @@ export const thumbnail = style({
   marginBottom: 16,
 });
 
+export const subscribeButton = style({
+  position: "absolute",
+  top: "10px",
+  right: "10px",
+});
+
 export const title = style({
   display: "flex",
   padding: "0 8px",
@@ -64,9 +70,5 @@ export const metaValue = style({
 });
 
 export const description = style({
-  overflow: "hidden",
   color: "#32343E",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-  textTransform: "uppercase",
 });

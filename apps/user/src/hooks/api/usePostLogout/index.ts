@@ -1,4 +1,4 @@
-import { postLogout } from "@/apis/ssr/customer";
+import { postLogout } from "@/apis/ssr/account";
 import { useMutation } from "@/hooks/api/utils/useMutation";
 
 const usePostLogout = () => {
