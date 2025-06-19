@@ -2,6 +2,7 @@
 import { getReviews } from "@/apis/ssr/review";
 import type { Review } from "@/apis/ssr/review";
 import { formatLocalizedDate } from "@/apis/utils/format";
+import RegisterLink from "@/components/common/storeRegisterLink";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, X } from "lucide-react";
 import Image from "next/image";
@@ -33,6 +34,11 @@ export default function page() {
     };
     fetchReviews();
   }, []);
+
+  // 등록된 매장이 없는 경우 주소로 접근을 위해서 추가했습니다.
+  if (!ownerStoreId) {
+    return <RegisterLink />;
+  }
 
   return (
     <div>

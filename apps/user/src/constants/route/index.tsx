@@ -185,6 +185,10 @@ const ROUTE = {
       name: "리뷰 보기",
       path: "/review",
     },
+    deleteAccount: {
+      name: "회원탈퇴",
+      path: "/mypage/delete-account",
+    },
   },
 };
 
