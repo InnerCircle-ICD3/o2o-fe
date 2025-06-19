@@ -93,6 +93,7 @@ vi.mock("@/components/common/kakaoMap", () => ({
         setCenter: () => {},
         setLevel: () => {},
         setBounds: () => {},
+        getLevel: () => 1,
       };
       onMapReady?.(mockMap as kakao.maps.Map);
       onMapIdle?.(mockMap as kakao.maps.Map);

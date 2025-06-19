@@ -48,12 +48,12 @@ describe("StoreCard Test", () => {
   };
 
   it("스토어 이름이 렌더링된다.", () => {
-    render(<StoreCard storesDetail={mockStoreDetail} />);
+    render(<StoreCard storesDetail={mockStoreDetail} isFavorite={false} />);
     expect(screen.getByText("테스트 매장")).toBeInTheDocument();
   });
 
   it("스토어카드를 클릭하면 스토어 상세 페이지로 이동한다.", () => {
-    render(<StoreCard storesDetail={mockStoreDetail} />);
+    render(<StoreCard storesDetail={mockStoreDetail} isFavorite={false} />);
     const storeCard = screen.getByText("테스트 매장").closest("div");
     if (!storeCard) throw new Error("Store card element not found");
     fireEvent.click(storeCard);
