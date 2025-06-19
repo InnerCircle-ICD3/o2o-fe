@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as styles from "./addressSearch.css";
 
-export default function LocationSearchPage() {
+export default function AddressSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchAddressResult[]>([]);
   const location = useGeolocation();
