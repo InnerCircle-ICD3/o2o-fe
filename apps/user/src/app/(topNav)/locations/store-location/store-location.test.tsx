@@ -1,9 +1,13 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, vi } from "vitest";
 import Page from "./page";
 
 vi.mock("@/components/ui/locations/storeMap", () => ({
-  default: ({ lat, lng }: { lat: number; lng: number }) => <div>매장 위치 {lat} {lng}</div>
+  default: ({ lat, lng }: { lat: number; lng: number }) => (
+    <div>
+      매장 위치 {lat} {lng}
+    </div>
+  ),
 }));
 
 describe("Page (비정규 테스트)", () => {

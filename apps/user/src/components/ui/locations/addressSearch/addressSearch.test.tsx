@@ -1,7 +1,7 @@
-import { vi } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import AddressSearch from ".";
 import { searchAddress } from "@/utils/locations";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { vi } from "vitest";
+import AddressSearch from ".";
 
 vi.mock("@/hooks/useGeolocation");
 vi.mock("@/hooks/useKakaoLoader");
@@ -19,9 +19,9 @@ vi.mock("@/utils/locations", () => ({
       address: "서울 강남구 강남대로",
       location: {
         lat: 37.123456,
-        lng: 127.123456
-      }
-    }
+        lng: 127.123456,
+      },
+    },
   ]),
 }));
 
@@ -62,11 +62,7 @@ describe("AddressSearch", () => {
     expect(resultItem).toBeInTheDocument();
   });
 
-  it("검색 결과를 클릭하면 주소를 선택하고 홈 주소로 이동한다.", () => {
+  it("검색 결과를 클릭하면 주소를 선택하고 홈 주소로 이동한다.", () => {});
 
-  });
-
-  it("현재 위치로 등록을 클릭하면 현재 위치 좌표를 선택하고 홈 주소로 이동한다.", () => {
-
-  });
+  it("현재 위치로 등록을 클릭하면 현재 위치 좌표를 선택하고 홈 주소로 이동한다.", () => {});
 });

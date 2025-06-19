@@ -11,4 +11,4 @@ describe("my-location page", () => {
     render(<Page />);
     expect(screen.getByText("내 위치")).toBeInTheDocument();
   });
-})
+});

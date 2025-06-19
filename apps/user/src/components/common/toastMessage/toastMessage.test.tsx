@@ -1,7 +1,7 @@
-import { ToastMessage } from ".";
-import { act, render, screen, waitFor } from "@testing-library/react";
 import { useToastStore } from "@/stores/toastStore";
+import { act, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
+import { ToastMessage } from ".";
 
 describe("ToastMessage", () => {
   beforeEach(() => {

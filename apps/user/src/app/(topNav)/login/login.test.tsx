@@ -11,4 +11,4 @@ describe("login page", () => {
     render(<Page />);
     expect(screen.getByText("로그인")).toBeInTheDocument();
   });
-})
+});
