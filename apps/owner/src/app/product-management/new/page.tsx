@@ -1,6 +1,5 @@
 "use client";
 
-import { uploadFile } from "@/apis/ssr/file-upload";
 import { createProduct } from "@/apis/ssr/product";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,9 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { FileUploadResponse } from "@/types/file-upload";
+import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import type { UseFormOptions } from "@/types/form";
 import type { ProductFormData } from "@/types/product";
+import { getS3UploadUrl } from "@/utils/imageUpload";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -29,6 +29,7 @@ interface FormData {
 
 export default function LuckyBagRegister() {
   const router = useRouter();
+  const { data: storeData } = useGetOwnerStore();
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<{
     origin: File;
@@ -62,40 +63,15 @@ export default function LuckyBagRegister() {
     },
   } as UseFormOptions<FormData>);
 
-  const getS3UploadUrl = async () => {
-    const file = previewUrl?.origin;
-    if (!file || typeof file === "string") {
-      throw new Error("파일이 없습니다.");
-    }
-    const realFile = file as File; // Type assertion here
-
-    const result = await uploadFile({
-      fileName: realFile.name,
-      contentType: realFile.type,
-      folderPath: "product",
-    });
-
-    if (!result.success) {
-      alert("파일 업로드에 실패했습니다.");
-      return;
-    }
-
-    const data = result.data as FileUploadResponse;
-    const presignedUrl = data.preSignedUrl;
-    const s3Key = data.s3Key;
-    const baseUrl = presignedUrl.split("/product")[0];
-    return `${baseUrl}/${s3Key}`;
-  };
-
   const onSubmit = async (data: FormData) => {
     const isValid = validate();
-    if (!isValid) {
+    if (!isValid || !storeData?.id || !previewUrl?.origin) {
       return;
     }
 
     setIsLoading(true);
     try {
-      const fileResult = await getS3UploadUrl();
+      const fileResult = await getS3UploadUrl(previewUrl?.origin, "product");
       const formatData: ProductFormData = {
         ...data,
         price: {
@@ -113,7 +89,7 @@ export default function LuckyBagRegister() {
           .filter((item) => item.length > 0),
       };
 
-      const result = await createProduct(1, formatData);
+      const result = await createProduct(storeData?.id, formatData);
       if (result.success) {
         router.push("/product-management");
       } else {

@@ -4,6 +4,8 @@ import type { Review } from "@/apis/ssr/review";
 import { formatLocalizedDate } from "@/apis/utils/format";
 import RegisterLink from "@/components/common/storeRegisterLink";
 import { Card, CardContent } from "@/components/ui/card";
+import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
 import { Star, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -17,17 +19,16 @@ interface ReviewCardProps {
   onImageClick: (image: string) => void;
 }
 
-//TODO: 교체 필요
-const ownerId = 1;
-const ownerStoreId = 1;
-
 export default function page() {
+  const { owner } = useOwnerStore();
+  const { data: storeData } = useGetOwnerStore();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const result = await getReviews(ownerId, ownerStoreId);
+      if (!storeData?.id || !owner?.storeOwnerId) return;
+      const result = await getReviews(storeData?.id, owner?.storeOwnerId);
       if (result.success) {
         setReviews(result.data.contents);
       }
