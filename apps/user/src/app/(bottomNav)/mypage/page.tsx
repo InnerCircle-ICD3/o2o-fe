@@ -1,7 +1,6 @@
 "use client";
 
 import LoginLink from "@/components/ui/mypage/loginLink";
-import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import useGetCustomer from "@/hooks/api/useGetCustomer";
 import usePostLogout from "@/hooks/api/usePostLogout";
 import { useToastStore } from "@/stores/toastStore";
@@ -20,7 +19,7 @@ const Page = () => {
 
   const logoutMutation = usePostLogout();
 
-  const { data: userInfo, isLoading } = useGetCustomer(isLogin);
+  const { data: userInfo } = useGetCustomer(isLogin);
 
   const handleLogout = async () => {
     const result = await logoutMutation.mutateAsync({});
@@ -36,10 +35,6 @@ const Page = () => {
   const handleDeleteCustomer = async () => {
     router.push("/mypage/delete-account");
   };
-
-  if (isLoading) {
-    return <SkeletonStoreCard imagePosition="left" />;
-  }
 
   return (
     <div className={style.container}>
