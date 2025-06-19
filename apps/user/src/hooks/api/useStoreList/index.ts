@@ -53,13 +53,14 @@ export const useStoreList = () => {
     initialPageParam: undefined,
   });
   const loading = useLoading(isLoading);
+  const fetchingNextpage = useLoading(isFetchingNextPage);
 
   return {
     stores,
     isError,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
+    isFetchingNextPage: fetchingNextpage,
     isLoading: loading,
     error,
   };

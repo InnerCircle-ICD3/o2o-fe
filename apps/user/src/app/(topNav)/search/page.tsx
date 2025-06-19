@@ -1,6 +1,5 @@
 "use client";
 
-import PullToRefreshWrapper from "@/components/ui/pullToRefresh";
 import { SearchProvider } from "@/providers/search";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -17,17 +16,15 @@ export default function SearchPage() {
 
   return (
     <SearchProvider>
-      <PullToRefreshWrapper>
-        <header className={styles.headerStyle}>
-          <button className={styles.backButton} type={"button"} onClick={router.back}>
-            <Image src={"/icons/chevron_left.svg"} alt="뒤로가기" width={24} height={24} />
-          </button>
-          <SearchInput onSubmit={onSubmit} />
-        </header>
-        <main className={styles.contentStyle}>
-          <SearchResult onSubmit={onSubmit} />
-        </main>
-      </PullToRefreshWrapper>
+      <header className={styles.headerStyle}>
+        <button className={styles.backButton} type={"button"} onClick={router.back}>
+          <Image src={"/icons/chevron_left.svg"} alt="뒤로가기" width={24} height={24} />
+        </button>
+        <SearchInput onSubmit={onSubmit} />
+      </header>
+      <main className={styles.contentStyle}>
+        <SearchResult onSubmit={onSubmit} />
+      </main>
     </SearchProvider>
   );
 }

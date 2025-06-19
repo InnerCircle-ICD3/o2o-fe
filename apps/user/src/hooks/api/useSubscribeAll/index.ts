@@ -13,7 +13,6 @@ const useSubscribeAll = (isLogin: boolean) => {
     queryFn: subscribeAll,
     staleTime: Number.POSITIVE_INFINITY,
     enabled: isLogin,
-    initialData: { data: [] as number[], success: true },
   });
 
   const subscribes = data?.data || [];

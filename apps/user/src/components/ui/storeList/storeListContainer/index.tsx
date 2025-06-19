@@ -14,7 +14,7 @@ import * as style from "./storeListContainer.css";
 const StoreListContainer = () => {
   const { user } = userInfoStore();
   const isLogin = !!user;
-  const { stores, isLoading, fetchNextPage, isError, error } = useStoreList();
+  const { stores, isLoading, fetchNextPage, isError, hasNextPage, error } = useStoreList();
   const subscribes = useSubscribeAll(isLogin);
 
   if (isError) {
@@ -49,6 +49,9 @@ const StoreListContainer = () => {
             "store-category": {
               aspectRatio: 388 / 205,
             },
+            "loading-bar": {
+              height: 50,
+            },
           }}
           onScrollEnd={fetchNextPage}
         >
@@ -63,6 +66,78 @@ const StoreListContainer = () => {
               <StoreCard storesDetail={store} isFavorite={subscribes.includes(store.storeId)} />
             </VirtualItem>
           ))}
+
+          {hasNextPage && (
+            <VirtualItem name={"loading-bar"}>
+              <div className={style.loadingContainer}>
+                <svg
+                  className={style.pullIcon}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-label="당겨서 새로고침"
+                  role="img"
+                >
+                  <path
+                    d="M12 4.75V6.25"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M17.1266 6.87347L16.0659 7.93413"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M19.25 12L17.75 12"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M17.1266 17.1265L16.0659 16.0659"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 19.25V17.75"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M7.9342 17.1265L8.99486 16.0659"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M4.75 12L6.25 12"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M7.9342 6.87347L8.99486 7.93413"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </VirtualItem>
+          )}
         </VirtualScroll>
       )}
     </div>
