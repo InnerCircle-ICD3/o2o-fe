@@ -9,7 +9,7 @@ export interface OrderItem {
   originPrice: number;
   finalPrice: number;
   quantity: number;
-  imageUrl: number;
+  imageUrl: string;
 }
 export interface OrderDetail {
   id: number;
