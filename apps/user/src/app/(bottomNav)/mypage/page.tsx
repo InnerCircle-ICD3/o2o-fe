@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import * as style from "./mypage.css";
 
 const Page = () => {
-  const { user } = userInfoStore();
+  const { user, clearUser } = userInfoStore();
   const isLogin = !!user;
   const router = useRouter();
 
@@ -20,16 +20,21 @@ const Page = () => {
 
   const logoutMutation = usePostLogout();
 
-  const { data: userInfo, isLoading } = useGetCustomer();
+  const { data: userInfo, isLoading } = useGetCustomer(isLogin);
 
   const handleLogout = async () => {
     const result = await logoutMutation.mutateAsync({});
     if (result.success) {
+      clearUser();
       showToast("로그아웃되었습니다.");
       router.push("/");
     } else {
       showToast("로그아웃에 실패했습니다.", true);
     }
+  };
+
+  const handleDeleteCustomer = async () => {
+    router.push("/mypage/delete-account");
   };
 
   if (isLoading) {
@@ -89,7 +94,7 @@ const Page = () => {
             {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
           </button>
           |
-          <button className={style.bottomButton} type={"button"}>
+          <button className={style.bottomButton} type={"button"} onClick={handleDeleteCustomer}>
             회원탈퇴
           </button>
         </div>

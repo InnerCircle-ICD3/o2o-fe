@@ -22,3 +22,7 @@ export const putStore = async (storeId: number, data: UpdateStoreRequest) => {
 export const patchStoreStatus = async (storeId: number, data: StoreStatus) => {
   return await toSafeResult(() => api.patch(`stores/${storeId}/status`, data));
 };
+
+export const deleteStore = async (storeId: number) => {
+  return await toSafeResult(() => api.delete(`stores/${storeId}`));
+};

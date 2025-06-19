@@ -2,10 +2,7 @@
 
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-
-const PUBLIC_PATHS = ["/store/login", "/store/register"];
 
 export function OwnerInfoProvider() {
   const setOwner = useOwnerStore((state) => state.setOwner);
@@ -13,10 +10,7 @@ export function OwnerInfoProvider() {
   const clearOwner = useOwnerStore((state) => state.clearOwner);
   const clearStore = useOwnerStore((state) => state.clearStore);
 
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const { data: storeData, isLoading: isStoreLoading } = useGetOwnerStore();
+  const { data: storeData } = useGetOwnerStore();
 
   useEffect(() => {
     fetch("/api/me", { credentials: "include" })
@@ -34,19 +28,12 @@ export function OwnerInfoProvider() {
   }, [clearOwner, setOwner]);
 
   useEffect(() => {
-    if (
-      !isStoreLoading &&
-      storeData === null &&
-      !PUBLIC_PATHS.some((path) => pathname.startsWith(path))
-    ) {
-      // 매장 정보가 없고 공개 페이지가 아닌 경우 register로 리다이렉트
-      router.replace("/store/register");
-    } else if (storeData) {
+    if (storeData) {
       setStore(storeData);
     } else {
       clearStore();
     }
-  }, [storeData, isStoreLoading, pathname, router, setStore, clearStore]);
+  }, [storeData, setStore, clearStore]);
 
   return null;
 }
