@@ -41,6 +41,7 @@ globalThis.kakao = {
     MarkerClusterer: vi.fn().mockImplementation(() => ({
       addMarkers: vi.fn(),
       clear: vi.fn(),
+      removeMarkers: vi.fn(),
     })),
     services: {
       Geocoder: vi.fn().mockImplementation(() => ({
