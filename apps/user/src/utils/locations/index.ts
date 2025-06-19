@@ -6,8 +6,9 @@ export const createStoreMarker = (
   onMarkerClick: (storeId: number) => void,
   isSelected = false,
 ) => {
+  console.log(store);
   const marker = new kakao.maps.Marker({
-    position: new kakao.maps.LatLng(store.coordinates.latitude, store.coordinates.longitude),
+    position: new kakao.maps.LatLng(store.coordinate.latitude, store.coordinate.longitude),
     map,
     image: new kakao.maps.MarkerImage(
       isSelected ? "/icons/selected_store_marker.svg" : "/icons/store_marker.svg",

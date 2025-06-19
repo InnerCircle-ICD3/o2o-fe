@@ -69,19 +69,14 @@ describe("StoreEdit", () => {
     vi.clearAllMocks();
   });
 
-  it("유저 정보 없을 때 메시지 렌더링", async () => {
-    renderWithClient(<StoreEdit />);
-    screen.getByText("유저 정보를 불러올 수 없습니다. 다시 로그인해주세요.");
-  });
-
-  it("로딩 중일 때 Loading 메시지 렌더링", async () => {
+  it("매장 정보가 없을 때 StoreRegisterLink 안내 메시지를 보여준다", async () => {
     (useOwnerStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ owner: mockOwner });
     (useGetOwnerStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       data: null,
       isLoading: true,
     });
     renderWithClient(<StoreEdit />);
-    screen.getByText("매장 정보를 불러오는 중...");
+    expect(screen.getByText("매장 정보를 불러올 수 없습니다.")).toBeInTheDocument();
   });
 
   it("폼 필드들이 정상적으로 렌더링", () => {

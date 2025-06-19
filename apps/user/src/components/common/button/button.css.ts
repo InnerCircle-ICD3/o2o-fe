@@ -41,4 +41,12 @@ export const buttonStatus = styleVariants({
       color: globalTheme.color.black,
     },
   ],
+  danger: [
+    button,
+    {
+      backgroundColor: globalTheme.color.danger,
+      borderColor: globalTheme.color.danger,
+      color: globalTheme.color.white,
+    },
+  ],
 });

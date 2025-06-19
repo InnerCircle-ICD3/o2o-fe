@@ -6,7 +6,7 @@ const createMockStore = (id: number) => ({
   storeId: id,
   storeName: `Mock Store ${id}`,
   storeImage: "https://eatngo-app.s3.ap-northeast-2.amazonaws.com/store/pu.png",
-  storeCategory: [["PIZZA", "BAKERY", "FRUIT", "BREAD", "RICECAKE", "KOREAN", "SALAD"][id % 7]],
+  storeCategory: [["PIZZA", "FRUIT", "BREAD", "RICECAKE", "KOREAN", "SALAD"][id % 7]],
   foodCategory: ["호밀빵", "케이크"],
   distanceKm: 0.1,
   status: "OPEN",

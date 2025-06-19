@@ -1,4 +1,6 @@
 "use client";
+
+import ErrorUi from "@/components/common/errorUi";
 import { BottomButton } from "@/components/ui/storesDetail/bottomButton";
 import StoresInfo from "@/components/ui/storesDetail/storesInfo";
 import { useStoreDetail } from "@/hooks/api/useStoreDetail";
@@ -7,13 +9,18 @@ import {} from "react";
 
 const Page = () => {
   const { id } = useParams();
-  const { storeDetail, isError } = useStoreDetail(id as string);
+  const { storeDetail, isPending, isError } = useStoreDetail(id as string);
+
+  if (isPending) {
+    return null;
+  }
 
   if (!storeDetail || isError) {
     return (
-      <div>
-        <h2>매장 정보를 불러오는 데 실패했습니다.</h2>
-      </div>
+      <ErrorUi
+        message="가게 정보를 불러오는데 실패했어요. 잠시 후 다시 시도해주세요."
+        isButton={false}
+      />
     );
   }
 

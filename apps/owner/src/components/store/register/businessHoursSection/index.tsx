@@ -64,10 +64,10 @@ export function BusinessHoursSection<T extends WithBusinessHours>({
         <div className="space-y-3">
           {/* 전체 일괄 적용 */}
           <div className="flex items-center gap-2 mb-4 justify-between">
-            <span className="w-16">전체</span>
+            <span className="w-16 text-sm">전체</span>
             <Input
               type="time"
-              className="w-34"
+              className="w-42"
               value={getTime("MONDAY", "openTime").slice(0, 5)}
               onChange={handleAllOpenTimeChange}
               aria-label="전체 영업 시작 시간"
@@ -75,7 +75,7 @@ export function BusinessHoursSection<T extends WithBusinessHours>({
             <span>~</span>
             <Input
               type="time"
-              className="w-34"
+              className="w-42"
               value={getTime("MONDAY", "closeTime").slice(0, 5)}
               onChange={handleAllCloseTimeChange}
               aria-label="전체 영업 종료 시간"
@@ -88,10 +88,10 @@ export function BusinessHoursSection<T extends WithBusinessHours>({
             const isSelected = selectedDays.includes(dayKey);
             return (
               <div key={day} className="flex items-center gap-2 justify-between">
-                <span className="w-16">{day}요일</span>
+                <span className="w-16 text-sm">{day}요일</span>
                 <Input
                   type="time"
-                  className="w-34"
+                  className="w-42"
                   disabled={!isSelected}
                   value={getTime(dayKey, "openTime")}
                   onChange={handleTimeChange(dayKey, "openTime")}
@@ -100,7 +100,7 @@ export function BusinessHoursSection<T extends WithBusinessHours>({
                 <span>~</span>
                 <Input
                   type="time"
-                  className="w-34"
+                  className="w-42"
                   disabled={!isSelected}
                   value={getTime(dayKey, "closeTime")}
                   onChange={handleTimeChange(dayKey, "closeTime")}

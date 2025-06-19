@@ -49,6 +49,7 @@ export interface StoresDetail {
   ratingCount: number;
   foodCategory: string[]; // (예: ["커피", "디저트"])
   storeCategory: string[]; // (예: ["BREAD"])
+  isFavorite: boolean;
 }
 
 export interface Inventory {

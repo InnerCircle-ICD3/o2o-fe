@@ -10,7 +10,7 @@ import type { MapStore } from "@/types/locations.type";
 import Button from "@/components/common/button";
 import { KakaoMap } from "@/components/common/kakaoMap";
 
-import { getStoresByCenter } from "@/apis/ssr/locations";
+import { getStoresByCenter, getStoresByCenterRefresh } from "@/apis/ssr/locations";
 import { LoadingMap } from "@/components/ui/locations/loadingMap";
 import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
 import { CLUSTERER_STYLE } from "@/constants/locations";
@@ -94,8 +94,8 @@ export default function SearchMap() {
       const markers: kakao.maps.Marker[] = [];
 
       for (const store of storeListRef.current) {
-        if (!store.coordinates) {
-          console.warn("store.coordinates is null", store);
+        if (!store.coordinate) {
+          console.warn("store.coordinate is null", store);
           continue;
         }
 
@@ -135,8 +135,8 @@ export default function SearchMap() {
     clusterer.clear();
 
     const center = map.getCenter();
-    const result = await getStoresByCenter(center);
-    if (!result.success) return;
+    const result = await getStoresByCenterRefresh(center);
+    if (!result || !result.success) return;
     storeListRef.current = result.data.storeList;
 
     // 새로운 마커 추가

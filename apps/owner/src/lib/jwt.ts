@@ -12,6 +12,7 @@ import jwt from "jsonwebtoken";
 export interface TokenPayload {
   sub: string;
   roles: string[];
+  storeOwnerId: number;
   customerId: number;
   nickname: string;
   iat: number;

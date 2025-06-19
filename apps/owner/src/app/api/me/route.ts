@@ -7,14 +7,10 @@ export async function GET() {
   const token = cookieStore.get("access_token")?.value;
 
   if (!token) {
-    return NextResponse.json(
-      {
-        success: false,
-        errorCode: "UNAUTHORIZED",
-        errorMessage: "토큰이 없습니다.",
-      },
-      { status: 401 },
-    );
+    return NextResponse.json({
+      success: true,
+      data: null,
+    });
   }
 
   try {
@@ -22,20 +18,13 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: {
-        userId: payload.sub,
+        storeOwnerId: payload.storeOwnerId,
         roles: payload.roles,
         nickname: payload.nickname,
         customerId: payload.customerId,
       },
     });
   } catch {
-    return NextResponse.json(
-      {
-        success: false,
-        errorCode: "INVALID_TOKEN",
-        errorMessage: "토큰이 유효하지 않습니다.",
-      },
-      { status: 401 },
-    );
+    return NextResponse.redirect(new URL("/store/login"));
   }
 }

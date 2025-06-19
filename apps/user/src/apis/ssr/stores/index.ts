@@ -8,8 +8,8 @@ import type {
   StoresDetail,
 } from "@/types/apis/stores.type";
 
-export const getStoresDetail = async (id: string) => {
-  return await toSafeResult(() => apiClient.get<StoresDetail>(`stores/${id}`));
+export const getStoresDetail = (id: string) => {
+  return apiClient.get<StoresDetail>(`stores/${id}`);
 };
 
 export const getStoresDetailProducts = async (id: string) => {

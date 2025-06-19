@@ -1,6 +1,7 @@
 import { getStoreList } from "@/apis/ssr/stores";
 import type { InfiniteQueryResponse, Result } from "@/apis/types";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import useLoading from "@/hooks/useLoading";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useFilterTab } from "@/stores/useFilterTab";
 import type { StoreListResponse } from "@/types/apis/stores.type";
@@ -51,6 +52,7 @@ export const useStoreList = () => {
     },
     initialPageParam: undefined,
   });
+  const loading = useLoading(isLoading);
 
   return {
     stores,
@@ -58,7 +60,7 @@ export const useStoreList = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading,
+    isLoading: loading,
     error,
   };
 };

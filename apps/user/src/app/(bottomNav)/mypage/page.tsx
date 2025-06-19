@@ -1,48 +1,45 @@
 "use client";
 
-import { getCustomer } from "@/apis/ssr/customers";
-import type { Result } from "@/apis/types";
 import LoginLink from "@/components/ui/mypage/loginLink";
+import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
+import useGetCustomer from "@/hooks/api/useGetCustomer";
 import usePostLogout from "@/hooks/api/usePostLogout";
 import { useToastStore } from "@/stores/toastStore";
 import { userInfoStore } from "@/stores/userInfoStore";
-import type { Customer } from "@/types/apis/accounts.type";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import * as style from "./mypage.css";
 
 const Page = () => {
-  const { user } = userInfoStore();
+  const { user, clearUser } = userInfoStore();
   const isLogin = !!user;
   const router = useRouter();
 
-  const [userInfo, setUserInfo] = useState<Result<Customer> | null>(null);
   const { showToast } = useToastStore();
 
   const logoutMutation = usePostLogout();
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (!user?.customerId) return;
-      const result = await getCustomer(user.customerId);
-      if (result.success) {
-        setUserInfo(result);
-      }
-    };
-    fetchUserInfo();
-  }, [user?.customerId]);
+  const { data: userInfo, isLoading } = useGetCustomer(isLogin);
 
   const handleLogout = async () => {
     const result = await logoutMutation.mutateAsync({});
     if (result.success) {
+      clearUser();
       showToast("로그아웃되었습니다.");
       router.push("/");
     } else {
       showToast("로그아웃에 실패했습니다.", true);
     }
   };
+
+  const handleDeleteCustomer = async () => {
+    router.push("/mypage/delete-account");
+  };
+
+  if (isLoading) {
+    return <SkeletonStoreCard imagePosition="left" />;
+  }
 
   return (
     <div className={style.container}>
@@ -97,7 +94,7 @@ const Page = () => {
             {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
           </button>
           |
-          <button className={style.bottomButton} type={"button"}>
+          <button className={style.bottomButton} type={"button"} onClick={handleDeleteCustomer}>
             회원탈퇴
           </button>
         </div>

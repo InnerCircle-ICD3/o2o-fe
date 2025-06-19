@@ -1,5 +1,8 @@
+import Subscribe from "@/components/common/subscribe";
+import { userInfoStore } from "@/stores/userInfoStore";
 import * as globalStyle from "@/styles/global.css";
 import type { StoresDetail } from "@/types/apis/stores.type";
+import { formatTimeToHourMinute } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +15,8 @@ interface StoreInfoProps {
 
 const StoresInfo = (props: StoreInfoProps) => {
   const { storeDetail } = props;
+  const { user } = userInfoStore();
+  const isLogin = !!user;
 
   const joinCategories = (categories: string[]) => {
     return categories.join(" / ");
@@ -26,6 +31,15 @@ const StoresInfo = (props: StoreInfoProps) => {
           fill
           style={{ objectFit: "contain" }}
         />
+        {isLogin && (
+          <div className={style.subscribeButton}>
+            <Subscribe
+              isFavorite={storeDetail.isFavorite}
+              storeId={storeDetail.id}
+              customerId={user.customerId}
+            />
+          </div>
+        )}
       </div>
       <article className={globalStyle.innerPadding}>
         <h2 className={style.title}>
@@ -37,7 +51,7 @@ const StoresInfo = (props: StoreInfoProps) => {
         <div className={style.reviewAndDistanceWrapper}>
           <Image src={"/icons/star.svg"} alt={"star"} width={16} height={16} />
           <span>
-            <strong>4.5</strong> (123) 1km
+            <strong>{storeDetail.ratingAverage}</strong> ({storeDetail.ratingCount})
           </span>
         </div>
         <StoreReview id={storeDetail.id.toString()} />
@@ -45,7 +59,8 @@ const StoresInfo = (props: StoreInfoProps) => {
           <div className={style.metaRow}>
             <p className={style.metaLabel}>픽업 시간</p>
             <strong className={classNames(style.metaValue, globalStyle.primaryColor)}>
-              {storeDetail.todayPickupStartTime} ~ {storeDetail.todayPickupEndTime}
+              {formatTimeToHourMinute(storeDetail.todayPickupStartTime)} ~{" "}
+              {formatTimeToHourMinute(storeDetail.todayPickupEndTime)}
             </strong>
           </div>
           <div className={style.metaRow}>
@@ -59,7 +74,16 @@ const StoresInfo = (props: StoreInfoProps) => {
           <div className={style.metaRow}>
             <p className={style.metaLabel}>주소</p>
             <p className={style.metaValue}>{storeDetail.address.roadNameAddress}</p>
-            <Link href={"#"} style={{ textDecoration: "underline" }}>
+            <Link
+              href={{
+                pathname: "/locations/store-location",
+                query: {
+                  lat: storeDetail.address.coordinate.latitude,
+                  lng: storeDetail.address.coordinate.longitude,
+                },
+              }}
+              style={{ textDecoration: "underline" }}
+            >
               지도보기
             </Link>
           </div>

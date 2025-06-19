@@ -27,4 +27,5 @@ export interface SubscribeSuccess {
   id: number;
   userId: number;
   storeId: number;
+  subscribed: boolean;
 }

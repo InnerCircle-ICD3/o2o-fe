@@ -10,16 +10,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { useOrderModalStore } from "@/stores/orderModalStore";
-import { useOwnerStore } from "@/stores/ownerInfoStore";
 import { useState } from "react";
 
 export default function OrderAlertModal() {
   const { isOpen, orderData, closeModal } = useOrderModalStore();
-  const { owner } = useOwnerStore();
-  const { data: storeData } = useGetOwnerStore(owner?.userId);
+  const { data: storeData } = useGetOwnerStore();
   const { showToast } = useToastMessage();
   const [isLoading, setIsLoading] = useState(false);
 
