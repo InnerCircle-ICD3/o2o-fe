@@ -3,14 +3,14 @@
 import ErrorUi from "@/components/common/errorUi";
 import { BottomButton } from "@/components/ui/storesDetail/bottomButton";
 import StoresInfo from "@/components/ui/storesDetail/storesInfo";
-import useProduct from "@/hooks/api/useProduct";
+import { useStoreDetail } from "@/hooks/api/useStoreDetail";
 import { useParams } from "next/navigation";
 
 const Page = () => {
   const { id } = useParams();
-  const { data, isLoading, isError } = useProduct(id as string);
+  const { storeDetail, isPending, isError } = useStoreDetail(id as string);
 
-  if (isLoading) {
+  if (isPending || !storeDetail) {
     return null;
   }
 
@@ -24,12 +24,10 @@ const Page = () => {
   }
 
   return (
-    data?.success && (
-      <>
-        <StoresInfo storesDetail={data.data} />
-        <BottomButton buttonText="잇고백 상세보기" href={`/stores/${data.data.id}/products`} />
-      </>
-    )
+    <>
+      <StoresInfo storeDetail={storeDetail} />
+      <BottomButton buttonText="잇고백 상세보기" href={`/stores/${storeDetail.id}/products`} />
+    </>
   );
 };
 

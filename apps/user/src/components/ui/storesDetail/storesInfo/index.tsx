@@ -10,11 +10,11 @@ import { StoreReview } from "../storeReview";
 import * as style from "./storesInfo.css";
 
 interface StoreInfoProps {
-  storesDetail: StoresDetail;
+  storeDetail: StoresDetail;
 }
 
 const StoresInfo = (props: StoreInfoProps) => {
-  const { storesDetail } = props;
+  const { storeDetail } = props;
   const { user } = userInfoStore();
   const isLogin = !!user;
 
@@ -26,7 +26,7 @@ const StoresInfo = (props: StoreInfoProps) => {
     <>
       <div className={style.thumbnail}>
         <Image
-          src={storesDetail.mainImageUrl ?? "/images/banner.png"}
+          src={storeDetail.mainImageUrl ?? "/images/banner.png"}
           alt={"store thumbnail"}
           fill
           style={{ objectFit: "contain" }}
@@ -34,8 +34,8 @@ const StoresInfo = (props: StoreInfoProps) => {
         {isLogin && (
           <div className={style.subscribeButton}>
             <Subscribe
-              isFavorite={storesDetail.isFavorite}
-              storeId={storesDetail.id}
+              isFavorite={storeDetail.isFavorite}
+              storeId={storeDetail.id}
               customerId={user.customerId}
             />
           </div>
@@ -43,43 +43,43 @@ const StoresInfo = (props: StoreInfoProps) => {
       </div>
       <article className={globalStyle.innerPadding}>
         <h2 className={style.title}>
-          <span>{storesDetail.name}</span>
+          <span>{storeDetail.name}</span>
           <span className={style.category}>
-            {joinCategories([...storesDetail.foodCategory, ...storesDetail.storeCategory])}
+            {joinCategories([...storeDetail.foodCategory, ...storeDetail.storeCategory])}
           </span>
         </h2>
         <div className={style.reviewAndDistanceWrapper}>
           <Image src={"/icons/star.svg"} alt={"star"} width={16} height={16} />
           <span>
-            <strong>{storesDetail.ratingAverage}</strong> ({storesDetail.ratingCount})
+            <strong>{storeDetail.ratingAverage}</strong> ({storeDetail.ratingCount})
           </span>
         </div>
-        <StoreReview id={storesDetail.id.toString()} />
+        <StoreReview id={storeDetail.id.toString()} />
         <div className={classNames(style.metaSection, globalStyle.grayBackground)}>
           <div className={style.metaRow}>
             <p className={style.metaLabel}>픽업 시간</p>
             <strong className={classNames(style.metaValue, globalStyle.primaryColor)}>
-              {formatTimeToHourMinute(storesDetail.todayPickupStartTime)} ~{" "}
-              {formatTimeToHourMinute(storesDetail.todayPickupEndTime)}
+              {formatTimeToHourMinute(storeDetail.todayPickupStartTime)} ~{" "}
+              {formatTimeToHourMinute(storeDetail.todayPickupEndTime)}
             </strong>
           </div>
           <div className={style.metaRow}>
             <p className={style.metaLabel}>매장 소개</p>
             <span className={classNames(style.metaValue, style.description)}>
-              {storesDetail.description}
+              {storeDetail.description}
             </span>
           </div>
         </div>
         <div className={classNames(style.metaSection, globalStyle.grayBackground)}>
           <div className={style.metaRow}>
             <p className={style.metaLabel}>주소</p>
-            <p className={style.metaValue}>{storesDetail.address.roadNameAddress}</p>
+            <p className={style.metaValue}>{storeDetail.address.roadNameAddress}</p>
             <Link
               href={{
                 pathname: "/locations/store-location",
                 query: {
-                  lat: storesDetail.address.coordinate.latitude,
-                  lng: storesDetail.address.coordinate.longitude,
+                  lat: storeDetail.address.coordinate.latitude,
+                  lng: storeDetail.address.coordinate.longitude,
                 },
               }}
               style={{ textDecoration: "underline" }}
@@ -90,7 +90,7 @@ const StoresInfo = (props: StoreInfoProps) => {
 
           <div className={style.metaRow}>
             <p className={style.metaLabel}>연락처</p>
-            <p className={style.metaValue}>{storesDetail.contact}</p>
+            <p className={style.metaValue}>{storeDetail.contact}</p>
           </div>
 
           <div className={style.metaRow}>

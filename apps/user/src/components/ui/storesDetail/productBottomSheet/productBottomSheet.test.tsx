@@ -8,6 +8,10 @@ vi.mock("@/hooks/api/usePostOrder", () => ({
   default: () => mockSubmit,
 }));
 
+// Date.now를 mock해서 일관된 테스트를 위해 고정된 시간 사용
+const mockNow = new Date("2024-01-01T12:00:00Z").getTime();
+vi.spyOn(Date, "now").mockReturnValue(mockNow);
+
 const mockProducts: Product[] = [
   {
     id: "1L",
@@ -66,7 +70,11 @@ describe("ProductBottomSheet Test", () => {
     const orderButton = screen.getByRole("button", { name: "주문하기" });
     fireEvent.click(orderButton);
 
+    // 현재 시간 + 30분으로 설정된 pickupDateTime 포함하여 검증
+    const expectedPickupDateTime = new Date(mockNow + 30 * 60 * 1000).toISOString();
+
     expect(mockSubmit).toHaveBeenCalledWith({
+      pickupDateTime: expectedPickupDateTime,
       storeId: "1L",
       orderItems: [
         {
