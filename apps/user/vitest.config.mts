@@ -8,7 +8,7 @@ export default mergeConfig(
     plugins: [vanillaExtractPlugin()],
     test: {
       coverage: {
-        exclude: ["src/app/(not-used)/**", "src/middleware.ts", "src/lib/**"],
+        exclude: ["src/app/(not-used)/**", "src/lib/**"],
       },
     },
   }),

@@ -1,3 +1,4 @@
+import ErrorUi from "@/components/common/errorUi";
 import InfoDetail from "@/components/ui/mypage/infoDetail";
 
 const mockDetail = [
@@ -54,6 +55,10 @@ const Page = async (props: PageProps) => {
   const { id } = await params;
 
   const notice = mockDetail.find((item) => item.id === Number(id));
+
+  if (!notice) {
+    return <ErrorUi message={"문제가 생겼나봐요! 다시 시도해주세요."} />;
+  }
 
   return <InfoDetail infoDetail={notice} />;
 };
