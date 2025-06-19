@@ -83,6 +83,7 @@ declare namespace kakao {
       constructor(options: MarkerClustererOptions);
       addMarkers(markers: Marker[]): void;
       clear(): void;
+      removeMarkers(markers: Marker[]): void;
     }
 
     /* biome-ignore lint/suspicious/noShadowRestrictedNames: false */

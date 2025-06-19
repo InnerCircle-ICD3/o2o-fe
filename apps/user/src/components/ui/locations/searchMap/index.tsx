@@ -78,7 +78,7 @@ export default function SearchMap() {
       const movedDistance = calculateMovedDistance(center, location);
       const level = map.getLevel();
 
-      setShouldShowRefetch(movedDistance > 0.02 && level <= 3);
+      setShouldShowRefetch(movedDistance > 0.001 && level <= 2);
 
       if (boxRef.current && !isInBox(center, boxRef.current)) {
         await handleRefetch("REFETCH");
@@ -142,13 +142,14 @@ export default function SearchMap() {
     if (!map || !clusterer) return;
 
     // 기존 마커 제거
-    for (const marker of storeMarkerMap.current.values()) {
+    const oldMarkers = Array.from(storeMarkerMap.current.values());
+    for (const marker of oldMarkers) {
       marker.setMap(null);
     }
-    storeMarkerMap.current.clear();
+    clusterer.removeMarkers(oldMarkers);
 
-    // 클러스터 제거
-    clusterer.clear();
+    storeMarkerMap.current.clear();
+    clusterer.clear(); // 클러스터 정보 초기화
 
     const center = map.getCenter();
     const result =
