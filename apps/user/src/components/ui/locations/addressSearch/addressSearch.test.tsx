@@ -1,29 +1,47 @@
 import { searchAddress } from "@/utils/locations";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
+import { type Mock, vi } from "vitest";
 import AddressSearch from ".";
 
-vi.mock("@/hooks/useGeolocation");
-vi.mock("@/hooks/useKakaoLoader");
+const mockPush = vi.fn();
+const mockSetSelectedAddress = vi.fn();
+
+vi.mock("@/hooks/useGeolocation", () => ({
+  useGeolocation: () => ({
+    lat: 37.123456,
+    lng: 127.123456,
+  }),
+}));
+vi.mock("@/hooks/useKakaoLoader", () => ({
+  useKakaoLoader: () => true,
+}));
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: vi.fn(),
+    push: mockPush,
   }),
   useSearchParams: () => ({
-    get: vi.fn().mockReturnValue("HOME"),
+    get: () => "HOME",
   }),
 }));
-vi.mock("@/utils/locations", () => ({
-  searchAddress: vi.fn().mockResolvedValue([
-    {
-      address: "서울 강남구 강남대로",
-      location: {
-        lat: 37.123456,
-        lng: 127.123456,
-      },
-    },
-  ]),
+vi.mock("@/stores/selectedAddressStore", () => ({
+  useSelectedAddressStore: (
+    selector: (store: { setSelectedAddress: typeof mockSetSelectedAddress }) => unknown,
+  ) => selector({ setSelectedAddress: mockSetSelectedAddress }),
 }));
+vi.mock("@/utils/locations", () => {
+  const mockLocation = {
+    lat: 37.123456,
+    lng: 127.123456,
+  };
+  const mockAddressResult = {
+    address: "서울 강남구 강남대로",
+    location: mockLocation,
+  };
+  return {
+    searchAddress: vi.fn().mockResolvedValue([mockAddressResult]),
+    getFullAddressByCoords: vi.fn().mockReturnValue("서울 강남구 강남대로 123"),
+  };
+});
 
 describe("AddressSearch", () => {
   beforeEach(() => {
@@ -62,7 +80,32 @@ describe("AddressSearch", () => {
     expect(resultItem).toBeInTheDocument();
   });
 
-  it("검색 결과를 클릭하면 주소를 선택하고 홈 주소로 이동한다.", () => {});
+  it("검색 결과를 클릭하면 주소를 선택하고 홈 주소로 이동한다.", async () => {
+    render(<AddressSearch />);
 
-  it("현재 위치로 등록을 클릭하면 현재 위치 좌표를 선택하고 홈 주소로 이동한다.", () => {});
+    const input = screen.getByPlaceholderText("동네 이름을 검색하세요");
+    await fireEvent.change(input, { target: { value: "서울" } });
+
+    const resultItem = await screen.findByText("서울 강남구 강남대로");
+    await fireEvent.click(resultItem);
+
+    await waitFor(() => {
+      expect(mockSetSelectedAddress).toHaveBeenCalledWith("서울 강남구 강남대로 123", "HOME");
+      expect(mockPush).toHaveBeenCalledWith("/locations/my-location?address_type=HOME");
+    });
+  });
+
+  it("현재 위치로 등록을 클릭하면 현재 위치 좌표를 선택하고 홈 주소로 이동한다.", async () => {
+    (searchAddress as Mock).mockResolvedValueOnce([]);
+
+    render(<AddressSearch />);
+
+    const currentLocationButton = screen.getByText("현재 위치로 등록");
+    await fireEvent.click(currentLocationButton);
+
+    await waitFor(() => {
+      expect(mockSetSelectedAddress).toHaveBeenCalledWith("서울 강남구 강남대로 123", "HOME");
+      expect(mockPush).toHaveBeenCalledWith("/locations/my-location?address_type=HOME");
+    });
+  });
 });
