@@ -5,12 +5,17 @@ import VirtualScroll, { VirtualItem } from "@/components/common/virtualScroll";
 import { StoreCard } from "@/components/ui/storeList/storeCard";
 import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import { useStoreList } from "@/hooks/api/useStoreList";
+import useSubscribeAll from "@/hooks/api/useSubscribeAll";
+import { userInfoStore } from "@/stores/userInfoStore";
 import type { StoreList } from "@/types/apis/stores.type";
 import Categories from "../categories";
 import * as style from "./storeListContainer.css";
 
 const StoreListContainer = () => {
+  const { user } = userInfoStore();
+  const isLogin = !!user;
   const { stores, isLoading, fetchNextPage, isError, error } = useStoreList();
+  const subscribes = useSubscribeAll(isLogin);
 
   if (isError) {
     return <ErrorUi message={error?.message} />;
@@ -55,7 +60,7 @@ const StoreListContainer = () => {
           </VirtualItem>
           {list.map((store: StoreList) => (
             <VirtualItem key={store.storeId} name={"store-item"}>
-              <StoreCard storesDetail={store} />
+              <StoreCard storesDetail={store} isFavorite={subscribes.includes(store.storeId)} />
             </VirtualItem>
           ))}
         </VirtualScroll>

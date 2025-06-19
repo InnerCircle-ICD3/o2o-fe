@@ -11,4 +11,4 @@ describe("address-search page", () => {
     render(<Page />);
     expect(screen.getByText("주소 검색")).toBeInTheDocument();
   });
-})
+});

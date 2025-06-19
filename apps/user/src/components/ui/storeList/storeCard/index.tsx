@@ -12,9 +12,10 @@ import * as style from "./storeCard.css";
 
 interface StoreCardProps {
   storesDetail: StoreList;
+  isFavorite: boolean;
 }
 
-export const StoreCard = ({ storesDetail }: StoreCardProps) => {
+export const StoreCard = ({ storesDetail, isFavorite }: StoreCardProps) => {
   const router = useRouter();
 
   const { user } = userInfoStore();
@@ -34,7 +35,7 @@ export const StoreCard = ({ storesDetail }: StoreCardProps) => {
       {isLogin && (
         <div className={style.subscribeButton}>
           <Subscribe
-            isFavorite={storesDetail.isFavorite}
+            isFavorite={isFavorite}
             storeId={storesDetail.storeId}
             customerId={user.customerId}
           />

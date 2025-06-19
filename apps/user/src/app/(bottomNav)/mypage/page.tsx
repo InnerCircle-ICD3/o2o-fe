@@ -3,7 +3,7 @@
 import LoginLink from "@/components/ui/mypage/loginLink";
 import useGetCustomer from "@/hooks/api/useGetCustomer";
 import usePostLogout from "@/hooks/api/usePostLogout";
-import { useToastStore } from "@/stores/toastStore";
+import { useToastStore } from "@/stores/useToastStore";
 import { userInfoStore } from "@/stores/userInfoStore";
 import Image from "next/image";
 import Link from "next/link";

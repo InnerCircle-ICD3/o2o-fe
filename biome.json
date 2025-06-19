@@ -25,7 +25,8 @@
       "correctness": {
         "noUnusedVariables": "error",
         "noUnusedImports": "error",
-        "useJsxKeyInIterable": "error"
+        "useJsxKeyInIterable": "error",
+        "useExhaustiveDependencies": "off"
       },
       "suspicious": {
         "noExplicitAny": "error"

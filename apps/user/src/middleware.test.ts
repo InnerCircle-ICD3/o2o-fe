@@ -6,7 +6,7 @@ function createRequest(path: string, token?: string) {
   const url = `http://localhost:3000${path}`;
   const headers: Record<string, string> = {};
   if (token) {
-    headers["cookie"] = `access_token=${token}`;
+    headers.cookie = `access_token=${token}`;
   }
   return new NextRequest(url, { headers });
 }
