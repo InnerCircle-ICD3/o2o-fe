@@ -51,9 +51,7 @@ const StoresInfo = (props: StoreInfoProps) => {
       <article className={globalStyle.innerPadding}>
         <h2 className={style.title}>
           <span className={style.storeName}>{storeDetail.name}</span>
-          <span className={style.category}>
-            {joinCategories([...storeDetail.foodCategory, ...storeDetail.storeCategory])}
-          </span>
+          <span className={style.category}>{joinCategories([...storeDetail.foodCategory])}</span>
         </h2>
         <div className={style.reviewAndDistanceWrapper}>
           <Image src={"/icons/star.svg"} alt={"star"} width={16} height={16} />
