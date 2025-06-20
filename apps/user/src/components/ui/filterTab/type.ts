@@ -20,4 +20,4 @@ export type Location = {
 
 export type FoodType = (typeof foodTypeList)[number]["value"];
 
-export type TabKey = "reservation" | "foodType" | "pickupTime";
+export type TabKey = "reservation" | "foodType" | "pickupTime" | "reset";

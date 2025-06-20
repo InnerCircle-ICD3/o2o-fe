@@ -12,6 +12,7 @@ interface FilterTabState {
   onSelectedPickupTime: (time: PickupTime) => void;
   onResetPickupTime: () => void;
   onToggleReservable: () => void;
+  onResetReservable: () => void;
   getPickupTimeString: () => string;
   onLocationChange: (location: string) => void;
   onResetLocation: () => void;
@@ -41,6 +42,7 @@ export const useFilterTab = create<FilterTabState>((set, get) => {
     location: undefined,
     search: "",
     onToggleReservable: () => set((state) => ({ reservable: !state.reservable })),
+    onResetReservable: () => set({ reservable: false }),
     onSelectedFoodType: (foodType?: FoodType) => {
       set({
         selectedFoodType: foodType,
