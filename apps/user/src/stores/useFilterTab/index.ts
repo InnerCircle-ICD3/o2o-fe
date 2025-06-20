@@ -17,6 +17,7 @@ interface FilterTabState {
   onLocationChange: (location: string) => void;
   onResetLocation: () => void;
   onSearchChange: (search: string) => void;
+  onResetSearch: () => void;
 }
 
 export const useFilterTab = create<FilterTabState>((set, get) => {
@@ -66,6 +67,9 @@ export const useFilterTab = create<FilterTabState>((set, get) => {
     },
     onSearchChange: (search: string) => {
       set({ search });
+    },
+    onResetSearch: () => {
+      set({ search: "" });
     },
   };
 });
