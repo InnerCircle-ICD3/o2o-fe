@@ -44,7 +44,7 @@ export const StoreCard = ({ storesDetail, isFavorite }: StoreCardProps) => {
 
       <button type={"button"} onClick={handleClick}>
         <Image
-          src={"/images/thumb.png"}
+          src={storesDetail.storeImage || "/images/thumb.png"}
           alt={""}
           className={style.image}
           width={240}

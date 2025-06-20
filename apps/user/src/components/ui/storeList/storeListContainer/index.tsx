@@ -87,7 +87,7 @@ const StoreListContainer = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  aria-label="당겨서 새로고침"
+                  aria-label="로딩"
                   role="img"
                 >
                   <path

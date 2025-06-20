@@ -47,7 +47,7 @@ const Page = () => {
               height: 48,
             },
             "subscribe-item": {
-              aspectRatio: 388 / 175,
+              aspectRatio: 388 / 181,
             },
           }}
           onScrollEnd={fetchNextPage}
