@@ -1,4 +1,4 @@
-import useSubscribe from "@/hooks/api/useSubsctibe";
+import useSubscribe from "@/hooks/api/useSubscribe";
 import Image from "next/image";
 import * as style from "./subscribe.css";
 

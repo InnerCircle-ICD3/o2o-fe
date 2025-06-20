@@ -3,9 +3,9 @@ import Button from "@/components/common/button";
 import { useFilterTab } from "@/stores/useFilterTab";
 import { padTwoDigits } from "@/utils/format";
 import { useRef, useState } from "react";
-import { pickupTimeDefaultValue } from "./constant";
-import * as styles from "./filterTab.css";
-import type { HourType, MinuteType, PickupTime } from "./type";
+import { pickupTimeDefaultValue } from "../constant";
+import type { HourType, MinuteType, PickupTime } from "../type";
+import * as styles from "./pickUpTimeFilter.css";
 
 interface PickUpTimeFilterProps {
   isOpen: boolean;
