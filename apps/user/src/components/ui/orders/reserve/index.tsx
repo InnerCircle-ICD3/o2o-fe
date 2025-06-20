@@ -2,7 +2,7 @@
 
 import { readyToOrder } from "@/apis/ssr/orders";
 import Button from "@/components/common/button";
-import { useToastStore } from "@/stores/toastStore";
+import { useToastStore } from "@/stores/useToastStore";
 import * as globalStyle from "@/styles/global.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

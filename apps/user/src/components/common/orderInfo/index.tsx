@@ -1,7 +1,7 @@
 import { ORDER_STATUS } from "@/constants/my-orders";
 import { useStoreDetail } from "@/hooks/api/useStoreDetail";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import { useToastStore } from "@/stores/toastStore";
+import { useToastStore } from "@/stores/useToastStore";
 import * as globalStyle from "@/styles/global.css";
 import type { OrderDetail } from "@/types/apis/order.type";
 import { formatCurrency, formatHourTo12HourText } from "@/utils/format";
