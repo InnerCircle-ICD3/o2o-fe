@@ -36,7 +36,6 @@ export default function page() {
     fetchReviews();
   }, []);
 
-  // 등록된 매장이 없는 경우 주소로 접근을 위해서 추가했습니다.
   if (!owner?.storeOwnerId) {
     return <RegisterLink />;
   }

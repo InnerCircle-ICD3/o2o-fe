@@ -10,7 +10,7 @@ import useDeleteCustomerAddress from "@/hooks/api/useDeleteCustomerAddress";
 import useGetCustomerAddress from "@/hooks/api/useGetCustomerAddress";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { useSelectedAddressStore } from "@/stores/selectedAddressStore";
-import { useToastStore } from "@/stores/toastStore";
+import { useToastStore } from "@/stores/useToastStore";
 import { userInfoStore } from "@/stores/userInfoStore";
 import { createUserMarker, renderMyLocationCircle } from "@/utils/locations";
 import { useRouter, useSearchParams } from "next/navigation";

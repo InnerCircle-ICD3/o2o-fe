@@ -2,7 +2,7 @@
 
 import { patchCustomer as defaultPatchCustomer } from "@/apis/ssr/customers";
 import Button from "@/components/common/button";
-import { useToastStore } from "@/stores/toastStore";
+import { useToastStore } from "@/stores/useToastStore";
 import { userInfoStore as defaultUseUserStore } from "@/stores/userInfoStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

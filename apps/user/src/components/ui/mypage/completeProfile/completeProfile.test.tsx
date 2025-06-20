@@ -10,7 +10,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 const mockShowToast = vi.fn();
-vi.mock("@/stores/toastStore", () => ({
+vi.mock("@/stores/useToastStore", () => ({
   useToastStore: () => ({
     showToast: mockShowToast,
   }),
