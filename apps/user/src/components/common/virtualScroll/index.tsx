@@ -85,7 +85,10 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
       <div ref={containerRef} className={containerStyle}>
         <div style={{ height: totalHeight + 20 }}>
           {containerSize.height !== 0 && containerSize.width !== 0 && (
-            <div style={{ transform: `translateY(${translateY}px)` }}>{visible}</div>
+            <div style={{ transform: `translateY(${translateY}px)` }}>
+              {visible}
+              <div className={style.padding} />
+            </div>
           )}
         </div>
       </div>

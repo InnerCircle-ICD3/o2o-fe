@@ -14,8 +14,14 @@ import * as style from "./storeListContainer.css";
 const StoreListContainer = () => {
   const { user } = userInfoStore();
   const isLogin = !!user;
-  const { stores, isLoading, fetchNextPage, isError, hasNextPage, error } = useStoreList();
+  const { stores, isLoading, fetchNextPage, isError, isFetchingNextPage, hasNextPage, error } =
+    useStoreList();
   const subscribes = useSubscribeAll(isLogin);
+
+  const handleNextPage = () => {
+    if (isFetchingNextPage || !hasNextPage) return;
+    fetchNextPage();
+  };
 
   if (isError) {
     return <ErrorUi message={error?.message} />;
@@ -30,12 +36,18 @@ const StoreListContainer = () => {
           <SkeletonStoreCard key={`skeleton-${i}-${Date.now()}`} />
         ))
       ) : list.length === 0 ? (
-        <ErrorUi
-          type={"home"}
-          message={`이 근처에는 아직 등록된 가게가 없어요.
+        <div className={style.errorWrapper}>
+          <div className={style.error}>
+            <Categories />
+          </div>
+
+          <ErrorUi
+            type={"home"}
+            message={`이 근처에는 아직 등록된 가게가 없어요.
 우리, 좀 더 유명해져야 할 이유가 생겼네요.`}
-          isButton={false}
-        />
+            isButton={false}
+          />
+        </div>
       ) : (
         <VirtualScroll
           overscan={3}
@@ -53,7 +65,7 @@ const StoreListContainer = () => {
               height: 50,
             },
           }}
-          onScrollEnd={fetchNextPage}
+          onScrollEnd={handleNextPage}
         >
           <VirtualItem name={"store-category"}>
             <Categories />
