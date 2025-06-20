@@ -24,7 +24,13 @@ export const title = style({
   fontWeight: 700,
 });
 
+export const storeName = style({
+  width: "fit-content",
+});
+
 export const category = style({
+  flex: 1,
+
   color: "#6B7684",
   paddingLeft: 8,
   fontSize: 16,

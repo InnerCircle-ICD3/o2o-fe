@@ -36,7 +36,7 @@ const StoresInfo = (props: StoreInfoProps) => {
           src={storeDetail.mainImageUrl ?? "/images/banner.png"}
           alt={"store thumbnail"}
           fill
-          style={{ objectFit: "contain" }}
+          style={{ objectFit: "cover" }}
         />
         {isLogin && (
           <div className={style.subscribeButton}>
@@ -50,10 +50,8 @@ const StoresInfo = (props: StoreInfoProps) => {
       </div>
       <article className={globalStyle.innerPadding}>
         <h2 className={style.title}>
-          <span>{storeDetail.name}</span>
-          <span className={style.category}>
-            {joinCategories([...storeDetail.foodCategory, ...storeDetail.storeCategory])}
-          </span>
+          <span className={style.storeName}>{storeDetail.name}</span>
+          <span className={style.category}>{joinCategories([...storeDetail.foodCategory])}</span>
         </h2>
         <div className={style.reviewAndDistanceWrapper}>
           <Image src={"/icons/star.svg"} alt={"star"} width={16} height={16} />

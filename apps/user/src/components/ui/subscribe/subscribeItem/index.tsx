@@ -1,9 +1,6 @@
 import StatusLabel from "@/components/common/statusLabel";
-import * as globalStyle from "@/styles/global.css";
 import type { SubscribeDetail } from "@/types/apis/subscribe.type";
-import { formatCurrency } from "@/utils/format";
 import generateProductStatus from "@/utils/productStatus";
-import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import * as style from "./subscribeItem.css";
@@ -31,7 +28,7 @@ const SubscribeItem = (props: SubscribeItemProps) => {
         <div className={style.infoBox}>
           <Image
             src={subscribe.mainImageUrl || "/images/thumb.png"}
-            alt="#"
+            alt=""
             width={90}
             height={90}
             className={style.image}
@@ -40,12 +37,14 @@ const SubscribeItem = (props: SubscribeItemProps) => {
           <div className={style.info}>
             <p className={style.category}>{subscribe.foodCategory.join(" | ")}</p>
             <p className={style.description}>{subscribe.description}</p>
-            <div className={style.prices}>
-              <p className={style.original}>{formatCurrency(subscribe.originalPrice)}</p>
-              <p className={classNames(style.discount, globalStyle.primaryColor)}>
-                {formatCurrency(subscribe.discountedPrice)}~
+            {/* <div className={style.prices}>
+              <p className={style.original}>
+                {subscribe.originalPrice !== 0 && formatCurrency(subscribe.originalPrice)}
               </p>
-            </div>
+              <p className={classNames(style.discount, globalStyle.primaryColor)}>
+                {subscribe.discountedPrice !== 0 && `${formatCurrency(subscribe.discountedPrice)}~`}
+              </p>
+            </div> */}
           </div>
         </div>
       </Link>

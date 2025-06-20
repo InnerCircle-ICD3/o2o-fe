@@ -38,14 +38,14 @@ const OrderInfo = (props: OrderInfoProps) => {
   useEffect(() => {
     // 결제 취소 상태인 경우 토스트 메시지 표시 및 매장 상세 페이지로 이동
     if (orderDetail.status === ORDER_STATUS.CANCELED) {
-      showToast("결제가 취소되었습니다.");
+      showToast("주문이 취소되었습니다.");
 
-      // 일정 시간 후 매장 상세 페이지로 이동
-      const timer = setTimeout(() => {
-        push(`/stores/${storeId}`);
-      }, 2000); // 2초 후 이동
+      //   // 일정 시간 후 매장 상세 페이지로 이동
+      //   const timer = setTimeout(() => {
+      //     push(`/stores/${storeId}`);
+      //   }, 2000); // 2초 후 이동
 
-      return () => clearTimeout(timer);
+      //   return () => clearTimeout(timer);
     }
   }, [orderDetail.status, showToast, push, storeId]);
 

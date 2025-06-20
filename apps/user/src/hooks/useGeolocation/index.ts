@@ -22,9 +22,10 @@ function isValidCoordinates(coords: Coordinate | undefined | null): coords is Co
 
 export const useGeolocation = (): Coordinate => {
   const { updateLocations, getLocations } = useUserLocation();
+  const location = getLocations();
 
   useEffect(() => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation || (location.lat !== 0 && location.lng !== 0)) return;
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -38,8 +39,7 @@ export const useGeolocation = (): Coordinate => {
       },
       { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 },
     );
-  }, []);
+  }, [location]);
 
-  const location = getLocations();
   return isValidCoordinates(location) ? location : FALLBACK_COORDINATES;
 };

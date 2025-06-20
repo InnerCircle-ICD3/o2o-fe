@@ -20,8 +20,6 @@ describe("SubscribeItem", () => {
     expect(screen.getByText("테스트 매장")).toBeInTheDocument();
     expect(screen.getByText("한식 | 분식")).toBeInTheDocument();
     expect(screen.getByText("테스트 설명입니다.")).toBeInTheDocument();
-    expect(screen.getByText("10,000₩")).toBeInTheDocument();
-    expect(screen.getByText("8,000₩~")).toBeInTheDocument();
   });
 
   it("Link가 매장 상세 페이지로 연결된다", () => {
