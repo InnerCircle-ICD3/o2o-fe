@@ -8,7 +8,7 @@ const rotate = keyframes({
 export const container = style({
   position: "relative",
   width: "100%",
-  minHeight: "100%",
+  height: "100%",
 });
 
 export const pullIndicator = style({

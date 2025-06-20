@@ -1,6 +1,6 @@
-import { renderHook, act } from "@testing-library/react";
-import { useToastMessage } from ".";
+import { act, renderHook } from "@testing-library/react";
 import { vi } from "vitest";
+import { useToastMessage } from ".";
 
 describe("useToastMessage", () => {
   beforeEach(() => {

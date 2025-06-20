@@ -38,7 +38,7 @@ export const useGeolocation = (): Coordinate => {
       },
       { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 },
     );
-  }, [updateLocations]);
+  }, []);
 
   const location = getLocations();
   return isValidCoordinates(location) ? location : FALLBACK_COORDINATES;

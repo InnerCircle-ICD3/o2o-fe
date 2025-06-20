@@ -167,7 +167,11 @@ export default function MyLocation() {
             clearSelectedAddress={selectedAddressStore.clearSelectedAddress}
           />
 
-          <RangeSelector range={range} setRange={setRange} />
+          <RangeSelector
+            range={range}
+            setRange={setRange}
+            isDisabled={!selectedAddressStore.selectedAddress[ADDRESS_TYPES[selectedIndex]]}
+          />
 
           <div className={styles.buttonWrapper}>
             <Button

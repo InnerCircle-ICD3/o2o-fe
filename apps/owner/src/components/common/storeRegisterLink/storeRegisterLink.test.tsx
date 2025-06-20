@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import StoreRegisterLink from ".";
 
 describe("StoreRegisterLink", () => {
@@ -10,9 +10,9 @@ describe("StoreRegisterLink", () => {
 
     // next/link는 a 태그로 렌더링되므로 'link' role 이용
     const registerLink = screen.getByRole("link", { name: "매장 등록하기" });
-    
+
     expect(registerLink).toHaveAttribute("href", "/store/register");
-    
+
     const buttonInsideLink = screen.getByRole("button", { name: "매장 등록하기" });
     expect(buttonInsideLink).toBeInTheDocument();
   });

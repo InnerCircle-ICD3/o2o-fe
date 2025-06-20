@@ -18,7 +18,7 @@ const Page = () => {
     isError,
     isLoading,
     fetchNextPage,
-  } = useSubscribeList(1, isLogin);
+  } = useSubscribeList(user?.customerId);
 
   if (!isLogin) {
     return <RequireLogin text="찜" />;
@@ -47,7 +47,7 @@ const Page = () => {
               height: 48,
             },
             "subscribe-item": {
-              aspectRatio: 388 / 190,
+              aspectRatio: 388 / 175,
             },
           }}
           onScrollEnd={fetchNextPage}

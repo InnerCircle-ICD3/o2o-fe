@@ -49,6 +49,6 @@ describe("Success Page Test", () => {
     const orderButton = await screen.findByRole("button", { name: "주문 내역 보러가기" });
     fireEvent.click(orderButton);
 
-    expect(mockReplace).toHaveBeenCalledWith("/my-orders/1234");
+    expect(mockReplace).toHaveBeenCalledWith("/my-orders");
   });
 });

@@ -6,6 +6,7 @@ import { formatTimeToHourMinute } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
+import { foodTypeList } from "../../filterTab/constant";
 import { StoreReview } from "../storeReview";
 import * as style from "./storesInfo.css";
 
@@ -20,6 +21,12 @@ const StoresInfo = (props: StoreInfoProps) => {
 
   const joinCategories = (categories: string[]) => {
     return categories.join(" / ");
+  };
+
+  const storeCategory = foodTypeList.find(
+    (category) => category.value === storeDetail.storeCategory[0],
+  ) || {
+    label: "기타",
   };
 
   return (
@@ -95,7 +102,7 @@ const StoresInfo = (props: StoreInfoProps) => {
 
           <div className={style.metaRow}>
             <p className={style.metaLabel}>카테고리</p>
-            <p className={style.metaValue}>김밥</p>
+            <p className={style.metaValue}>{storeCategory.label}</p>
           </div>
         </div>
       </article>
