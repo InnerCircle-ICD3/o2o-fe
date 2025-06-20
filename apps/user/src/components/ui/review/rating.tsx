@@ -29,9 +29,6 @@ export default function Rating({ value, onChange, error }: RatingProps) {
             onMouseLeave={() => setHoverRating(0)}
           >
             <Image
-              // src={`/icons/star-${
-              //   rating <= displayRating ? "filled" : "empty"
-              // }.svg`}
               src={`/icons/star${rating <= displayRating ? "" : "-empty"}.svg`}
               alt={`${rating}점`}
               width={32}
