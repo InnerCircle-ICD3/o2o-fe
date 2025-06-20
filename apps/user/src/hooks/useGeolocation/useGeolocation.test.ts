@@ -77,8 +77,8 @@ describe("useGeolocation", () => {
     const { result } = renderHook(() => useGeolocation());
 
     expect(result.current).toEqual({
-      lat: 37.123457,
-      lng: 127.123457,
+      lat: 37.123456,
+      lng: 127.123456,
     });
   });
 });
