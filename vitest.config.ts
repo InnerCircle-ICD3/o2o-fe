@@ -26,6 +26,8 @@ export default defineConfig({
         "src/app/(bottomNav)/layout.tsx",
         "src/app/layout.tsx",
         "src/app/page.tsx",
+        "src/app/not-found.tsx",
+        "src/app/api/**"
       ],
     },
   },

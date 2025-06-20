@@ -5,12 +5,11 @@ import { ToastMessage } from ".";
 
 describe("ToastMessage", () => {
   beforeEach(() => {
-    vi.useFakeTimers(); // 모든 setTimeout을 대체
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    vi.clearAllTimers(); // 남은 타이머 정리
-    // 상태 초기화 (테스트 간 영향 방지)
+    vi.clearAllTimers();
     useToastStore.setState({
       message: "",
       isVisible: false,
