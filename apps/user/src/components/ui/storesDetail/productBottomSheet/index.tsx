@@ -1,3 +1,5 @@
+"use client";
+
 import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import usePostOrder from "@/hooks/api/usePostOrder";
@@ -27,6 +29,8 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
 
   const handleSubmit = () => {
     const orderBody = {
+      // TODO - 픽업타임 메인에서 설정되면 가지고 와야 할 듯 / 지금은 현재 시간 + 30분 으로 주문 생성함
+      pickupDateTime: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
       storeId: storesProducts[0].storeId,
       orderItems: selectedProducts.map((product) => ({
         productId: product.id,

@@ -1,6 +1,7 @@
 export const ORDER_STATUS = {
-  CONFIRMED: "pending",
-  READY: "pending",
-  DONE: "completed",
-  CANCELED: "canceled",
+  CREATED: "CREATED",
+  READY: "READY",
+  CONFIRMED: "CONFIRMED",
+  CANCELED: "CANCELED",
+  DONE: "DONE",
 } as const;

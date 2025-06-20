@@ -3,6 +3,7 @@ import StatusLabel from "@/components/common/statusLabel";
 import { ORDER_STATUS } from "@/constants/my-orders";
 import * as globalStyle from "@/styles/global.css";
 import type { OrderDetail } from "@/types/apis/order.type";
+import type { StatusLabelType } from "@/types/statusLabel.type";
 import { formatCurrency } from "@/utils/format";
 import classNames from "classnames";
 import Image from "next/image";
@@ -15,9 +16,27 @@ interface OrderItemProps {
 }
 
 const ORDER_STATUS_INFO = {
+  [ORDER_STATUS.CREATED]: "주문 생성",
   [ORDER_STATUS.READY]: "픽업 대기중",
+  [ORDER_STATUS.CONFIRMED]: "주문 확인됨",
   [ORDER_STATUS.DONE]: "픽업 완료",
   [ORDER_STATUS.CANCELED]: "주문 취소",
+};
+
+// 주문 상태를 StatusLabel 상태로 매핑
+const getStatusLabelType = (orderStatus: string): StatusLabelType => {
+  switch (orderStatus) {
+    case ORDER_STATUS.CREATED:
+    case ORDER_STATUS.READY:
+    case ORDER_STATUS.CONFIRMED:
+      return "pending";
+    case ORDER_STATUS.DONE:
+      return "completed";
+    case ORDER_STATUS.CANCELED:
+      return "canceled";
+    default:
+      return "pending";
+  }
 };
 
 const OrderItem = (props: OrderItemProps) => {
@@ -25,6 +44,7 @@ const OrderItem = (props: OrderItemProps) => {
   const router = useRouter();
 
   const orderStatus = ORDER_STATUS[order.status];
+  const statusLabelType = getStatusLabelType(orderStatus);
   const isCompleted = orderStatus === ORDER_STATUS.DONE;
 
   const [totalLength, totalPrice, originTotalPrice] = order.orderItems.reduce(
@@ -38,7 +58,7 @@ const OrderItem = (props: OrderItemProps) => {
         <div className={style.titleBox}>
           <h3 className={style.title}>잇고백 {totalLength}개 예약</h3>
 
-          <StatusLabel status={orderStatus}>{ORDER_STATUS_INFO[orderStatus]}</StatusLabel>
+          <StatusLabel status={statusLabelType}>{ORDER_STATUS_INFO[orderStatus]}</StatusLabel>
         </div>
         <div className={style.infoBox}>
           <Image

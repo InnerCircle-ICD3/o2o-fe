@@ -1,25 +1,7 @@
-import { apiClient } from "@/apis/client";
+import { createOrder } from "@/apis/ssr/orders";
+import type { CreateOrderRequest } from "@/types/apis/order.type";
 import { useRouter } from "next/navigation";
 import { useMutation } from "../utils/useMutation";
-
-interface OrderBody {
-  storeId: string;
-  orderItems: {
-    productId: string;
-    productName: string;
-    price: number;
-    quantity: number;
-  }[];
-}
-
-interface OrderResponse {
-  orderId: string;
-}
-
-const createOrder = (body: OrderBody, customerId = "1") => {
-  // todo customerId = 유저 정보에서 받아와야 함 (로그인 기능 완료되면 붙일 수 있을듯)
-  return apiClient.post<OrderResponse>(`orders?customerId=${customerId}`, body);
-};
 
 const usePostOrder = () => {
   const mutation = useMutation({
@@ -27,10 +9,10 @@ const usePostOrder = () => {
   });
   const router = useRouter();
 
-  const submitOrder = (body: OrderBody) => {
+  const submitOrder = (body: CreateOrderRequest) => {
     return mutation.mutate(body, {
       onSuccess: (res) => {
-        router.push(`/orders/${res.data.orderId}`);
+        router.push(`/orders/${res.data.id}`);
       },
       onError: (error) => {
         console.error("Order submission failed:", error);
