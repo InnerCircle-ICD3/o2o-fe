@@ -27,7 +27,13 @@ const Products = (props: ProductsProps) => {
           return (
             <li key={product.id} className={style.wrapper}>
               <div className={style.thumbnail}>
-                <Image src={product.image} alt={"상품 이미지"} width={88} height={105} />
+                <Image
+                  className={style.image}
+                  src={product.image}
+                  alt={"상품 이미지"}
+                  width={88}
+                  height={105}
+                />
 
                 {(uiStatus === "soldOut" || product.inventory.quantity === 0) && (
                   <div className={style.shadowLabel} />
