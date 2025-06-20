@@ -1,8 +1,8 @@
 import BottomSheet from "@/components/common/bottomSheet";
 import { useFilterTab } from "@/stores/useFilterTab";
-import { foodTypeList } from "./constant";
-import * as styles from "./filterTab.css";
-import type { FoodType } from "./type";
+import { foodTypeList } from "../constant";
+import type { FoodType } from "../type";
+import * as styles from "./foodTypeFilter.css";
 
 interface FoodTypeFilterProps {
   isOpen: boolean;

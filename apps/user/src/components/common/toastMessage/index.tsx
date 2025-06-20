@@ -1,6 +1,6 @@
 "use client";
 
-import { useToastStore } from "@/stores/toastStore";
+import { useToastStore } from "@/stores/useToastStore";
 import { useEffect, useState } from "react";
 import * as styles from "./toastMessage.css";
 

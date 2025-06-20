@@ -6,7 +6,6 @@ export const createStoreMarker = (
   onMarkerClick: (storeId: number) => void,
   isSelected = false,
 ) => {
-  console.log(store);
   const marker = new kakao.maps.Marker({
     position: new kakao.maps.LatLng(store.coordinate.latitude, store.coordinate.longitude),
     map,

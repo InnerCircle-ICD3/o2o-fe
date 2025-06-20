@@ -3,7 +3,7 @@
 import Button from "@/components/common/button";
 import * as styles from "@/components/ui/locations/myLocation/myLocation.css";
 import { ADDRESS_TYPES } from "@/constants/locations";
-import { useToastStore } from "@/stores/toastStore";
+import { useToastStore } from "@/stores/useToastStore";
 import type {
   AddressType,
   CustomerAddressRequest,

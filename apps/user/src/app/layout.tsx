@@ -32,7 +32,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body className={classNames(pretendard.variable, style.container)}>
         <Providers>
           <div className={style.main}>{children}</div>
