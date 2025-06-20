@@ -36,7 +36,7 @@ const StoresInfo = (props: StoreInfoProps) => {
           src={storeDetail.mainImageUrl ?? "/images/banner.png"}
           alt={"store thumbnail"}
           fill
-          style={{ objectFit: "contain" }}
+          style={{ objectFit: "cover" }}
         />
         {isLogin && (
           <div className={style.subscribeButton}>
