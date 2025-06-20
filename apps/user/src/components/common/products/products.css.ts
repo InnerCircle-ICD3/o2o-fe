@@ -16,6 +16,13 @@ export const wrapper = style({
   height: "150px",
 });
 
+export const image = style({
+  width: "100%",
+  height: "100%",
+
+  objectFit: "cover",
+});
+
 export const thumbnail = style({
   position: "relative",
 
