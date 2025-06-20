@@ -17,7 +17,7 @@ describe("Products Component", () => {
         name: "잇고백 S",
         description: "소형 잇고백입니다",
         foodType: ["과자", "음료"],
-        imageUrl: "/images/thumb.png",
+        image: "/images/thumb.png",
         inventory: {
           quantity: 5,
           stock: 10,
@@ -50,7 +50,7 @@ describe("Products Component", () => {
         name: "잇고백 L",
         description: "대형 잇고백입니다",
         foodType: ["간식", "과일"],
-        imageUrl: "/images/thumb.png",
+        image: "/images/thumb.png",
         inventory: {
           quantity: 0,
           stock: 10,

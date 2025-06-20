@@ -9,7 +9,7 @@ describe("Select Test", () => {
     {
       id: "1",
       name: "상품 1",
-      imageUrl: "",
+      image: "",
       description: "",
       foodType: [],
       inventory: { quantity: 3, stock: 5 },
@@ -27,7 +27,7 @@ describe("Select Test", () => {
     {
       id: "2",
       name: "품절 상품",
-      imageUrl: "",
+      image: "",
       description: "",
       foodType: [],
       inventory: { quantity: 0, stock: 0 },
