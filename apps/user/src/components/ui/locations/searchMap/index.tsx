@@ -16,10 +16,20 @@ import { StoreInfoCard } from "@/components/ui/locations/storeMapInfo";
 import { CLUSTERER_STYLE } from "@/constants/locations";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useKakaoLoader } from "@/hooks/useKakaoLoader";
-import { calculateMovedDistance, createStoreMarker, createUserMarker } from "@/utils/locations";
+import {
+  calculateMovedDistance,
+  createStoreMarker,
+  createUserMarker,
+  isInBox,
+} from "@/utils/locations";
 
 export default function SearchMap() {
   const mapRef = useRef<kakao.maps.Map | null>(null);
+  const boxRef = useRef<{
+    topLeft: { longitude: number; latitude: number };
+    bottomRight: { longitude: number; latitude: number };
+  } | null>(null);
+
   const storeMarkerMap = useRef<Map<number, kakao.maps.Marker>>(new Map());
   const storeListRef = useRef<MapStore[]>([]);
   const clustererRef = useRef<kakao.maps.MarkerClusterer | null>(null);
@@ -66,8 +76,13 @@ export default function SearchMap() {
 
       const center = map.getCenter();
       const movedDistance = calculateMovedDistance(center, location);
+      const level = map.getLevel();
 
-      setShouldShowRefetch(movedDistance > 0.02);
+      setShouldShowRefetch(movedDistance > 0.001 && level <= 2);
+
+      if (boxRef.current && !isInBox(center, boxRef.current)) {
+        await handleRefetch("REFETCH");
+      }
     },
     [location],
   );
@@ -79,6 +94,7 @@ export default function SearchMap() {
 
       const result = await getStoresByCenter(center);
       if (!result.success) return;
+      boxRef.current = result.data.box;
       storeListRef.current = result.data.storeList;
 
       const clusterer = new kakao.maps.MarkerClusterer({
@@ -120,24 +136,28 @@ export default function SearchMap() {
     [location],
   );
 
-  const handleRefetch = async () => {
+  const handleRefetch = async (type: "REFETCH" | "REFRESH") => {
     const map = mapRef.current;
     const clusterer = clustererRef.current;
     if (!map || !clusterer) return;
 
     // 기존 마커 제거
-    for (const marker of storeMarkerMap.current.values()) {
+    const oldMarkers = Array.from(storeMarkerMap.current.values());
+    for (const marker of oldMarkers) {
       marker.setMap(null);
     }
-    storeMarkerMap.current.clear();
+    clusterer.removeMarkers(oldMarkers);
 
-    // 클러스터 제거
-    clusterer.clear();
+    storeMarkerMap.current.clear();
+    clusterer.clear(); // 클러스터 정보 초기화
 
     const center = map.getCenter();
-    const result = await getStoresByCenterRefresh(center);
+    const result =
+      type === "REFETCH" ? await getStoresByCenter(center) : await getStoresByCenterRefresh(center);
     if (!result || !result.success) return;
+
     storeListRef.current = result.data.storeList;
+    boxRef.current = result.data.box;
 
     // 새로운 마커 추가
     const newMarkers = createStoreMarkers(storeListRef.current, map);
@@ -150,7 +170,7 @@ export default function SearchMap() {
     if (mapRef.current && location) {
       const latLng = new kakao.maps.LatLng(location.lat, location.lng);
       mapRef.current.setCenter(latLng);
-      handleRefetch();
+      handleRefetch("REFETCH");
     }
   };
 
@@ -168,7 +188,7 @@ export default function SearchMap() {
       {shouldShowRefetch && (
         <Button
           type="button"
-          onClick={handleRefetch}
+          onClick={() => handleRefetch("REFRESH")}
           style={{
             position: "absolute",
             top: 16,

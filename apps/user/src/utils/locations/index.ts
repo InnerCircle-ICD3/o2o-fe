@@ -204,3 +204,21 @@ export async function searchAddress(query: string): Promise<SearchAddressResult[
     },
   }));
 }
+
+export function isInBox(
+  point: kakao.maps.LatLng,
+  box: {
+    topLeft: { longitude: number; latitude: number };
+    bottomRight: { longitude: number; latitude: number };
+  },
+) {
+  const lat = point.getLat();
+  const lng = point.getLng();
+
+  return (
+    lng >= box.topLeft.longitude &&
+    lng <= box.bottomRight.longitude &&
+    lat <= box.topLeft.latitude &&
+    lat >= box.bottomRight.latitude
+  );
+}
