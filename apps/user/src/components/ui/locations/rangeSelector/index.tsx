@@ -4,9 +4,10 @@ import { RANGE_OPTIONS } from "@/constants/locations";
 interface RangeSelectorProps {
   range: number;
   setRange: (value: number) => void;
+  isDisabled: boolean;
 }
 
-export default function RangeSelector({ range, setRange }: RangeSelectorProps) {
+export default function RangeSelector({ range, setRange, isDisabled }: RangeSelectorProps) {
   const selectedIndex = RANGE_OPTIONS.findIndex((option) => option.value === range);
 
   return (
@@ -32,11 +33,14 @@ export default function RangeSelector({ range, setRange }: RangeSelectorProps) {
                 checked={isSelected}
                 onChange={() => setRange(value)}
                 className={styles.input}
+                disabled={isDisabled}
               />
               <span
                 className={`${styles.circle} ${
                   isSelected
-                    ? styles.circleSelected
+                    ? isDisabled
+                      ? styles.circleDisabled
+                      : styles.circleSelected
                     : isPassed
                       ? styles.circlePassed
                       : styles.circleInactive

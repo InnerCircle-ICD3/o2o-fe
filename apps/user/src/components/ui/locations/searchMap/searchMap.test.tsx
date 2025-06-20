@@ -41,6 +41,7 @@ globalThis.kakao = {
     MarkerClusterer: vi.fn().mockImplementation(() => ({
       addMarkers: vi.fn(),
       clear: vi.fn(),
+      removeMarkers: vi.fn(),
     })),
     services: {
       Geocoder: vi.fn().mockImplementation(() => ({
@@ -93,6 +94,7 @@ vi.mock("@/components/common/kakaoMap", () => ({
         setCenter: () => {},
         setLevel: () => {},
         setBounds: () => {},
+        getLevel: () => 1,
       };
       onMapReady?.(mockMap as kakao.maps.Map);
       onMapIdle?.(mockMap as kakao.maps.Map);

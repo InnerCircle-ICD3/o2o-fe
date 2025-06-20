@@ -100,6 +100,12 @@ export const circleSelected = style({
   borderWidth: "8px",
 });
 
+export const circleDisabled = style({
+  borderColor: "#ccc",
+  backgroundColor: "#1B9D5C",
+  borderWidth: "8px",
+});
+
 export const circlePassed = style({
   borderColor: "#35A865",
   backgroundColor: "white",
