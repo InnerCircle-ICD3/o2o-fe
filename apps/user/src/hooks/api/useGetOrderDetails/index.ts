@@ -1,7 +1,7 @@
 import { getOrderDetail } from "@/apis/ssr/orders";
 import { useQuery } from "@/hooks/api/utils/useQuery";
 
-const ORDER_DETAIL_QUERY_KEY = "orderDetail";
+export const ORDER_DETAIL_QUERY_KEY = "orderDetail";
 
 export const useGetOrderDetail = (orderId: string) => {
   const { data, isPending, isError } = useQuery({

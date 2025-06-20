@@ -4,19 +4,18 @@ import Button from "@/components/common/button";
 import * as globalStyle from "@/styles/global.css";
 import classNames from "classnames";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import * as style from "./success.css";
 
 const Page = () => {
   const router = useRouter();
-  const { id } = useParams();
 
   const handleGoHome = () => {
     router.replace("/");
   };
 
   const handleGoMyOrder = () => {
-    router.replace(`/my-orders/${id}`);
+    router.replace("/my-orders");
   };
 
   return (
