@@ -8,12 +8,6 @@ import { formatCurrency } from "@/utils/format";
 import generateProductStatus from "@/utils/productStatus";
 import classNames from "classnames";
 
-const PRODUCTS_IMAGE = {
-  S: "/images/back_s.png",
-  M: "/images/back_m.png",
-  L: "/images/back_l.png",
-};
-
 interface ProductsProps {
   products: Product[];
 }
@@ -33,12 +27,7 @@ const Products = (props: ProductsProps) => {
           return (
             <li key={product.id} className={style.wrapper}>
               <div className={style.thumbnail}>
-                <Image
-                  src={PRODUCTS_IMAGE[product.size]}
-                  alt={"상품 이미지"}
-                  width={88}
-                  height={105}
-                />
+                <Image src={product.image} alt={"상품 이미지"} width={88} height={105} />
 
                 {(uiStatus === "soldOut" || product.inventory.quantity === 0) && (
                   <div className={style.shadowLabel} />

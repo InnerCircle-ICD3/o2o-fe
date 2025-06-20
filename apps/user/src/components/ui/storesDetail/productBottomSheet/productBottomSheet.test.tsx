@@ -18,7 +18,7 @@ const mockProducts: Product[] = [
     createdAt: "2025-05-06T10:15:30Z",
     description: "신선한 제철 과일 및 계절 채소로 구성된 특별 잇고백입니다.",
     foodType: ["크림빵", "야채빵"],
-    imageUrl: "https://example.com/images/luckybags/1L.jpg",
+    image: "https://example.com/images/luckybags/1L.jpg",
     inventory: {
       quantity: 10,
       stock: 10,
