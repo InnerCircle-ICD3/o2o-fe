@@ -71,7 +71,7 @@ export interface Product {
   createdAt: string;
   description: string;
   foodType: string[];
-  imageUrl: string;
+  image: string;
   inventory: Inventory;
   storeId: string;
   storeName: string;

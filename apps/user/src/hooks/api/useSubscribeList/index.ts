@@ -25,9 +25,7 @@ const useSubscribeList = (id?: number) => {
         return getMySubscribe(queryParams.toString());
       },
       getNextPageParam: (lastPage) => {
-        return lastPage.success &&
-          lastPage.data.contents.length > 0 &&
-          lastPage.data.lastId !== lastPage.data.contents.at(-1)?.id
+        return lastPage.success && lastPage.data.contents.length > 0 && lastPage.data.lastId
           ? lastPage.data.lastId
           : undefined;
       },
