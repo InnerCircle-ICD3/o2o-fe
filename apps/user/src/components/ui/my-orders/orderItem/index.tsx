@@ -48,7 +48,11 @@ const OrderItem = (props: OrderItemProps) => {
   const isCompleted = orderStatus === ORDER_STATUS.DONE;
 
   const [totalLength, totalPrice, originTotalPrice] = order.orderItems.reduce(
-    (acc, item) => [acc[0] + item.quantity, acc[1] + item.finalPrice, acc[2] + item.originPrice],
+    (acc, item) => [
+      acc[0] + item.quantity,
+      acc[1] + item.finalPrice * item.quantity,
+      acc[2] + item.originPrice * item.quantity,
+    ],
     [0, 0, 0],
   );
 
@@ -63,7 +67,7 @@ const OrderItem = (props: OrderItemProps) => {
         <div className={style.infoBox}>
           <Image
             className={style.image}
-            src={"/images/thumb.png"}
+            src={order.orderItems[0].imageUrl}
             alt={""}
             width={90}
             height={90}
