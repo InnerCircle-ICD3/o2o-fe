@@ -85,7 +85,7 @@ const OrderInfo = (props: OrderInfoProps) => {
                       alt={"상품 이미지"}
                       width={150}
                       height={150}
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "cover" }}
                     />
 
                     <div className={style.productLabel}>
