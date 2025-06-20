@@ -50,7 +50,7 @@ const StoresInfo = (props: StoreInfoProps) => {
       </div>
       <article className={globalStyle.innerPadding}>
         <h2 className={style.title}>
-          <span>{storeDetail.name}</span>
+          <span className={style.storeName}>{storeDetail.name}</span>
           <span className={style.category}>
             {joinCategories([...storeDetail.foodCategory, ...storeDetail.storeCategory])}
           </span>

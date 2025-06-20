@@ -29,11 +29,11 @@ const Page = () => {
       </p>
 
       <div className={style.buttons}>
-        <Button type={"button"} onClick={handleGoHome}>
-          홈으로
-        </Button>
         <Button status={"primary"} type={"button"} onClick={handleGoMyOrder}>
           주문 내역 보러가기
+        </Button>
+        <Button type={"button"} onClick={handleGoHome}>
+          홈으로
         </Button>
       </div>
     </div>
