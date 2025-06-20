@@ -46,7 +46,6 @@ const OrderItem = (props: OrderItemProps) => {
   const orderStatus = ORDER_STATUS[order.status];
   const statusLabelType = getStatusLabelType(orderStatus);
   const isCompleted = orderStatus === ORDER_STATUS.DONE;
-
   const [totalLength, totalPrice, originTotalPrice] = order.orderItems.reduce(
     (acc, item) => [
       acc[0] + item.quantity,
