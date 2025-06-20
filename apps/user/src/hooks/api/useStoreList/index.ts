@@ -7,7 +7,7 @@ import { useFilterTab } from "@/stores/useFilterTab";
 import type { StoreListResponse } from "@/types/apis/stores.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const SIZE = 10;
+const SIZE = 5;
 
 export const STORE_LIST_QUERY_KEY = "storeList";
 

@@ -77,6 +77,7 @@ const VirtualScroll = ({ overscan = 2, heights, children, onScrollEnd }: Virtual
     };
 
     el.addEventListener("scroll", onScroll);
+    onScroll();
     return () => el.removeEventListener("scroll", onScroll);
   }, [onScrollEnd]);
 
