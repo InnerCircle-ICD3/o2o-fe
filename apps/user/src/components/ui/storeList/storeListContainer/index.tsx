@@ -71,7 +71,7 @@ const StoreListContainer = () => {
             <Categories />
           </VirtualItem>
           <VirtualItem name={"store-title"}>
-            <h2 className={style.title}>우리동네에서 지금 할인중이에요!</h2>
+            <h2 className={style.title}>지금 근처에서 할인 중인 가게를 찾아봤어요!</h2>
           </VirtualItem>
           {list.map((store: StoreList) => (
             <VirtualItem key={store.storeId} name={"store-item"}>
