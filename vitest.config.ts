@@ -27,7 +27,7 @@ export default defineConfig({
         "src/app/layout.tsx",
         "src/app/page.tsx",
         "src/app/not-found.tsx",
-        "src/app/api/**"
+        "src/app/api/**",
       ],
     },
   },

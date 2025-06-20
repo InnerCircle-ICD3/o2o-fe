@@ -1,9 +1,9 @@
+import { deleteStoreOwner } from "@/apis/ssr/store-owner";
+import { useOwnerStore } from "@/stores/ownerInfoStore";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { useRouter } from "next/navigation";
 import { type Mock, vi } from "vitest";
 import OwnerDeleteForm from ".";
-import { useOwnerStore } from "@/stores/ownerInfoStore";
-import { deleteStoreOwner } from "@/apis/ssr/store-owner";
-import { useRouter } from "next/navigation";
 
 vi.mock("@/stores/ownerInfoStore");
 vi.mock("@/apis/ssr/store-owner");

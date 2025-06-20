@@ -13,7 +13,13 @@ import * as style from "./myOrders.css";
 const Page = () => {
   const { user } = userInfoStore();
   const isLogin = !!user;
-  const { data: orders, error, isError, isLoading, fetchNextPage } = useGetMyOrder(1, !isLogin);
+  const {
+    data: orders,
+    error,
+    isError,
+    isLoading,
+    fetchNextPage,
+  } = useGetMyOrder(user?.customerId);
 
   if (!isLogin) {
     return <RequireLogin text="주문 내역" />;

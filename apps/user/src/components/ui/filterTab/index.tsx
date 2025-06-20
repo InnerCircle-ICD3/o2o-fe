@@ -34,11 +34,29 @@ const FilterTabButton = ({ tabKey, isActive, onClick, children }: FilterTabButto
 };
 
 export default function FilterTab() {
-  const { reservable, selectedFoodType, selectedPickupTime, onToggleReservable } = useFilterTab();
+  const {
+    reservable,
+    selectedFoodType,
+    selectedPickupTime,
+    onToggleReservable,
+    onResetFoodType,
+    onResetPickupTime,
+    onResetReservable,
+  } = useFilterTab();
   const [activeTab, setActiveTab] = useState<TabKey>("reservation");
 
   const handleTabClick = (tab: TabKey) => {
-    setActiveTab(tab);
+    if (tab === "reset") {
+      handleReset();
+    } else {
+      setActiveTab(tab);
+    }
+  };
+
+  const handleReset = () => {
+    onResetFoodType();
+    onResetPickupTime();
+    onResetReservable();
   };
 
   const renderTabContent = (tabKey: TabKey) => {
@@ -93,10 +111,32 @@ export default function FilterTab() {
             </span>
           </>
         );
+
+      case "reset":
+        return (
+          <>
+            <Image
+              src="/icons/reset.svg"
+              alt="clock"
+              width={14}
+              height={14}
+              className={styles.imageStyle({ parentActive: activeTab === "reset" })}
+            />
+            <span
+              className={styles.textStyle({
+                type: "tab",
+              })}
+            >
+              초기화
+            </span>
+          </>
+        );
     }
   };
 
   const tabs: TabKey[] = ["foodType", "pickupTime"];
+
+  if (reservable || selectedFoodType || selectedPickupTime) tabs.push("reset");
 
   return (
     <>

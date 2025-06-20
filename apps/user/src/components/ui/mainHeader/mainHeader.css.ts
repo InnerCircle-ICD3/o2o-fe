@@ -30,6 +30,12 @@ export const mainHeaderRight = style({
   gap: "10px",
 });
 
+export const button = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+});
+
 export const bottomSheetListStyle = style({
   width: "100%",
   marginTop: 30,

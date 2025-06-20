@@ -7,7 +7,7 @@ import { useFilterTab } from "@/stores/useFilterTab";
 import type { StoreListResponse } from "@/types/apis/stores.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const SIZE = 10;
+const SIZE = 5;
 
 export const STORE_LIST_QUERY_KEY = "storeList";
 
@@ -53,13 +53,14 @@ export const useStoreList = () => {
     initialPageParam: undefined,
   });
   const loading = useLoading(isLoading);
+  const fetchingNextpage = useLoading(isFetchingNextPage);
 
   return {
     stores,
     isError,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
+    isFetchingNextPage: fetchingNextpage,
     isLoading: loading,
     error,
   };
