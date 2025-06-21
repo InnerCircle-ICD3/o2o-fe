@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+import { formatHourTo12HourText } from "@/apis/utils/format";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { useOrderModalStore } from "@/stores/orderModalStore";
@@ -25,14 +26,14 @@ export default function OrderAlertModal() {
   if (!orderData) return null;
 
   const handleConfirmOrder = async () => {
-    if (!storeData?.id || !orderData.orderId) {
+    if (!storeData?.id || !orderData.id) {
       showToast("매장 정보 또는 주문 정보가 없습니다.", true);
       return;
     }
 
     setIsLoading(true);
     try {
-      const result = await confirmOrder(storeData.id, orderData.orderId);
+      const result = await confirmOrder(storeData.id, orderData.id);
       if (result.success) {
         showToast("주문이 수락되었습니다.", false);
         closeModal();
@@ -49,14 +50,14 @@ export default function OrderAlertModal() {
   };
 
   const handleCancelOrder = async () => {
-    if (!storeData?.id || !orderData.orderId) {
+    if (!storeData?.id || !orderData.id) {
       showToast("매장 정보 또는 주문 정보가 없습니다.", true);
       return;
     }
 
     setIsLoading(true);
     try {
-      const result = await cancelOrder(storeData.id, orderData.orderId);
+      const result = await cancelOrder(storeData.id, orderData.id);
       if (result.success) {
         showToast("주문이 취소되었습니다.", false);
         closeModal();
@@ -72,6 +73,11 @@ export default function OrderAlertModal() {
     }
   };
 
+  const totalPrice = orderData.orderItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent className="max-w-md">
@@ -80,19 +86,13 @@ export default function OrderAlertModal() {
           <DialogDescription asChild>
             <div className="space-y-3">
               <div>
-                <strong>주문번호:</strong> {orderData.orderId}
+                <strong>주문번호:</strong> {orderData.id}
               </div>
               <div>
-                <strong>고객명:</strong> {orderData.customerName}
+                <strong>고객명:</strong> {orderData.nickname}
               </div>
               <div>
-                <strong>전화번호:</strong> {orderData.customerPhone}
-              </div>
-              <div>
-                <strong>총 금액:</strong> {orderData.totalAmount.toLocaleString()}원
-              </div>
-              <div>
-                <strong>주문시간:</strong> {new Date(orderData.orderTime).toLocaleString()}
+                <strong>주문시간:</strong> {formatHourTo12HourText(orderData.createdAt)}
               </div>
               <div>
                 <strong>주문 항목:</strong>
@@ -103,6 +103,9 @@ export default function OrderAlertModal() {
                     </li>
                   ))}
                 </ul>
+              </div>
+              <div>
+                <strong>총 금액:</strong> {totalPrice}원
               </div>
             </div>
           </DialogDescription>

@@ -25,6 +25,7 @@
     "@radix-ui/react-switch": "^1.2.5",
     "@radix-ui/react-toggle": "^1.1.9",
     "@radix-ui/react-toggle-group": "^1.1.10",
+    "@react-nano/use-event-source": "^0.16.0",
     "@tailwindcss/postcss": "^4.1.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
