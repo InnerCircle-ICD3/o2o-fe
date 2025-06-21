@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   /* config options here */
   distDir: ".next",
   output: "standalone",
-  strictMode: false,
   async rewrites() {
     return [
       {
