@@ -12,7 +12,7 @@ const sampleOrders = [
     orderTime: new Date().toISOString(),
     customerName: "김고객",
     customerPhone: "010-1234-5678",
-    items: [
+    orderItems: [
       {
         productId: 101,
         productName: "잇고백 세트",
@@ -30,7 +30,7 @@ const sampleOrders = [
     orderTime: new Date().toISOString(),
     customerName: "이손님",
     customerPhone: "010-9876-5432",
-    items: [
+    orderItems: [
       {
         productId: 102,
         productName: "프리미엄 럭키백",
