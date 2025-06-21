@@ -16,7 +16,7 @@ export interface Order {
   pickupTime?: string;
   customerName: string;
   customerPhone: string;
-  items: OrderItem[];
+  orderItems: OrderItem[];
 }
 
 export interface OrderItem {
