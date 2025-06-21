@@ -44,7 +44,7 @@ export default function RootLayout({
           <OwnerInfoProvider />
           <OrderAlertModal />
           <OrderSseListenerWrapper />
-          <SsePanelWrapper />
+          {process.env.NODE_ENV === "development" && <SsePanelWrapper />}
           <LayoutContent>{children}</LayoutContent>
         </Providers>
       </body>
