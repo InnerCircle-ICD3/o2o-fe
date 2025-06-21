@@ -7,16 +7,21 @@ export type OrderStatus =
   | "CANCELLED";
 
 export interface Order {
-  orderId: number;
+  id: number;
+  orderNumber: string;
+  nickname: string;
   customerId: number;
   storeId: number;
-  orderStatus: OrderStatus;
-  totalAmount: number;
-  orderTime: string;
-  pickupTime?: string;
-  customerName: string;
-  customerPhone: string;
+  status: OrderStatus;
+  pickupDateTime?: string;
   orderItems: OrderItem[];
+  createdAt: string;
+  updatedAt: string;
+  canceledAt: string;
+  confirmedAt: string;
+  doneAt: string;
+  hasReview: boolean;
+  readiedAt: string;
 }
 
 export interface OrderItem {

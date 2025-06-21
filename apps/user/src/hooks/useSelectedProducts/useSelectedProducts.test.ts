@@ -7,7 +7,7 @@ const mockProduct: Product = {
   id: "1",
   storeName: "블루문",
   name: "샌드위치",
-  imageUrl: "",
+  image: "",
   description: "",
   foodType: [],
   inventory: { quantity: 5, stock: 5 },
