@@ -34,7 +34,7 @@ export default function SsePanelWrapper() {
         orderTime: new Date().toISOString(),
         customerName: "테스트 고객",
         customerPhone: "010-1234-5678",
-        items: [
+        orderItems: [
           {
             productId: 101,
             productName: "테스트 럭키백",
@@ -64,7 +64,7 @@ export default function SsePanelWrapper() {
         orderTime: new Date().toISOString(),
         customerName: "늦은 주문 고객",
         customerPhone: "010-9999-8888",
-        items: [
+        orderItems: [
           {
             productId: 102,
             productName: "늦은 시간 럭키백",
@@ -119,7 +119,7 @@ export default function SsePanelWrapper() {
         orderTime: new Date().toISOString(),
         customerName: "김럭키",
         customerPhone: "010-1111-2222",
-        items: [
+        orderItems: [
           { productId: 201, productName: "프리미엄 럭키백", quantity: 1, price: 20000 },
           { productId: 202, productName: "디저트 세트", quantity: 1, price: 15000 },
         ],
@@ -133,7 +133,7 @@ export default function SsePanelWrapper() {
         orderTime: new Date().toISOString(),
         customerName: "박할인",
         customerPhone: "010-3333-4444",
-        items: [{ productId: 203, productName: "미니 럭키백", quantity: 1, price: 8000 }],
+        orderItems: [{ productId: 203, productName: "미니 럭키백", quantity: 1, price: 8000 }],
       },
     ];
 
