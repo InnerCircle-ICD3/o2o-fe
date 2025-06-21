@@ -24,7 +24,7 @@ export default function PickUpTimeFilter({ isOpen, onClose }: PickUpTimeFilterPr
   };
 
   const handlePickupTimeClick = () => {
-    if (tempPickupTime.day && tempPickupTime.hour && tempPickupTime.minute) {
+    if (tempPickupTime.day && tempPickupTime.hour && Number.isFinite(tempPickupTime.minute)) {
       onSelectedPickupTime(tempPickupTime);
       onClose();
     }
@@ -56,7 +56,7 @@ export default function PickUpTimeFilter({ isOpen, onClose }: PickUpTimeFilterPr
           ))}
         </ul>
         <ul className={styles.timePickerColumn} ref={hourRef}>
-          {Array.from({ length: 13 }).map((_, index) => (
+          {Array.from({ length: 12 }).map((_, index) => (
             /**
              * biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
              * 숫자형 데이터 이므로, 배열의 인덱스를 키로 사용해도 무방하여 린트 주석 처리 했습니다.
@@ -65,11 +65,11 @@ export default function PickUpTimeFilter({ isOpen, onClose }: PickUpTimeFilterPr
               <button
                 type="button"
                 className={
-                  tempPickupTime.hour === index ? styles.timeItemSelected : styles.timeItem
+                  tempPickupTime.hour === index + 1 ? styles.timeItemSelected : styles.timeItem
                 }
-                onClick={() => handleTempPickupTimeClick({ hour: index as HourType })}
+                onClick={() => handleTempPickupTimeClick({ hour: (index + 1) as HourType })}
               >
-                <span>{padTwoDigits(index)}</span>
+                <span>{padTwoDigits(index + 1)}</span>
               </button>
             </li>
           ))}
