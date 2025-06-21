@@ -33,7 +33,10 @@ const OrderInfo = (props: OrderInfoProps) => {
 
   const isKakaoLoaded = useKakaoLoader();
 
-  const totalPrice = orderDetail.orderItems.reduce((sum, item) => sum + item.finalPrice, 0);
+  const totalPrice = orderDetail.orderItems.reduce(
+    (sum, item) => sum + item.finalPrice * item.quantity,
+    0,
+  );
 
   useEffect(() => {
     // 결제 취소 상태인 경우 토스트 메시지 표시 및 매장 상세 페이지로 이동
