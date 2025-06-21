@@ -11,7 +11,7 @@ export default function OrderSseListener() {
   // EventSource 연결: url, 옵션으로 withCredentials 전달 가능
   const [eventSource, _] = useEventSource(
     `https://store-owner.eatngo.org/api/v1/stores/${storeId}/sse`,
-    false,
+    true,
   );
 
   useEventSourceListener(
