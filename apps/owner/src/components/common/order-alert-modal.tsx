@@ -97,7 +97,7 @@ export default function OrderAlertModal() {
               <div>
                 <strong>주문 항목:</strong>
                 <ul className="list-disc pl-5 mt-1">
-                  {orderData.items.map((item) => (
+                  {orderData.orderItems.map((item) => (
                     <li key={`${item.productId}-${item.productName}`}>
                       {item.productName} x {item.quantity} ({item.price.toLocaleString()}원)
                     </li>
