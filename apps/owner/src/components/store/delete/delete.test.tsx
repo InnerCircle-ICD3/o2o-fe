@@ -67,7 +67,6 @@ describe("StoreDeleteForm", () => {
   it("활성화된 삭제 버튼을 클릭하면 확인 다이얼로그(추가 확인 창)가 열린다.", async () => {
     mockUseGetOwnerStore.mockReturnValue({ data: { id: 1, name: "내 가게" } });
     render(<StoreDeleteForm />);
-
     await fireEvent.click(screen.getByRole("checkbox"));
     await fireEvent.click(screen.getByRole("button", { name: "매장 삭제하기" }));
 
@@ -78,12 +77,10 @@ describe("StoreDeleteForm", () => {
   it("다이얼로그(추가 확인 창)에서 '삭제하기'를 클릭하면 API가 호출되고, 성공 시 /store/login으로 이동한다.", async () => {
     mockUseGetOwnerStore.mockReturnValue({ data: { id: 1, name: "내 가게" } });
     mockDeleteStore.mockResolvedValue({ success: true });
-
     render(<StoreDeleteForm />);
 
     await fireEvent.click(screen.getByRole("checkbox"));
     await fireEvent.click(screen.getByRole("button", { name: "매장 삭제하기" }));
-
     const confirmButton = screen.getByRole("button", { name: "삭제하기" });
     await fireEvent.click(confirmButton);
 
@@ -98,7 +95,6 @@ describe("StoreDeleteForm", () => {
   it("다이얼로그(추가 확인 창)에서 '취소'를 클릭하면 다이얼로그가 닫힌다.", async () => {
     mockUseGetOwnerStore.mockReturnValue({ data: { id: 1, name: "내 가게" } });
     render(<StoreDeleteForm />);
-
     await fireEvent.click(screen.getByRole("checkbox"));
     await fireEvent.click(screen.getByRole("button", { name: "매장 삭제하기" }));
 
