@@ -31,11 +31,7 @@ const StoreListContainer = () => {
 
   return (
     <div className={style.container}>
-      {isLoading ? (
-        Array.from({ length: 5 }).map((_, i) => (
-          <SkeletonStoreCard key={`skeleton-${i}-${Date.now()}`} />
-        ))
-      ) : list.length === 0 ? (
+      {list.length === 0 ? (
         <div className={style.errorWrapper}>
           <div className={style.error}>
             <Categories />
@@ -64,6 +60,9 @@ const StoreListContainer = () => {
             "loading-bar": {
               height: 50,
             },
+            skeleton: {
+              height: 272,
+            },
           }}
           onScrollEnd={handleNextPage}
         >
@@ -73,11 +72,18 @@ const StoreListContainer = () => {
           <VirtualItem name={"store-title"}>
             <h2 className={style.title}>지금 근처에서 할인 중인 가게를 찾아봤어요!</h2>
           </VirtualItem>
-          {list.map((store: StoreList) => (
-            <VirtualItem key={store.storeId} name={"store-item"}>
-              <StoreCard storesDetail={store} isFavorite={subscribes.includes(store.storeId)} />
-            </VirtualItem>
-          ))}
+
+          {isLoading
+            ? Array.from({ length: 5 }).map((_, i) => (
+                <VirtualItem key={`skeleton-${i}-${Date.now()}`} name={"skeleton"}>
+                  <SkeletonStoreCard />
+                </VirtualItem>
+              ))
+            : list.map((store: StoreList) => (
+                <VirtualItem key={store.storeId} name={"store-item"}>
+                  <StoreCard storesDetail={store} isFavorite={subscribes.includes(store.storeId)} />
+                </VirtualItem>
+              ))}
 
           {hasNextPage && (
             <VirtualItem name={"loading-bar"}>
