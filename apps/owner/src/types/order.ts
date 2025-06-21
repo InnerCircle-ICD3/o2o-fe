@@ -9,15 +9,19 @@ export type OrderStatus =
 export interface Order {
   id: number;
   orderNumber: string;
-  nickname: number;
+  nickname: string;
+  customerId: number;
   storeId: number;
   status: OrderStatus;
-  totalAmount: number;
-  orderTime: string;
   pickupDateTime?: string;
-  customerName: string;
-  customerPhone: string;
   orderItems: OrderItem[];
+  createdAt: string;
+  updatedAt: string;
+  canceledAt: string;
+  confirmedAt: string;
+  doneAt: string;
+  hasReview: boolean;
+  readiedAt: string;
 }
 
 export interface OrderItem {
