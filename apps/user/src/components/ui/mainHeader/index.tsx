@@ -11,7 +11,7 @@ import * as styles from "./mainHeader.css";
 
 export default function MainHeader() {
   const { user } = userInfoStore();
-  const isLogin = !!user;
+  const isLogin = !!user?.customerId;
   const { search, onResetSearch } = useFilterTab();
 
   const { data: locationList, isError } = useAddressList(isLogin);

@@ -13,7 +13,7 @@ import * as style from "./mypage.css";
 
 const Page = () => {
   const { user, clearUser } = userInfoStore();
-  const isLogin = !!user;
+  const isLogin = !!user?.customerId;
   const router = useRouter();
 
   const { showToast } = useToastStore();
@@ -51,7 +51,7 @@ const Page = () => {
           <>
             <LoginLink userInfo={userInfo} />
 
-            {isLogin && userInfo && (
+            {isLogin && (
               <>
                 <div className={style.shortcuts}>
                   <Link href="/subscribes" className={style.shortcutItem}>
@@ -88,7 +88,7 @@ const Page = () => {
           </>
         )}
       </section>
-      {!isLoading && isLogin && userInfo && (
+      {!isLoading && isLogin && (
         <div className={style.bottomButtons}>
           <button
             className={style.bottomButton}
