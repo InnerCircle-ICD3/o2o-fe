@@ -13,7 +13,7 @@ import * as style from "./storeListContainer.css";
 
 const StoreListContainer = () => {
   const { user } = userInfoStore();
-  const isLogin = !!user;
+  const isLogin = !!user?.customerId;
   const { stores, isLoading, fetchNextPage, isError, isFetchingNextPage, hasNextPage, error } =
     useStoreList();
   const subscribes = useSubscribeAll(isLogin);

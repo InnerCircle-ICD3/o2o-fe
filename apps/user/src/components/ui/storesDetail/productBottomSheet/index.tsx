@@ -5,6 +5,7 @@ import Button from "@/components/common/button";
 import usePostOrder from "@/hooks/api/usePostOrder";
 import useSelectedProducts from "@/hooks/useSelectedProducts";
 import type { Product } from "@/types/apis/stores.type";
+import { useState } from "react";
 import Select from "../select";
 import SelectedItem from "../selectedItem";
 import TotalPrice from "../totalPrice";
@@ -18,6 +19,7 @@ interface ProductBottomSheetProps {
 
 const ProductBottomSheet = (props: ProductBottomSheetProps) => {
   const { isShow, storesProducts, onClose } = props;
+  const [isLoading, setIsLoading] = useState(false);
   const submitOrder = usePostOrder();
   const {
     selectedProducts,
@@ -28,6 +30,8 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
   } = useSelectedProducts();
 
   const handleSubmit = () => {
+    if (isLoading) return;
+    setIsLoading(true);
     const orderBody = {
       // TODO - 픽업타임 메인에서 설정되면 가지고 와야 할 듯 / 지금은 현재 시간 + 30분 으로 주문 생성함
       pickupDateTime: new Date(Date.now() + 30 * 60 * 1000).toISOString(),

@@ -1,6 +1,6 @@
+import StoreMap from "@/components/ui/locations/storeMap";
 import { ORDER_STATUS } from "@/constants/my-orders";
 import { useStoreDetail } from "@/hooks/api/useStoreDetail";
-import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { useToastStore } from "@/stores/useToastStore";
 import * as globalStyle from "@/styles/global.css";
 import type { OrderDetail } from "@/types/apis/order.type";
@@ -9,7 +9,6 @@ import classNames from "classnames";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { KakaoMap } from "../kakaoMap";
 import * as style from "./orderInfo.css";
 
 const paymentLabel = {
@@ -30,8 +29,6 @@ const OrderInfo = (props: OrderInfoProps) => {
   const storeId = orderDetail.storeId;
   const { storeDetail } = useStoreDetail(String(storeId));
   const { showToast } = useToastStore();
-
-  const isKakaoLoaded = useKakaoLoader();
 
   const totalPrice = orderDetail.orderItems.reduce(
     (sum, item) => sum + item.finalPrice * item.quantity,
@@ -55,8 +52,8 @@ const OrderInfo = (props: OrderInfoProps) => {
   return (
     <>
       <div className={style.map}>
-        {isKakaoLoaded ? (
-          <KakaoMap
+        {storeDetail?.address?.coordinate ? (
+          <StoreMap
             lat={storeDetail?.address?.coordinate?.latitude || 37.5665}
             lng={storeDetail?.address?.coordinate?.longitude || 126.978}
           />

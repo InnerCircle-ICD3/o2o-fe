@@ -2,9 +2,11 @@
 
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
 import { useOwnerStore } from "@/stores/ownerInfoStore";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export function OwnerInfoProvider() {
+  const router = useRouter();
   const setOwner = useOwnerStore((state) => state.setOwner);
   const setStore = useOwnerStore((state) => state.setStore);
   const clearOwner = useOwnerStore((state) => state.clearOwner);
@@ -17,6 +19,9 @@ export function OwnerInfoProvider() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
+          if (!res.data.storeOwnerId) {
+            router.replace("/store/login");
+          }
           setOwner(res.data);
         } else {
           clearOwner();

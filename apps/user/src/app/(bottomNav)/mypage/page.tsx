@@ -1,6 +1,7 @@
 "use client";
 
 import LoginLink from "@/components/ui/mypage/loginLink";
+import SkeletonStoreCard from "@/components/ui/storeList/storeCard/skeletonStoreCard";
 import useGetCustomer from "@/hooks/api/useGetCustomer";
 import usePostLogout from "@/hooks/api/usePostLogout";
 import { useToastStore } from "@/stores/useToastStore";
@@ -12,14 +13,14 @@ import * as style from "./mypage.css";
 
 const Page = () => {
   const { user, clearUser } = userInfoStore();
-  const isLogin = !!user;
+  const isLogin = !!user?.customerId;
   const router = useRouter();
 
   const { showToast } = useToastStore();
 
   const logoutMutation = usePostLogout();
 
-  const { data: userInfo } = useGetCustomer(isLogin);
+  const { data: userInfo, isLoading } = useGetCustomer(isLogin);
 
   const handleLogout = async () => {
     const result = await logoutMutation.mutateAsync({});
@@ -41,44 +42,53 @@ const Page = () => {
       <h2 className={style.title}>마이페이지</h2>
 
       <section className={style.wrapper}>
-        <LoginLink userInfo={userInfo} />
-
-        {isLogin && userInfo && (
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 정적인 스켈레톤 UI 목록이므로 index를 key로 사용해도 안전합니다.
+            <SkeletonStoreCard imagePosition="left" key={`skeleton-${i}`} />
+          ))
+        ) : (
           <>
-            <div className={style.shortcuts}>
-              <Link href="/subscribes" className={style.shortcutItem}>
-                <Image src={"/icons/subscribe.svg"} alt="" width={24} height={24} />
-                <span>찜 목록</span>
-              </Link>
-              <Link href="/my-orders" className={style.shortcutItem}>
-                <Image src={"/icons/order.svg"} alt="" width={24} height={24} />
-                <span>주문 내역</span>
-              </Link>
-              <Link href="/locations/my-location" className={style.shortcutItem}>
-                <Image src={"/icons/location.svg"} alt="" width={24} height={24} />
-                <span>지역 인증</span>
-              </Link>
-            </div>
+            <LoginLink userInfo={userInfo} />
 
-            <div className={style.menus}>
-              <Link href={"/mypage/notice"} className={style.menuItem}>
-                공지사항
-              </Link>
+            {isLogin && (
+              <>
+                <div className={style.shortcuts}>
+                  <Link href="/subscribes" className={style.shortcutItem}>
+                    <Image src={"/icons/subscribe.svg"} alt="" width={24} height={24} />
+                    <span>찜 목록</span>
+                  </Link>
+                  <Link href="/my-orders" className={style.shortcutItem}>
+                    <Image src={"/icons/order.svg"} alt="" width={24} height={24} />
+                    <span>주문 내역</span>
+                  </Link>
+                  <Link href="/locations/my-location" className={style.shortcutItem}>
+                    <Image src={"/icons/location.svg"} alt="" width={24} height={24} />
+                    <span>지역 인증</span>
+                  </Link>
+                </div>
 
-              <Link href={"/mypage/faq"} className={style.menuItem}>
-                자주 묻는 질문
-              </Link>
+                <div className={style.menus}>
+                  <Link href={"/mypage/notice"} className={style.menuItem}>
+                    공지사항
+                  </Link>
 
-              <Link href={"/mypage/terms"} className={style.menuItem}>
-                이용 약관
-              </Link>
+                  <Link href={"/mypage/faq"} className={style.menuItem}>
+                    자주 묻는 질문
+                  </Link>
 
-              <p>현재 버전 1.0.0</p>
-            </div>
+                  <Link href={"/mypage/terms"} className={style.menuItem}>
+                    이용 약관
+                  </Link>
+
+                  <p>현재 버전 1.0.0</p>
+                </div>
+              </>
+            )}
           </>
         )}
       </section>
-      {isLogin && userInfo && (
+      {isLogin && (
         <div className={style.bottomButtons}>
           <button
             className={style.bottomButton}

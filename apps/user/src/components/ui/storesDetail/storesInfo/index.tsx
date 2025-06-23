@@ -17,7 +17,7 @@ interface StoreInfoProps {
 const StoresInfo = (props: StoreInfoProps) => {
   const { storeDetail } = props;
   const { user } = userInfoStore();
-  const isLogin = !!user;
+  const isLogin = !!user?.customerId;
 
   const joinCategories = (categories: string[]) => {
     return categories.join(" / ");
