@@ -18,6 +18,8 @@ const Reserve = (props: ReserveProps) => {
   const { showToast } = useToastStore();
 
   const handleSubmit = async () => {
+    if (isLoading) return;
+
     try {
       setIsLoading(true);
       const result = await readyToOrder(orderId);
