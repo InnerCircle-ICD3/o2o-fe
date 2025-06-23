@@ -1,6 +1,7 @@
 "use client";
 
 import { deleteProduct, getProducts } from "@/apis/ssr/product";
+import StoreRegisterLink from "@/components/common/storeRegisterLink";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -61,6 +62,10 @@ export default function LuckyBagList() {
       }
     }
   };
+
+  if (!storeData) {
+    return <StoreRegisterLink />;
+  }
 
   return (
     <div className="p-4">
