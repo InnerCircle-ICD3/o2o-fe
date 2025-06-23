@@ -51,7 +51,7 @@ export default function LocationFilter({ isOpen, locationList, onClose }: Locati
             onClick={handleResetLocation}
           >
             <Image src="/icons/pin.svg" alt="store" width={30} height={30} />
-            <span>모든 지역</span>
+            <span>내 위치</span>
           </button>
         </li>
         {locationList.map((location) => (

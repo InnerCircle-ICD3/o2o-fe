@@ -6,7 +6,7 @@ export const PRODUCT_KEY = "product";
 
 const useProduct = (id: string) => {
   const data = useQuery<StoresDetail>({
-    queryKey: [PRODUCT_KEY],
+    queryKey: [PRODUCT_KEY, id],
     queryFn: () => getStoresDetail(id),
   });
 

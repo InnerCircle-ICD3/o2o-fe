@@ -19,7 +19,7 @@ export const StoreCard = ({ storesDetail, isFavorite }: StoreCardProps) => {
   const router = useRouter();
 
   const { user } = userInfoStore();
-  const isLogin = !!user;
+  const isLogin = !!user?.customerId;
 
   const { uiStatus, label } = generateProductStatus(storesDetail.status, {
     quantity: storesDetail.totalStockCount,
