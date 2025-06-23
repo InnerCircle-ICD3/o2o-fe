@@ -4,6 +4,7 @@ export interface ErrorJson {
   message: string;
   statusCode: number;
   timestamp: Date;
+  data?: Record<string, unknown>;
 }
 
 export abstract class BaseError extends Error {
