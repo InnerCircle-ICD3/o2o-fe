@@ -88,7 +88,7 @@ const Page = () => {
           </>
         )}
       </section>
-      {!isLoading && isLogin && (
+      {isLogin && (
         <div className={style.bottomButtons}>
           <button
             className={style.bottomButton}
