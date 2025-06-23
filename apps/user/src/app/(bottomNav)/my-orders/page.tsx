@@ -12,7 +12,7 @@ import * as style from "./myOrders.css";
 
 const Page = () => {
   const { user } = userInfoStore();
-  const isLogin = !!user;
+  const isLogin = !!user?.customerId;
   const {
     data: orders,
     error,

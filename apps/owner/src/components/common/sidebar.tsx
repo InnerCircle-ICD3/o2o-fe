@@ -208,7 +208,10 @@ export function Sidebar() {
                         asChild
                       >
                         <Link href={submenu.href}>
-                          <submenu.icon className="mr-2 h-4 w-4" />
+                          {/* <submenu.icon className="mr-2 h-4 w-4" /> */}
+                          <span className="flex items-center justify-center text-lg text-gray-400">
+                            •
+                          </span>
                           {submenu.title}
                         </Link>
                       </Button>
