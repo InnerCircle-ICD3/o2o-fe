@@ -30,7 +30,7 @@ export default function MainHeader() {
         >
           <Image src="/icons/store.svg" alt="store" width={24} height={24} />
           <h1 className={styles.mainTitle}>
-            {search ? search : location ? `${location}의 가게` : "모든 지역의 가게"}
+            {search ? search : location ? `${location}의 가게` : "내 위치의 가게"}
           </h1>
         </button>
         <div className={styles.mainHeaderRight}>
