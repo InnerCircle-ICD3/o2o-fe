@@ -42,7 +42,7 @@ describe("generateProductStatus", () => {
   describe("StoreStatus", () => {
     it("OPEN + stock<=5는 '마감 임박'으로 반환한다.", () => {
       expect(generateProductStatus("OPEN", { quantity: 10, stock: 3 })).toEqual({
-        status: "CLOSED",
+        status: "OPEN",
         uiStatus: "endSoon",
         label: "마감 임박",
       });
