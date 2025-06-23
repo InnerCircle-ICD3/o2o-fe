@@ -164,14 +164,15 @@ export default function StoreEdit() {
   };
 
   const handleStatusChange = async (checked: boolean) => {
-    try {
-      await patchStoreStatusMutation.mutateAsync({
-        status: checked ? "OPEN" : "CLOSED",
-      });
+    const result = await patchStoreStatusMutation.mutateAsync({
+      status: checked ? "OPEN" : "CLOSED",
+    });
+
+    if (result.success) {
       setIsOpen(checked);
       showToast(checked ? "영업이 시작되었습니다." : "영업이 종료되었습니다.");
-    } catch {
-      showToast("상태 변경에 실패했습니다.", true);
+    } else {
+      showToast(result.message, true);
     }
   };
 
