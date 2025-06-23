@@ -9,7 +9,7 @@ export default function RequireLogin({ text }: { text: string }) {
   const router = useRouter();
   const { user } = userInfoStore();
 
-  const isLoggedIn = !!user;
+  const isLoggedIn = !!user?.customerId;
 
   if (!isLoggedIn) {
     return (
