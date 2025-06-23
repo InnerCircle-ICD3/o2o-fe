@@ -5,7 +5,7 @@ import useOrderCancel from "@/hooks/api/useOrderCancel";
 import useOrderDone from "@/hooks/api/useOrderDone";
 import { useToastStore } from "@/stores/useToastStore";
 import type { OrderDetail } from "@/types/apis/order.type";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as style from "./actionsButtons.css";
 
