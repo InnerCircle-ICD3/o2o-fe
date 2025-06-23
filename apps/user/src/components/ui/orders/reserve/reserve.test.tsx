@@ -3,6 +3,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import Reserve from ".";
 
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+}));
+
 const mockReplace = vi.fn();
 
 vi.mock("next/navigation", () => ({
