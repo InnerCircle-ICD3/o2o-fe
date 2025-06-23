@@ -153,8 +153,6 @@ export default function LuckyBagDetail() {
     }
   };
 
-  if (!watch("name")) return <div>Loading...</div>;
-
   return (
     <div className="flex min-h-screen bg-white">
       <div className="w-full p-10 grid grid-cols-2 gap-10">
@@ -207,6 +205,7 @@ export default function LuckyBagDetail() {
                 className={`${!isEditing ? "bg-gray-50" : ""} ${
                   errors.name ? "border-destructive" : ""
                 }`}
+                placeholder="최소 2자 이상, 최대 10자 이하"
               />
               {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
             </div>

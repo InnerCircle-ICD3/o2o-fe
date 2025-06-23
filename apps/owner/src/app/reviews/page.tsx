@@ -53,7 +53,7 @@ export default function page() {
           onImageClick={setSelectedImage}
         />
       ))}
-      {!reviews && <div>리뷰가 없습니다.</div>}
+      {reviews.length === 0 && <div>리뷰가 없습니다.</div>}
       {/* 이미지 팝업 */}
       {selectedImage && (
         <div
