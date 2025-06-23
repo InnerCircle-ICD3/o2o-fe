@@ -2,7 +2,12 @@ import { ORDER_STATUS } from "@/constants/my-orders";
 import type { OrderDetail } from "@/types/apis/order.type";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cleanup, render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 import ActionButtons from ".";
+
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+}));
 
 const baseOrder: OrderDetail = {
   id: 1,
