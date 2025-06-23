@@ -9,7 +9,10 @@ vi.mock("@/hooks/api/useGetOwnerStore", () => ({
   default: vi.fn(),
 }));
 vi.mock("@/hooks/api/usePatchOwnerStoreStatus", () => ({
-  default: vi.fn(),
+  default: vi.fn(() => ({
+    mutateAsync: vi.fn().mockResolvedValue({ success: true }),
+    isPending: false,
+  })),
 }));
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -96,9 +99,10 @@ describe("StoreEdit", () => {
       data: { data: mockStoreData },
       isLoading: false,
     });
-    const patchMutate = vi.fn();
+    const patchMutate = vi.fn().mockResolvedValue({ success: true });
     (usePatchOwnerStoreStatus as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       mutateAsync: patchMutate,
+      isPending: false,
     });
     renderWithClient(<StoreEdit />);
     const switchButton = screen.getByRole("switch");
