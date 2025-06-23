@@ -11,7 +11,7 @@ import * as style from "./subscribes.css";
 
 const Page = () => {
   const { user } = userInfoStore();
-  const isLogin = !!user;
+  const isLogin = !!user?.customerId;
   const {
     data: subscribes,
     error,

@@ -2,7 +2,7 @@ import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import { useFilterTab } from "@/stores/useFilterTab";
 import { padTwoDigits } from "@/utils/format";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { pickupTimeDefaultValue } from "../constant";
 import type { HourType, MinuteType, PickupTime } from "../type";
 import * as styles from "./pickUpTimeFilter.css";
@@ -13,7 +13,7 @@ interface PickUpTimeFilterProps {
 }
 
 export default function PickUpTimeFilter({ isOpen, onClose }: PickUpTimeFilterProps) {
-  const { onSelectedPickupTime, onResetPickupTime } = useFilterTab();
+  const { selectedPickupTime, onSelectedPickupTime, onResetPickupTime } = useFilterTab();
   const [tempPickupTime, setTempPickupTime] = useState<PickupTime>(pickupTimeDefaultValue);
   const dayRef = useRef<HTMLUListElement>(null);
   const hourRef = useRef<HTMLUListElement>(null);
@@ -38,6 +38,12 @@ export default function PickUpTimeFilter({ isOpen, onClose }: PickUpTimeFilterPr
     onResetPickupTime();
     onClose();
   };
+
+  useEffect(() => {
+    if (!selectedPickupTime) {
+      setTempPickupTime(pickupTimeDefaultValue);
+    }
+  }, [selectedPickupTime]);
 
   return (
     <BottomSheet type="shadow" isShow={isOpen} title="픽업 가능시간" onClose={onClose}>

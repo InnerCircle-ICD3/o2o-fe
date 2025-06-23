@@ -11,6 +11,16 @@ const TopNav = (props: PropsWithChildren) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const isMyLocationPage = pathname === "/locations/my-location";
+
+  const handleBack = () => {
+    if (isMyLocationPage) {
+      router.push("/mypage");
+    } else {
+      router.back();
+    }
+  };
+
   const sortedNav = Object.values(ROUTE.topNav).sort((a, b) => b.path.length - a.path.length);
   const route = sortedNav.find((item) => pathname.startsWith(item.path));
 
@@ -21,7 +31,7 @@ const TopNav = (props: PropsWithChildren) => {
   return (
     <div className={style.container}>
       <header className={style.topNav}>
-        <button className={style.backButton} type={"button"} onClick={router.back}>
+        <button className={style.backButton} type={"button"} onClick={handleBack}>
           <Image src={"/icons/chevron_left.svg"} alt="뒤로가기" width={24} height={24} />
         </button>
         <h1 className={style.title}>{route.name}</h1>

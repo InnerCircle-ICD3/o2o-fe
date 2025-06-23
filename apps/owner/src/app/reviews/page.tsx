@@ -2,6 +2,7 @@
 import { getReviews } from "@/apis/ssr/review";
 import type { Review } from "@/apis/ssr/review";
 import { formatLocalizedDate } from "@/apis/utils/format";
+import StoreRegisterLink from "@/components/common/storeRegisterLink";
 import RegisterLink from "@/components/common/storeRegisterLink";
 import { Card, CardContent } from "@/components/ui/card";
 import useGetOwnerStore from "@/hooks/api/useGetOwnerStore";
@@ -38,6 +39,10 @@ export default function page() {
 
   if (!owner?.storeOwnerId) {
     return <RegisterLink />;
+  }
+
+  if (!storeData) {
+    return <StoreRegisterLink />;
   }
 
   return (

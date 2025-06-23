@@ -1,6 +1,7 @@
 "use client";
 
 import { createProduct } from "@/apis/ssr/product";
+import StoreRegisterLink from "@/components/common/storeRegisterLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -116,6 +117,10 @@ export default function LuckyBagRegister() {
       reader.readAsDataURL(file);
     }
   };
+
+  if (!storeData) {
+    return <StoreRegisterLink />;
+  }
 
   return (
     <div className="flex min-h-screen bg-white">
