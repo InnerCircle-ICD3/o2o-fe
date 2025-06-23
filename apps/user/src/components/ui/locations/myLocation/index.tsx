@@ -12,6 +12,7 @@ import { useKakaoLoader } from "@/hooks/useKakaoLoader";
 import { useSelectedAddressStore } from "@/stores/selectedAddressStore";
 import { useToastStore } from "@/stores/useToastStore";
 import { userInfoStore } from "@/stores/userInfoStore";
+import type { AddressType } from "@/types/locations.type";
 import { createUserMarker, renderMyLocationCircle } from "@/utils/locations";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -22,12 +23,26 @@ import * as styles from "./myLocation.css";
 export default function MyLocation() {
   const router = useRouter();
   const { user } = userInfoStore();
-  const selectedAddressStore = useSelectedAddressStore();
+  const {
+    selectedAddress: globalSelectedAddress,
+    clearSelectedAddress: clearGlobalSelectedAddress,
+  } = useSelectedAddressStore();
   const { showToast } = useToastStore();
   const isLoaded = useKakaoLoader();
   const [range, setRange] = useState(0.5);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [localSelectedAddress, setLocalSelectedAddress] = useState(globalSelectedAddress);
+
+  const isInitialized = useRef(false);
+
+  useEffect(() => {
+    if (!isInitialized.current && (globalSelectedAddress.HOME || globalSelectedAddress.WORK)) {
+      clearGlobalSelectedAddress("HOME");
+      clearGlobalSelectedAddress("WORK");
+      isInitialized.current = true;
+    }
+  }, [globalSelectedAddress, clearGlobalSelectedAddress]);
 
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const markerRef = useRef<kakao.maps.Marker | null>(null);
@@ -56,26 +71,18 @@ export default function MyLocation() {
   }, [addressType]);
 
   useEffect(() => {
-    if (
-      !selectedAddressStore.selectedAddress.HOME &&
-      !selectedAddressStore.selectedAddress.WORK &&
-      customerAddress
-    ) {
+    if (!localSelectedAddress.HOME && !localSelectedAddress.WORK && customerAddress) {
       if (customerAddress.find((addr) => addr.customerAddressType === "HOME")) {
         setSelectedIndex(0);
       } else if (customerAddress.find((addr) => addr.customerAddressType === "WORK")) {
         setSelectedIndex(1);
       }
     }
-  }, [
-    customerAddress,
-    selectedAddressStore.selectedAddress.HOME,
-    selectedAddressStore.selectedAddress.WORK,
-  ]);
+  }, [customerAddress, localSelectedAddress.HOME, localSelectedAddress.WORK]);
 
   useEffect(() => {
     const type = ADDRESS_TYPES[selectedIndex];
-    const selected = selectedAddressStore.selectedAddress[type];
+    const selected = localSelectedAddress[type];
 
     if (selected?.address?.coordinate) {
       setLocation({
@@ -90,8 +97,8 @@ export default function MyLocation() {
       });
       setRange(addressMap[type].radiusInKilometers);
     } else if (
-      !selectedAddressStore.selectedAddress.HOME &&
-      !selectedAddressStore.selectedAddress.WORK &&
+      !localSelectedAddress.HOME &&
+      !localSelectedAddress.WORK &&
       !addressMap.HOME &&
       !addressMap.WORK
     ) {
@@ -102,7 +109,7 @@ export default function MyLocation() {
         });
       }
     }
-  }, [selectedIndex, selectedAddressStore.selectedAddress, addressMap]);
+  }, [selectedIndex, localSelectedAddress, addressMap]);
 
   useEffect(() => {
     if (!isLoaded || !mapRef.current || !location) return;
@@ -119,9 +126,13 @@ export default function MyLocation() {
     mapRef.current = map;
   }, []);
 
+  const clearSelectedAddress = (type: AddressType) => {
+    setLocalSelectedAddress((prev) => ({ ...prev, [type]: undefined }));
+  };
+
   const handleRegister = async () => {
     const type = ADDRESS_TYPES[selectedIndex];
-    const selected = selectedAddressStore.selectedAddress[type];
+    const selected = localSelectedAddress[type];
     if (!user?.customerId || !selected) return;
 
     const result = await postCustomerAddress({
@@ -135,7 +146,7 @@ export default function MyLocation() {
 
     if (result.success) {
       showToast("주소가 등록되었습니다.");
-      selectedAddressStore.clearSelectedAddress(type);
+      clearGlobalSelectedAddress(type);
       router.push("/mypage");
     } else {
       showToast("주소 등록에 실패했습니다.", true);
@@ -160,24 +171,24 @@ export default function MyLocation() {
             setSelectedIndex={setSelectedIndex}
             customerAddress={customerAddress}
             selectedAddress={{
-              HOME: selectedAddressStore.selectedAddress.HOME,
-              WORK: selectedAddressStore.selectedAddress.WORK,
+              HOME: localSelectedAddress.HOME,
+              WORK: localSelectedAddress.WORK,
             }}
             deleteCustomerAddress={deleteCustomerAddress}
-            clearSelectedAddress={selectedAddressStore.clearSelectedAddress}
+            clearSelectedAddress={clearSelectedAddress}
           />
 
           <RangeSelector
             range={range}
             setRange={setRange}
-            isDisabled={!selectedAddressStore.selectedAddress[ADDRESS_TYPES[selectedIndex]]}
+            isDisabled={!localSelectedAddress[ADDRESS_TYPES[selectedIndex]]}
           />
 
           <div className={styles.buttonWrapper}>
             <Button
               status="primary"
               onClick={handleRegister}
-              disabled={!selectedAddressStore.selectedAddress[ADDRESS_TYPES[selectedIndex]]}
+              disabled={!localSelectedAddress[ADDRESS_TYPES[selectedIndex]]}
             >
               <p className={styles.buttonText}>등록하기</p>
             </Button>

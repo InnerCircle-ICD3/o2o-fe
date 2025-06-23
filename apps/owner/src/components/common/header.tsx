@@ -26,7 +26,7 @@ export function Header() {
       clearOwner();
       clearStore();
       showToast("로그아웃되었습니다.");
-      router.push("/");
+      router.push("/store/login");
     } else {
       showToast("로그아웃에 실패했습니다.", true);
     }
