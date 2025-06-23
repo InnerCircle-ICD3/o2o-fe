@@ -2,6 +2,7 @@
 
 import { getOrders } from "@/apis/ssr/orders";
 import { formatHourTo12HourText } from "@/apis/utils/format";
+import StoreRegisterLink from "@/components/common/storeRegisterLink";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Pagination,
@@ -34,9 +35,7 @@ export default function PickupManagementList() {
     const fetchOrders = async () => {
       if (!storeData?.id) return;
       const result = await getOrders(storeData.id);
-      console.log(result, "order!!!<<<<<<");
       if (result.success) {
-        console.log(result.data);
         setOrderList(result.data.contents);
       } else {
         console.error("주문 조회 실패:", result);
@@ -45,12 +44,13 @@ export default function PickupManagementList() {
     fetchOrders();
   }, [storeData?.id]);
 
-  console.log(orderList, "orderList!!!");
-
   const totalPages = Math.ceil(orderList.length / ITEMS_PER_PAGE);
 
   const paginatedData = orderList.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
-  console.log(paginatedData, "paginatedData!!!");
+
+  if (!storeData) {
+    return <StoreRegisterLink />;
+  }
 
   return (
     <div className="p-4">
