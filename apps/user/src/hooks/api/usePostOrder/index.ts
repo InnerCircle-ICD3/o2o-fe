@@ -16,7 +16,8 @@ const usePostOrder = () => {
       },
       onError: (error) => {
 
-        console.error("Order submission error:", error);
+        console.error("Order submission error:", error.data);
+        console.error("Order submission error:", error.errorCode);
 
         if (error.errorCode === "O005") {
           const data = error?.data as { orderIds: number[] };
