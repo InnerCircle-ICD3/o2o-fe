@@ -15,9 +15,9 @@ export class ApiError extends Error {
   }
 }
 
-function resolveError(code: ErrorCode): BaseError {
+function resolveError(code: ErrorCode, data?: Record<string, unknown>): BaseError {
   const factory = errorRegistry[code] || errorRegistry[CommonErrorCode.UNKNOWN_ERROR];
-  return factory();
+  return factory(data);
 }
 
 function createErrorResult(code: ErrorCode): Result<never> {
@@ -42,7 +42,8 @@ export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T
   } catch (error) {
     if (error instanceof HTTPError) {
       const json = await error.response.json();
-      throw resolveError(json.errorCode);
+      const data = json.data as Record<string, unknown> | undefined;
+      throw resolveError(json.errorCode, data);
     }
 
     throw resolveError(CommonErrorCode.UNKNOWN_ERROR);
