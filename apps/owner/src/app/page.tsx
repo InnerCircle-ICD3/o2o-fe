@@ -53,15 +53,15 @@ export default function Page() {
         있습니다.
       </p>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 pt-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 pt-4 items-stretch">
         {quickLinks.map((link) => (
-          <Link href={link.href} key={link.title}>
-            <Card className="hover:border-primary/60 hover:shadow-lg transition-all duration-300">
+          <Link href={link.href} key={link.title} className="h-full">
+            <Card className="h-full flex flex-col hover:border-primary/60 hover:shadow-lg transition-all duration-300">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-xl font-semibold">{link.title}</CardTitle>
                 {link.icon}
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-1">
                 <p className="text-sm text-muted-foreground">{link.description}</p>
               </CardContent>
             </Card>
