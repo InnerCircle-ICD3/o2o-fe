@@ -17,6 +17,7 @@ export class ApiError extends Error {
 
 function resolveError(code: ErrorCode): BaseError {
   const factory = errorRegistry[code] || errorRegistry[CommonErrorCode.UNKNOWN_ERROR];
+  console.log(factory, code);
   return factory();
 }
 
