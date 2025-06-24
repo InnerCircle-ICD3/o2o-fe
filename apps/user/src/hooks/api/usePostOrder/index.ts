@@ -10,6 +10,7 @@ const usePostOrder = () => {
   const router = useRouter();
 
   const submitOrder = (body: CreateOrderRequest) => {
+    console.log("Submitting order:", body);
     return mutation.mutate(body, {
       onSuccess: (res) => {
         router.push(`/orders/${res.data.id}`);
