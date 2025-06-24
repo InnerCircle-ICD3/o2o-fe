@@ -25,6 +25,7 @@ function createErrorResult(code: ErrorCode): Result<never> {
   return {
     success: false,
     ...error,
+    errorCode: code,
   };
 }
 

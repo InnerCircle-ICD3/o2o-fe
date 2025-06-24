@@ -49,6 +49,7 @@ describe("Reserve", () => {
       success: false,
       name: "ApiError",
       code: "TEST_ERROR",
+      errorCode: "TEST_ERROR",
       message: "API 에러",
       statusCode: 500,
       timestamp: new Date(),
