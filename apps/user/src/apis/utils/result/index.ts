@@ -1,4 +1,5 @@
 import type { Result, ResultSuccess } from "@/apis/types";
+import { HTTPError } from "ky";
 import { CommonErrorCode, type ErrorCode, errorRegistry } from "o2o/errors";
 import type { BaseError } from "o2o/errors/base/BaseError";
 
@@ -29,14 +30,23 @@ function createErrorResult(code: ErrorCode): Result<never> {
 }
 
 export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T>> => {
-  const data = await fn();
-  if (data && typeof data === "object" && "success" in data) {
-    return data as unknown as ResultSuccess<T>;
+  try {
+    const data = await fn();
+    if (data && typeof data === "object" && "success" in data) {
+      return data as unknown as ResultSuccess<T>;
+    }
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    if (error instanceof HTTPError) {
+      const json = await error.response.json();
+      throw resolveError(json.errorCode);
+    }
+
+    throw resolveError(CommonErrorCode.UNKNOWN_ERROR);
   }
-  return {
-    success: true,
-    data,
-  };
 };
 
 export const toSafeResult = async <T>(fn: () => Promise<ResultSuccess<T>>): Promise<Result<T>> => {
