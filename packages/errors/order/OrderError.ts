@@ -25,8 +25,8 @@ export class OrderError extends BaseError {
     [OrderErrorCode.INVALID_ORDER_STATUS]: "유효하지 않은 주문 상태입니다.",
   };
 
-  constructor(code: OrderErrorCode, statusCode = 500) {
-    super(code, OrderError.messages[code], statusCode);
+  constructor(code: OrderErrorCode, statusCode = 500, data?: Record<string, unknown>) {
+    super(code, OrderError.messages[code], statusCode, data);
   }
 
   static notFound(): OrderError {
@@ -45,8 +45,8 @@ export class OrderError extends BaseError {
     return new OrderError(OrderErrorCode.INVALID_ORDER_MENU, 400);
   }
 
-  static acceptFailed(): OrderError {
-    return new OrderError(OrderErrorCode.ORDER_ACCEPT_FAILED, 500);
+  static acceptFailed(data?: Record<string, unknown>): OrderError {
+    return new OrderError(OrderErrorCode.ORDER_ACCEPT_FAILED, 500, data);
   }
 
   static rejectFailed(): OrderError {
