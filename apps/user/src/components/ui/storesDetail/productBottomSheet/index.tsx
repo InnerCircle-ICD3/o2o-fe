@@ -4,7 +4,10 @@ import BottomSheet from "@/components/common/bottomSheet";
 import Button from "@/components/common/button";
 import usePostOrder from "@/hooks/api/usePostOrder";
 import useSelectedProducts from "@/hooks/useSelectedProducts";
+import { useToastStore } from "@/stores/useToastStore";
+import { userInfoStore } from "@/stores/userInfoStore";
 import type { Product } from "@/types/apis/stores.type";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Select from "../select";
 import SelectedItem from "../selectedItem";
@@ -21,6 +24,8 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
   const { isShow, storesProducts, onClose } = props;
   const [isLoading, setIsLoading] = useState(false);
   const submitOrder = usePostOrder();
+  const { user } = userInfoStore();
+  const isLogin = !!user?.customerId;
   const {
     selectedProducts,
     orderSummary,
@@ -28,23 +33,30 @@ const ProductBottomSheet = (props: ProductBottomSheetProps) => {
     handleDeleteProduct,
     updateProductCount,
   } = useSelectedProducts();
+  const { showToast } = useToastStore();
+  const router = useRouter();
 
   const handleSubmit = () => {
     if (isLoading) return;
-    setIsLoading(true);
-    const orderBody = {
-      // TODO - 픽업타임 메인에서 설정되면 가지고 와야 할 듯 / 지금은 현재 시간 + 30분 으로 주문 생성함
-      pickupDateTime: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-      storeId: storesProducts[0].storeId,
-      orderItems: selectedProducts.map((product) => ({
-        productId: product.id,
-        productName: product.name,
-        price: product.price.finalPrice,
-        quantity: product.selectedCount,
-      })),
-    };
+    if (!isLogin) {
+      showToast("로그인 후 이용해주세요.");
+      router.push("/login");
+    } else {
+      setIsLoading(true);
+      const orderBody = {
+        // TODO - 픽업타임 메인에서 설정되면 가지고 와야 할 듯 / 지금은 현재 시간 + 30분 으로 주문 생성함
+        pickupDateTime: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+        storeId: storesProducts[0].storeId,
+        orderItems: selectedProducts.map((product) => ({
+          productId: product.id,
+          productName: product.name,
+          price: product.price.finalPrice,
+          quantity: product.selectedCount,
+        })),
+      };
 
-    submitOrder(orderBody);
+      submitOrder(orderBody);
+    }
   };
 
   return (

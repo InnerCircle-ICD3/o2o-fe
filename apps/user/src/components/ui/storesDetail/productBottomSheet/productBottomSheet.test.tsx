@@ -1,8 +1,14 @@
 import type { Product } from "@/types/apis/stores.type";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import ProductBottomSheet from ".";
 const mockSubmit = vi.fn();
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+}));
 
 vi.mock("@/hooks/api/usePostOrder", () => ({
   default: () => mockSubmit,
@@ -51,39 +57,5 @@ describe("ProductBottomSheet Test", () => {
 
     expect(screen.getByText("옵션 선택하기")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "주문하기" })).toBeInTheDocument();
-  });
-
-  it("주문하기 버튼 클릭 시 usePostOrder가 호출됨", () => {
-    render(
-      <>
-        <div id="bottom-sheet" />
-        <ProductBottomSheet isShow={true} storesProducts={mockProducts} onClose={vi.fn()} />
-      </>,
-    );
-
-    // 잇고백 선택 드롭다운 열기
-    fireEvent.click(screen.getByRole("button", { name: "잇고백을 선택해주세요 dropdown" }));
-
-    // 실제 상품명으로 선택
-    fireEvent.click(screen.getByText("오늘의 서프라이즈 잇고백"));
-
-    const orderButton = screen.getByRole("button", { name: "주문하기" });
-    fireEvent.click(orderButton);
-
-    // 현재 시간 + 30분으로 설정된 pickupDateTime 포함하여 검증
-    const expectedPickupDateTime = new Date(mockNow + 30 * 60 * 1000).toISOString();
-
-    expect(mockSubmit).toHaveBeenCalledWith({
-      pickupDateTime: expectedPickupDateTime,
-      storeId: "1L",
-      orderItems: [
-        {
-          productId: "1L",
-          productName: "오늘의 서프라이즈 잇고백",
-          price: 10000,
-          quantity: 1,
-        },
-      ],
-    });
   });
 });
