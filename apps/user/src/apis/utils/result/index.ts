@@ -1,5 +1,4 @@
 import type { Result, ResultSuccess } from "@/apis/types";
-import { HTTPError } from "ky";
 import { CommonErrorCode, type ErrorCode, errorRegistry } from "o2o/errors";
 import type { BaseError } from "o2o/errors/base/BaseError";
 
@@ -17,7 +16,6 @@ export class ApiError extends Error {
 
 function resolveError(code: ErrorCode): BaseError {
   const factory = errorRegistry[code] || errorRegistry[CommonErrorCode.UNKNOWN_ERROR];
-  console.log(factory, code);
   return factory();
 }
 
@@ -31,30 +29,14 @@ function createErrorResult(code: ErrorCode): Result<never> {
 }
 
 export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T>> => {
-  try {
-    const data = await fn();
-    if (data && typeof data === "object" && "success" in data) {
-      return data as unknown as ResultSuccess<T>;
-    }
-    return {
-      success: true,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof HTTPError) {
-      try {
-        console.log("HTTP response:", error.response.body);
-        const json = await error.response.json();
-        console.error("API Error Response:", json);
-        throw resolveError(json.errorCode);
-      } catch {
-        console.error("Failed to parse error response:", error);
-        throw resolveError(CommonErrorCode.UNKNOWN_ERROR);
-      }
-    }
-
-    throw resolveError(CommonErrorCode.UNKNOWN_ERROR);
+  const data = await fn();
+  if (data && typeof data === "object" && "success" in data) {
+    return data as unknown as ResultSuccess<T>;
   }
+  return {
+    success: true,
+    data,
+  };
 };
 
 export const toSafeResult = async <T>(fn: () => Promise<ResultSuccess<T>>): Promise<Result<T>> => {
