@@ -42,6 +42,7 @@ export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T
   } catch (error) {
     if (error instanceof HTTPError) {
       try {
+        console.log("HTTP Error:", error);
         const json = await error.response.json();
         console.error("API Error Response:", json);
         throw resolveError(json.errorCode);
