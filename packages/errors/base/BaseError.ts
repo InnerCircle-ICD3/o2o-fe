@@ -14,10 +14,10 @@ export abstract class BaseError extends Error {
   public readonly statusCode: number;
   public readonly timestamp: Date;
 
-  constructor(code: string, errorCode: string, message: string, statusCode = 500) {
+  constructor(code: string, message: string, statusCode = 500) {
     super(message);
     this.code = code;
-    this.errorCode = errorCode;
+    this.errorCode = code;
     this.statusCode = statusCode;
     this.timestamp = new Date();
     this.name = this.constructor.name;
