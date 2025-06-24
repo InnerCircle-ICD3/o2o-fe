@@ -31,11 +31,11 @@ const ErrorUi = (props: ErrorUiProps) => {
 
       {isButton && (
         <div className={style.buttons}>
-          <Button type={"button"} status={"common"} onClick={router.back}>
-            돌아가기
-          </Button>
           <Button type={"button"} status={"primary"} onClick={() => router.push("/")}>
             홈으로
+          </Button>
+          <Button type={"button"} status={"common"} onClick={router.back}>
+            돌아가기
           </Button>
         </div>
       )}
