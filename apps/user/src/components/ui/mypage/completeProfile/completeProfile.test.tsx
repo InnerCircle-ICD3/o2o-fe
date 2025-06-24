@@ -102,6 +102,7 @@ describe("CompleteProfile", () => {
       success: false as const,
       name: "Error",
       code: "ERROR",
+      errorCode: "ERROR",
       message: "에러",
       statusCode: 400,
       timestamp: new Date(),
