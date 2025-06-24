@@ -15,6 +15,7 @@ const usePostOrder = () => {
         router.push(`/orders/${res.data.id}`);
       },
       onError: (error) => {
+
         console.error("Order submission error:", error);
 
         if (error.errorCode === "O005") {
