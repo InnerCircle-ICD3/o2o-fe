@@ -43,8 +43,10 @@ export const toResult = async <T>(fn: () => Promise<T>): Promise<ResultSuccess<T
     if (error instanceof HTTPError) {
       try {
         const json = await error.response.json();
+        console.error("API Error Response:", json);
         throw resolveError(json.errorCode);
       } catch {
+        console.error("Failed to parse error response:", error);
         throw resolveError(CommonErrorCode.UNKNOWN_ERROR);
       }
     }
