@@ -27,6 +27,8 @@ const errorRegistry: Record<string, ErrorConstructor> = {
   [StoreErrorCode.STORE_UNAVAILABLE]: () => StoreError.unavailable(),
   [StoreErrorCode.SUBSCRIPTION_NOT_FOUND]: () => StoreError.subscriptionNotFound(),
   [StoreErrorCode.SUBSCRIPTION_UPDATE_FAILED]: () => StoreError.subscriptionUpdateFailed(),
+  [StoreErrorCode.STORE_PRODUCT_NOT_ENOUGH]: () => StoreError.storeProductNotFound(),
+  [StoreErrorCode.STORE_COUNT_EXCEEDED]: () => StoreError.storeCountExceeded(),
 
   [CustomerErrorCode.CUSTOMER_NOT_FOUND]: () => CustomerError.customerNotFound(),
   [CustomerErrorCode.USER_NOT_FOUND]: () => CustomerError.userNotFound(),

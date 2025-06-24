@@ -138,8 +138,8 @@ export default function StoreRegisterForm() {
         onSuccess: async () => {
           showToast("매장 등록이 완료되었습니다.", false, () => router.push("/"));
         },
-        onError: () => {
-          showToast("매장 등록에 실패했습니다.", true);
+        onError: (error) => {
+          showToast(error.message, true);
         },
       },
     );
