@@ -4,14 +4,15 @@ import { OrderError, OrderErrorCode } from "../order/OrderError";
 import { PaymentError, PaymentErrorCode } from "../payment/PaymentError";
 import { StoreError, StoreErrorCode } from "../store/StoreError";
 
-type ErrorConstructor = () => BaseError;
+type ErrorConstructor = (data?: Record<string, unknown>) => BaseError;
 
 const errorRegistry: Record<string, ErrorConstructor> = {
   [OrderErrorCode.ORDER_NOT_FOUND]: () => OrderError.notFound(),
   [OrderErrorCode.ORDER_ALREADY_COMPLETED]: () => OrderError.alreadyCompleted(),
   [OrderErrorCode.ORDER_ALREADY_CANCELLED]: () => OrderError.alreadyCancelled(),
   [OrderErrorCode.INVALID_ORDER_MENU]: () => OrderError.invalidMenu(),
-  [OrderErrorCode.ORDER_ACCEPT_FAILED]: () => OrderError.acceptFailed(),
+  [OrderErrorCode.ORDER_ACCEPT_FAILED]: (data?: Record<string, unknown>) =>
+    OrderError.acceptFailed(data),
   [OrderErrorCode.ORDER_REJECT_FAILED]: () => OrderError.rejectFailed(),
   [OrderErrorCode.ORDER_COMPLETE_FAILED]: () => OrderError.completeFailed(),
   [OrderErrorCode.ORDER_CANCEL_FAILED]: () => OrderError.cancelFailed(),
