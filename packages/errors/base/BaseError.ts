@@ -1,6 +1,7 @@
 export interface ErrorJson {
   name: string;
   code: string;
+  errorCode?: string;
   message: string;
   statusCode: number;
   timestamp: Date;
