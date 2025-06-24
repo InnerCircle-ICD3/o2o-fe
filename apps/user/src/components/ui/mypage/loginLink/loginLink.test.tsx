@@ -15,6 +15,7 @@ const successUserInfo = {
 const failureUserInfo = {
   success: false,
   code: "NOT_LOGGED_IN",
+  errorCode: "NOT_LOGGED_IN",
   name: "로그인 안내",
   message: "로그인이 필요합니다.",
   statusCode: 401,
